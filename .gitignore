@@ -1,0 +1,13 @@
+/Temp
+/Library
+/*.csproj
+/*.unityproj
+/build
+/*.userprefs
+/*.sln
+/log*
+/Assets/UnityVS/*
+/Assets/UnityVS.meta
+/UnityVS.*
+/obj
+Packman.git-csharp.v11.suo
