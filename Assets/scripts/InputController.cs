@@ -135,6 +135,7 @@ public class InputController : MonoSingleton<InputController>
     }
 
     _cameraAngleY = ca.To;
+    _cameraAngleY = Mathf.Round(_cameraAngleY);
 
     //Debug.Log (_cameraAngleY);
 
@@ -176,6 +177,8 @@ public class InputController : MonoSingleton<InputController>
     else _cameraPosX = ca.To;
 
     _isProcessing = false;
+
+    SoundManager.Instance.PlayFootstepSound();
   }
 }
 
