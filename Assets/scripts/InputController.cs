@@ -30,39 +30,7 @@ public class InputController : MonoSingleton<InputController>
   Vector3 _cameraPos = Vector3.zero;
 	void Update () 
   {
-    if (Input.GetKeyDown(KeyCode.E) && !_isProcessing)
-    {
-      _cameraTurnRight.From = Camera.main.transform.eulerAngles.y;
-      _cameraTurnRight.To = _cameraTurnRight.From + 90;
-      StartCoroutine ("CameraTurnRoutine", _cameraTurnRight);
-    }
-
-    if (Input.GetKeyDown(KeyCode.Q) && !_isProcessing)
-    {
-      _cameraTurnLeft.From = Camera.main.transform.eulerAngles.y;
-      _cameraTurnLeft.To = _cameraTurnLeft.From - 90;
-      StartCoroutine ("CameraTurnRoutine", _cameraTurnLeft);
-    }
-
-    if (Input.GetKeyDown(KeyCode.W) && !_isProcessing)
-    {
-      int xFraction = Mathf.RoundToInt(Mathf.Sin(Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-      int zFraction = Mathf.RoundToInt(Mathf.Cos(Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-      if (zFraction != 0)
-      {
-        _cameraMove.From = App.Instance.CameraPos.z;
-        _cameraMove.To = _cameraMove.From + zFraction * GlobalConstants.WallScaleFactor;
-        _cameraMove.MoveZ = true;
-        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
-      }    
-      else if (xFraction != 0)
-      {
-        _cameraMove.From = App.Instance.CameraPos.x;
-        _cameraMove.To = _cameraMove.From + xFraction * GlobalConstants.WallScaleFactor;
-        _cameraMove.MoveZ = false;
-        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
-      }
-    }
+    ProcessKeyboard();
 
     _cameraPos.x = _cameraPosX;
     _cameraPos.z = _cameraPosZ;
@@ -73,6 +41,63 @@ public class InputController : MonoSingleton<InputController>
     App.Instance.CameraPos = _cameraPos;
     App.Instance.CameraPivot.transform.position = App.Instance.CameraPos;
 	}
+
+  void ProcessKeyboard ()
+  {
+    if (Input.GetKeyDown (KeyCode.E) && !_isProcessing) 
+    {
+      _cameraTurnRight.From = Camera.main.transform.eulerAngles.y;
+      _cameraTurnRight.To = _cameraTurnRight.From + 90;
+      StartCoroutine ("CameraTurnRoutine", _cameraTurnRight);
+    }
+
+    if (Input.GetKeyDown (KeyCode.Q) && !_isProcessing) 
+    {
+      _cameraTurnLeft.From = Camera.main.transform.eulerAngles.y;
+      _cameraTurnLeft.To = _cameraTurnLeft.From - 90;
+      StartCoroutine ("CameraTurnRoutine", _cameraTurnLeft);
+    }
+
+    if (Input.GetKeyDown (KeyCode.W) && !_isProcessing) 
+    {
+      int xFraction = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+      int zFraction = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+      if (zFraction != 0) 
+      {
+        _cameraMove.From = App.Instance.CameraPos.z;
+        _cameraMove.To = _cameraMove.From + zFraction * GlobalConstants.WallScaleFactor;
+        _cameraMove.MoveZ = true;
+        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
+      }
+      else if (xFraction != 0) 
+      {
+        _cameraMove.From = App.Instance.CameraPos.x;
+        _cameraMove.To = _cameraMove.From + xFraction * GlobalConstants.WallScaleFactor;
+        _cameraMove.MoveZ = false;
+        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
+      }
+    }
+
+    if (Input.GetKeyDown (KeyCode.S) && !_isProcessing) 
+    {
+      int xFraction = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+      int zFraction = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+      if (zFraction != 0) 
+      {
+        _cameraMove.From = App.Instance.CameraPos.z;
+        _cameraMove.To = _cameraMove.From - zFraction * GlobalConstants.WallScaleFactor;
+        _cameraMove.MoveZ = true;
+        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
+      }
+      else if (xFraction != 0) 
+      {
+        _cameraMove.From = App.Instance.CameraPos.x;
+        _cameraMove.To = _cameraMove.From - xFraction * GlobalConstants.WallScaleFactor;
+        _cameraMove.MoveZ = false;
+        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
+      }
+    }
+  }
 
   protected override void Init()
   {

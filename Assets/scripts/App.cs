@@ -24,7 +24,7 @@ public class App : MonoSingleton<App>
   public Callback MapLoadingFinished;
 	void Awake () 
 	{
-    UnityEngine.RenderSettings.fog = true;
+    //UnityEngine.RenderSettings.fog = true;
     UnityEngine.RenderSettings.fogColor = GlobalConstants.FogColor;
     UnityEngine.RenderSettings.fogDensity = GlobalConstants.FogDensity;
 
