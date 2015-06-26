@@ -5,7 +5,7 @@ public class InputController : MonoSingleton<InputController>
 {
   CoroutineTurnArgument _cameraTurnRight = new CoroutineTurnArgument();
   CoroutineTurnArgument _cameraTurnLeft = new CoroutineTurnArgument();
-  CoroutineTurnArgument _cameraMove = new CoroutineTurnArgument();
+  CoroutineMoveArgument _cameraMove = new CoroutineMoveArgument();
 
   void Awake () 
   {	
@@ -30,31 +30,38 @@ public class InputController : MonoSingleton<InputController>
   Vector3 _cameraPos = Vector3.zero;
 	void Update () 
   {
-    if (Input.GetKeyUp(KeyCode.E) && !_isProcessing)
+    if (Input.GetKeyDown(KeyCode.E) && !_isProcessing)
     {
       _cameraTurnRight.From = Camera.main.transform.eulerAngles.y;
       _cameraTurnRight.To = _cameraTurnRight.From + 90;
       StartCoroutine ("CameraTurnRoutine", _cameraTurnRight);
     }
 
-    if (Input.GetKeyUp(KeyCode.Q) && !_isProcessing)
+    if (Input.GetKeyDown(KeyCode.Q) && !_isProcessing)
     {
       _cameraTurnLeft.From = Camera.main.transform.eulerAngles.y;
       _cameraTurnLeft.To = _cameraTurnLeft.From - 90;
       StartCoroutine ("CameraTurnRoutine", _cameraTurnLeft);
     }
 
-    if (Input.GetKeyUp(KeyCode.W) && !_isProcessing)
+    if (Input.GetKeyDown(KeyCode.W) && !_isProcessing)
     {
       int xFraction = Mathf.RoundToInt(Mathf.Sin(Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
       int zFraction = Mathf.RoundToInt(Mathf.Cos(Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-      //Debug.Log ("X: " + xFraction + " Z: " + zFraction);
       if (zFraction != 0)
       {
         _cameraMove.From = App.Instance.CameraPos.z;
         _cameraMove.To = _cameraMove.From + zFraction * GlobalConstants.WallScaleFactor;
+        _cameraMove.MoveZ = true;
         StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
       }    
+      else if (xFraction != 0)
+      {
+        _cameraMove.From = App.Instance.CameraPos.x;
+        _cameraMove.To = _cameraMove.From + xFraction * GlobalConstants.WallScaleFactor;
+        _cameraMove.MoveZ = false;
+        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
+      }
     }
 
     _cameraPos.x = _cameraPosX;
@@ -111,7 +118,7 @@ public class InputController : MonoSingleton<InputController>
 
   IEnumerator CameraMoveForwardRoutine(object arg)
   {
-    CoroutineTurnArgument ca = arg as CoroutineTurnArgument;
+    CoroutineMoveArgument ca = arg as CoroutineMoveArgument;
     if (ca == null) yield return null;
     _isProcessing = true;
     float res = ca.From;
@@ -121,7 +128,8 @@ public class InputController : MonoSingleton<InputController>
       {
         float speed = Time.deltaTime * ca.Speed;
         res += speed;
-        _cameraPosZ += speed;
+        if (ca.MoveZ) _cameraPosZ += speed;
+        else _cameraPosX += speed;
         if (res + speed > ca.To) break;
         yield return null;
       }
@@ -132,13 +140,16 @@ public class InputController : MonoSingleton<InputController>
       {
         float speed = Time.deltaTime * ca.Speed;
         res -= speed;
-        _cameraPosZ -= speed;
+        if (ca.MoveZ) _cameraPosZ -= speed;
+        else _cameraPosX -= speed;
         if (res - speed < ca.To) break;
         yield return null;
       }
     }
 
-    _cameraPosZ = ca.To;
+    if (ca.MoveZ) _cameraPosZ = ca.To;
+    else _cameraPosX = ca.To;
+
     _isProcessing = false;
   }
 }
@@ -148,4 +159,12 @@ public class CoroutineTurnArgument
   public float From;
   public float To;
   public float Speed;
+}
+
+public class CoroutineMoveArgument
+{
+  public float From;
+  public float To;
+  public float Speed;
+  public bool MoveZ;
 }
