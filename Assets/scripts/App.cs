@@ -7,6 +7,7 @@ public class App : MonoSingleton<App>
 {
   public GameObject WallPrefab;
   public GameObject FloorPrefab;
+  public GameObject ObjectsInstancesTransform;
 
   char[,] _map;
 
@@ -84,6 +85,7 @@ public class App : MonoSingleton<App>
             goPosition.x = i * GlobalConstants.WallScaleFactor;
             goPosition.z = j * GlobalConstants.WallScaleFactor;
             go.transform.position = goPosition;
+            go.transform.parent = ObjectsInstancesTransform.transform;
             _instances.Add(go);
             break;
           case 'X':
@@ -97,6 +99,7 @@ public class App : MonoSingleton<App>
             goPosition.x = i * GlobalConstants.WallScaleFactor;
             goPosition.z = j * GlobalConstants.WallScaleFactor;
             go.transform.position = goPosition;
+            go.transform.parent = ObjectsInstancesTransform.transform;
             _instances.Add(go);            
             break;
         }
