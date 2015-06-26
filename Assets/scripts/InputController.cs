@@ -7,22 +7,19 @@ public class InputController : MonoSingleton<InputController>
   CoroutineTurnArgument _cameraTurnLeft = new CoroutineTurnArgument();
   CoroutineTurnArgument _cameraMove = new CoroutineTurnArgument();
 
-  void Start () 
+  void Awake () 
   {	
     _cameraTurnRight.Speed = GlobalConstants.CameraTurnSpeed;
     _cameraTurnLeft.Speed = GlobalConstants.CameraTurnSpeed;
     _cameraMove.Speed = GlobalConstants.CameraMoveSpeed;
-
-    App.Instance.MapLoadingFinished += MapLoadingFinishedHandler;
 	}
 	
-  void MapLoadingFinishedHandler()
+  public void MapLoadingFinishedHandler()
   {
     _cameraAngles = Camera.main.transform.eulerAngles;
     _cameraPosX = App.Instance.CameraPos.x;
     _cameraPosZ = App.Instance.CameraPos.z;
     _cameraPos.x = _cameraPosX;
-    _cameraPos.y = Camera.main.transform.position.y;
     _cameraPos.z = _cameraPosZ;
   }
 
@@ -58,18 +55,16 @@ public class InputController : MonoSingleton<InputController>
         _cameraMove.To = _cameraMove.From + zFraction * GlobalConstants.WallScaleFactor;
         StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
       }    
-
     }
 
     _cameraPos.x = _cameraPosX;
-    //_cameraPos.y = Camera.main.transform.position.y;
     _cameraPos.z = _cameraPosZ;
 
     _cameraAngles.y = _cameraAngleY;
-    Camera.main.transform.eulerAngles = _cameraAngles;
 
+    App.Instance.CameraPivot.transform.eulerAngles = _cameraAngles;
     App.Instance.CameraPos = _cameraPos;
-    Camera.main.transform.position = App.Instance.CameraPos;
+    App.Instance.CameraPivot.transform.position = App.Instance.CameraPos;
 	}
 
   protected override void Init()
@@ -120,13 +115,27 @@ public class InputController : MonoSingleton<InputController>
     if (ca == null) yield return null;
     _isProcessing = true;
     float res = ca.From;
-    while (res < ca.To)
+    if (ca.From < ca.To)
     {
-      float speed = Time.deltaTime * ca.Speed;
-      res += speed;
-      _cameraPosZ += speed;
-      if (res + speed > ca.To) break;
-      yield return null;
+      while (res < ca.To)
+      {
+        float speed = Time.deltaTime * ca.Speed;
+        res += speed;
+        _cameraPosZ += speed;
+        if (res + speed > ca.To) break;
+        yield return null;
+      }
+    }
+    else
+    {
+      while (res > ca.To)
+      {
+        float speed = Time.deltaTime * ca.Speed;
+        res -= speed;
+        _cameraPosZ -= speed;
+        if (res - speed < ca.To) break;
+        yield return null;
+      }
     }
 
     _cameraPosZ = ca.To;

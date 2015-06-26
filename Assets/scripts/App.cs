@@ -6,6 +6,7 @@ using System.IO;
 public class App : MonoSingleton<App>
 {
   public GameObject WallPrefab;
+  public GameObject FloorPrefab;
 
   char[,] _map;
 
@@ -17,10 +18,19 @@ public class App : MonoSingleton<App>
     get { return _cameraPos; }
   }
 
+  public GameObject CameraPivot;
+
   public Callback MapLoadingFinished;
-	void Start () 
+	void Awake () 
 	{
-    _cameraPos = Camera.main.transform.position;
+    UnityEngine.RenderSettings.fog = true;
+    UnityEngine.RenderSettings.fogColor = GlobalConstants.FogColor;
+    UnityEngine.RenderSettings.fogDensity = GlobalConstants.FogDensity;
+
+    MapLoadingFinished += InputController.Instance.MapLoadingFinishedHandler;
+
+    _cameraPos = CameraPivot.transform.position;
+
     LoadMap("Assets/maps/test.txt");
     ParseMap();
 
@@ -56,19 +66,20 @@ public class App : MonoSingleton<App>
 
   void ParseMap()
   {
+    GameObject go;
     Vector3 goPosition = Vector3.zero;
     for (int i = 0; i < _mapRows; i++)
     {
       for (int j = 0; j < _mapColumns; j++)
       {
-        if (_map[i, j] == '0') continue;
+        //if (_map[i, j] == '0') continue;
 
         char type = _map[i, j];
 
         switch(type)
-        {
+        {            
           case '1':
-            var go = (GameObject)Instantiate(WallPrefab);
+            go = (GameObject)Instantiate(WallPrefab);
             goPosition = go.transform.position;
             goPosition.x = i * GlobalConstants.WallScaleFactor;
             goPosition.z = j * GlobalConstants.WallScaleFactor;
@@ -77,10 +88,16 @@ public class App : MonoSingleton<App>
             break;
           case 'X':
             _cameraPos.x = i * GlobalConstants.WallScaleFactor;
-            _cameraPos.z = j * GlobalConstants.WallScaleFactor;
-            Camera.main.transform.position = _cameraPos;
+            _cameraPos.z = j * GlobalConstants.WallScaleFactor;            
+            CameraPivot.transform.position = _cameraPos;
             break;
           default:
+            go = (GameObject)Instantiate(FloorPrefab);
+            goPosition = go.transform.position;
+            goPosition.x = i * GlobalConstants.WallScaleFactor;
+            goPosition.z = j * GlobalConstants.WallScaleFactor;
+            go.transform.position = goPosition;
+            _instances.Add(go);            
             break;
         }
       }
