@@ -7,6 +7,7 @@ public class App : MonoSingleton<App>
 {
   public GameObject WallPrefab;
   public GameObject FloorPrefab;
+  public GameObject ColumnPrefab;
   public GameObject ObjectsInstancesTransform;
 
   char[,] _map;
@@ -24,7 +25,7 @@ public class App : MonoSingleton<App>
   public Callback MapLoadingFinished;
 	void Awake () 
 	{
-    //UnityEngine.RenderSettings.fog = true;
+    UnityEngine.RenderSettings.fog = true;
     UnityEngine.RenderSettings.fogColor = GlobalConstants.FogColor;
     UnityEngine.RenderSettings.fogDensity = GlobalConstants.FogDensity;
 
@@ -92,6 +93,15 @@ public class App : MonoSingleton<App>
             _cameraPos.x = i * GlobalConstants.WallScaleFactor;
             _cameraPos.z = j * GlobalConstants.WallScaleFactor;            
             CameraPivot.transform.position = _cameraPos;
+            break;
+          case '2':
+            go = (GameObject)Instantiate(ColumnPrefab);
+            goPosition = go.transform.position;
+            goPosition.x = i * GlobalConstants.WallScaleFactor;
+            goPosition.z = j * GlobalConstants.WallScaleFactor;
+            go.transform.position = goPosition;
+            go.transform.parent = ObjectsInstancesTransform.transform;
+            _instances.Add(go);
             break;
           default:
             go = (GameObject)Instantiate(FloorPrefab);

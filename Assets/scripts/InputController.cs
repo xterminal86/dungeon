@@ -30,7 +30,10 @@ public class InputController : MonoSingleton<InputController>
   Vector3 _cameraPos = Vector3.zero;
 	void Update () 
   {
-    ProcessKeyboard();
+    if (!_isProcessing)
+    {
+      ProcessKeyboard();
+    }
 
     _cameraPos.x = _cameraPosX;
     _cameraPos.z = _cameraPosZ;
@@ -44,21 +47,21 @@ public class InputController : MonoSingleton<InputController>
 
   void ProcessKeyboard ()
   {
-    if (Input.GetKeyDown (KeyCode.E) && !_isProcessing) 
-    {
+    if (Input.GetKeyDown (KeyCode.E)) 
+    {      
       _cameraTurnRight.From = Camera.main.transform.eulerAngles.y;
       _cameraTurnRight.To = _cameraTurnRight.From + 90;
       StartCoroutine ("CameraTurnRoutine", _cameraTurnRight);
     }
 
-    if (Input.GetKeyDown (KeyCode.Q) && !_isProcessing) 
+    if (Input.GetKeyDown (KeyCode.Q)) 
     {
       _cameraTurnLeft.From = Camera.main.transform.eulerAngles.y;
       _cameraTurnLeft.To = _cameraTurnLeft.From - 90;
       StartCoroutine ("CameraTurnRoutine", _cameraTurnLeft);
     }
 
-    if (Input.GetKeyDown (KeyCode.W) && !_isProcessing) 
+    if (Input.GetKeyDown (KeyCode.W)) 
     {
       int xFraction = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
       int zFraction = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
@@ -78,7 +81,7 @@ public class InputController : MonoSingleton<InputController>
       }
     }
 
-    if (Input.GetKeyDown (KeyCode.S) && !_isProcessing) 
+    if (Input.GetKeyDown (KeyCode.S)) 
     {
       int xFraction = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
       int zFraction = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
