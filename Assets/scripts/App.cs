@@ -13,6 +13,7 @@ public class App : MonoSingleton<App>
   public GameObject DummyObjectPrefab;
   public GameObject ObjectsInstancesTransform;
 
+  char[,] _mapLayout;
   List<string> _map = new System.Collections.Generic.List<string>();
 
   List<GameObject> _instances = new List<GameObject>();
@@ -107,6 +108,8 @@ public class App : MonoSingleton<App>
     _mapColumns = _map[0].Length;
     _mapRows = _map.Count;
 
+    _mapLayout = new char[_mapRows, _mapColumns];
+
     GameObject go;
     Vector3 goPosition = Vector3.zero;
     int x = 0, y = 0;
@@ -114,6 +117,8 @@ public class App : MonoSingleton<App>
     {
       for (int i = 0; i < line.Length; i++)
       {
+        _mapLayout[x, y] = line[i];
+
         if (line[i] == '#')
         {
           go = (GameObject)Instantiate(WallPrefab);
@@ -148,5 +153,13 @@ public class App : MonoSingleton<App>
       y = 0;
       x++;
     }
+  }
+
+  public char GetMapLayoutPoint(int x, int y)
+  {
+    int lx = Mathf.Clamp(x, 0, _mapRows);
+    int ly = Mathf.Clamp(y, 0, _mapColumns);
+
+    return _mapLayout[lx, ly];
   }
 }
