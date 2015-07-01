@@ -7,7 +7,7 @@ public static class GlobalConstants
 {
   public static int WallScaleFactor = 2;
   public static int CameraTurnSpeed = 350;
-  public static int CameraMoveSpeed = 6;
+  public static int CameraMoveSpeed = 4;
   public static Color FogColor = Color.black;
   public static float FogDensity = 0.2f;
 
@@ -17,6 +17,13 @@ public static class GlobalConstants
     { MapAttributes.CoordX, "x" }, { MapAttributes.CoordY, "y" }
   };
 
+  /*
+  public Dictionary<Orientation, Vector2> OrientationAngles = new Dictionary<Orientation, Vector2>()
+  {
+    //{ Orientation.NORTH, new Vector2
+  };
+  */
+
   public enum MapAttributes
   {
     Floor = 0,
@@ -24,6 +31,14 @@ public static class GlobalConstants
     Ceiling,
     CoordX,
     CoordY    
+  }
+
+  public enum Orientation
+  {
+    NORTH = 0,
+    EAST,
+    SOUTH,
+    WEST
   }
 }
 

@@ -3,17 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 public class App : MonoSingleton<App>
 {
   public GameObject WallPrefab;
   public GameObject FloorPrefab;
   public GameObject CeilingPrefab;
-  public GameObject ColumnPrefab;
+  public GameObject DummyObjectPrefab;
   public GameObject ObjectsInstancesTransform;
 
-  //char[,] _map;
-  List<MapCell> _map = new List<MapCell>();
+  List<string> _map = new System.Collections.Generic.List<string>();
 
   List<GameObject> _instances = new List<GameObject>();
   Vector3 _cameraPos = Vector3.zero;
@@ -48,78 +48,100 @@ public class App : MonoSingleton<App>
     base.Init();
   }
 
-  int _mapColumns = 0, _mapRows = 0;
+  int _mapColumns = 0;
+  public int MapColumns
+  {
+    get { return _mapColumns; }
+  }
+
+  int _mapRows = 0;
+  public int MapRows
+  {
+    get { return _mapRows; }
+  }
+
   void LoadMap(string filename)
   {
-    /*
-    string[] lines = File.ReadAllLines(filename);
-    _mapColumns = lines[0].Length;
-    _mapRows = lines.Length;
-    _map = new char[_mapRows, _mapColumns];
+    XmlDocument doc = new XmlDocument();
+    doc.Load("Assets/maps/test_map.xml");
+    foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+    {
+      switch(node.Name)
+      {
+        case "START":
+          int x = int.Parse(node.Attributes["x"].InnerText);
+          int y = int.Parse(node.Attributes["y"].InnerText);
+          _cameraPos.x = x * GlobalConstants.WallScaleFactor;
+          _cameraPos.z = y * GlobalConstants.WallScaleFactor;
+          CameraPivot.transform.position = _cameraPos;
+          break;
+      case "LAYOUT":
+          ParseLayout(node);
+          break;
+      }
+    }
+  }
+
+  void ParseLayout(XmlNode node)
+  {
+    var mapLayout = Regex.Split(node.InnerText, "\r\n");
+    for (int i = 0; i < mapLayout.Length; i++)
+    {
+      if (mapLayout[i] != string.Empty) 
+      {
+        _map.Add(mapLayout[i]);
+      }
+    }
+
+    _mapColumns = _map[0].Length;
+    _mapRows = _map.Count;
+
+    GameObject go;
+    Vector3 goPosition = Vector3.zero;
     int x = 0, y = 0;
-    foreach (var line in lines)
+    foreach (var line in _map)
     {
       for (int i = 0; i < line.Length; i++)
       {
-        _map[x, y] = line[i];
+        if (line[i] == '#')
+        {
+          go = (GameObject)Instantiate(WallPrefab);
+          goPosition = go.transform.position;
+          goPosition.x = x * GlobalConstants.WallScaleFactor;
+          goPosition.z = y * GlobalConstants.WallScaleFactor;
+          go.transform.position = goPosition;
+          go.transform.parent = ObjectsInstancesTransform.transform;
+          _instances.Add(go);
+        }
+        else
+        {
+          go = (GameObject)Instantiate(FloorPrefab);
+          goPosition = go.transform.position;
+          goPosition.x = x * GlobalConstants.WallScaleFactor;
+          goPosition.z = y * GlobalConstants.WallScaleFactor;
+          go.transform.position = goPosition;
+          go.transform.parent = ObjectsInstancesTransform.transform;
+          _instances.Add(go);
+
+          go = (GameObject)Instantiate(CeilingPrefab);
+          goPosition = go.transform.position;
+          goPosition.x = x * GlobalConstants.WallScaleFactor;
+          goPosition.z = y * GlobalConstants.WallScaleFactor;
+          go.transform.position = goPosition;
+          go.transform.parent = ObjectsInstancesTransform.transform;
+          _instances.Add(go);
+        }
         y++;        
       }
       
       y = 0;
       x++;
     }
-    */
-
-    XmlDocument doc = new XmlDocument();
-    doc.Load("Assets/maps/test_map.xml");
-    foreach (XmlNode node in doc.DocumentElement.ChildNodes)
-    {
-      if (node.Name == "START")
-      {
-        int x = int.Parse(node.Attributes["x"].InnerText);
-        int y = int.Parse(node.Attributes["y"].InnerText);
-        _cameraPos.x = x * GlobalConstants.WallScaleFactor;
-        _cameraPos.z = y * GlobalConstants.WallScaleFactor;
-        CameraPivot.transform.position = _cameraPos;
-      }
-
-      MapCell mapCell = new MapCell();
-      foreach (var item in GlobalConstants.MapAttributesDictionary)
-      {
-        var attribute = node.Attributes[item.Value];
-        if (attribute == null) continue;
-        int attrValue = int.Parse(attribute.InnerText);
-        switch (item.Key)
-        {
-          case GlobalConstants.MapAttributes.Floor:
-            mapCell.FloorId = attrValue;
-            break;
-          case GlobalConstants.MapAttributes.Ceiling:
-            mapCell.CeilingId = attrValue;
-            break;
-          case GlobalConstants.MapAttributes.CoordX:
-            mapCell.CoordX = attrValue;
-            break;
-          case GlobalConstants.MapAttributes.CoordY:
-            mapCell.CoordY = attrValue;
-            break;
-          case GlobalConstants.MapAttributes.Wall:
-            mapCell.WallId = attrValue;
-            break;
-          default:
-            break;
-
-        }
-
-        //Debug.Log(item.Value + " -> " + attrValue);
-      }    
-
-      _map.Add(mapCell);
-    }
   }
 
   void ParseMap()
   {
+    /*
     Vector3 goPosition = Vector3.zero;
     foreach (var cell in _map)
     {
@@ -161,6 +183,7 @@ public class App : MonoSingleton<App>
         _instances.Add(go);
       }      
     }
+    */
 
     /*
     GameObject go;

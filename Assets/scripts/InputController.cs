@@ -61,7 +61,7 @@ public class InputController : MonoSingleton<InputController>
       StartCoroutine ("CameraTurnRoutine", _cameraTurnLeft);
     }
 
-    if (Input.GetKeyDown (KeyCode.W)) 
+    if (Input.GetKey (KeyCode.W)) 
     {
       int xFraction = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
       int zFraction = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
