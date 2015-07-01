@@ -23,6 +23,14 @@ public class App : MonoSingleton<App>
     get { return _cameraPos; }
   }
 
+  public int CameraOrientation;
+
+  Vector3 _cameraAngles = Vector3.zero;
+  public Vector3 CameraAngles
+  {
+    get { return _cameraAngles; }
+  }
+
   public GameObject CameraPivot;
 
   public Callback MapLoadingFinished;
@@ -37,7 +45,6 @@ public class App : MonoSingleton<App>
     _cameraPos = CameraPivot.transform.position;
 
     LoadMap("Assets/maps/test.txt");
-    ParseMap();
 
     if (MapLoadingFinished != null)
       MapLoadingFinished();
@@ -71,9 +78,13 @@ public class App : MonoSingleton<App>
         case "START":
           int x = int.Parse(node.Attributes["x"].InnerText);
           int y = int.Parse(node.Attributes["y"].InnerText);
+          CameraOrientation = int.Parse(node.Attributes["facing"].InnerText);
+          GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[CameraOrientation];
           _cameraPos.x = x * GlobalConstants.WallScaleFactor;
           _cameraPos.z = y * GlobalConstants.WallScaleFactor;
           CameraPivot.transform.position = _cameraPos;
+          CameraPivot.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
+          _cameraAngles = CameraPivot.transform.eulerAngles;
           break;
       case "LAYOUT":
           ParseLayout(node);
@@ -137,102 +148,5 @@ public class App : MonoSingleton<App>
       y = 0;
       x++;
     }
-  }
-
-  void ParseMap()
-  {
-    /*
-    Vector3 goPosition = Vector3.zero;
-    foreach (var cell in _map)
-    {
-      int x = cell.CoordX;
-      int y = cell.CoordY;
-
-      GameObject go = null;
-
-      if (cell.FloorId != -1)
-      {
-        go = (GameObject)Instantiate(FloorPrefab);
-        goPosition = go.transform.position;
-        goPosition.x = x * GlobalConstants.WallScaleFactor;
-        goPosition.z = y * GlobalConstants.WallScaleFactor;
-        go.transform.position = goPosition;
-        go.transform.parent = ObjectsInstancesTransform.transform;
-        _instances.Add(go);
-      }
-
-      if (cell.WallId != -1)
-      {
-        go = (GameObject)Instantiate(WallPrefab);
-        goPosition = go.transform.position;
-        goPosition.x = x * GlobalConstants.WallScaleFactor;
-        goPosition.z = y * GlobalConstants.WallScaleFactor;
-        go.transform.position = goPosition;
-        go.transform.parent = ObjectsInstancesTransform.transform;
-        _instances.Add(go);
-      }
-
-      if (cell.CeilingId != -1)
-      {
-        go = (GameObject)Instantiate(CeilingPrefab);
-        goPosition = go.transform.position;
-        goPosition.x = x * GlobalConstants.WallScaleFactor;
-        goPosition.z = y * GlobalConstants.WallScaleFactor;
-        go.transform.position = goPosition;
-        go.transform.parent = ObjectsInstancesTransform.transform;
-        _instances.Add(go);
-      }      
-    }
-    */
-
-    /*
-    GameObject go;
-    Vector3 goPosition = Vector3.zero;
-    for (int i = 0; i < _mapRows; i++)
-    {
-      for (int j = 0; j < _mapColumns; j++)
-      {
-        //if (_map[i, j] == '0') continue;
-
-        char type = _map[i, j];
-
-        switch(type)
-        {            
-          case '1':
-            go = (GameObject)Instantiate(WallPrefab);
-            goPosition = go.transform.position;
-            goPosition.x = i * GlobalConstants.WallScaleFactor;
-            goPosition.z = j * GlobalConstants.WallScaleFactor;
-            go.transform.position = goPosition;
-            go.transform.parent = ObjectsInstancesTransform.transform;
-            _instances.Add(go);
-            break;
-          case 'X':
-            _cameraPos.x = i * GlobalConstants.WallScaleFactor;
-            _cameraPos.z = j * GlobalConstants.WallScaleFactor;            
-            CameraPivot.transform.position = _cameraPos;
-            break;
-          case '2':
-            go = (GameObject)Instantiate(ColumnPrefab);
-            goPosition = go.transform.position;
-            goPosition.x = i * GlobalConstants.WallScaleFactor;
-            goPosition.z = j * GlobalConstants.WallScaleFactor;
-            go.transform.position = goPosition;
-            go.transform.parent = ObjectsInstancesTransform.transform;
-            _instances.Add(go);
-            break;
-          default:
-            go = (GameObject)Instantiate(FloorPrefab);
-            goPosition = go.transform.position;
-            goPosition.x = i * GlobalConstants.WallScaleFactor;
-            goPosition.z = j * GlobalConstants.WallScaleFactor;
-            go.transform.position = goPosition;
-            go.transform.parent = ObjectsInstancesTransform.transform;
-            _instances.Add(go);            
-            break;
-        }
-      }
-    }
-    */
   }
 }

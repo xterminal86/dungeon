@@ -3,20 +3,17 @@ using System.Collections;
 
 public class InputController : MonoSingleton<InputController> 
 {
-  CoroutineTurnArgument _cameraTurnRight = new CoroutineTurnArgument();
-  CoroutineTurnArgument _cameraTurnLeft = new CoroutineTurnArgument();
+  CameraTurnArgument arg = new CameraTurnArgument();
   CoroutineMoveArgument _cameraMove = new CoroutineMoveArgument();
-
   void Awake () 
   {	
-    _cameraTurnRight.Speed = GlobalConstants.CameraTurnSpeed;
-    _cameraTurnLeft.Speed = GlobalConstants.CameraTurnSpeed;
+    arg.Speed = GlobalConstants.CameraTurnSpeed;
     _cameraMove.Speed = GlobalConstants.CameraMoveSpeed;
 	}
 	
   public void MapLoadingFinishedHandler()
   {
-    _cameraAngles = Camera.main.transform.eulerAngles;
+    _cameraAngles = App.Instance.CameraAngles;
     _cameraPosX = App.Instance.CameraPos.x;
     _cameraPosZ = App.Instance.CameraPos.z;
     _cameraPos.x = _cameraPosX;
@@ -24,7 +21,6 @@ public class InputController : MonoSingleton<InputController>
   }
 
   bool _isProcessing = false;
-  float _cameraAngleY = 0.0f;
   float _cameraPosX = 0.0f, _cameraPosZ = 0.0f;
   Vector3 _cameraAngles = Vector3.zero;
   Vector3 _cameraPos = Vector3.zero;
@@ -38,8 +34,6 @@ public class InputController : MonoSingleton<InputController>
     _cameraPos.x = _cameraPosX;
     _cameraPos.z = _cameraPosZ;
 
-    _cameraAngles.y = _cameraAngleY;
-
     App.Instance.CameraPivot.transform.eulerAngles = _cameraAngles;
     App.Instance.CameraPos = _cameraPos;
     App.Instance.CameraPivot.transform.position = App.Instance.CameraPos;
@@ -47,18 +41,14 @@ public class InputController : MonoSingleton<InputController>
 
   void ProcessKeyboard ()
   {
-    if (Input.GetKeyDown (KeyCode.E)) 
-    {      
-      _cameraTurnRight.From = Camera.main.transform.eulerAngles.y;
-      _cameraTurnRight.To = _cameraTurnRight.From + 90;
-      StartCoroutine ("CameraTurnRoutine", _cameraTurnRight);
+    if (Input.GetKey(KeyCode.E)) 
+    {   
+      TurnCamera(App.Instance.CameraOrientation, App.Instance.CameraOrientation + 1, true);
     }
 
-    if (Input.GetKeyDown (KeyCode.Q)) 
+    if (Input.GetKey(KeyCode.Q)) 
     {
-      _cameraTurnLeft.From = Camera.main.transform.eulerAngles.y;
-      _cameraTurnLeft.To = _cameraTurnLeft.From - 90;
-      StartCoroutine ("CameraTurnRoutine", _cameraTurnLeft);
+      TurnCamera(App.Instance.CameraOrientation, App.Instance.CameraOrientation - 1, false);
     }
 
     if (Input.GetKey (KeyCode.W)) 
@@ -107,40 +97,38 @@ public class InputController : MonoSingleton<InputController>
     base.Init ();
   }
 
+  void TurnCamera(int from, int to, bool turnRight)
+  {
+    if (from < 0) from = GlobalConstants.OrientationsMap.Count - 1;
+    if (from == GlobalConstants.OrientationsMap.Count) from = 0;
+    if (to < 0) to = GlobalConstants.OrientationsMap.Count - 1;
+    if (to == GlobalConstants.OrientationsMap.Count) to = 0;
+
+    arg.From = from;
+    arg.To = to;
+    arg.TurnRight = turnRight;
+    StartCoroutine("CameraTurnRoutine", arg);
+  }
+
   IEnumerator CameraTurnRoutine(object arg)
   {
-    CoroutineTurnArgument ca = arg as CoroutineTurnArgument;
+    CameraTurnArgument ca = arg as CameraTurnArgument;
     if (ca == null) yield return null;
     _isProcessing = true;
-    float res = ca.From;
-    // Right Turn
-    if (ca.From < ca.To)
+    float cond = 0.0f;
+    float toAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.To]];
+    while (Mathf.Abs(cond) < 90.0f)
     {
-      while (res < ca.To)
-      {
-        float speed = Time.deltaTime * ca.Speed;
-        res += speed;
-        _cameraAngleY += speed;
-        if (res + speed > ca.To) break;
-        yield return null;
-      }
-    }
-    else
-    {
-      while (res > ca.To)
-      {
-        float speed = Time.deltaTime * ca.Speed;
-        res -= speed;
-        _cameraAngleY -= speed;
-        if (res - speed < ca.To) break;
-        yield return null;
-      }
+      cond += Time.deltaTime * ca.Speed;
+      if (cond + Time.deltaTime * ca.Speed > 90.0f) break;
+      if (ca.TurnRight) _cameraAngles.y += Time.deltaTime * ca.Speed;
+      else _cameraAngles.y -= Time.deltaTime * ca.Speed;
+      yield return null;
     }
 
-    _cameraAngleY = ca.To;
-    _cameraAngleY = Mathf.Round(_cameraAngleY);
+    _cameraAngles.y = toAngle;
 
-    //Debug.Log (_cameraAngleY);
+    App.Instance.CameraOrientation = ca.To;
 
     _isProcessing = false;
   }
@@ -185,11 +173,12 @@ public class InputController : MonoSingleton<InputController>
   }
 }
 
-public class CoroutineTurnArgument
+public class CameraTurnArgument
 {
-  public float From;
-  public float To;
+  public int From;
+  public int To;
   public float Speed;
+  public bool TurnRight;
 }
 
 public class CoroutineMoveArgument
