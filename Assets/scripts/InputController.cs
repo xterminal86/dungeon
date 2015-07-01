@@ -31,8 +31,8 @@ public class InputController : MonoSingleton<InputController>
       ProcessKeyboard();
     }
 
-    _cameraPos.x = _cameraPosX;
-    _cameraPos.z = _cameraPosZ;
+    //_cameraPos.x = _cameraPosX;
+    //_cameraPos.z = _cameraPosZ;
 
     App.Instance.CameraPivot.transform.eulerAngles = _cameraAngles;
     App.Instance.CameraPos = _cameraPos;
@@ -51,41 +51,31 @@ public class InputController : MonoSingleton<InputController>
       TurnCamera(App.Instance.CameraOrientation, App.Instance.CameraOrientation - 1, false);
     }
 
-    if (Input.GetKey (KeyCode.W)) 
+    if (Input.GetKey(KeyCode.W)) 
     {
-      int xFraction = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-      int zFraction = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-      if (zFraction != 0) 
-      {
-        _cameraMove.From = App.Instance.CameraPos.z;
-        _cameraMove.To = _cameraMove.From + zFraction * GlobalConstants.WallScaleFactor;
-        _cameraMove.MoveZ = true;
-        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
-      }
-      else if (xFraction != 0) 
-      {
-        _cameraMove.From = App.Instance.CameraPos.x;
-        _cameraMove.To = _cameraMove.From + xFraction * GlobalConstants.WallScaleFactor;
-        _cameraMove.MoveZ = false;
-        StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
-      }
+      int posX = (int)App.Instance.CameraPos.x;
+      int posZ = (int)App.Instance.CameraPos.z;
+      CameraMoveArgument arg = new CameraMoveArgument();
+      arg.From = new Vector2(posX, posZ);
+      arg.Speed = GlobalConstants.CameraMoveSpeed;
+      StartCoroutine("CameraMoveRoutine", arg);
     }
 
-    if (Input.GetKeyDown (KeyCode.S)) 
+    if (Input.GetKey(KeyCode.S)) 
     {
-      int xFraction = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-      int zFraction = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-      if (zFraction != 0) 
+      int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+      int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+      if (zComponent != 0) 
       {
         _cameraMove.From = App.Instance.CameraPos.z;
-        _cameraMove.To = _cameraMove.From - zFraction * GlobalConstants.WallScaleFactor;
+        _cameraMove.To = _cameraMove.From - zComponent * GlobalConstants.WallScaleFactor;
         _cameraMove.MoveZ = true;
         StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
       }
-      else if (xFraction != 0) 
+      else if (xComponent != 0) 
       {
         _cameraMove.From = App.Instance.CameraPos.x;
-        _cameraMove.To = _cameraMove.From - xFraction * GlobalConstants.WallScaleFactor;
+        _cameraMove.To = _cameraMove.From - xComponent * GlobalConstants.WallScaleFactor;
         _cameraMove.MoveZ = false;
         StartCoroutine ("CameraMoveForwardRoutine", _cameraMove);
       }
@@ -133,8 +123,55 @@ public class InputController : MonoSingleton<InputController>
     _isProcessing = false;
   }
 
-  IEnumerator CameraMoveForwardRoutine(object arg)
+  IEnumerator CameraMoveRoutine(object arg)
   {
+    CameraMoveArgument ca = arg as CameraMoveArgument;
+    if (ca == null) yield return null;
+    _isProcessing = true;
+
+    int newX = (int)_cameraPos.x;
+    int newZ = (int)_cameraPos.z;
+
+    int cameraOrientation = App.Instance.CameraOrientation;
+    switch (cameraOrientation)
+    {
+      case 0:
+        newX -= GlobalConstants.WallScaleFactor;
+        break;
+      case 1:
+        newZ += GlobalConstants.WallScaleFactor;
+        break;
+      case 2:
+        newX += GlobalConstants.WallScaleFactor;
+        break;
+      case 3:
+        newZ -= GlobalConstants.WallScaleFactor;
+        break;
+      default:
+        break;
+    }
+
+    float cond = 0.0f;
+    while (cond < GlobalConstants.WallScaleFactor)
+    {
+      cond += Time.deltaTime * ca.Speed;
+      if (cond + Time.deltaTime * ca.Speed > GlobalConstants.WallScaleFactor) break;
+
+      if (cameraOrientation == 0) _cameraPos.x -= Time.deltaTime * ca.Speed;
+      else if (cameraOrientation == 1) _cameraPos.z += Time.deltaTime * ca.Speed;
+      else if (cameraOrientation == 2) _cameraPos.x += Time.deltaTime * ca.Speed;
+      else if (cameraOrientation == 3) _cameraPos.z -= Time.deltaTime * ca.Speed;
+      yield return null;
+    }
+
+    _cameraPos.x = newX;
+    _cameraPos.z = newZ;
+
+    _isProcessing = false;
+
+    SoundManager.Instance.PlayFootstepSound();
+
+    /*
     CoroutineMoveArgument ca = arg as CoroutineMoveArgument;
     if (ca == null) yield return null;
     _isProcessing = true;
@@ -170,6 +207,7 @@ public class InputController : MonoSingleton<InputController>
     _isProcessing = false;
 
     SoundManager.Instance.PlayFootstepSound();
+    */
   }
 }
 
@@ -179,6 +217,13 @@ public class CameraTurnArgument
   public int To;
   public float Speed;
   public bool TurnRight;
+}
+
+public class CameraMoveArgument
+{
+  public Vector2 From;
+  public Vector2 To;
+  public float Speed;
 }
 
 public class CoroutineMoveArgument
