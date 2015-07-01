@@ -18,25 +18,18 @@ public class SoundManager : MonoSingleton<SoundManager>
     _soundMap.Add(2, Footstep3Sound);
     _soundMap.Add(3, Footstep4Sound);
   }
-  
+
+  int _lastPlayedSound = -1;
   public void PlayFootstepSound()
   {
     int which = Random.Range(0, _soundMap.Count);
-    _soundMap[which].Play();    
-
-    /*
-    int which = Random.Range(0, 4);
-    float pitchDiff = Random.Range(-0.1f, 0.1f);
-    if (which == 0)
-    {      
-      Footstep1Sound.pitch = 1.0f + pitchDiff;
-      Footstep1Sound.Play();
-    }
-    else
+    if (_lastPlayedSound == which)
     {
-      Footstep2Sound.pitch = 1.0f + pitchDiff;
-      Footstep2Sound.Play();
+      which++;
+      if (which > _soundMap.Count - 1) which = 0;
+      else if (which < 0) which = _soundMap.Count - 1;
     }
-    */
+    _soundMap[which].Play();
+    _lastPlayedSound = which;
   }
 }
