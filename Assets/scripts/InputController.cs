@@ -38,7 +38,7 @@ public class InputController : MonoSingleton<InputController>
   void ProcessKeyboard ()
   {
     if (Input.GetKey(KeyCode.E)) 
-    {   
+    {      
       TurnCamera(App.Instance.CameraOrientation, App.Instance.CameraOrientation + 1, true);
     }
 
@@ -114,7 +114,7 @@ public class InputController : MonoSingleton<InputController>
   }
 
   void TurnCamera(int from, int to, bool turnRight)
-  {
+  {    
     if (from < 0) from = GlobalConstants.OrientationsMap.Count - 1;
     if (from == GlobalConstants.OrientationsMap.Count) from = 0;
     if (to < 0) to = GlobalConstants.OrientationsMap.Count - 1;
@@ -208,7 +208,7 @@ public class InputController : MonoSingleton<InputController>
       }
 
       /*
-      if (cond + Time.deltaTime * ca.Speed > GlobalConstants.WallScaleFactor)
+      if (cond + Time.smoothDeltaTime * ca.Speed > GlobalConstants.WallScaleFactor)
       {
         break;
       }

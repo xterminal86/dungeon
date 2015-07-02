@@ -24,7 +24,8 @@ public class App : MonoSingleton<App>
     get { return _cameraPos; }
   }
 
-  public int CameraOrientation;
+  [HideInInspector]
+  public int CameraOrientation = -1;
 
   Vector3 _cameraAngles = Vector3.zero;
   public Vector3 CameraAngles
@@ -165,9 +166,7 @@ public class App : MonoSingleton<App>
   {
     GameObject go = null;
     int x = int.Parse(node.Attributes["x"].InnerText);
-    int y = int.Parse(node.Attributes["y"].InnerText);
-    CameraOrientation = int.Parse(node.Attributes["facing"].InnerText);
-    GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[CameraOrientation];
+    int y = int.Parse(node.Attributes["y"].InnerText);    
     string objectType = node.Attributes["type"].InnerText;
     switch(objectType)
     {
