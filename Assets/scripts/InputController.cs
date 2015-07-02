@@ -17,6 +17,7 @@ public class InputController : MonoSingleton<InputController>
     _cameraPos = App.Instance.CameraPos;
   }
 
+  float _cameraBob = 0.0f;
   bool _isProcessing = false;
   Vector3 _cameraAngles = Vector3.zero;
   Vector3 _cameraPos = Vector3.zero;
@@ -26,6 +27,8 @@ public class InputController : MonoSingleton<InputController>
     {
       ProcessKeyboard();
     }
+
+    _cameraPos.y += _cameraBob;
 
     App.Instance.CameraPivot.transform.eulerAngles = _cameraAngles;
     App.Instance.CameraPos = _cameraPos;
@@ -154,7 +157,7 @@ public class InputController : MonoSingleton<InputController>
 
     App.Instance.CameraOrientation = ca.To;
 
-    _isProcessing = false;
+    _isProcessing = false;   
   }
 
   // Same thing as commented above here, but instead we get error in position.
@@ -181,15 +184,35 @@ public class InputController : MonoSingleton<InputController>
       if (zComponent != 0) newZ -= zComponent * GlobalConstants.WallScaleFactor;
     }
 
+    _cameraBob = 0.0f;
+
+    bool _bobFlag = false;
     float cond = 0.0f;
+    float half = GlobalConstants.WallScaleFactor / 2;
     while (cond < GlobalConstants.WallScaleFactor)
     {
       cond += Time.deltaTime * ca.Speed;
 
+      if (cond > half)
+      {
+        _bobFlag = true;
+      }
+
+      if (!_bobFlag)
+      {
+        _cameraBob = Time.smoothDeltaTime * GlobalConstants.CameraBobSpeed;
+      }
+      else
+      {
+        _cameraBob = -Time.smoothDeltaTime * GlobalConstants.CameraBobSpeed;
+      }
+
+      /*
       if (cond + Time.deltaTime * ca.Speed > GlobalConstants.WallScaleFactor)
       {
         break;
       }
+      */
 
       if (!ca.MoveBackwards)
       {
@@ -205,12 +228,17 @@ public class InputController : MonoSingleton<InputController>
       yield return null;
     }
 
+    _cameraBob = 0.0f;
+
     _cameraPos.x = newX;
+    // Hardcoded camera pivot Y position - OK, since the actual camera is child of pivot.
+    // If we want to change camera height, we should do this by changing the camera inside the pivot GameObject.
+    _cameraPos.y = 0.0f;  
     _cameraPos.z = newZ;
 
-    _isProcessing = false;
-
     SoundManager.Instance.PlayFootstepSound();
+
+    _isProcessing = false;
   }
 
   IEnumerator CameraCannotMoveRoutine(object arg)
@@ -231,12 +259,14 @@ public class InputController : MonoSingleton<InputController>
     while (cond < nudge)
     {
       cond += Time.deltaTime * ca.Speed;
-      
+
+      /*
       if (cond + Time.deltaTime * ca.Speed > nudge)
       {
         break;
       }
-      
+      */
+
       if (!ca.MoveBackwards)
       {
         if (xComponent != 0)

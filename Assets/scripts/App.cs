@@ -10,7 +10,7 @@ public class App : MonoSingleton<App>
   public GameObject WallPrefab;
   public GameObject FloorPrefab;
   public GameObject CeilingPrefab;
-  public GameObject DummyObjectPrefab;
+  public GameObject DoorPrefab;
   public GameObject ObjectsInstancesTransform;
 
   char[,] _mapLayout;
@@ -31,6 +31,9 @@ public class App : MonoSingleton<App>
   {
     get { return _cameraAngles; }
   }
+
+  public Dictionary<Vector2, int> MapObjectsHashByPosition = new Dictionary<Vector2, int>();
+  public Dictionary<int, MapObject> MapObjectsByHash = new Dictionary<int, MapObject>();
 
   public GameObject CameraPivot;
 
@@ -89,6 +92,9 @@ public class App : MonoSingleton<App>
           break;
       case "LAYOUT":
           ParseLayout(node);
+          break;
+      case "OBJECT":
+          SpawnObject(node);
           break;
       }
     }
@@ -153,6 +159,45 @@ public class App : MonoSingleton<App>
       y = 0;
       x++;
     }
+  }
+
+  void SpawnObject(XmlNode node)
+  {
+    GameObject go = null;
+    int x = int.Parse(node.Attributes["x"].InnerText);
+    int y = int.Parse(node.Attributes["y"].InnerText);
+    CameraOrientation = int.Parse(node.Attributes["facing"].InnerText);
+    GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[CameraOrientation];
+    string objectType = node.Attributes["type"].InnerText;
+    switch(objectType)
+    {
+      case "door":
+        /*
+        go = (GameObject)Instantiate(DoorPrefab);
+        bool doorOpen = bool.Parse(node.Attributes["open"].InnerText);
+        Vector3 position = new Vector3(y * GlobalConstants.WallScaleFactor, 
+                                       go.transform.position.y, 
+                                       x * GlobalConstants.WallScaleFactor);
+        go.transform.position = position;
+        go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
+        go.transform.parent = ObjectsInstancesTransform.transform;
+        DoorControl dc = go.GetComponent<DoorControl>();
+        if (dc != null)
+        {
+          dc.Setup(position, doorOpen);
+        }
+        _instances.Add(go);
+        */
+        break;
+      default:
+        break;
+    }
+
+    if (go != null)
+    {
+      _instances.Add(go);
+    }
+
   }
 
   public char GetMapLayoutPoint(int x, int y)
