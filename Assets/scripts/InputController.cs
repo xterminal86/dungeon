@@ -41,13 +41,11 @@ public class InputController : MonoSingleton<InputController>
     {      
       TurnCamera(App.Instance.CameraOrientation, App.Instance.CameraOrientation + 1, true);
     }
-
-    if (Input.GetKey(KeyCode.Q)) 
+    else if (Input.GetKey(KeyCode.Q)) 
     {
       TurnCamera(App.Instance.CameraOrientation, App.Instance.CameraOrientation - 1, false);
     }
-
-    if (Input.GetKey(KeyCode.W)) 
+    else if (Input.GetKey(KeyCode.W)) 
     {
       int posX = (int)App.Instance.CameraPos.x;
       int posZ = (int)App.Instance.CameraPos.z;
@@ -64,8 +62,7 @@ public class InputController : MonoSingleton<InputController>
         StartCoroutine("CameraCannotMoveRoutine", _cameraMoveArgument);
       }
     }
-
-    if (Input.GetKey(KeyCode.S)) 
+    else if (Input.GetKey(KeyCode.S)) 
     {
       int posX = (int)App.Instance.CameraPos.x;
       int posZ = (int)App.Instance.CameraPos.z;
