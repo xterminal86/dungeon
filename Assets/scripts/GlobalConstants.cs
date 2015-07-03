@@ -6,7 +6,7 @@ public delegate void Callback();
 public static class GlobalConstants 
 {
   public static int WallScaleFactor = 2;
-  public static int CameraTurnSpeed = 250;
+  public static int CameraTurnSpeed = 350;
   public static int CameraMoveSpeed = 4;
   public static float DoorOpenSpeed = 1.0f;
   public static float FogDensity = 0.2f;

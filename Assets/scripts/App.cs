@@ -168,25 +168,25 @@ public class App : MonoSingleton<App>
     int x = int.Parse(node.Attributes["x"].InnerText);
     int y = int.Parse(node.Attributes["y"].InnerText);    
     string objectType = node.Attributes["type"].InnerText;
+    int orientation = int.Parse(node.Attributes["facing"].InnerText);
     switch(objectType)
     {
       case "door":
-        /*
         go = (GameObject)Instantiate(DoorPrefab);
-        bool doorOpen = bool.Parse(node.Attributes["open"].InnerText);
+        GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[orientation];
         Vector3 position = new Vector3(y * GlobalConstants.WallScaleFactor, 
                                        go.transform.position.y, 
                                        x * GlobalConstants.WallScaleFactor);
         go.transform.position = position;
         go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
         go.transform.parent = ObjectsInstancesTransform.transform;
-        DoorControl dc = go.GetComponent<DoorControl>();
-        if (dc != null)
+        BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();        
+        if (bmo != null)
         {
-          dc.Setup(position, doorOpen);
+          bmo.MapObjectInstance = new DoorMapObject();
+          bmo.MapObjectInstance.PrintType();
         }
-        _instances.Add(go);
-        */
+        _instances.Add(go);        
         break;
       default:
         break;
