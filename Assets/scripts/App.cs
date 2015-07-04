@@ -173,20 +173,13 @@ public class App : MonoSingleton<App>
     {
       case "door":
         go = (GameObject)Instantiate(DoorPrefab);
-        GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[orientation];
-        Vector3 position = new Vector3(y * GlobalConstants.WallScaleFactor, 
-                                       go.transform.position.y, 
-                                       x * GlobalConstants.WallScaleFactor);
-        go.transform.position = position;
-        go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
-        go.transform.parent = ObjectsInstancesTransform.transform;
-        BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();        
+        BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
         if (bmo != null)
         {
-          bmo.MapObjectInstance = new DoorMapObject();
-          bmo.MapObjectInstance.PrintType();
+          bmo.MapObjectInstance = new DoorMapObject();          
         }
-        _instances.Add(go);        
+        break;
+      case "button":
         break;
       default:
         break;
@@ -194,6 +187,13 @@ public class App : MonoSingleton<App>
 
     if (go != null)
     {
+      GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[orientation];
+      Vector3 position = new Vector3(y * GlobalConstants.WallScaleFactor,
+                                     go.transform.position.y,
+                                     x * GlobalConstants.WallScaleFactor);
+      go.transform.position = position;
+      go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
+      go.transform.parent = ObjectsInstancesTransform.transform;
       _instances.Add(go);
     }
 

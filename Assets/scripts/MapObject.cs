@@ -3,8 +3,6 @@ using System.Collections;
 
 public class MapObject
 {
-  public virtual void PrintType()
-  {
-    Debug.Log (this.GetType());
-  }
+  public string Name = string.Empty;
+  public int HashCode = -1;  
 }

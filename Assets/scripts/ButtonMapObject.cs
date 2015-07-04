@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DoorMapObject : MapObject
+public class ButtonMapObject : MapObject
 {
-  
+
 }
