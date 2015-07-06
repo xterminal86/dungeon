@@ -79,6 +79,12 @@ public class InputController : MonoSingleton<InputController>
         StartCoroutine("CameraCannotMoveRoutine", _cameraMoveArgument);
       }
     }
+    else if (Input.GetKeyDown(KeyCode.Space))
+    {
+      //Debug.Log (App.Instance.GetMapObjectByName("door_1"));
+      //Debug.Log (App.Instance.GetGameObjectByName("door_1"));
+      //Debug.Log (App.Instance.GetMapObjectByName("test"));
+    }
   }
 
   protected override void Init()

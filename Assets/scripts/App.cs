@@ -11,12 +11,13 @@ public class App : MonoSingleton<App>
   public GameObject FloorPrefab;
   public GameObject CeilingPrefab;
   public GameObject DoorPrefab;
+  public GameObject ButtonPrefab;
   public GameObject ObjectsInstancesTransform;
 
   char[,] _mapLayout;
   List<string> _map = new System.Collections.Generic.List<string>();
 
-  List<GameObject> _instances = new List<GameObject>();
+  Dictionary<int, GameObject> _mapObjectsHashTable = new Dictionary<int, GameObject>();
   Vector3 _cameraPos = Vector3.zero;
   public Vector3 CameraPos
   {
@@ -134,7 +135,7 @@ public class App : MonoSingleton<App>
           goPosition.z = y * GlobalConstants.WallScaleFactor;
           go.transform.position = goPosition;
           go.transform.parent = ObjectsInstancesTransform.transform;
-          _instances.Add(go);
+          //_mapObjectsHashTable.Add(go);
         }
         else
         {
@@ -144,7 +145,7 @@ public class App : MonoSingleton<App>
           goPosition.z = y * GlobalConstants.WallScaleFactor;
           go.transform.position = goPosition;
           go.transform.parent = ObjectsInstancesTransform.transform;
-          _instances.Add(go);
+          //_mapObjectsHashTable.Add(go);
 
           go = (GameObject)Instantiate(CeilingPrefab);
           goPosition = go.transform.position;
@@ -152,7 +153,7 @@ public class App : MonoSingleton<App>
           goPosition.z = y * GlobalConstants.WallScaleFactor;
           go.transform.position = goPosition;
           go.transform.parent = ObjectsInstancesTransform.transform;
-          _instances.Add(go);
+          //_mapObjectsHashTable.Add(go);
         }
         y++;        
       }
@@ -165,21 +166,33 @@ public class App : MonoSingleton<App>
   void SpawnObject(XmlNode node)
   {
     GameObject go = null;
+    BehaviourMapObject bmo = null;
     int x = int.Parse(node.Attributes["x"].InnerText);
     int y = int.Parse(node.Attributes["y"].InnerText);    
     string objectType = node.Attributes["type"].InnerText;
+    string objectName = node.Attributes["name"].InnerText;
     int orientation = int.Parse(node.Attributes["facing"].InnerText);
     switch(objectType)
     {
       case "door":
         go = (GameObject)Instantiate(DoorPrefab);
-        BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
+        bmo = go.GetComponent<BehaviourMapObject>();
         if (bmo != null)
         {
-          bmo.MapObjectInstance = new DoorMapObject();          
+          bmo.MapObjectInstance = new DoorMapObject();
+          (bmo.MapObjectInstance as DoorMapObject).Name = objectName;
+          (bmo.MapObjectInstance as DoorMapObject).HashCode = objectName.GetHashCode();
         }
         break;
       case "button":
+        go = (GameObject)Instantiate(ButtonPrefab);
+        bmo = go.GetComponent<BehaviourMapObject>();
+        if (bmo != null)
+        {
+          bmo.MapObjectInstance = new ButtonMapObject();
+          (bmo.MapObjectInstance as ButtonMapObject).Name = objectName;
+          (bmo.MapObjectInstance as ButtonMapObject).HashCode = objectName.GetHashCode();
+        }
         break;
       default:
         break;
@@ -194,10 +207,12 @@ public class App : MonoSingleton<App>
       go.transform.position = position;
       go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
       go.transform.parent = ObjectsInstancesTransform.transform;
-      _instances.Add(go);
+      _mapObjectsHashTable[objectName.GetHashCode()] = go;
     }
 
   }
+
+  // ********************** HELPER FUNCTIONS ********************** //
 
   public char GetMapLayoutPoint(int x, int y)
   {
@@ -205,5 +220,31 @@ public class App : MonoSingleton<App>
     int ly = Mathf.Clamp(y, 0, _mapColumns);
 
     return _mapLayout[lx, ly];
+  }
+
+  public GameObject GetGameObjectByName(string name)
+  {
+    int hash = name.GetHashCode();
+    if (_mapObjectsHashTable.ContainsKey(hash))
+    {
+      return _mapObjectsHashTable[hash];
+    }
+
+    return null;
+  }
+
+  public MapObject GetMapObjectByName(string name)
+  {
+    int hash = name.GetHashCode();
+    if (_mapObjectsHashTable.ContainsKey(hash))
+    {
+      BehaviourMapObject bmo = _mapObjectsHashTable[hash].GetComponent<BehaviourMapObject>();
+      if (bmo != null)
+      {
+        return bmo.MapObjectInstance;
+      }
+    }
+    
+    return null;
   }
 }
