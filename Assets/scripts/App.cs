@@ -135,7 +135,6 @@ public class App : MonoSingleton<App>
           goPosition.z = y * GlobalConstants.WallScaleFactor;
           go.transform.position = goPosition;
           go.transform.parent = ObjectsInstancesTransform.transform;
-          //_mapObjectsHashTable.Add(go);
         }
         else
         {
@@ -145,7 +144,6 @@ public class App : MonoSingleton<App>
           goPosition.z = y * GlobalConstants.WallScaleFactor;
           go.transform.position = goPosition;
           go.transform.parent = ObjectsInstancesTransform.transform;
-          //_mapObjectsHashTable.Add(go);
 
           go = (GameObject)Instantiate(CeilingPrefab);
           goPosition = go.transform.position;
@@ -153,7 +151,6 @@ public class App : MonoSingleton<App>
           goPosition.z = y * GlobalConstants.WallScaleFactor;
           go.transform.position = goPosition;
           go.transform.parent = ObjectsInstancesTransform.transform;
-          //_mapObjectsHashTable.Add(go);
         }
         y++;        
       }
@@ -179,9 +176,7 @@ public class App : MonoSingleton<App>
         bmo = go.GetComponent<BehaviourMapObject>();
         if (bmo != null)
         {
-          bmo.MapObjectInstance = new DoorMapObject();
-          (bmo.MapObjectInstance as DoorMapObject).Name = objectName;
-          (bmo.MapObjectInstance as DoorMapObject).HashCode = objectName.GetHashCode();
+          bmo.MapObjectInstance = new DoorMapObject();          
         }
         break;
       case "button":
@@ -189,9 +184,9 @@ public class App : MonoSingleton<App>
         bmo = go.GetComponent<BehaviourMapObject>();
         if (bmo != null)
         {
-          bmo.MapObjectInstance = new ButtonMapObject();
-          (bmo.MapObjectInstance as ButtonMapObject).Name = objectName;
-          (bmo.MapObjectInstance as ButtonMapObject).HashCode = objectName.GetHashCode();
+          bmo.MapObjectInstance = new ButtonMapObject();          
+          MapObject mo = GetMapObjectByName(node.Attributes["connect"].InnerText);
+          bmo.MapObjectInstance.ActionCallback += mo.ActionHandler;
         }
         break;
       default:
@@ -200,6 +195,13 @@ public class App : MonoSingleton<App>
 
     if (go != null)
     {
+      if (bmo != null)
+      {
+        bmo.MapObjectInstance.Name = objectName;
+        bmo.MapObjectInstance.HashCode = objectName.GetHashCode();
+        bmo.MapObjectInstance.Facing = int.Parse(node.Attributes["facing"].InnerText);
+      }
+
       GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[orientation];
       Vector3 position = new Vector3(y * GlobalConstants.WallScaleFactor,
                                      go.transform.position.y,

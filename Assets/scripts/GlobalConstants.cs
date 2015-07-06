@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 public delegate void Callback();
+public delegate void CallbackO(object sender);
 
 public static class GlobalConstants 
 {
