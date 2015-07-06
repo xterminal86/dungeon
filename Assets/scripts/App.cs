@@ -47,6 +47,7 @@ public class App : MonoSingleton<App>
     UnityEngine.RenderSettings.fogDensity = GlobalConstants.FogDensity;
 
     MapLoadingFinished += InputController.Instance.MapLoadingFinishedHandler;
+    MapLoadingFinished += SoundManager.Instance.MapLoadingFinishedHandler;
 
     _cameraPos = CameraPivot.transform.position;
 
@@ -187,6 +188,7 @@ public class App : MonoSingleton<App>
           bmo.MapObjectInstance = new ButtonMapObject();          
           MapObject mo = GetMapObjectByName(node.Attributes["connect"].InnerText);
           bmo.MapObjectInstance.ActionCallback += mo.ActionHandler;
+          bmo.MapObjectInstance.ActionCallback += bmo.MapObjectInstance.ActionHandler;
         }
         break;
       default:
@@ -200,6 +202,7 @@ public class App : MonoSingleton<App>
         bmo.MapObjectInstance.Name = objectName;
         bmo.MapObjectInstance.HashCode = objectName.GetHashCode();
         bmo.MapObjectInstance.Facing = int.Parse(node.Attributes["facing"].InnerText);
+        bmo.MapObjectInstance.GameObjectToControl = bmo.Model;
       }
 
       GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[orientation];

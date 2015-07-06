@@ -3,10 +3,12 @@ using System.Collections.Generic;
 
 public class SoundManager : MonoSingleton<SoundManager> 
 {
+  public AudioSource AmbientSound;
   public AudioSource Footstep1Sound;  
   public AudioSource Footstep2Sound;
   public AudioSource Footstep3Sound;
   public AudioSource Footstep4Sound;
+  public AudioSource ButtonSound;
 
   Dictionary<int, AudioSource> _soundMap = new Dictionary<int, AudioSource>();
   protected override void Init()
@@ -31,5 +33,10 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
     _soundMap[which].Play();
     _lastPlayedSound = which;
+  }
+
+  public void MapLoadingFinishedHandler()
+  {
+    AmbientSound.Play();
   }
 }

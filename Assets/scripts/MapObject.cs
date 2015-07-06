@@ -9,6 +9,8 @@ public abstract class MapObject
 
   public CallbackO ActionCallback;
 
+  public GameObject GameObjectToControl;
+
   public virtual void ActionHandler(object sender)
   {
   }
