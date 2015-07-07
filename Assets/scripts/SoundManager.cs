@@ -9,7 +9,8 @@ public class SoundManager : MonoSingleton<SoundManager>
   public AudioSource Footstep2Sound;
   public AudioSource Footstep3Sound;
   public AudioSource Footstep4Sound;
-  public AudioSource ButtonSound;
+  public AudioSource StoneDoorMovingSound;
+  public AudioSource StoneDoorCloseSound;
 
   Dictionary<int, AudioSource> _soundMap = new Dictionary<int, AudioSource>();
   protected override void Init()

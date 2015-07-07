@@ -3,6 +3,10 @@ using System.Collections;
 
 public class BehaviourMapObject : MonoBehaviour
 {
+  public AudioSource StartSound;
+  public AudioSource ContinuousSound;
+  public AudioSource AmbientSound;
+
   public GameObject Model;
 
   public MapObject MapObjectInstance;
@@ -11,6 +15,10 @@ public class BehaviourMapObject : MonoBehaviour
   void Start()
   {
     _collider = GetComponentInChildren<BoxCollider>();
+    if (AmbientSound != null)
+    {
+      AmbientSound.Play();
+    }
   }
 
   void Update()

@@ -10,6 +10,7 @@ public abstract class MapObject
   public CallbackO ActionCallback;
   public CallbackO ActionCompleteCallback;
 
+  public BehaviourMapObject BMO;
   public GameObject GameObjectToControl;
 
   public virtual void ActionHandler(object sender)

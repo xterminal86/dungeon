@@ -80,7 +80,7 @@ public class App : MonoSingleton<App>
     XmlDocument doc = new XmlDocument();
     doc.Load("Assets/maps/test_map.xml");
     foreach (XmlNode node in doc.DocumentElement.ChildNodes)
-    {
+    {      
       switch(node.Name)
       {
         case "START":
@@ -199,14 +199,15 @@ public class App : MonoSingleton<App>
       default:
         break;
     }
-
+    
     if (go != null)
     {
       if (bmo != null)
-      {
+      { 
         bmo.MapObjectInstance.Name = objectName;
         bmo.MapObjectInstance.HashCode = objectName.GetHashCode();
         bmo.MapObjectInstance.Facing = int.Parse(node.Attributes["facing"].InnerText);
+        bmo.MapObjectInstance.BMO = bmo;
         bmo.MapObjectInstance.GameObjectToControl = bmo.Model;
       }
 
@@ -220,7 +221,7 @@ public class App : MonoSingleton<App>
       _mapObjectsHashTable[objectName.GetHashCode()] = go;
     }
 
-  }
+  }    
 
   // ********************** HELPER FUNCTIONS ********************** //
 

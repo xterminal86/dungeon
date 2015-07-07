@@ -15,10 +15,15 @@ public class DoorMapObject : MapObject
     MapObject mo = sender as MapObject;
     if (mo != null)
     {
-      Debug.Log(Name + ": I was toggled by " + mo.Name);
+      Debug.Log(Name + ": was toggled by " + mo.Name);
       if (_job != null)
       {
         _job.KillJob();
+      }
+
+      if (BMO.ContinuousSound != null && !BMO.ContinuousSound.isPlaying)
+      {
+        BMO.ContinuousSound.Play();
       }
 
       _job = new Job(DoorToggleRoutine());
@@ -27,7 +32,7 @@ public class DoorMapObject : MapObject
 
   DoorMovingState _doorMovingState = DoorMovingState.STILL;
   IEnumerator DoorToggleRoutine()
-  {
+  {    
     Vector3 position = GameObjectToControl.transform.localPosition;
 
     if (!DoorIsOpen && _doorMovingState == DoorMovingState.STILL)
@@ -106,6 +111,16 @@ public class DoorMapObject : MapObject
       
       position.y = _doorMaxY;
       GameObjectToControl.transform.localPosition = position;
+    }
+
+    if (BMO.StartSound != null)
+    {
+      if (BMO.ContinuousSound != null)
+      {
+        BMO.ContinuousSound.Stop();
+      }
+
+      BMO.StartSound.Play();
     }
 
     Debug.Log (Name + " open status: " + DoorIsOpen);

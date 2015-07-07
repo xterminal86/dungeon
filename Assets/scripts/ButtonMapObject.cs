@@ -10,7 +10,11 @@ public class ButtonMapObject : MapObject
   {
     if (!_pushing)
     {
-      SoundManager.Instance.ButtonSound.Play();
+      if (BMO.StartSound != null)
+      {
+        BMO.StartSound.Play();
+      }
+
       JobManager.Instance.CreateJob(ButtonAnimationPressRoutine());
     }
   }
