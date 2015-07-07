@@ -16,4 +16,5 @@
 <OBJECT x="1" y="3" facing="0" type="door" name="door_1" open="false" />
 	<OBJECT x="2" y="3" facing="0" type="button" name="button_1" connect="door_1" mode="toggle" />
 	<OBJECT x="2" y="3" facing="3" type="button" name="button_2" connect="door_1" mode="toggle" />
+<OBJECT x="25" y="5" facing="0" type="dummy" name="dummy_1" />	
 </MAP>

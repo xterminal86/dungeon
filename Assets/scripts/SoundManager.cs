@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class SoundManager : MonoSingleton<SoundManager> 
 {
   public AudioSource AmbientSound;
+  public AudioSource ChoirSound;
   public AudioSource Footstep1Sound;  
   public AudioSource Footstep2Sound;
   public AudioSource Footstep3Sound;

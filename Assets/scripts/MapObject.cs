@@ -8,10 +8,15 @@ public abstract class MapObject
   public int Facing = -1;
 
   public CallbackO ActionCallback;
+  public CallbackO ActionCompleteCallback;
 
   public GameObject GameObjectToControl;
 
   public virtual void ActionHandler(object sender)
+  {
+  }
+
+  public virtual void ActionCompleteHandler(object sender)
   {
   }
 }

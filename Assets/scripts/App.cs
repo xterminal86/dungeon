@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 public class App : MonoSingleton<App>
 {
+  public GameObject DummyObjectPrefab;
   public GameObject WallPrefab;
   public GameObject FloorPrefab;
   public GameObject CeilingPrefab;
@@ -177,7 +178,8 @@ public class App : MonoSingleton<App>
         bmo = go.GetComponent<BehaviourMapObject>();
         if (bmo != null)
         {
-          bmo.MapObjectInstance = new DoorMapObject();          
+          bmo.MapObjectInstance = new DoorMapObject();
+          (bmo.MapObjectInstance as DoorMapObject).DoorIsOpen = bool.Parse(node.Attributes["open"].InnerText);
         }
         break;
       case "button":
@@ -187,9 +189,12 @@ public class App : MonoSingleton<App>
         {
           bmo.MapObjectInstance = new ButtonMapObject();          
           MapObject mo = GetMapObjectByName(node.Attributes["connect"].InnerText);
-          bmo.MapObjectInstance.ActionCallback += mo.ActionHandler;
           bmo.MapObjectInstance.ActionCallback += bmo.MapObjectInstance.ActionHandler;
+          bmo.MapObjectInstance.ActionCompleteCallback += mo.ActionCompleteHandler;
         }
+        break;
+      case "dummy":
+        go = (GameObject)Instantiate(DummyObjectPrefab);
         break;
       default:
         break;

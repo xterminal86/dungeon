@@ -4,33 +4,51 @@ using System.Collections;
 public class ButtonMapObject : MapObject
 {
   const float _buttonDepressMax = 1.05f;
-  const float _buttonPressSpeed = 1.0f;
+  const float _buttonPressSpeed = 0.25f;
 
   public override void ActionHandler(object sender)
   {
-    SoundManager.Instance.ButtonSound.Play();    
+    if (!_pushing)
+    {
+      SoundManager.Instance.ButtonSound.Play();
+      JobManager.Instance.CreateJob(ButtonAnimationPressRoutine());
+    }
   }
 
+  bool _pushing = false;
   IEnumerator ButtonAnimationPressRoutine()
   {
-    Vector3 transform = GameObjectToControl.transform.position;
+    _pushing = true;
+
+    Vector3 position = GameObjectToControl.transform.localPosition;
     float cond = 1.0f;
     while (cond < 1.1f)
     {
+      cond += Time.smoothDeltaTime * _buttonPressSpeed;
+
       if (cond < 1.05f)
-      {
-        transform.z += Time.smoothDeltaTime * _buttonPressSpeed;
+      {  
+        position.z -= Time.smoothDeltaTime * _buttonPressSpeed;
       }
       else
       {
-        transform.z -= Time.smoothDeltaTime * _buttonPressSpeed;
+        position.z += Time.smoothDeltaTime * _buttonPressSpeed;
       }
 
-      GameObjectToControl.transform.position = transform;
+      GameObjectToControl.transform.localPosition = position;
+
       yield return null;
     }
 
-    transform.z = 1.0f;
-    GameObjectToControl.transform.position = transform;    
+    position.z = 1.0f;
+
+    GameObjectToControl.transform.localPosition = position;    
+
+    _pushing = false;
+
+    if (ActionCompleteCallback != null)
+    {
+      ActionCompleteCallback(this);
+    }
   }  
 }
