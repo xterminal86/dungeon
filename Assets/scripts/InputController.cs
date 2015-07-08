@@ -116,8 +116,8 @@ public class InputController : MonoSingleton<InputController>
     char emptyCell = App.Instance.GetMapLayoutPoint(newX, newZ);
     bool doorAhead = false;
 
-    Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height - 50));
-
+    Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height - 80));
+    
     if (moveBackwards)
     {
       Vector3 tmp = ray.direction;
