@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BehaviourMapObject : MonoBehaviour
 {
-  public AudioSource StartSound;
+  public AudioSource ShortSound;
   public AudioSource ContinuousSound;
   public AudioSource AmbientSound;
 

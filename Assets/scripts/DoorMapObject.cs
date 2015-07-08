@@ -113,14 +113,14 @@ public class DoorMapObject : MapObject
       GameObjectToControl.transform.localPosition = position;
     }
 
-    if (BMO.StartSound != null)
+    if (BMO.ShortSound != null)
     {
       if (BMO.ContinuousSound != null)
       {
         BMO.ContinuousSound.Stop();
       }
 
-      BMO.StartSound.Play();
+      BMO.ShortSound.Play();
     }
 
     Debug.Log (Name + " open status: " + DoorIsOpen);

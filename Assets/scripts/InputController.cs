@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class InputController : MonoSingleton<InputController> 
 {
@@ -81,6 +82,7 @@ public class InputController : MonoSingleton<InputController>
     }
     else if (Input.GetKeyDown(KeyCode.Space))
     {
+      //Debug.Log(App.Instance.GetMapObjectsByPosition(1, 3)[0]);
       //Debug.Log (App.Instance.GetMapObjectByName("door_1"));
       //Debug.Log (App.Instance.GetGameObjectByName("door_1"));
       //Debug.Log (App.Instance.GetMapObjectByName("test"));
@@ -111,9 +113,36 @@ public class InputController : MonoSingleton<InputController>
       if (zComponent != 0) newZ -= zComponent;
     }
 
-    char res = App.Instance.GetMapLayoutPoint(newX, newZ);
+    char emptyCell = App.Instance.GetMapLayoutPoint(newX, newZ);
+    bool doorAhead = false;
 
-    return (res == '.');
+    Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height - 50));
+
+    if (moveBackwards)
+    {
+      Vector3 tmp = ray.direction;
+      if (xComponent != 0) tmp.x = -ray.direction.x;
+      if (zComponent != 0) tmp.z = -ray.direction.z;
+      ray.direction = tmp;
+    }
+
+    RaycastHit hit;      
+    if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
+    {
+      if (hit.collider != null)
+      {
+        var bmo = hit.collider.gameObject.GetComponentInParent<BehaviourMapObject>();
+        if (bmo != null)
+        {
+          if (bmo.MapObjectInstance is DoorMapObject)
+          {
+            doorAhead = true;
+          }
+        }
+      }
+    }
+
+    return (emptyCell == '.' && !doorAhead);
   }
 
   void TurnCamera(int from, int to, bool turnRight)
@@ -257,7 +286,7 @@ public class InputController : MonoSingleton<InputController>
     int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
 
     float cond = 0.0f;
-    float nudge = (float)GlobalConstants.WallScaleFactor / 2.0f;
+    float nudge = (float)GlobalConstants.WallScaleFactor / 3.0f;
     float half = nudge / 2.0f;
     while (cond < nudge)
     {

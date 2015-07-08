@@ -19,6 +19,8 @@ public class App : MonoSingleton<App>
   List<string> _map = new System.Collections.Generic.List<string>();
 
   Dictionary<int, GameObject> _mapObjectsHashTable = new Dictionary<int, GameObject>();
+  Dictionary<Vector2, List<int>> _mapObjectsHashListByPosition = new Dictionary<Vector2, List<int>>();
+
   Vector3 _cameraPos = Vector3.zero;
   public Vector3 CameraPos
   {
@@ -34,9 +36,6 @@ public class App : MonoSingleton<App>
   {
     get { return _cameraAngles; }
   }
-
-  public Dictionary<Vector2, int> MapObjectsHashByPosition = new Dictionary<Vector2, int>();
-  public Dictionary<int, MapObject> MapObjectsByHash = new Dictionary<int, MapObject>();
 
   public GameObject CameraPivot;
 
@@ -162,6 +161,7 @@ public class App : MonoSingleton<App>
     }
   }
 
+  Vector2 _dictionaryKey = Vector2.zero;
   void SpawnObject(XmlNode node)
   {
     GameObject go = null;
@@ -171,6 +171,7 @@ public class App : MonoSingleton<App>
     string objectType = node.Attributes["type"].InnerText;
     string objectName = node.Attributes["name"].InnerText;
     int orientation = int.Parse(node.Attributes["facing"].InnerText);
+    _dictionaryKey.Set(x, y);
     switch(objectType)
     {
       case "door":
@@ -219,6 +220,15 @@ public class App : MonoSingleton<App>
       go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
       go.transform.parent = ObjectsInstancesTransform.transform;
       _mapObjectsHashTable[objectName.GetHashCode()] = go;
+
+      if (_mapObjectsHashListByPosition.ContainsKey(_dictionaryKey))
+      {
+        _mapObjectsHashListByPosition[_dictionaryKey].Add(objectName.GetHashCode());
+      }
+      else
+      {
+        _mapObjectsHashListByPosition.Add(_dictionaryKey, new List<int>(){ objectName.GetHashCode() });
+      }
     }
 
   }    
@@ -257,5 +267,30 @@ public class App : MonoSingleton<App>
     }
     
     return null;
+  }
+
+  List<MapObject> _searchResult = new List<MapObject>();
+  Vector2 _searchKey = Vector2.zero;
+  public List<MapObject> GetMapObjectsByPosition(int x, int y)
+  {
+    _searchKey.Set(x, y);
+    if (!_mapObjectsHashListByPosition.ContainsKey(_searchKey)) return null;
+
+    _searchResult.Clear();
+
+    foreach (var hash in _mapObjectsHashListByPosition[_searchKey])
+    {
+      if (_mapObjectsHashTable.ContainsKey(hash))
+      {
+        GameObject go = _mapObjectsHashTable[hash];
+        BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
+        if (bmo != null)
+        {
+          _searchResult.Add(bmo.MapObjectInstance);
+        }
+      }
+    }
+
+    return _searchResult;
   }
 }
