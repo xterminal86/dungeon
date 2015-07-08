@@ -39,12 +39,19 @@ public class App : MonoSingleton<App>
 
   public GameObject CameraPivot;
 
+  [HideInInspector]
   public Callback MapLoadingFinished;
+
+  [Header("Fog settings")]
+  public Color FogColor = Color.black;
+  public float FogDensity = 0.2f;
+  public bool EnableFog = true;
+
   void Awake()
   {
-    UnityEngine.RenderSettings.fog = true;
-    UnityEngine.RenderSettings.fogColor = GlobalConstants.FogColor;
-    UnityEngine.RenderSettings.fogDensity = GlobalConstants.FogDensity;
+    UnityEngine.RenderSettings.fog = EnableFog;
+    UnityEngine.RenderSettings.fogColor = FogColor;
+    UnityEngine.RenderSettings.fogDensity = FogDensity;
 
     MapLoadingFinished += InputController.Instance.MapLoadingFinishedHandler;
     MapLoadingFinished += SoundManager.Instance.MapLoadingFinishedHandler;

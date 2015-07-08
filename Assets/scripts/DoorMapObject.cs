@@ -15,7 +15,7 @@ public class DoorMapObject : MapObject
     MapObject mo = sender as MapObject;
     if (mo != null)
     {
-      Debug.Log(Name + ": was toggled by " + mo.Name);
+      Debug.Log(string.Format("[{0}] was toggled by [{1}]", Name, mo.Name));
       if (_job != null)
       {
         _job.KillJob();
@@ -123,7 +123,7 @@ public class DoorMapObject : MapObject
       BMO.ShortSound.Play();
     }
 
-    Debug.Log (Name + " open status: " + DoorIsOpen);
+    Debug.Log (string.Format("[{0}] open status: {1}", Name, DoorIsOpen));
   }
 }
 
