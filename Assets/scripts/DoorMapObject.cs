@@ -7,7 +7,7 @@ public class DoorMapObject : MapObject
 
   const float _doorMinY = 1.0f;
   const float _doorMaxY = 2.9f;
-  const float _doorOpenSpeed = 1.0f;
+  const float _doorOpenSpeed = 0.5f;
 
   Job _job;
   public override void ActionCompleteHandler (object sender)
