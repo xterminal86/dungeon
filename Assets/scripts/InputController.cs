@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class InputController : MonoSingleton<InputController> 
 {
+  public Transform RaycastPoint;
+
   CameraTurnArgument _cameraTurnArgument = new CameraTurnArgument();
   CameraMoveArgument _cameraMoveArgument = new CameraMoveArgument();
   void Awake () 
@@ -115,9 +117,9 @@ public class InputController : MonoSingleton<InputController>
 
     char emptyCell = App.Instance.GetMapLayoutPoint(newX, newZ);
     bool doorAhead = false;
+        
+    Ray ray = new Ray(RaycastPoint.position, new Vector3(xComponent, 0.0f, zComponent));
 
-    Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height - 80));
-    
     if (moveBackwards)
     {
       Vector3 tmp = ray.direction;
