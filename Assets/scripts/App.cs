@@ -58,7 +58,8 @@ public class App : MonoSingleton<App>
 
     _cameraPos = CameraPivot.transform.position;
 
-    LoadMap("Assets/maps/test.txt");
+    LoadMap("Assets/maps/test_map.xml");
+    //LoadMap("Assets/maps/binary_tree_map.xml");
 
     if (MapLoadingFinished != null)
       MapLoadingFinished();
@@ -84,7 +85,7 @@ public class App : MonoSingleton<App>
   void LoadMap(string filename)
   {
     XmlDocument doc = new XmlDocument();
-    doc.Load("Assets/maps/test_map.xml");
+    doc.Load(filename);
     foreach (XmlNode node in doc.DocumentElement.ChildNodes)
     {      
       switch(node.Name)

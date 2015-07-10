@@ -115,6 +115,12 @@ public class InputController : MonoSingleton<InputController>
       if (zComponent != 0) newZ -= zComponent;
     }
 
+    // Check bounds
+    if (newX < 0 || newX > App.Instance.MapRows - 1 || newZ < 0 || newZ > App.Instance.MapColumns - 1)
+    {
+      return false;
+    }
+
     char emptyCell = App.Instance.GetMapLayoutPoint(newX, newZ);
     bool doorAhead = false;
         
