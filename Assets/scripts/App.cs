@@ -60,6 +60,7 @@ public class App : MonoSingleton<App>
 
     LoadMap("Assets/maps/test_map.xml");
     //LoadMap("Assets/maps/binary_tree_map.xml");
+    //LoadMap("Assets/maps/sidewinder_map.xml");
 
     if (MapLoadingFinished != null)
       MapLoadingFinished();

@@ -26,5 +26,8 @@
 <OBJECT x="7" y="7" facing="2" type="door" name="door_5" open="false" />
 	<OBJECT x="8" y="7" facing="3" type="button" name="button_7" connect="door_5" mode="toggle" />
 	<OBJECT x="8" y="7" facing="2" type="button" name="button_8" connect="door_5" mode="toggle" />
+<OBJECT x="12" y="8" facing="1" type="door" name="door_6" open="false" />
+	<OBJECT x="12" y="7" facing="1" type="button" name="button_9" connect="door_6" mode="toggle" />
+	<OBJECT x="12" y="9" facing="0" type="button" name="button_10" connect="door_6" mode="toggle" />
 <OBJECT x="25" y="5" facing="0" type="dummy" name="dummy_1" />	
 </MAP>

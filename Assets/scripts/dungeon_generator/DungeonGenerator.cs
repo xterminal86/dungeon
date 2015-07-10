@@ -15,16 +15,10 @@ public class DungeonGenerator : MonoBehaviour
 
   public GenerationMethods MazeGenerationMethod;
 
-  [Header("Binary Tree Settings")]
-  public bool CheckVisitedCells;
-  public bool ContinuousDigging;
-
-  //char[,] _map;
-  //int [,] _visitedCells;
-
   StringBuilder _result;
 
   Grid _map;
+  GenerationAlgorithmBase alg;
   void Start () 
   {
     // NxN for the map and additional N for the newlines
@@ -33,8 +27,19 @@ public class DungeonGenerator : MonoBehaviour
     _result = new StringBuilder(bufferSize);
     _map = new Grid(MapWidth, MapHeight);
 
-    BinaryTree bt = new BinaryTree();
-    bt.Do(_map);
+    switch (MazeGenerationMethod)
+    {
+      case GenerationMethods.BINARY_TREE:
+        alg = new BinaryTree();
+        alg.Do(_map);
+        break;
+      case GenerationMethods.SIDEWINDER:
+        alg = new Sidewinder();
+        alg.Do(_map);
+        break;
+      default:
+        break;
+    }
 
     TextArea.text = GetOutput();
     //Debug.Log (TextArea.text);
@@ -59,6 +64,7 @@ public class DungeonGenerator : MonoBehaviour
 
   public enum GenerationMethods
   {
-    BINARY_TREE = 0
+    BINARY_TREE = 0,
+    SIDEWINDER
   }
 }

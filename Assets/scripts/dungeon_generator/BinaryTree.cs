@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BinaryTree 
+public class BinaryTree : GenerationAlgorithmBase
 {
-  public void Do(Grid grid)
+  public override void Do(Grid grid)
   {
     for (int x = 0; x < grid.MapHeight; x++)
     {
