@@ -27,11 +27,11 @@ public class Cell
     if (_links.Contains(c)) return;
 
     _links.Add(c);
-    VisualRepresentation = (char)CellType.EMPTY;
 
     if (bidirectional)
     {
       c.Links.Add(this);
+      c.VisualRepresentation = (char)CellType.EMPTY;
     }
   }
 
@@ -40,11 +40,11 @@ public class Cell
     if (!_links.Contains(c)) return;
 
     _links.Remove(c);
-    VisualRepresentation = (char)CellType.WALL;
 
     if (bidirectional)
     {
       c.Links.Remove(this);
+      c.VisualRepresentation = (char)CellType.WALL;
     }
   }
 
