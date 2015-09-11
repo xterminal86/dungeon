@@ -9,6 +9,11 @@ public class Cell
   public Dictionary<CellDirections, Cell> Neighbours = new Dictionary<CellDirections, Cell>();
 
   Vector2 _coordinates = Vector2.zero;
+  public Vector2 Coordinates
+  {
+    get { return _coordinates; }
+  }
+
   List<Cell> _links = new List<Cell>();
   public List<Cell> Links
   {
@@ -19,7 +24,7 @@ public class Cell
   {
     _coordinates.Set(coords.x, coords.y);
     _links.Clear();
-    VisualRepresentation = (char)CellType.WALL;
+    VisualRepresentation = (char)CellVisualization.WALL;
   }
 
   public void Link(Cell c, bool bidirectional = true)
@@ -31,8 +36,19 @@ public class Cell
     if (bidirectional)
     {
       c.Links.Add(this);
-      c.VisualRepresentation = (char)CellType.EMPTY;
+      c.VisualRepresentation = (char)CellVisualization.EMPTY;
     }
+  }
+
+  public void Reset()
+  {
+    _links.Clear();
+    VisualRepresentation = (char)CellVisualization.WALL;
+  }
+
+  public void SetVisualRepresentation(CellVisualization type)
+  {
+    VisualRepresentation = (char)type;
   }
 
   public void Unlink(Cell c, bool bidirectional = true)
@@ -44,7 +60,7 @@ public class Cell
     if (bidirectional)
     {
       c.Links.Remove(this);
-      c.VisualRepresentation = (char)CellType.WALL;
+      c.VisualRepresentation = (char)CellVisualization.WALL;
     }
   }
 
@@ -57,6 +73,14 @@ public class Cell
   {
     return (_links.Count != 0);
   }
+}
+
+public enum CellType
+{
+  EMPTY = 0,
+  WALL,
+  ROOM,
+  CORRIDOR
 }
 
 public enum CellDirections

@@ -19,6 +19,28 @@ public class Grid
     get { return _mapHeight; }
   }
 
+  // Rooms only
+
+  int _roomMaxWidth = -1;
+  public int RoomMaxWidth
+  {
+    get { return _roomMaxWidth; }
+  }
+
+  int _roomMaxHeight = -1;
+  public int RoomMaxHeight
+  {
+    get { return _roomMaxHeight; }
+  }
+
+  int _maxRooms = -1;
+  public int MaxRooms
+  {
+    get { return _maxRooms; }
+  }
+
+  // =========================
+
   Cell[,] _map;
   public Cell[,] Map
   {
@@ -31,6 +53,16 @@ public class Grid
     _mapHeight = mapHeight;
     PrepareGrid();
     ConfigureCells();
+  }
+
+  public Grid (int mapWidth, int mapHeight, int roomMaxWidth, int roomMaxHeight, int maxRooms)
+  {
+    _mapWidth = mapWidth;
+    _mapHeight = mapHeight;
+    _roomMaxWidth = roomMaxWidth;
+    _roomMaxHeight = roomMaxHeight;
+    _maxRooms = maxRooms;
+    PrepareGrid();
   }
 
   protected virtual void PrepareGrid()
@@ -82,14 +114,22 @@ public class Grid
 
   public Cell GetRandomCell()
   {
-    int x = Random.Range(0, _mapHeight);
-    int y = Random.Range(0, _mapWidth);
+    int x = Random.Range(1, _mapHeight);
+    int y = Random.Range(1, _mapWidth);
 
     return _map[x, y];
   }
+
+  public Vector2 GetRandomCellPos()
+  {
+    int x = Random.Range(1, _mapHeight);
+    int y = Random.Range(1, _mapWidth);
+
+    return new Vector2(x, y);
+  }
 }
 
-public enum CellType
+public enum CellVisualization
 {
   EMPTY = '.',
   WALL = '#'

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -20,7 +20,7 @@ public class Sidewinder : GenerationAlgorithmBase
 
         if (val == 0)
         {
-          grid.Map[x, y].VisualRepresentation = (char)CellType.EMPTY;
+          grid.Map[x, y].VisualRepresentation = (char)CellVisualization.EMPTY;
         }
         else
         {

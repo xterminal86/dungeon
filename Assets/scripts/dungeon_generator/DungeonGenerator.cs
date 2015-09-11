@@ -13,7 +13,15 @@ public class DungeonGenerator : MonoBehaviour
   [Range(2, 100)]
   public int MapHeight;
 
-  public GenerationMethods MazeGenerationMethod;
+  public int MazeGenerationMethod;
+
+  [Header("Rooms only")]
+  [Range(2, 10)]
+  public int RoomMaxWidth = 3;
+  [Range(2, 10)]
+  public int RoomMaxHeight = 3;
+  [Range(1, 100)]
+  public int MaxRooms = 1;
 
   StringBuilder _result;
 
@@ -25,16 +33,28 @@ public class DungeonGenerator : MonoBehaviour
     int bufferSize = MapWidth * MapHeight + MapHeight;
 
     _result = new StringBuilder(bufferSize);
-    _map = new Grid(MapWidth, MapHeight);
+
+    if (MazeGenerationMethod != (int)GenerationMethods.ROOMS)
+    {
+      _map = new Grid(MapWidth, MapHeight);
+    }
+    else
+    {
+      _map = new Grid(MapWidth, MapHeight, RoomMaxWidth, RoomMaxHeight, MaxRooms);
+    }
 
     switch (MazeGenerationMethod)
     {
-      case GenerationMethods.BINARY_TREE:
+      case (int)GenerationMethods.BINARY_TREE:
         alg = new BinaryTree();
         alg.Do(_map);
         break;
-      case GenerationMethods.SIDEWINDER:
+      case (int)GenerationMethods.SIDEWINDER:
         alg = new Sidewinder();
+        alg.Do(_map);
+        break;
+      case (int)GenerationMethods.ROOMS:
+        alg = new Rooms();
         alg.Do(_map);
         break;
       default:
@@ -65,6 +85,7 @@ public class DungeonGenerator : MonoBehaviour
   public enum GenerationMethods
   {
     BINARY_TREE = 0,
-    SIDEWINDER
+    SIDEWINDER,
+    ROOMS
   }
 }
