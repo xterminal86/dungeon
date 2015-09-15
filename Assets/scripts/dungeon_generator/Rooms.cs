@@ -18,8 +18,8 @@ public class Rooms : GenerationAlgorithmBase
     while (_iterations < _gridRef.MaxRooms)
     {
       Vector2 cellPos = _gridRef.GetRandomCellPos();
-      int roomWidth = Random.Range(2, _gridRef.RoomMaxWidth + 1);
-      int roomHeight = Random.Range(2, _gridRef.RoomMaxHeight + 1);
+      int roomWidth = Random.Range(3, _gridRef.RoomMaxWidth + 1);
+      int roomHeight = Random.Range(3, _gridRef.RoomMaxHeight + 1);
 
       // Again, remember that map size of 10x5 means x:10, y:5 -> 10 columns, 5 rows in array form.
       // So we need to use height in x calculations and width in y.

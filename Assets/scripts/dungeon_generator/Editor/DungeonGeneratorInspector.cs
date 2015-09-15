@@ -17,8 +17,8 @@ public class DungeonGeneratorInspector : Editor
 
     if (dg.MazeGenerationMethod == (int)GenerationMethods.ROOMS)
     {
-      dg.RoomMaxWidth = EditorGUILayout.IntSlider("Room Max Width", dg.RoomMaxWidth, 2, dg.MapWidth);
-      dg.RoomMaxHeight = EditorGUILayout.IntSlider("Room Max Height", dg.RoomMaxHeight, 2, dg.MapHeight);
+      dg.RoomMaxWidth = EditorGUILayout.IntSlider("Room Max Width", dg.RoomMaxWidth, 3, dg.MapWidth);
+      dg.RoomMaxHeight = EditorGUILayout.IntSlider("Room Max Height", dg.RoomMaxHeight, 3, dg.MapHeight);
       int maxRooms = (dg.MapWidth * dg.MapHeight) / (dg.RoomMaxWidth * dg.RoomMaxHeight);
       dg.MaxRooms = EditorGUILayout.IntSlider("Max Rooms", dg.MaxRooms, 1, maxRooms);
     }
