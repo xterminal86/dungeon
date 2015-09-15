@@ -128,9 +128,3 @@ public class Grid
     return new Vector2(x, y);
   }
 }
-
-public enum CellVisualization
-{
-  EMPTY = '.',
-  WALL = '#'
-}

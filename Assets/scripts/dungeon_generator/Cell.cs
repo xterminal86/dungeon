@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Cell 
 {
-  public char VisualRepresentation = ' ';
-
   public Dictionary<CellDirections, Cell> Neighbours = new Dictionary<CellDirections, Cell>();
 
   Vector2 _coordinates = Vector2.zero;
@@ -20,11 +18,26 @@ public class Cell
     get { return _links; }
   }
 
+  Dictionary<CellType, char> _visualRepresentation = new Dictionary<CellType, char>()
+  {
+    { CellType.EMPTY, ' ' },
+    { CellType.FLOOR, '.' },
+    { CellType.WALL, '#' },
+    { CellType.BOUNDARY, '!' }
+  };
+
+  public char VisualRepresentation
+  {
+    get { return _visualRepresentation[CellType]; }
+  }
+
+  public CellType CellType = CellType.EMPTY;
+
   public Cell(Vector2 coords)
   {
     _coordinates.Set(coords.x, coords.y);
     _links.Clear();
-    VisualRepresentation = (char)CellVisualization.WALL;
+    CellType = CellType.EMPTY;
   }
 
   public void Link(Cell c, bool bidirectional = true)
@@ -36,19 +49,14 @@ public class Cell
     if (bidirectional)
     {
       c.Links.Add(this);
-      c.VisualRepresentation = (char)CellVisualization.EMPTY;
+      c.CellType = CellType.EMPTY;
     }
   }
 
   public void Reset()
   {
     _links.Clear();
-    VisualRepresentation = (char)CellVisualization.WALL;
-  }
-
-  public void SetVisualRepresentation(CellVisualization type)
-  {
-    VisualRepresentation = (char)type;
+    CellType = CellType.EMPTY;
   }
 
   public void Unlink(Cell c, bool bidirectional = true)
@@ -60,7 +68,7 @@ public class Cell
     if (bidirectional)
     {
       c.Links.Remove(this);
-      c.VisualRepresentation = (char)CellVisualization.WALL;
+      c.CellType = CellType.WALL;
     }
   }
 
@@ -78,9 +86,9 @@ public class Cell
 public enum CellType
 {
   EMPTY = 0,
+  FLOOR,
   WALL,
-  ROOM,
-  CORRIDOR
+  BOUNDARY
 }
 
 public enum CellDirections

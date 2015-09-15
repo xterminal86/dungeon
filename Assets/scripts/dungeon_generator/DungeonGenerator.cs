@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +22,8 @@ public class DungeonGenerator : MonoBehaviour
   public int RoomMaxHeight = 3;
   [Range(1, 100)]
   public int MaxRooms = 1;
+
+  public bool NoRoomsIntersection = false;
 
   StringBuilder _result;
 
@@ -54,7 +56,7 @@ public class DungeonGenerator : MonoBehaviour
         alg.Do(_map);
         break;
       case (int)GenerationMethods.ROOMS:
-        alg = new Rooms();
+        alg = new Rooms(NoRoomsIntersection);
         alg.Do(_map);
         break;
       default:

@@ -20,7 +20,7 @@ public class Sidewinder : GenerationAlgorithmBase
 
         if (val == 0)
         {
-          grid.Map[x, y].VisualRepresentation = (char)CellVisualization.EMPTY;
+          grid.Map[x, y].CellType = CellType.EMPTY;
         }
         else
         {

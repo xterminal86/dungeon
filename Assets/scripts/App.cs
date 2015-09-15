@@ -58,6 +58,7 @@ public class App : MonoSingleton<App>
 
     _cameraPos = CameraPivot.transform.position;
 
+    //LoadMap("Assets/maps/rooms_test_map.xml");
     LoadMap("Assets/maps/test_map.xml");
     //LoadMap("Assets/maps/binary_tree_map.xml");
     //LoadMap("Assets/maps/sidewinder_map.xml");
