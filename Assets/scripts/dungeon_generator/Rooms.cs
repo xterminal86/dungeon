@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Rooms : GenerationAlgorithmBase
 {
   Grid _gridRef;
+
+  List<RoomBounds> _roomsBounds = new List<RoomBounds>();
 
   bool _noRoomsIntersection = false;
   public Rooms(bool noRoomsIntersection)
@@ -24,8 +27,8 @@ public class Rooms : GenerationAlgorithmBase
     while (_iterations < _gridRef.MaxRooms)
     {
       Vector2 cellPos = _gridRef.GetRandomCellPos();
-      int roomWidth = Random.Range(3, _gridRef.RoomMaxWidth + 1);
-      int roomHeight = Random.Range(3, _gridRef.RoomMaxHeight + 1);
+      int roomWidth = Random.Range(5, _gridRef.RoomMaxWidth + 1);
+      int roomHeight = Random.Range(5, _gridRef.RoomMaxHeight + 1);
 
       // Again, remember that map size of 10x5 means x:10, y:5 -> 10 columns, 5 rows in array form.
       // So we need to use height in x calculations and width in y.
@@ -53,6 +56,10 @@ public class Rooms : GenerationAlgorithmBase
           else
           {
             MakeRoom(cellPos, roomWidth, roomHeight);
+            Int2 p1 = new Int2(cellPos.x, cellPos.y);
+            // For loop in MakeRoom() does not include (x + roomHeight), so we subtract 1 to get second boundary point
+            Int2 p2 = new Int2((int)cellPos.x + roomHeight - 1, (int)cellPos.y + roomWidth - 1);
+            _roomsBounds.Add(new RoomBounds(p1, p2));
             break;
           }
 
@@ -62,10 +69,20 @@ public class Rooms : GenerationAlgorithmBase
       else
       {
         MakeRoom(cellPos, roomWidth, roomHeight);
+        Int2 p1 = new Int2(cellPos.x, cellPos.y);
+        Int2 p2 = new Int2((int)cellPos.x + roomHeight - 1, (int)cellPos.y + roomWidth - 1);
+        _roomsBounds.Add(new RoomBounds(p1, p2));
       }
 
       _iterations++;
+
+    } // end while
+
+    foreach (var room in _roomsBounds)
+    {
+      Debug.Log(room.FirstPoint + " " + room.SecondPoint);
     }
+
   }
 
   bool IsRegionValid(Vector2 cellPos, int roomWidth, int roomHeight)
@@ -108,18 +125,18 @@ public class Rooms : GenerationAlgorithmBase
   void MakeRoom(Vector2 cellPos, int roomWidth, int roomHeight)
   {
     // Wall everything
-    for (int i = (int)cellPos.x - 1; i < (int)cellPos.x + roomHeight + 1; i++)
+    for (int i = (int)cellPos.x; i < (int)cellPos.x + roomHeight; i++)
     {
-      for (int j = (int)cellPos.y - 1; j < (int)cellPos.y + roomWidth + 1; j++)
+      for (int j = (int)cellPos.y; j < (int)cellPos.y + roomWidth; j++)
       {
         _gridRef.Map[i, j].CellType = CellType.WALL;
       }
     }
 
-    // Carve room
-    for (int i = (int)cellPos.x; i < (int)cellPos.x + roomHeight; i++)
+    // Carve room inside
+    for (int i = (int)cellPos.x + 1; i < (int)cellPos.x + roomHeight - 1; i++)
     {
-      for (int j = (int)cellPos.y; j < (int)cellPos.y + roomWidth; j++)
+      for (int j = (int)cellPos.y + 1; j < (int)cellPos.y + roomWidth - 1; j++)
       {
         _gridRef.Map[i, j].CellType = CellType.FLOOR;
       }
