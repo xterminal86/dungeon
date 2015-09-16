@@ -121,4 +121,9 @@ public class RoomBounds
     SecondPoint.X = p2.X;
     SecondPoint.Y = p2.Y;
   }
+
+  public override string ToString()
+  {
+    return string.Format("[RoomBounds] -> [" + FirstPoint + " " + SecondPoint + "]");
+  }
 }
