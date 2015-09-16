@@ -22,6 +22,8 @@ public class DungeonGenerator : MonoBehaviour
   public int RoomMaxHeight = 3;
   [Range(1, 100)]
   public int MaxRooms = 1;
+    
+  public int RoomsDistance = 1;
 
   public bool NoRoomsIntersection = false;
 
@@ -42,7 +44,7 @@ public class DungeonGenerator : MonoBehaviour
     }
     else
     {
-      _map = new Grid(MapWidth, MapHeight, RoomMaxWidth, RoomMaxHeight, MaxRooms);
+      _map = new Grid(MapWidth, MapHeight, RoomMaxWidth, RoomMaxHeight, MaxRooms, RoomsDistance);
     }
 
     switch (MazeGenerationMethod)

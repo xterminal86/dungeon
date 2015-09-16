@@ -39,6 +39,12 @@ public class Grid
     get { return _maxRooms; }
   }
 
+  int _roomsDistance = 1;
+  public int RoomsDistance
+  {
+    get { return _roomsDistance; }
+  }
+
   // =========================
 
   Cell[,] _map;
@@ -55,13 +61,14 @@ public class Grid
     ConfigureCells();
   }
 
-  public Grid (int mapWidth, int mapHeight, int roomMaxWidth, int roomMaxHeight, int maxRooms)
+  public Grid (int mapWidth, int mapHeight, int roomMaxWidth, int roomMaxHeight, int maxRooms, int roomsDistance)
   {
     _mapWidth = mapWidth;
     _mapHeight = mapHeight;
     _roomMaxWidth = roomMaxWidth;
     _roomMaxHeight = roomMaxHeight;
     _maxRooms = maxRooms;
+    _roomsDistance = roomsDistance;
     PrepareGrid();
   }
 

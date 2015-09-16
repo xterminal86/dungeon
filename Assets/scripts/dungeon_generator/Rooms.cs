@@ -48,7 +48,7 @@ public class Rooms : GenerationAlgorithmBase
             break;
           }
 
-          bool res = IsRegionValid(cellPos, roomWidth, roomHeight);
+          bool res = IsRegionOccupied(cellPos, roomWidth, roomHeight, _gridRef.RoomsDistance);
           if (res)
           {
             cellPos = _gridRef.GetRandomCellPos();
@@ -135,11 +135,16 @@ public class Rooms : GenerationAlgorithmBase
     return false;
   }
 
-  bool IsRegionValid(Vector2 cellPos, int roomWidth, int roomHeight)
+  bool IsRegionOccupied(Vector2 cellPos, int roomWidth, int roomHeight, int roomsDistance)
   {
-    for (int i = (int)cellPos.x; i < (int)cellPos.x + roomHeight; i++)
+    int minX = ((int)cellPos.x - roomsDistance) < 0 ? 0 : (int)cellPos.x - roomsDistance;
+    int minY = ((int)cellPos.y - roomsDistance) < 0 ? 0 : (int)cellPos.y - roomsDistance;
+    int maxX = ((int)cellPos.x + roomHeight + roomsDistance) > _gridRef.MapHeight ? _gridRef.MapHeight : (int)cellPos.x + roomHeight + roomsDistance;
+    int maxY = ((int)cellPos.y + roomWidth + roomsDistance) > _gridRef.MapWidth ? _gridRef.MapWidth : (int)cellPos.y + roomWidth + roomsDistance;
+    
+    for (int i = minX; i < maxX; i++)
     {
-      for (int j = (int)cellPos.y; j < (int)cellPos.y + roomWidth; j++)
+      for (int j = minY; j < maxY; j++)
       {
         // Room can "eat" adjacent wall, if it gets into current room floor
         //if (_gridRef.Map[i, j].CellType == CellType.FLOOR)

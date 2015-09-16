@@ -22,6 +22,7 @@ public class DungeonGeneratorInspector : Editor
       int maxRooms = (dg.MapWidth * dg.MapHeight) / (dg.RoomMaxWidth * dg.RoomMaxHeight);
       dg.MaxRooms = EditorGUILayout.IntSlider("Max Rooms", dg.MaxRooms, 1, maxRooms);
       dg.NoRoomsIntersection = EditorGUILayout.Toggle("No Rooms Intersection", dg.NoRoomsIntersection);
+      dg.RoomsDistance = EditorGUILayout.IntSlider("Rooms Minimum Spread Distance", dg.RoomsDistance, 0, Mathf.Max(dg.MapWidth, dg.MapHeight) / 2);
     }
   }
 
