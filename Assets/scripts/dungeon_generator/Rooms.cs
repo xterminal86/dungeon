@@ -7,6 +7,7 @@ public class Rooms : GenerationAlgorithmBase
   Grid _gridRef;
 
   List<RoomBounds> _roomsBounds = new List<RoomBounds>();
+  List<Int2> _roomsCentralPoints = new List<Int2>();
 
   bool _noRoomsIntersection = false;
   public Rooms(bool noRoomsIntersection)
@@ -78,12 +79,60 @@ public class Rooms : GenerationAlgorithmBase
 
     } // end while
 
+    int count = 1;
     foreach (var room in _roomsBounds)
     {
-      Debug.Log(room.FirstPoint + " " + room.SecondPoint);
+      int x = room.FirstPoint.X + ((room.SecondPoint.X - room.FirstPoint.X) / 2);
+      int y = room.FirstPoint.Y + ((room.SecondPoint.Y - room.FirstPoint.Y) / 2);
+
+      Int2 cp = new Int2(x, y);
+
+      _roomsCentralPoints.Add(cp);
+
+      Debug.Log(count + ") " + room.FirstPoint + " " + room.SecondPoint + " center: " + cp);
+      count++;
     }
 
+    SortRooms();
     CarvePassages();
+  }
+
+  List<Int2> _sortedRoomCenters = new List<Int2>();
+  void SortRooms()
+  {
+    for (int x = 0; x < _gridRef.MapHeight; x++)
+    {
+      for (int y = 0; y < _gridRef.MapWidth; y++)
+      {
+        bool res = FindCenterPointInList(x, y);
+        if (res)
+        {
+          _sortedRoomCenters.Add(new Int2(x, y));
+        }
+      }
+    }
+
+    Debug.Log("Sorted rooms:");
+
+    int count = 1;
+    foreach (var p in _sortedRoomCenters)
+    {
+      Debug.Log(count + ") " + p);
+      count++;
+    }
+  }
+
+  bool FindCenterPointInList(int x, int y)
+  {
+    foreach (var p in _roomsCentralPoints)
+    {
+      if (p.X == x && p.Y == y)
+      {
+        return true;
+      }      
+    }
+
+    return false;
   }
 
   bool IsRegionValid(Vector2 cellPos, int roomWidth, int roomHeight)
@@ -146,6 +195,15 @@ public class Rooms : GenerationAlgorithmBase
 
   void CarvePassages()
   {
+    if (_sortedRoomCenters.Count == 1) return;
+
+    for (int i = 0; i < _sortedRoomCenters.Count - 1; i++)
+    {
+      KeyValuePair<Int2, Int2> pair = new KeyValuePair<Int2, Int2>(_sortedRoomCenters[i], _sortedRoomCenters[i + 1]);
+      CarvePassage(pair);
+    }
+
+    /*
     if (_roomsBounds.Count == 1) return;
 
     for (int i = 0; i < _roomsBounds.Count - 1; i++)
@@ -153,6 +211,7 @@ public class Rooms : GenerationAlgorithmBase
       var centralPoints = GetCentralPoints(_roomsBounds[i], _roomsBounds[i + 1]);
       CarvePassage(centralPoints);
     }
+    */
   }
 
   KeyValuePair<Int2, Int2> _centralPoints;
