@@ -47,6 +47,8 @@ public class App : MonoSingleton<App>
   public float FogDensity = 0.2f;
   public bool EnableFog = true;
 
+  public MapFilename MapFilenameField;
+
   void Awake()
   {
     UnityEngine.RenderSettings.fog = EnableFog;
@@ -58,10 +60,24 @@ public class App : MonoSingleton<App>
 
     _cameraPos = CameraPivot.transform.position;
 
-    //LoadMap("Assets/maps/rooms_test_map.xml");
-    LoadMap("Assets/maps/test_map.xml");
-    //LoadMap("Assets/maps/binary_tree_map.xml");
-    //LoadMap("Assets/maps/sidewinder_map.xml");
+    switch (MapFilenameField)
+    {
+      case MapFilename.ROOMS:
+        LoadMap("Assets/maps/rooms_test_map.xml");
+        break;
+      case MapFilename.TEST:
+        LoadMap("Assets/maps/test_map.xml");
+        break;
+      case MapFilename.BINARY_TREE:
+        LoadMap("Assets/maps/binary_tree_map.xml");
+        break;
+      case MapFilename.SIDEWINDER:
+        LoadMap("Assets/maps/sidewinder_map.xml");
+        break;
+      default:
+        LoadMap("Assets/maps/test_map.xml");
+        break;
+    }
 
     if (MapLoadingFinished != null)
       MapLoadingFinished();
@@ -137,7 +153,7 @@ public class App : MonoSingleton<App>
       for (int i = 0; i < line.Length; i++)
       {
         _mapLayout[x, y] = line[i];
-
+                
         if (line[i] == '#')
         {
           go = (GameObject)Instantiate(WallPrefab);
@@ -147,7 +163,7 @@ public class App : MonoSingleton<App>
           go.transform.position = goPosition;
           go.transform.parent = ObjectsInstancesTransform.transform;
         }
-        else
+        else if (line[i] == '.')
         {
           go = (GameObject)Instantiate(FloorPrefab);
           goPosition = go.transform.position;
@@ -302,5 +318,13 @@ public class App : MonoSingleton<App>
     }
 
     return _searchResult;
+  }
+
+  public enum MapFilename
+  {
+    ROOMS = 0,
+    TEST,
+    BINARY_TREE,
+    SIDEWINDER
   }
 }

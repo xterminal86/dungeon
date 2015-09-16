@@ -64,7 +64,7 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     TextArea.text = GetOutput();
-    //Debug.Log (TextArea.text);
+    Debug.Log (TextArea.text);
 	}
 
   string GetOutput()

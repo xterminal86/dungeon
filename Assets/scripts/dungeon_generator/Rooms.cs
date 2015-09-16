@@ -249,6 +249,8 @@ public class Rooms : GenerationAlgorithmBase
       for (int i = fromY; i <= toY; i++)
       {
         _gridRef.Map[p1.X, i].CellType = CellType.FLOOR;
+                
+        WallPassage(p1.X - 1, p1.X + 1, i - 1, i + 1);
       }
 
       int fromX = (p1.X < p2.X) ? p1.X : p2.X;
@@ -257,6 +259,8 @@ public class Rooms : GenerationAlgorithmBase
       for (int i = fromX; i <= toX; i++)
       {
         _gridRef.Map[i, p2.Y].CellType = CellType.FLOOR;
+
+        WallPassage(i - 1, i + 1, p2.Y - 1, p2.Y + 1);        
       }
     }
     else
@@ -267,6 +271,8 @@ public class Rooms : GenerationAlgorithmBase
       for (int i = fromX; i <= toX; i++)
       {
         _gridRef.Map[i, p1.Y].CellType = CellType.FLOOR;
+
+        WallPassage(i - 1, i + 1, p1.Y - 1, p1.Y + 1);
       }
       
       int fromY = (p1.Y < p2.Y) ? p1.Y : p2.Y;
@@ -275,6 +281,24 @@ public class Rooms : GenerationAlgorithmBase
       for (int i = fromY; i <= toY; i++)
       {
         _gridRef.Map[p2.X, i].CellType = CellType.FLOOR;
+
+        WallPassage(p2.X - 1, p2.X + 1, i - 1, i + 1);
+      }
+    }
+  }
+
+  void WallPassage(int minX, int maxX, int minY, int maxY)
+  {
+    for (int i = minX; i <= maxX; i++)
+    {
+      for (int j = minY; j <= maxY; j++)
+      {
+        if (i == (minX + 1) && j == (minY + 1)) continue;
+
+        if (_gridRef.Map[i, j].CellType == CellType.EMPTY)
+        {
+          _gridRef.Map[i, j].CellType = CellType.WALL;
+        }
       }
     }
   }
