@@ -53,11 +53,11 @@ public class Grid
     get { return _map; }
   }
 
-  public Grid (int mapWidth, int mapHeight)
+  public Grid (int mapWidth, int mapHeight, CellType defaultCell = CellType.EMPTY)
   {
     _mapWidth = mapWidth;
     _mapHeight = mapHeight;
-    PrepareGrid();
+    PrepareGrid(defaultCell);
     ConfigureCells();
   }
 
@@ -69,10 +69,10 @@ public class Grid
     _roomMaxHeight = roomMaxHeight;
     _maxRooms = maxRooms;
     _roomsDistance = roomsDistance;
-    PrepareGrid();
+    PrepareGrid(CellType.EMPTY);
   }
 
-  protected virtual void PrepareGrid()
+  protected virtual void PrepareGrid(CellType defaultCell)
   {
     // Remember, that 10x5 means 10 columns and 5 rows
     _map = new Cell[_mapHeight, _mapWidth];
@@ -83,7 +83,7 @@ public class Grid
       for (int y = 0; y < _mapWidth; y++)
       {
         coords.Set(x, y);
-        _map[x, y] = new Cell(coords);
+        _map[x, y] = new Cell(coords, defaultCell);
       }
     }
   }

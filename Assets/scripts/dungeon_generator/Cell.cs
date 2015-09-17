@@ -33,11 +33,11 @@ public class Cell
 
   public CellType CellType = CellType.EMPTY;
 
-  public Cell(Vector2 coords)
+  public Cell(Vector2 coords, CellType defaultCell)
   {
     _coordinates.Set(coords.x, coords.y);
     _links.Clear();
-    CellType = CellType.EMPTY;
+    CellType = defaultCell;
   }
 
   public void Link(Cell c, bool bidirectional = true)

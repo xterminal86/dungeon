@@ -5,7 +5,7 @@ using System.Collections;
 [CustomEditor(typeof(DungeonGenerator))]
 public class DungeonGeneratorInspector : Editor 
 {
-  string[] _options = { "Binary Tree", "Sidewinder", "Rooms" };
+  string[] _options = { "Binary Tree", "Sidewinder", "Rooms", "Growing Tree" };
 
   public override void OnInspectorGUI()
   {
@@ -24,12 +24,17 @@ public class DungeonGeneratorInspector : Editor
       dg.NoRoomsIntersection = EditorGUILayout.Toggle("No Rooms Intersection", dg.NoRoomsIntersection);
       dg.RoomsDistance = EditorGUILayout.IntSlider("Rooms Minimum Spread Distance", dg.RoomsDistance, 0, Mathf.Max(dg.MapWidth, dg.MapHeight) / 2);
     }
+    else if (dg.MazeGenerationMethod == (int)GenerationMethods.GROWING_TREE)
+    {
+      dg.GTRandomFlag = EditorGUILayout.Toggle("Choose random from visited", dg.GTRandomFlag);
+    }
   }
 
   public enum GenerationMethods
   {
     BINARY_TREE = 0,
     SIDEWINDER,
-    ROOMS
+    ROOMS,
+    GROWING_TREE
   }
 }
