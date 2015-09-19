@@ -21,6 +21,59 @@ public class GrowingTree : GenerationAlgorithmBase
   {
     _gridRef = grid;
 
+    Cell c = grid.GetRandomCell();
+
+    Int2 pos = new Int2((int)c.Coordinates.x, (int)c.Coordinates.y);
+    grid.Map[pos.X, pos.Y].Status = CellStatus.VISITED;
+    _visitedCells.Add(pos);
+
+    Debug.Log("Starting point: " + pos);
+
+    MakeWall(pos);
+
+    Int2 neighbour = new Int2();
+    while (_visitedCells.Count != 0)
+    {
+      if (_safeguard > 100000)
+      {
+        Debug.LogWarning("Terminated by safeguard on " + pos);
+        break;
+      }
+
+      if (_gtRandomFlag)
+      {
+        int val = Random.Range(0, _visitedCells.Count);
+        pos = _visitedCells[val];
+      }
+      else
+      {
+        pos = _visitedCells[_visitedCells.Count - 1];
+      }
+
+      Debug.Log("Current cell " + pos);
+
+      neighbour = ChooseNeighbour(pos);
+      if (neighbour == null)
+      {
+        RemoveCell(pos);
+      }
+      else
+      {
+        MakeWall(neighbour);
+        _gridRef.Map[neighbour.X, neighbour.Y].Status = CellStatus.VISITED;
+        _visitedCells.Add(neighbour);
+        LockPreviousCellWalls(pos, neighbour);
+      }
+
+      _safeguard++;
+    }
+  }
+
+#if false
+  public override void Do(Grid grid)
+  {
+    _gridRef = grid;
+
     //CreateBounds();
 
     Cell c = grid.GetRandomCell();
@@ -42,7 +95,7 @@ public class GrowingTree : GenerationAlgorithmBase
     {
       if (_safeguard > 100000)
       {
-        Debug.LogWarning("Terminated by safeguard");
+        Debug.LogWarning("Terminated by safeguard on " + pos);
         break;
       }
 
@@ -99,7 +152,8 @@ public class GrowingTree : GenerationAlgorithmBase
 
       _safeguard++;
     }    
-  }
+  }  
+#endif
 
   void CreateBounds()
   {
@@ -131,20 +185,72 @@ public class GrowingTree : GenerationAlgorithmBase
     }
   }
 
-  void InvalidatePreviousCell(Int2 cell, Int2 neighbour)
+  void LockPreviousCellWalls(Int2 prevPos, Int2 neighbour)
   {
-    int xMin = cell.X - 1;
-    int xMax = cell.X + 1;
-    int yMin = cell.Y - 1;
-    int yMax = cell.Y + 1;
+    bool leftPassage = (prevPos.X - neighbour.X) > 0;
+    bool downPassage = (prevPos.Y - neighbour.Y) < 0;
+
+    if (leftPassage)
+    {
+      // ##XX#
+      // #..X#
+      // ##XX#
+
+      if (_gridRef.Map[prevPos.X - 1, prevPos.Y].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X - 1, prevPos.Y].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X + 1, prevPos.Y].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X + 1, prevPos.Y].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X - 1, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y + 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X, prevPos.Y + 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X + 1, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y + 1].Status = CellStatus.LOCKED; }
+    }
+    else if (!leftPassage)
+    {
+      // #XX##
+      // #X..#
+      // #XX##
+
+      if (_gridRef.Map[prevPos.X - 1, prevPos.Y].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X - 1, prevPos.Y].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X + 1, prevPos.Y].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X + 1, prevPos.Y].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X - 1, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y - 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X, prevPos.Y - 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X + 1, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y - 1].Status = CellStatus.LOCKED; }
+    }
+    else if (downPassage)
+    {
+      // XXX
+      // X.X
+      // #.#
+      // ###
+
+      if (_gridRef.Map[prevPos.X - 1, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y - 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X - 1, prevPos.Y].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X - 1, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y + 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X, prevPos.Y - 1].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X, prevPos.Y - 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X, prevPos.Y + 1].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X, prevPos.Y + 1].Status = CellStatus.LOCKED; }
+    }
+    else if (!downPassage)
+    {
+      // ###
+      // #.#
+      // X.X
+      // XXX
+
+      if (_gridRef.Map[prevPos.X + 1, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y - 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X + 1, prevPos.Y].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X + 1, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y + 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X, prevPos.Y - 1].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X, prevPos.Y - 1].Status = CellStatus.LOCKED; }
+      if (_gridRef.Map[prevPos.X, prevPos.Y + 1].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X, prevPos.Y + 1].Status = CellStatus.LOCKED; }
+    }
+
+    /*
+    int xMin = prevPos.X - 1;
+    int xMax = prevPos.X + 1;
+    int yMin = prevPos.Y - 1;
+    int yMax = prevPos.Y + 1;
 
     xMin = Mathf.Clamp(xMin, 0, _gridRef.MapHeight - 1);
     xMax = Mathf.Clamp(xMax, 0, _gridRef.MapHeight - 1);
     yMin = Mathf.Clamp(yMin, 0, _gridRef.MapWidth - 1);
     yMax = Mathf.Clamp(yMax, 0, _gridRef.MapWidth - 1);
-
-    int nx = neighbour.X;
-    int ny = neighbour.Y;
 
     Int2 tmp = new Int2();
     for (int x = xMin; x <= xMax; x++)
@@ -153,15 +259,14 @@ public class GrowingTree : GenerationAlgorithmBase
       {
         tmp.X = x;
         tmp.Y = y;
-
-        if ((x == cell.X && y == cell.Y) || (x == tmp.X && y == tmp.Y)) continue;
-
-        if (!DoesCellExist(tmp, _visitedCells))
+                
+        if (_gridRef.Map[x, y].CellType == CellType.WALL)
         {
-          _visitedCells.Add(tmp);
+          _gridRef.Map[x, y].Status = CellStatus.LOCKED;
         }
       }
     }
+    */
   }
 
   void RemoveCell(Int2 pos)
@@ -187,7 +292,7 @@ public class GrowingTree : GenerationAlgorithmBase
     int xMax = center.X + 1;
     int yMin = center.Y - 1;
     int yMax = center.Y + 1;
-    
+
     xMin = Mathf.Clamp(xMin, 0, _gridRef.MapHeight - 1);
     xMax = Mathf.Clamp(xMax, 0, _gridRef.MapHeight - 1);
     yMin = Mathf.Clamp(yMin, 0, _gridRef.MapWidth - 1);
@@ -202,7 +307,7 @@ public class GrowingTree : GenerationAlgorithmBase
         if (_gridRef.Map[i, j].CellType == CellType.FLOOR) continue;
 
         if (i == center.X && j == center.Y)
-        {          
+        {
           _gridRef.Map[i, j].CellType = CellType.FLOOR;
         }
         else
@@ -252,17 +357,43 @@ public class GrowingTree : GenerationAlgorithmBase
     Int2 left = new Int2(center.X, center.Y - 1);
     Int2 right = new Int2(center.X, center.Y + 1);
 
+    Int2 tmp = new Int2();
+
     res = IsCellValid(up);
-    if (res) _neighbours.Add(up);
+    if (res)
+    {
+      tmp.X = center.X - 1;
+      tmp.Y = center.Y;
+
+      _neighbours.Add(up);
+    }
 
     res = IsCellValid(down);
-    if (res) _neighbours.Add(down);
+    if (res)
+    {
+      tmp.X = center.X + 1;
+      tmp.Y = center.Y;
+
+      _neighbours.Add(down);
+    }
 
     res = IsCellValid(left);
-    if (res) _neighbours.Add(left);
+    if (res)
+    {
+      tmp.X = center.X;
+      tmp.Y = center.Y - 1;
+
+      _neighbours.Add(left);
+    }
 
     res = IsCellValid(right);
-    if (res) _neighbours.Add(right);
+    if (res)
+    {
+      tmp.X = center.X;
+      tmp.Y = center.Y + 1;
+
+      _neighbours.Add(right);
+    }
 
     if (_neighbours.Count == 0)
     {
@@ -283,25 +414,27 @@ public class GrowingTree : GenerationAlgorithmBase
     int x = pos.X;
     int y = pos.Y;
 
-    if (x == 0 || x == _gridRef.MapHeight - 1 || y == 0 || y == _gridRef.MapWidth - 1)
+    if (x <= 1 || x >= _gridRef.MapHeight - 1 || y <= 1 || y >= _gridRef.MapWidth - 1)
+    {
+      return false;
+    }
+
+    if (_gridRef.Map[x, y].Status == CellStatus.VISITED || _gridRef.Map[x, y].Status == CellStatus.LOCKED)
     {
       return false;
     }
 
     /*
-    foreach (var item in _untouchableWalls)
+    if (DoesCellExist(pos, _untouchableWalls))
     {
-      if (item.X == x && item.Y == y)
-      {
-        return false;
-      }
-    }
-    */
-
+      return false;
+    }    
+    
     if (DoesCellExist(pos, _visitedCells))
     {
       return false;
     }
+    */
 
     return true;
   }

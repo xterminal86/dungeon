@@ -6,6 +6,8 @@ public class Cell
 {
   public Dictionary<CellDirections, Cell> Neighbours = new Dictionary<CellDirections, Cell>();
 
+  public CellStatus Status;
+
   Vector2 _coordinates = Vector2.zero;
   public Vector2 Coordinates
   {
@@ -38,6 +40,7 @@ public class Cell
     _coordinates.Set(coords.x, coords.y);
     _links.Clear();
     CellType = defaultCell;
+    Status = CellStatus.UNVISITED;
   }
 
   public void Link(Cell c, bool bidirectional = true)
@@ -89,6 +92,13 @@ public enum CellType
   FLOOR,
   WALL,
   BOUNDARY
+}
+
+public enum CellStatus
+{
+  UNVISITED = 0,
+  VISITED,
+  LOCKED
 }
 
 public enum CellDirections

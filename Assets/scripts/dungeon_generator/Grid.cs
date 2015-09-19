@@ -121,16 +121,16 @@ public class Grid
 
   public Cell GetRandomCell()
   {
-    int x = Random.Range(1, _mapHeight);
-    int y = Random.Range(1, _mapWidth);
+    int x = Random.Range(1, _mapHeight - 1);
+    int y = Random.Range(1, _mapWidth - 1);
 
     return _map[x, y];
   }
 
   public Vector2 GetRandomCellPos()
   {
-    int x = Random.Range(1, _mapHeight);
-    int y = Random.Range(1, _mapWidth);
+    int x = Random.Range(1, _mapHeight - 1);
+    int y = Random.Range(1, _mapWidth - 1);
 
     return new Vector2(x, y);
   }
