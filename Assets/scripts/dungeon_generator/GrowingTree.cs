@@ -16,6 +16,33 @@ public class GrowingTree : GenerationAlgorithmBase
     _gtRandomFlag = gtRandomFlag;
   }
 
+  /// <summary>
+  /// General description:
+  /// 1) Choose random cell, add it to visited cells list
+  /// 2) Choose random neighbour (up, down, left, right)
+  /// 3) If neighbour can be chosen, add it to visited cells
+  /// 4) Depending on the option, choose next cell and repeat from 2 while visited cells list is not empty
+  /// 
+  /// Option consists of choosing next cell either as the last added to the visited cells list or randomly from it.  
+  /// 
+  /// My modification consists in locking certain cardinal direction (up, down, left, right) depending on neighbour chosen,
+  /// so that we don't end up with empty map.
+  /// E.g. if we chose neighbour to the right, we lock up, down and left walls of the current cell.
+  /// 
+  /// Original algorithm, AFAIU, works on different kind of grid - where walls are lines between cells, not separate cells:
+  /// 
+  /// ------
+  /// |.|..|
+  /// ------
+  /// 
+  /// as opposed to:
+  /// 
+  /// --------
+  /// |.|#|..|
+  /// --------
+  /// 
+  /// </summary>
+  /// <param name="grid"></param>
   public override void Do(Grid grid)
   {
     _gridRef = grid;
@@ -28,14 +55,14 @@ public class GrowingTree : GenerationAlgorithmBase
     grid.Map[pos.X, pos.Y].Status = CellStatus.VISITED;
     _visitedCells.Add(pos);
 
-    //Debug.Log("Starting point: " + pos);
+    Debug.Log("Starting point: " + pos);
 
     MakeWall(pos);
 
     Int2 neighbour = new Int2();
     while (_visitedCells.Count != 0)
     {
-      if (_safeguard > 100000)
+      if (_safeguard > 1000000)
       {
         Debug.LogWarning("Terminated by safeguard on " + pos);
         break;
@@ -100,6 +127,8 @@ public class GrowingTree : GenerationAlgorithmBase
     }
   }
 
+  // Too much locking yields unwanted behaviour - maze consisting of only long corridors, short maze etc.
+  // Thus, some lines are commented out.
   void LockPreviousCellWalls(Int2 prevPos, Int2 neighbour)
   {
     bool leftPassage = (prevPos.X - neighbour.X) > 0;
