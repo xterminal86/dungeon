@@ -10,10 +10,10 @@ public class GrowingTree : GenerationAlgorithmBase
   
   int _safeguard = 0;
 
-  bool _gtRandomFlag = false;
-  public GrowingTree(bool gtRandomFlag)
+  DecisionType _decisionType;
+  public GrowingTree(DecisionType decisionType)
   {
-    _gtRandomFlag = gtRandomFlag;
+    _decisionType = decisionType;
   }
 
   /// <summary>
@@ -33,12 +33,14 @@ public class GrowingTree : GenerationAlgorithmBase
   /// 
   /// ------
   /// |.|..|
+  /// |. ..|
   /// ------
   /// 
   /// as opposed to:
   /// 
   /// --------
   /// |.|#|..|
+  /// |. . ..|
   /// --------
   /// 
   /// </summary>
@@ -50,8 +52,6 @@ public class GrowingTree : GenerationAlgorithmBase
     Cell c = grid.GetRandomCell();
 
     Int2 pos = new Int2((int)c.Coordinates.x, (int)c.Coordinates.y);
-    pos.X = 8;
-    pos.Y = 3;
     grid.Map[pos.X, pos.Y].Status = CellStatus.VISITED;
     _visitedCells.Add(pos);
 
@@ -68,14 +68,18 @@ public class GrowingTree : GenerationAlgorithmBase
         break;
       }
 
-      if (_gtRandomFlag)
+      if (_decisionType == DecisionType.RANDOM)
       {
         int val = Random.Range(0, _visitedCells.Count);
         pos = _visitedCells[val];
       }
-      else
+      else if (_decisionType == DecisionType.NEWEST)
       {
         pos = _visitedCells[_visitedCells.Count - 1];
+      }
+      else if (_decisionType == DecisionType.OLDEST)
+      {
+        pos = _visitedCells[0];
       }
 
       //Debug.Log("Current cell " + pos);
@@ -318,4 +322,11 @@ public class GrowingTree : GenerationAlgorithmBase
 
     return false;
   }
+}
+
+public enum DecisionType
+{
+  NEWEST = 0,
+  RANDOM,
+  OLDEST
 }

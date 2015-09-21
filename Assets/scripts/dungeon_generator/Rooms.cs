@@ -10,9 +10,12 @@ public class Rooms : GenerationAlgorithmBase
   List<Int2> _roomsCentralPoints = new List<Int2>();
 
   bool _noRoomsIntersection = false;
-  public Rooms(bool noRoomsIntersection)
+  bool _connectRooms = false;
+
+  public Rooms(bool noRoomsIntersection, bool connectRooms)
   {
     _noRoomsIntersection = noRoomsIntersection;
+    _connectRooms = connectRooms;
   }
 
   public override void Do(Grid grid)
@@ -93,8 +96,11 @@ public class Rooms : GenerationAlgorithmBase
       count++;
     }
 
-    SortRooms();
-    CarvePassages();
+    if (_connectRooms)
+    {
+      SortRooms();
+      CarvePassages();
+    }
   }
 
   List<Int2> _sortedRoomCenters = new List<Int2>();
@@ -184,7 +190,10 @@ public class Rooms : GenerationAlgorithmBase
     {
       for (int j = (int)cellPos.y; j < (int)cellPos.y + roomWidth; j++)
       {
-        _gridRef.Map[i, j].CellType = CellType.WALL;
+        if (_gridRef.Map[i, j].CellType != CellType.FLOOR)
+        {
+          _gridRef.Map[i, j].CellType = CellType.WALL;
+        }
       }
     }
 

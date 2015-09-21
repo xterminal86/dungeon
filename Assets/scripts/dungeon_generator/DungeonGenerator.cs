@@ -21,12 +21,14 @@ public class DungeonGenerator : MonoBehaviour
   [Range(2, 10)]
   public int RoomMaxHeight = 3;
   [Range(1, 100)]
-  public int MaxRooms = 1;    
+  public int MaxRooms = 1;
+
   public int RoomsDistance = 1;
   public bool NoRoomsIntersection = false;
+  public bool ConnectRooms = false;
 
   [Header("Growing Tree only")]
-  public bool GTRandomFlag = false;
+  public DecisionType PassageType = DecisionType.NEWEST;
 
   StringBuilder _result;
 
@@ -63,11 +65,11 @@ public class DungeonGenerator : MonoBehaviour
         alg.Do(_map);
         break;
       case (int)GenerationMethods.ROOMS:
-        alg = new Rooms(NoRoomsIntersection);
+        alg = new Rooms(NoRoomsIntersection, ConnectRooms);
         alg.Do(_map);
         break;
       case (int)GenerationMethods.GROWING_TREE:
-        alg = new GrowingTree(GTRandomFlag);
+        alg = new GrowingTree(PassageType);
         alg.Do(_map);
         break;
       default:

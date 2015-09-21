@@ -22,11 +22,12 @@ public class DungeonGeneratorInspector : Editor
       int maxRooms = (dg.MapWidth * dg.MapHeight) / (dg.RoomMaxWidth * dg.RoomMaxHeight);
       dg.MaxRooms = EditorGUILayout.IntSlider("Max Rooms", dg.MaxRooms, 1, maxRooms);
       dg.NoRoomsIntersection = EditorGUILayout.Toggle("No Rooms Intersection", dg.NoRoomsIntersection);
+      dg.ConnectRooms = EditorGUILayout.Toggle("Connect Rooms", dg.ConnectRooms);
       dg.RoomsDistance = EditorGUILayout.IntSlider("Rooms Minimum Spread Distance", dg.RoomsDistance, 0, Mathf.Max(dg.MapWidth, dg.MapHeight) / 2);
     }
     else if (dg.MazeGenerationMethod == (int)GenerationMethods.GROWING_TREE)
     {
-      dg.GTRandomFlag = EditorGUILayout.Toggle("Choose random from visited", dg.GTRandomFlag);
+      dg.PassageType = (DecisionType)EditorGUILayout.EnumPopup("Passage Carving Option", dg.PassageType);
     }
   }
 
