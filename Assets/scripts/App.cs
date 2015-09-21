@@ -74,6 +74,9 @@ public class App : MonoSingleton<App>
       case MapFilename.SIDEWINDER:
         LoadMap("Assets/maps/sidewinder_map.xml");
         break;
+      case MapFilename.GROWING_TREE:
+        LoadMap("Assets/maps/growing_tree_test_map.xml");
+        break;
       default:
         LoadMap("Assets/maps/test_map.xml");
         break;
@@ -325,6 +328,7 @@ public class App : MonoSingleton<App>
     ROOMS = 0,
     TEST,
     BINARY_TREE,
-    SIDEWINDER
+    SIDEWINDER,
+    GROWING_TREE
   }
 }
