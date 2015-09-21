@@ -47,7 +47,7 @@ public class DungeonGenerator : MonoBehaviour
     }
     else if (MazeGenerationMethod == (int)GenerationMethods.GROWING_TREE)
     {
-      _map = new Grid(MapWidth, MapHeight, CellType.EMPTY);
+      _map = new Grid(MapWidth, MapHeight, CellType.WALL);
     }
     else
     {

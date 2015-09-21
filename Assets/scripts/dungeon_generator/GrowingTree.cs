@@ -25,39 +25,23 @@ public class GrowingTree : GenerationAlgorithmBase
   /// 
   /// Option consists of choosing next cell either as the last added to the visited cells list or randomly from it.  
   /// 
-  /// My modification consists in locking certain cardinal direction (up, down, left, right) depending on neighbour chosen,
-  /// so that we don't end up with empty map.
-  /// E.g. if we chose neighbour to the right, we lock up, down and left walls of the current cell.
-  /// 
-  /// Original algorithm, AFAIU, works on different kind of grid - where walls are lines between cells, not separate cells:
-  /// 
-  /// ------
-  /// |.|..|
-  /// |. ..|
-  /// ------
-  /// 
-  /// as opposed to:
-  /// 
-  /// --------
-  /// |.|#|..|
-  /// |. . ..|
-  /// --------
+  /// This particular implementation uses passage carving approach.
+  /// Resulting maze is perfect, i.e. there are no loops, 2x2 floors etc.
   /// 
   /// </summary>
   /// <param name="grid"></param>
   public override void Do(Grid grid)
   {
     _gridRef = grid;
-
+    
     Cell c = grid.GetRandomCell();
-
+    
     Int2 pos = new Int2((int)c.Coordinates.x, (int)c.Coordinates.y);
+    grid.Map[pos.X, pos.Y].CellType = CellType.FLOOR;
     grid.Map[pos.X, pos.Y].Status = CellStatus.VISITED;
     _visitedCells.Add(pos);
 
     Debug.Log("Starting point: " + pos);
-
-    MakeWall(pos);
 
     Int2 neighbour = new Int2();
     while (_visitedCells.Count != 0)
@@ -82,19 +66,20 @@ public class GrowingTree : GenerationAlgorithmBase
         pos = _visitedCells[0];
       }
 
-      //Debug.Log("Current cell " + pos);
-
-      neighbour = ChooseNeighbour(pos);            
+      neighbour = ChooseNeighbour(pos);
       if (neighbour == null)
       {
+        //Debug.Log("Couldn't find neighbours of " + pos + " - removing it from the list");
+
         RemoveCell(pos);
       }
       else
-      {        
-        MakeWall(neighbour);
+      { 
+        //Debug.Log(pos + " - found neighbour " + neighbour);
+
+        _gridRef.Map[neighbour.X, neighbour.Y].CellType = CellType.FLOOR;
         _gridRef.Map[neighbour.X, neighbour.Y].Status = CellStatus.VISITED;
         _visitedCells.Add(neighbour);
-        LockPreviousCellWalls(pos, neighbour);
       }
 
       _safeguard++;
@@ -131,65 +116,6 @@ public class GrowingTree : GenerationAlgorithmBase
     }
   }
 
-  // Too much locking yields unwanted behaviour - maze consisting of only long corridors, short maze etc.
-  // Thus, some lines are commented out.
-  void LockPreviousCellWalls(Int2 prevPos, Int2 neighbour)
-  {
-    bool leftPassage = (prevPos.X - neighbour.X) > 0;
-    bool downPassage = (prevPos.Y - neighbour.Y) < 0;
-
-    if (leftPassage)
-    {
-      // ##XX#
-      // #..X#
-      // ##XX#
-
-      if (_gridRef.Map[prevPos.X - 1, prevPos.Y].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X - 1, prevPos.Y].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X + 1, prevPos.Y].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X + 1, prevPos.Y].Status = CellStatus.LOCKED; }
-      //if (_gridRef.Map[prevPos.X - 1, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y + 1].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X, prevPos.Y + 1].Status = CellStatus.LOCKED; }
-      //if (_gridRef.Map[prevPos.X + 1, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y + 1].Status = CellStatus.LOCKED; }
-    }
-    else if (!leftPassage)
-    {
-      // #XX##
-      // #X..#
-      // #XX##
-
-      if (_gridRef.Map[prevPos.X - 1, prevPos.Y].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X - 1, prevPos.Y].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X + 1, prevPos.Y].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X + 1, prevPos.Y].Status = CellStatus.LOCKED; }
-      //if (_gridRef.Map[prevPos.X - 1, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y - 1].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X, prevPos.Y - 1].Status = CellStatus.LOCKED; }
-      //if (_gridRef.Map[prevPos.X + 1, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y - 1].Status = CellStatus.LOCKED; }
-    }
-    else if (downPassage)
-    {
-      // XXX
-      // X.X
-      // #.#
-      // ###
-
-      //if (_gridRef.Map[prevPos.X - 1, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y - 1].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X - 1, prevPos.Y].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y].Status = CellStatus.LOCKED; }
-      //if (_gridRef.Map[prevPos.X - 1, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X - 1, prevPos.Y + 1].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X, prevPos.Y - 1].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X, prevPos.Y - 1].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X, prevPos.Y + 1].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X, prevPos.Y + 1].Status = CellStatus.LOCKED; }
-    }
-    else if (!downPassage)
-    {
-      // ###
-      // #.#
-      // X.X
-      // XXX
-
-      //if (_gridRef.Map[prevPos.X + 1, prevPos.Y - 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y - 1].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X + 1, prevPos.Y].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y].Status = CellStatus.LOCKED; }
-      //if (_gridRef.Map[prevPos.X + 1, prevPos.Y + 1].CellType == CellType.WALL) { _gridRef.Map[prevPos.X + 1, prevPos.Y + 1].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X, prevPos.Y - 1].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X, prevPos.Y - 1].Status = CellStatus.LOCKED; }
-      if (_gridRef.Map[prevPos.X, prevPos.Y + 1].CellType == CellType.WALL)     { _gridRef.Map[prevPos.X, prevPos.Y + 1].Status = CellStatus.LOCKED; }
-    }    
-  }
-
   void RemoveCell(Int2 pos)
   {
     int x = pos.X;
@@ -203,40 +129,6 @@ public class GrowingTree : GenerationAlgorithmBase
         break;
       }
     }
-  }
-
-  void MakeWall(Int2 center)
-  {
-    //Debug.Log("Making wall around " + center);
-
-    int xMin = center.X - 1;
-    int xMax = center.X + 1;
-    int yMin = center.Y - 1;
-    int yMax = center.Y + 1;
-
-    xMin = Mathf.Clamp(xMin, 0, _gridRef.MapHeight - 1);
-    xMax = Mathf.Clamp(xMax, 0, _gridRef.MapHeight - 1);
-    yMin = Mathf.Clamp(yMin, 0, _gridRef.MapWidth - 1);
-    yMax = Mathf.Clamp(yMax, 0, _gridRef.MapWidth - 1);
-
-    //Debug.Log(string.Format("xMin {0} yMin {1} xMax {2} yMax {3}", xMin, yMin, xMax, yMax));
-
-    for (int i = xMin; i <= xMax; i++)
-    {
-      for (int j = yMin; j <= yMax; j++)
-      {
-        if (_gridRef.Map[i, j].CellType == CellType.FLOOR) continue;
-
-        if (i == center.X && j == center.Y)
-        {
-          _gridRef.Map[i, j].CellType = CellType.FLOOR;
-        }
-        else
-        {
-          _gridRef.Map[i, j].CellType = CellType.WALL;
-        }
-      }
-    }    
   }
 
   List<Int2> _neighbours = new List<Int2>();
@@ -286,41 +178,27 @@ public class GrowingTree : GenerationAlgorithmBase
 
     //Debug.Log("Choosed " + _neighbours[index]);
 
-    return _neighbours[index];
+    return _neighbours[index];  
   }
 
   bool IsCellValid(Int2 pos)
   {
     int x = pos.X;
     int y = pos.Y;
-
-    if (x <= 1 || x >= _gridRef.MapHeight - 1 || y <= 1 || y >= _gridRef.MapWidth - 1)
+    
+    if (x <= 0 || x >= _gridRef.MapHeight - 1 || y <= 0 || y >= _gridRef.MapWidth - 1 || _gridRef.Map[x, y].Status == CellStatus.VISITED)
     {
       return false;
     }
 
-    if (_gridRef.Map[x, y].Status == CellStatus.VISITED || _gridRef.Map[x, y].Status == CellStatus.LOCKED)
-    {
-      return false;
-    }    
+    int count = 0;
 
-    return true;
-  }
+    if (_gridRef.Map[x - 1, y].CellType == CellType.FLOOR) { count++; }
+    if (_gridRef.Map[x + 1, y].CellType == CellType.FLOOR) { count++; }
+    if (_gridRef.Map[x, y - 1].CellType == CellType.FLOOR) { count++; }
+    if (_gridRef.Map[x, y + 1].CellType == CellType.FLOOR) { count++; }
 
-  bool DoesCellExist(Int2 pos, List<Int2> listToSearch)
-  {
-    int x = pos.X;
-    int y = pos.Y;
-
-    foreach (var item in listToSearch)
-    {
-      if (item.X == x && item.Y == y)
-      {
-        return true;
-      }
-    }
-
-    return false;
+    return (count == 1);
   }
 }
 
