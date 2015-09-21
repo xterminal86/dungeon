@@ -52,7 +52,7 @@ public class Cell
     if (bidirectional)
     {
       c.Links.Add(this);
-      c.CellType = CellType.EMPTY;
+      c.CellType = CellType.FLOOR;
     }
   }
 
@@ -71,7 +71,7 @@ public class Cell
     if (bidirectional)
     {
       c.Links.Remove(this);
-      c.CellType = CellType.WALL;
+      c.CellType = CellType.EMPTY;
     }
   }
 
