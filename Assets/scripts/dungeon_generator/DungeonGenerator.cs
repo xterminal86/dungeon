@@ -61,7 +61,6 @@ public class DungeonGenerator : MonoBehaviour
         alg.Do(_map);
         break;
       case (int)GenerationMethods.ROOMS:
-        //alg = new Rooms(NoRoomsIntersection, ConnectRooms);
         alg = new Rooms(RoomMaxWidth, RoomMaxHeight, MaxRooms, RoomsDistance, NoRoomsIntersection, ConnectRooms);
         alg.Do(_map);
         break;
