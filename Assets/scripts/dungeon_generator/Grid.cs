@@ -19,34 +19,6 @@ public class Grid
     get { return _mapHeight; }
   }
 
-  // Rooms only
-
-  int _roomMaxWidth = -1;
-  public int RoomMaxWidth
-  {
-    get { return _roomMaxWidth; }
-  }
-
-  int _roomMaxHeight = -1;
-  public int RoomMaxHeight
-  {
-    get { return _roomMaxHeight; }
-  }
-
-  int _maxRooms = -1;
-  public int MaxRooms
-  {
-    get { return _maxRooms; }
-  }
-
-  int _roomsDistance = 1;
-  public int RoomsDistance
-  {
-    get { return _roomsDistance; }
-  }
-
-  // =========================
-
   Cell[,] _map;
   public Cell[,] Map
   {
@@ -59,17 +31,6 @@ public class Grid
     _mapHeight = mapHeight;
     PrepareGrid(defaultCell);
     ConfigureCells();
-  }
-
-  public Grid (int mapWidth, int mapHeight, int roomMaxWidth, int roomMaxHeight, int maxRooms, int roomsDistance)
-  {
-    _mapWidth = mapWidth;
-    _mapHeight = mapHeight;
-    _roomMaxWidth = roomMaxWidth;
-    _roomMaxHeight = roomMaxHeight;
-    _maxRooms = maxRooms;
-    _roomsDistance = roomsDistance;
-    PrepareGrid(CellType.EMPTY);
   }
 
   protected virtual void PrepareGrid(CellType defaultCell)

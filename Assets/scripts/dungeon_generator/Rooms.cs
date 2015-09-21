@@ -11,9 +11,17 @@ public class Rooms : GenerationAlgorithmBase
 
   bool _noRoomsIntersection = false;
   bool _connectRooms = false;
+  int _roomMaxWidth = -1;
+  int _roomMaxHeight = -1;
+  int _maxRooms = -1;
+  int _roomsDistance = -1;
 
-  public Rooms(bool noRoomsIntersection, bool connectRooms)
+  public Rooms(int roomMaxWidth, int roomMaxHeight, int maxRooms, int roomsDistance, bool noRoomsIntersection, bool connectRooms)
   {
+    _roomMaxWidth = roomMaxWidth;
+    _roomMaxHeight = roomMaxHeight;
+    _maxRooms = maxRooms;
+    _roomsDistance = roomsDistance;
     _noRoomsIntersection = noRoomsIntersection;
     _connectRooms = connectRooms;
   }
@@ -28,11 +36,11 @@ public class Rooms : GenerationAlgorithmBase
   int _iterations = 0;
   void MakeRooms()
   {
-    while (_iterations < _gridRef.MaxRooms)
+    while (_iterations < _maxRooms)
     {
       Vector2 cellPos = _gridRef.GetRandomCellPos();
-      int roomWidth = Random.Range(5, _gridRef.RoomMaxWidth + 1);
-      int roomHeight = Random.Range(5, _gridRef.RoomMaxHeight + 1);
+      int roomWidth = Random.Range(5, _roomMaxWidth + 1);
+      int roomHeight = Random.Range(5, _roomMaxHeight + 1);
 
       // Again, remember that map size of 10x5 means x:10, y:5 -> 10 columns, 5 rows in array form.
       // So we need to use height in x calculations and width in y.
@@ -51,7 +59,7 @@ public class Rooms : GenerationAlgorithmBase
             break;
           }
 
-          bool res = IsRegionOccupied(cellPos, roomWidth, roomHeight, _gridRef.RoomsDistance);
+          bool res = IsRegionOccupied(cellPos, roomWidth, roomHeight, _roomsDistance);
           if (res)
           {
             cellPos = _gridRef.GetRandomCellPos();

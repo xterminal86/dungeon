@@ -43,11 +43,7 @@ public class DungeonGenerator : MonoBehaviour
 
     if (MazeGenerationMethod == (int)GenerationMethods.ROOMS)
     {
-      _map = new Grid(MapWidth, MapHeight, RoomMaxWidth, RoomMaxHeight, MaxRooms, RoomsDistance);
-    }
-    else if (MazeGenerationMethod == (int)GenerationMethods.GROWING_TREE)
-    {
-      _map = new Grid(MapWidth, MapHeight, CellType.WALL);
+      _map = new Grid(MapWidth, MapHeight);
     }
     else
     {
@@ -65,7 +61,8 @@ public class DungeonGenerator : MonoBehaviour
         alg.Do(_map);
         break;
       case (int)GenerationMethods.ROOMS:
-        alg = new Rooms(NoRoomsIntersection, ConnectRooms);
+        //alg = new Rooms(NoRoomsIntersection, ConnectRooms);
+        alg = new Rooms(RoomMaxWidth, RoomMaxHeight, MaxRooms, RoomsDistance, NoRoomsIntersection, ConnectRooms);
         alg.Do(_map);
         break;
       case (int)GenerationMethods.GROWING_TREE:
