@@ -29,6 +29,8 @@ public class DungeonGenerator : MonoBehaviour
 
   [Header("Growing Tree only")]
   public DecisionType PassageType = DecisionType.NEWEST;
+  public bool RemoveDeadEnds = false;
+  public int DeadEndsToRemove = 1000;
 
   StringBuilder _result;
 
@@ -65,7 +67,7 @@ public class DungeonGenerator : MonoBehaviour
         alg.Do(_map);
         break;
       case (int)GenerationMethods.GROWING_TREE:
-        alg = new GrowingTree(PassageType);
+        alg = new GrowingTree(PassageType, RemoveDeadEnds, DeadEndsToRemove);
         alg.Do(_map);
         break;
       default:

@@ -28,6 +28,11 @@ public class DungeonGeneratorInspector : Editor
     else if (dg.MazeGenerationMethod == (int)GenerationMethods.GROWING_TREE)
     {
       dg.PassageType = (DecisionType)EditorGUILayout.EnumPopup("Passage Carving Option", dg.PassageType);
+      dg.RemoveDeadEnds = EditorGUILayout.Toggle("Remove Dead Ends", dg.RemoveDeadEnds);
+      if (dg.RemoveDeadEnds)
+      {
+        dg.DeadEndsToRemove = EditorGUILayout.IntSlider("Dead Ends to Remove", dg.DeadEndsToRemove, 1, dg.MapWidth * dg.MapHeight);
+      }
     }
   }
 

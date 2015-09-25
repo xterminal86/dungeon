@@ -11,9 +11,13 @@ public class GrowingTree : GenerationAlgorithmBase
   int _safeguard = 0;
 
   DecisionType _decisionType;
-  public GrowingTree(DecisionType decisionType)
+  bool _removeDeadEnds = false;
+  int _deadEndsToRemove = 1;
+  public GrowingTree(DecisionType decisionType, bool removeDeadEnds, int deadEndsToRemove)
   {
     _decisionType = decisionType;
+    _removeDeadEnds = removeDeadEnds;
+    _deadEndsToRemove = deadEndsToRemove;
   }
 
   /// <summary>
@@ -83,6 +87,45 @@ public class GrowingTree : GenerationAlgorithmBase
       }
 
       _safeguard++;
+    }
+
+    if (_removeDeadEnds)
+    {
+      RemoveDeadEnds();
+    }    
+  }
+
+  int _deadEndsCounter = 0;
+  void RemoveDeadEnds()
+  {
+    _deadEndsCounter = 0;
+    Int2 tmpPos = new Int2();
+    bool safeguard = false;
+    while (_deadEndsCounter < _deadEndsToRemove)
+    {
+      if (safeguard)
+      {
+        Debug.LogWarning("RemoveDeadEnds(): Terminated by safeguard!");
+        break;
+      }
+
+      safeguard = true;
+
+      for (int x = 1; x < _gridRef.MapHeight - 1; x++)
+      {
+        for (int y = 1; y < _gridRef.MapWidth - 1; y++)
+        {
+          tmpPos.X = x;
+          tmpPos.Y = y;
+
+          if (IsDeadEnd(tmpPos))
+          {
+            _gridRef.Map[x, y].CellType = CellType.WALL;
+            _deadEndsCounter++;
+            safeguard = false;
+          }
+        }
+      }
     }
   }
 
@@ -190,6 +233,29 @@ public class GrowingTree : GenerationAlgorithmBase
     if (_gridRef.Map[x, y + 1].CellType == CellType.FLOOR) { count++; }
 
     return (count == 1);
+  }
+
+  bool IsDeadEnd(Int2 pos)
+  {
+    CellType current = _gridRef.Map[pos.X, pos.Y].CellType;
+
+    CellType up = _gridRef.Map[pos.X - 1, pos.Y].CellType;
+    CellType down = _gridRef.Map[pos.X + 1, pos.Y].CellType;
+    CellType left = _gridRef.Map[pos.X, pos.Y - 1].CellType;
+    CellType right = _gridRef.Map[pos.X, pos.Y + 1].CellType;
+
+    if (current == CellType.FLOOR)
+    {
+      if ( (left == CellType.WALL && up == CellType.WALL && right == CellType.WALL)
+        || (up == CellType.WALL && right == CellType.WALL && down == CellType.WALL)
+        || (right == CellType.WALL && down == CellType.WALL && left == CellType.WALL)
+        || (down == CellType.WALL && left == CellType.WALL && up == CellType.WALL))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 
