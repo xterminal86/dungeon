@@ -34,6 +34,8 @@ public class DungeonGeneratorInspector : Editor
         dg.DeadEndsToRemove = EditorGUILayout.IntSlider("Dead Ends to Remove", dg.DeadEndsToRemove, 1, dg.MapWidth * dg.MapHeight);
       }
     }
+
+    dg.DoCleanup = EditorGUILayout.Toggle("Cleanup Walls", dg.DoCleanup);
   }
 
   public enum GenerationMethods

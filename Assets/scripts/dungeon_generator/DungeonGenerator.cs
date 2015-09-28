@@ -32,6 +32,8 @@ public class DungeonGenerator : MonoBehaviour
   public bool RemoveDeadEnds = false;
   public int DeadEndsToRemove = 1000;
 
+  public bool DoCleanup = true;
+
   StringBuilder _result;
 
   Grid _map;
@@ -72,6 +74,11 @@ public class DungeonGenerator : MonoBehaviour
         break;
       default:
         break;
+    }
+
+    if (DoCleanup)
+    {
+      alg.Cleanup(_map);
     }
 
     TextArea.text = GetOutput();

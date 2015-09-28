@@ -34,6 +34,7 @@ public class Cell
   }
 
   public CellType CellType = CellType.EMPTY;
+  public CellType CellStatusForCleanup = CellType.EMPTY;
 
   public Cell(Vector2 coords, CellType defaultCell)
   {
