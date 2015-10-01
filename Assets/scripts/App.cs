@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 
 public class App : MonoSingleton<App>
 {
+  public GameObject TestModel;
+
   public GameObject DummyObjectPrefab;
   public GameObject WallPrefab;
   public GameObject FloorPrefab;
@@ -84,11 +86,18 @@ public class App : MonoSingleton<App>
 
     if (MapLoadingFinished != null)
       MapLoadingFinished();
+
+    SetupModel();
   }
 
   protected override void Init()
   {
     base.Init();
+  }
+
+  void SetupModel()
+  {
+    GameObject go = (GameObject)Instantiate(TestModel, new Vector3(4, 0, 4), Quaternion.identity);
   }
 
   int _mapColumns = 0;
