@@ -18,8 +18,6 @@ public class ModelMover : MonoBehaviour
     if (_animationComponent != null)
     {
       _animationComponent["Idle"].speed = 0.5f;
-      
-      _animationComponent.Play("Idle");
     }
 	}
 		
@@ -40,7 +38,10 @@ public class ModelMover : MonoBehaviour
 
     _animationComponent.Play(_animationsByIndex[index]);
 
-    while (_time < _animationComponent[_animationsByIndex[index]].length)
+    float speed = _animationComponent[_animationsByIndex[index]].speed;
+    float length = _animationComponent[_animationsByIndex[index]].length;
+    float cond = length / speed;
+    while (_time < cond)
     {
       _time += Time.deltaTime;
       yield return null;
