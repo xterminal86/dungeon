@@ -16,7 +16,11 @@ public class Rooms : GenerationAlgorithmBase
   int _maxRooms = -1;
   int _roomsDistance = -1;
 
-  public Rooms(int roomMaxWidth, int roomMaxHeight, int maxRooms, int roomsDistance, bool noRoomsIntersection, bool connectRooms)
+  GrowingTree _maze;
+
+  public Rooms(int roomMaxWidth, int roomMaxHeight, int maxRooms, 
+               int roomsDistance, bool noRoomsIntersection, bool connectRooms,
+               bool removeDeadEnds, int deadEndsToRemove)
   {
     _roomMaxWidth = roomMaxWidth;
     _roomMaxHeight = roomMaxHeight;
@@ -24,6 +28,8 @@ public class Rooms : GenerationAlgorithmBase
     _roomsDistance = roomsDistance;
     _noRoomsIntersection = noRoomsIntersection;
     _connectRooms = connectRooms;
+
+    _maze = new GrowingTree(DecisionType.NEWEST, removeDeadEnds, deadEndsToRemove);
   }
 
   public override void Do(Grid grid)
@@ -31,6 +37,13 @@ public class Rooms : GenerationAlgorithmBase
     _gridRef = grid;
 
     MakeRooms();
+
+    if (_connectRooms)
+    {
+      //SortRooms();
+      //CarvePassages();
+      GenerateMaze();
+    }
   }
 
   int _iterations = 0;
@@ -102,12 +115,6 @@ public class Rooms : GenerationAlgorithmBase
 
       Debug.Log(count + ") " + room.FirstPoint + " " + room.SecondPoint + " center: " + cp);
       count++;
-    }
-
-    if (_connectRooms)
-    {
-      SortRooms();
-      CarvePassages();
     }
   }
 
@@ -201,6 +208,7 @@ public class Rooms : GenerationAlgorithmBase
         if (_gridRef.Map[i, j].CellType != CellType.FLOOR)
         {
           _gridRef.Map[i, j].CellType = CellType.WALL;
+          _gridRef.Map[i, j].Status = CellStatus.VISITED;
         }
       }
     }
@@ -234,6 +242,22 @@ public class Rooms : GenerationAlgorithmBase
       CarvePassage(centralPoints);
     }
     */
+  }
+
+  void GenerateMaze()
+  {
+    for (int x = 0; x < _gridRef.MapHeight; x++)
+    {
+      for (int y = 0; y < _gridRef.MapWidth; y++)
+      {
+        if (_gridRef.Map[x, y].Status != CellStatus.VISITED)
+        {
+          _gridRef.Map[x, y].CellType = CellType.WALL;
+        }
+      }
+    }
+
+    _maze.Do(_gridRef);
   }
 
   KeyValuePair<Int2, Int2> _centralPoints;
@@ -324,89 +348,4 @@ public class Rooms : GenerationAlgorithmBase
       }
     }
   }
-
-  /*
-  KeyValuePair<Int2, Int2> _doorways;
-  KeyValuePair<Int2, Int2> GetDoorways(RoomBounds room1, RoomBounds room2)
-  {
-    int x1, y1, x2, y2 = 0;
-    Int2 d1 = new Int2();
-    Int2 d2 = new Int2();
-
-    // First room is below second
-    if (room1.FirstPoint.X > room2.SecondPoint.X) 
-    {
-      // Both rooms are approximately on the same vertical line
-      if (room1.FirstPoint.Y >= room2.FirstPoint.Y && room1.FirstPoint.Y <= room2.SecondPoint.Y ||
-          room1.SecondPoint.Y >= room2.FirstPoint.Y && room1.SecondPoint.Y <= room2.SecondPoint.Y)
-      {
-        // Get random point between left and right sides (exclusive) on upper side
-        y1 = Random.Range(room1.FirstPoint.Y + 1, room1.SecondPoint.Y);
-        x1 = room1.FirstPoint.X;
-
-        // Same thing for the room above
-        y2 = Random.Range(room2.FirstPoint.Y + 1, room2.SecondPoint.Y);
-        x2 = room2.SecondPoint.X;
-
-        d1.X = x1;
-        d1.Y = y1;
-
-        d2.X = x2;
-        d2.Y = y2;
-      }
-      // if second room if to the left
-      else if (room1.FirstPoint.Y >= room2.SecondPoint.Y)
-      {
-        // Randomly choose at which side we create a doorway
-        int choice = Random.Range(0, 2);
-        // Left side
-        if (choice == 0)
-        {
-          y1 = room1.FirstPoint.Y;
-          x1 = Random.Range(room1.FirstPoint.X + 1, room1.SecondPoint.X);
-        }
-        // Right side
-        else
-        {
-          y1 = Random.Range(room1.FirstPoint.Y + 1, room1.SecondPoint.Y);
-          x1 = room1.FirstPoint.X;
-        }
-
-        // Do the same thing for the second room
-        choice = Random.Range(0, 2);
-        // Bottom side
-        if (choice == 0)
-        {
-          y2 = room2.SecondPoint.Y;
-          x2 = Random.Range(room2.FirstPoint.X + 1, room2.SecondPoint.X);
-        }
-        // Right side
-        else
-        {
-          y2 = Random.Range(room2.FirstPoint.Y + 1, room2.SecondPoint.Y);
-          x2 = room2.SecondPoint.X;
-        }
-
-        d1.X = x1;
-        d1.Y = y1;
-
-        d2.X = x2;
-        d2.Y = y2;
-      }
-      // if second room is to the right
-      else if (room1.SecondPoint.Y <= room2.FirstPoint.Y)
-      {
-      }
-    }
-
-    _doorways = new KeyValuePair<Int2, Int2>(d1, d2);
-
-    return _doorways;
-  }
-
-  void CarvePassage(KeyValuePair<Int2, Int2> doorways)
-  {
-    Debug.Log("Carving passage from " + doorways.Key + " to " + doorways.Value);
-  }
-  */
 }

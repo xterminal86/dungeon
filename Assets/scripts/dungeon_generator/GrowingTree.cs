@@ -20,14 +20,20 @@ public class GrowingTree : GenerationAlgorithmBase
     _deadEndsToRemove = deadEndsToRemove;
   }
 
+  public GrowingTree(DecisionType decisionType)
+  {
+    _decisionType = decisionType;
+  }
+
   /// <summary>
   /// General description:
   /// 1) Choose random cell, add it to visited cells list
   /// 2) Choose random neighbour (up, down, left, right)
-  /// 3) If neighbour can be chosen, add it to visited cells
+  /// 3) If neighbour can be chosen, add it to visited cells list, 
+  ///    otherwise remove current cell from the list
   /// 4) Depending on the option, choose next cell and repeat from 2 while visited cells list is not empty
   /// 
-  /// Option consists of choosing next cell either as the last added to the visited cells list or randomly from it.  
+  /// Option consists of choosing next cell either as the last added to the visited cells list, oldest or random from it.  
   /// 
   /// This particular implementation uses passage carving approach.
   /// Resulting maze is perfect, i.e. there are no loops, 2x2 floors etc.

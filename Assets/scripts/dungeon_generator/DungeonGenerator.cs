@@ -22,6 +22,8 @@ public class DungeonGenerator : MonoBehaviour
   public int RoomMaxHeight = 3;
   [Range(1, 100)]
   public int MaxRooms = 1;
+  public bool RoomsRemoveDeadEnds = false;
+  public int RoomsDeadEndsToRemove = 1;
 
   public int RoomsDistance = 1;
   public bool NoRoomsIntersection = false;
@@ -65,7 +67,8 @@ public class DungeonGenerator : MonoBehaviour
         alg.Do(_map);
         break;
       case (int)GenerationMethods.ROOMS:
-        alg = new Rooms(RoomMaxWidth, RoomMaxHeight, MaxRooms, RoomsDistance, NoRoomsIntersection, ConnectRooms);
+        alg = new Rooms(RoomMaxWidth, RoomMaxHeight, MaxRooms, RoomsDistance, NoRoomsIntersection, ConnectRooms,
+                        RoomsRemoveDeadEnds, RoomsDeadEndsToRemove);
         alg.Do(_map);
         break;
       case (int)GenerationMethods.GROWING_TREE:

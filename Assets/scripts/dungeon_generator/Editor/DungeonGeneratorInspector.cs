@@ -23,6 +23,15 @@ public class DungeonGeneratorInspector : Editor
       dg.MaxRooms = EditorGUILayout.IntSlider("Max Rooms", dg.MaxRooms, 1, maxRooms);
       dg.NoRoomsIntersection = EditorGUILayout.Toggle("No Rooms Intersection", dg.NoRoomsIntersection);
       dg.ConnectRooms = EditorGUILayout.Toggle("Connect Rooms", dg.ConnectRooms);
+      if (dg.ConnectRooms)
+      {
+        dg.RoomsRemoveDeadEnds = EditorGUILayout.Toggle("Remove Dead Ends", dg.RoomsRemoveDeadEnds);
+        if (dg.RoomsRemoveDeadEnds)
+        {
+          dg.RoomsDeadEndsToRemove = EditorGUILayout.IntSlider("Dead Ends to Remove", dg.RoomsDeadEndsToRemove, 1, dg.MapWidth * dg.MapHeight);
+        }
+      }
+
       dg.RoomsDistance = EditorGUILayout.IntSlider("Rooms Minimum Spread Distance", dg.RoomsDistance, 0, Mathf.Max(dg.MapWidth, dg.MapHeight) / 2);
     }
     else if (dg.MazeGenerationMethod == (int)GenerationMethods.GROWING_TREE)

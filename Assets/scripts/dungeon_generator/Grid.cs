@@ -80,10 +80,38 @@ public class Grid
     return _map[x, y];
   }
 
+  int _rounds = 0;
   public Cell GetRandomCell()
   {
     int x = Random.Range(1, _mapHeight - 1);
     int y = Random.Range(1, _mapWidth - 1);
+
+    int _mapSize = _mapWidth * _mapHeight;
+
+    if (_map[x, y].Status == CellStatus.VISITED || _map[x, y].Status == CellStatus.LOCKED)
+    {
+      while (true)
+      {
+        if (_rounds >= _mapSize)
+        {
+          Debug.LogWarning("Could not find starting cell!");
+
+          _rounds = 0;
+          break;
+        }
+
+        x = Random.Range(1, _mapHeight - 1);
+        y = Random.Range(1, _mapWidth - 1);
+
+        if (_map[x, y].Status == CellStatus.UNVISITED)
+        {
+          _rounds = 0;
+          break;
+        }
+
+        _rounds++;
+      }
+    }
 
     return _map[x, y];
   }
