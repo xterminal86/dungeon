@@ -16,6 +16,16 @@ public class BlockSetupInspector : Editor
 
     bs.DragMaterialHere = (Material)EditorGUILayout.ObjectField("Drag Material Here", bs.DragMaterialHere, typeof(Material));
 
+    if (bs.DragMaterialHere != null)
+    {
+      bs.Quad1.renderer.material = bs.DragMaterialHere;
+      bs.Quad2.renderer.material = bs.DragMaterialHere;
+      bs.Quad3.renderer.material = bs.DragMaterialHere;
+      bs.Quad4.renderer.material = bs.DragMaterialHere;
+      bs.Quad5.renderer.material = bs.DragMaterialHere;
+      bs.Quad6.renderer.material = bs.DragMaterialHere;
+    }
+
     if (GUI.changed)
     {
       EditorUtility.SetDirty(bs);

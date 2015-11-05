@@ -13,17 +13,4 @@ public class BlockSetup : MonoBehaviour
   public GameObject Quad6;
 
   public Material DragMaterialHere;
-
-  void Update()
-  {
-    if (DragMaterialHere != null)
-    {
-      Quad1.renderer.material = DragMaterialHere;
-      Quad2.renderer.material = DragMaterialHere;
-      Quad3.renderer.material = DragMaterialHere;
-      Quad4.renderer.material = DragMaterialHere;
-      Quad5.renderer.material = DragMaterialHere;
-      Quad6.renderer.material = DragMaterialHere;
-    }
-  }
 }
