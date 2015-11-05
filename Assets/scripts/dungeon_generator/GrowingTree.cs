@@ -135,27 +135,6 @@ public class GrowingTree : GenerationAlgorithmBase
     }
   }
 
-  void CreateBounds()
-  {
-    for (int i = 0; i < _gridRef.MapWidth; i++)
-    {
-      _gridRef.Map[0, i].CellType = CellType.WALL;
-      _gridRef.Map[0, i].Status = CellStatus.LOCKED;
-
-      _gridRef.Map[_gridRef.MapHeight - 1, i].CellType = CellType.WALL;
-      _gridRef.Map[_gridRef.MapHeight - 1, i].Status = CellStatus.LOCKED;
-    }
-
-    for (int i = 1; i < _gridRef.MapHeight; i++)
-    {
-      _gridRef.Map[i, 0].CellType = CellType.WALL;
-      _gridRef.Map[i, 0].Status = CellStatus.LOCKED;
-
-      _gridRef.Map[i, _gridRef.MapWidth - 1].CellType = CellType.WALL;
-      _gridRef.Map[i, _gridRef.MapWidth - 1].Status = CellStatus.LOCKED;      
-    }
-  }
-
   void RemoveCell(Int2 pos)
   {
     int x = pos.X;

@@ -7,7 +7,6 @@ public class Rooms : GenerationAlgorithmBase
   Grid _gridRef;
 
   List<RoomBounds> _roomsBounds = new List<RoomBounds>();
-  List<Int2> _roomsCentralPoints = new List<Int2>();
 
   bool _noRoomsIntersection = false;
   bool _connectRooms = false;
@@ -40,9 +39,8 @@ public class Rooms : GenerationAlgorithmBase
 
     if (_connectRooms)
     {
-      //SortRooms();
-      //CarvePassages();
       GenerateMaze();
+      MakeDoorways();
     }
   }
 
@@ -102,58 +100,6 @@ public class Rooms : GenerationAlgorithmBase
       _iterations++;
 
     } // end while
-
-    int count = 1;
-    foreach (var room in _roomsBounds)
-    {
-      int x = room.FirstPoint.X + ((room.SecondPoint.X - room.FirstPoint.X) / 2);
-      int y = room.FirstPoint.Y + ((room.SecondPoint.Y - room.FirstPoint.Y) / 2);
-
-      Int2 cp = new Int2(x, y);
-
-      _roomsCentralPoints.Add(cp);
-
-      Debug.Log(count + ") " + room.FirstPoint + " " + room.SecondPoint + " center: " + cp);
-      count++;
-    }
-  }
-
-  List<Int2> _sortedRoomCenters = new List<Int2>();
-  void SortRooms()
-  {
-    for (int x = 0; x < _gridRef.MapHeight; x++)
-    {
-      for (int y = 0; y < _gridRef.MapWidth; y++)
-      {
-        bool res = FindCenterPointInList(x, y);
-        if (res)
-        {
-          _sortedRoomCenters.Add(new Int2(x, y));
-        }
-      }
-    }
-
-    Debug.Log("Sorted rooms:");
-
-    int count = 1;
-    foreach (var p in _sortedRoomCenters)
-    {
-      Debug.Log(count + ") " + p);
-      count++;
-    }
-  }
-
-  bool FindCenterPointInList(int x, int y)
-  {
-    foreach (var p in _roomsCentralPoints)
-    {
-      if (p.X == x && p.Y == y)
-      {
-        return true;
-      }      
-    }
-
-    return false;
   }
 
   bool IsRegionOccupied(Vector2 cellPos, int roomWidth, int roomHeight, int roomsDistance)
@@ -223,27 +169,6 @@ public class Rooms : GenerationAlgorithmBase
     }
   }
 
-  void CarvePassages()
-  {
-    if (_sortedRoomCenters.Count == 1) return;
-
-    for (int i = 0; i < _sortedRoomCenters.Count - 1; i++)
-    {
-      KeyValuePair<Int2, Int2> pair = new KeyValuePair<Int2, Int2>(_sortedRoomCenters[i], _sortedRoomCenters[i + 1]);
-      CarvePassage(pair);
-    }
-
-    /*
-    if (_roomsBounds.Count == 1) return;
-
-    for (int i = 0; i < _roomsBounds.Count - 1; i++)
-    {
-      var centralPoints = GetCentralPoints(_roomsBounds[i], _roomsBounds[i + 1]);
-      CarvePassage(centralPoints);
-    }
-    */
-  }
-
   void GenerateMaze()
   {
     for (int x = 0; x < _gridRef.MapHeight; x++)
@@ -260,91 +185,72 @@ public class Rooms : GenerationAlgorithmBase
     _maze.Do(_gridRef);
   }
 
-  KeyValuePair<Int2, Int2> _centralPoints;
-  KeyValuePair<Int2, Int2> GetCentralPoints(RoomBounds r1, RoomBounds r2)
+  List<Int2> _doorwayCandidates = new List<Int2>();
+  void MakeDoorways()
   {
-    int cx1 = r1.FirstPoint.X + ((r1.SecondPoint.X - r1.FirstPoint.X) / 2); 
-    int cy1 = r1.FirstPoint.Y + ((r1.SecondPoint.Y - r1.FirstPoint.Y) / 2);
-    
-    int cx2 = r2.FirstPoint.X + ((r2.SecondPoint.X - r2.FirstPoint.X) / 2); 
-    int cy2 = r2.FirstPoint.Y + ((r2.SecondPoint.Y - r2.FirstPoint.Y) / 2);
-    
-    Int2 c1 = new Int2(cx1, cy1);
-    Int2 c2 = new Int2(cx2, cy2);
-
-    //Debug.Log("Room1 " + r1 + " approx. center " + c1);
-    //Debug.Log("Room2 " + r2 + " approx. center " + c2);
-
-    _centralPoints = new KeyValuePair<Int2, Int2>(c1, c2);
-
-    return _centralPoints;
-  }
-
-  void CarvePassage(KeyValuePair<Int2, Int2> centralPoints)
-  {
-    Debug.Log("Carving manhattan passage from " + centralPoints.Key + " to " + centralPoints.Value); 
-
-    Int2 p1 = centralPoints.Key;
-    Int2 p2 = centralPoints.Value;
-
-    if (Mathf.Abs(p1.Y - p2.Y) >= Mathf.Abs(p1.X - p2.X))
+    for (int i = 0; i < _roomsBounds.Count; i++)
     {
-      int fromY = (p1.Y < p2.Y) ? p1.Y : p2.Y;
-      int toY = (p1.Y < p2.Y) ? p2.Y : p1.Y;
+      _doorwayCandidates.Clear();
 
-      for (int i = fromY; i <= toY; i++)
+      for (int y = _roomsBounds[i].FirstPoint.Y + 1; y <= _roomsBounds[i].SecondPoint.Y - 1; y++)
       {
-        _gridRef.Map[p1.X, i].CellType = CellType.FLOOR;
-                
-        WallPassage(p1.X - 1, p1.X + 1, i - 1, i + 1);
-      }
+        int x1 = _roomsBounds[i].FirstPoint.X + 1;
+        int x2 = _roomsBounds[i].SecondPoint.X - 1;
 
-      int fromX = (p1.X < p2.X) ? p1.X : p2.X;
-      int toX = (p1.X < p2.X) ? p2.X : p1.X;
+        int yUp = (y - 2) < 0 ? 0 : y - 2;
+        int yDown = (y + 2) > _gridRef.MapHeight - 1 ? _gridRef.MapHeight - 1 : y + 2;
 
-      for (int i = fromX; i <= toX; i++)
-      {
-        _gridRef.Map[i, p2.Y].CellType = CellType.FLOOR;
+        CellStatus up = _gridRef.Map[x1, yUp].Status;
+        CellStatus down = _gridRef.Map[x2, yDown].Status;
+        CellType upType = _gridRef.Map[x1, yUp].CellType;
+        CellType downType = _gridRef.Map[x2, yDown].CellType;
 
-        WallPassage(i - 1, i + 1, p2.Y - 1, p2.Y + 1);        
-      }
-    }
-    else
-    {
-      int fromX = (p1.X < p2.X) ? p1.X : p2.X;
-      int toX = (p1.X < p2.X) ? p2.X : p1.X;
-      
-      for (int i = fromX; i <= toX; i++)
-      {
-        _gridRef.Map[i, p1.Y].CellType = CellType.FLOOR;
-
-        WallPassage(i - 1, i + 1, p1.Y - 1, p1.Y + 1);
-      }
-      
-      int fromY = (p1.Y < p2.Y) ? p1.Y : p2.Y;
-      int toY = (p1.Y < p2.Y) ? p2.Y : p1.Y;
-      
-      for (int i = fromY; i <= toY; i++)
-      {
-        _gridRef.Map[p2.X, i].CellType = CellType.FLOOR;
-
-        WallPassage(p2.X - 1, p2.X + 1, i - 1, i + 1);
-      }
-    }
-  }
-
-  void WallPassage(int minX, int maxX, int minY, int maxY)
-  {
-    for (int i = minX; i <= maxX; i++)
-    {
-      for (int j = minY; j <= maxY; j++)
-      {
-        if (i == (minX + 1) && j == (minY + 1)) continue;
-
-        if (_gridRef.Map[i, j].CellType == CellType.EMPTY)
+        if (up == CellStatus.VISITED && upType == CellType.FLOOR)
         {
-          _gridRef.Map[i, j].CellType = CellType.WALL;
+          _doorwayCandidates.Add(new Int2(x1, _roomsBounds[i].FirstPoint.Y));
         }
+
+        if (down == CellStatus.VISITED && downType == CellType.FLOOR)
+        {
+          _doorwayCandidates.Add(new Int2(x2, _roomsBounds[i].FirstPoint.Y));
+        }
+      }
+
+      for (int x = _roomsBounds[i].FirstPoint.X + 1; x <= _roomsBounds[i].SecondPoint.X - 1; x++)
+      {
+        int y1 = _roomsBounds[i].FirstPoint.Y + 1;
+        int y2 = _roomsBounds[i].SecondPoint.Y - 1;
+        
+        int xLeft = (x - 2) < 0 ? 0 : x - 2;
+        int xRight = (x + 2) > _gridRef.MapWidth - 1 ? _gridRef.MapWidth - 1 : x + 2;
+        
+        CellStatus left = _gridRef.Map[xLeft, y1].Status;
+        CellStatus right = _gridRef.Map[xRight, y2].Status;
+        CellType leftType = _gridRef.Map[xLeft, y1].CellType;
+        CellType rightType = _gridRef.Map[xRight, y2].CellType;
+
+        if (left == CellStatus.VISITED && leftType == CellType.FLOOR)
+        {
+          _doorwayCandidates.Add(new Int2(_roomsBounds[i].FirstPoint.X, y1));
+        }
+        
+        if (right == CellStatus.VISITED && rightType == CellType.FLOOR)
+        {
+          _doorwayCandidates.Add(new Int2(_roomsBounds[i].SecondPoint.X, y2));
+        }
+      }
+
+      if (_doorwayCandidates.Count == 0)
+      {
+        Debug.Log("Removing orphaned room: " + _roomsBounds[i].FirstPoint + " " + _roomsBounds[i].SecondPoint);
+        _roomsBounds.RemoveAt(i);
+      }
+      else
+      {
+        int doorwayIndex = Random.Range(0, _doorwayCandidates.Count);
+        Int2 pos = _doorwayCandidates[doorwayIndex];
+        Debug.Log("Making doorway at " + pos);
+        _gridRef.Map[pos.X, pos.Y].CellType = CellType.FLOOR;
       }
     }
   }
