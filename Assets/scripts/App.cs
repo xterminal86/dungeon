@@ -67,6 +67,9 @@ public class App : MonoSingleton<App>
       case MapFilename.ROOMS:
         LoadMap("Assets/maps/rooms_test_map.xml");
         break;
+      case MapFilename.ROOMS_CONNECTED:
+        LoadMap("Assets/maps/rooms_test_map2.xml");
+        break;
       case MapFilename.TEST:
         LoadMap("Assets/maps/test_map.xml");
         break;
@@ -335,6 +338,7 @@ public class App : MonoSingleton<App>
   public enum MapFilename
   {
     ROOMS = 0,
+    ROOMS_CONNECTED,
     TEST,
     BINARY_TREE,
     SIDEWINDER,
