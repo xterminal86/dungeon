@@ -212,6 +212,8 @@ public class GrowingTree : GenerationAlgorithmBase
 
     int count = 0;
 
+    // Neighbour is valid only if it touches only one floor tile
+
     if (_gridRef.Map[x - 1, y].CellType == CellType.FLOOR) { count++; }
     if (_gridRef.Map[x + 1, y].CellType == CellType.FLOOR) { count++; }
     if (_gridRef.Map[x, y - 1].CellType == CellType.FLOOR) { count++; }

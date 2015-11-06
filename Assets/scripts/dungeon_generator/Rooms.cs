@@ -80,9 +80,12 @@ public class Rooms : GenerationAlgorithmBase
           {
             MakeRoom(cellPos, roomWidth, roomHeight);
             Int2 p1 = new Int2(cellPos.x, cellPos.y);
+
             // For loop in MakeRoom() does not include (x + roomHeight), so we subtract 1 to get second boundary point
             Int2 p2 = new Int2((int)cellPos.x + roomHeight - 1, (int)cellPos.y + roomWidth - 1);
+
             _roomsBounds.Add(new RoomBounds(p1, p2));
+
             break;
           }
 
@@ -167,6 +170,8 @@ public class Rooms : GenerationAlgorithmBase
         _gridRef.Map[i, j].CellType = CellType.FLOOR;
       }
     }
+
+    Debug.Log("Room created: " + cellPos + " " + roomWidth + " " + roomHeight); 
   }
 
   void GenerateMaze()
@@ -192,58 +197,70 @@ public class Rooms : GenerationAlgorithmBase
     {
       _doorwayCandidates.Clear();
 
+      Debug.Log("Processing room " + _roomsBounds[i]);
+
       for (int y = _roomsBounds[i].FirstPoint.Y + 1; y <= _roomsBounds[i].SecondPoint.Y - 1; y++)
       {
-        int x1 = _roomsBounds[i].FirstPoint.X + 1;
-        int x2 = _roomsBounds[i].SecondPoint.X - 1;
+        //Debug.Log(_roomsBounds[i] + " y: " + y);
 
-        int yUp = (y - 2) < 0 ? 0 : y - 2;
-        int yDown = (y + 2) > _gridRef.MapHeight - 1 ? _gridRef.MapHeight - 1 : y + 2;
+        int xUp = _roomsBounds[i].FirstPoint.X - 1;
+        int xDown = _roomsBounds[i].SecondPoint.X + 1;
 
-        CellStatus up = _gridRef.Map[x1, yUp].Status;
-        CellStatus down = _gridRef.Map[x2, yDown].Status;
-        CellType upType = _gridRef.Map[x1, yUp].CellType;
-        CellType downType = _gridRef.Map[x2, yDown].CellType;
+        CellType upType = _gridRef.Map[xUp, y].CellType;
+        CellType downType = _gridRef.Map[xDown, y].CellType;
 
-        if (up == CellStatus.VISITED && upType == CellType.FLOOR)
+        //Debug.Log("Upper: [" + xUp + " " + y + "] - " + upType + " Lower: [" + xDown + " " + y + "] - " + downType);
+
+        if (upType == CellType.FLOOR)
         {
-          _doorwayCandidates.Add(new Int2(x1, _roomsBounds[i].FirstPoint.Y));
+          //Debug.Log("\tCandidate for doorway " + _roomsBounds[i].FirstPoint.X + " " + y);
+          _doorwayCandidates.Add(new Int2(_roomsBounds[i].FirstPoint.X, y));
         }
 
-        if (down == CellStatus.VISITED && downType == CellType.FLOOR)
+        if (downType == CellType.FLOOR)
         {
-          _doorwayCandidates.Add(new Int2(x2, _roomsBounds[i].FirstPoint.Y));
+          //Debug.Log("\tCandidate for doorway " + _roomsBounds[i].SecondPoint.X + " " + y);
+          _doorwayCandidates.Add(new Int2(_roomsBounds[i].SecondPoint.X, y));
         }
       }
 
       for (int x = _roomsBounds[i].FirstPoint.X + 1; x <= _roomsBounds[i].SecondPoint.X - 1; x++)
       {
-        int y1 = _roomsBounds[i].FirstPoint.Y + 1;
-        int y2 = _roomsBounds[i].SecondPoint.Y - 1;
+        //Debug.Log(_roomsBounds[i] + " x: " + x);
         
-        int xLeft = (x - 2) < 0 ? 0 : x - 2;
-        int xRight = (x + 2) > _gridRef.MapWidth - 1 ? _gridRef.MapWidth - 1 : x + 2;
-        
-        CellStatus left = _gridRef.Map[xLeft, y1].Status;
-        CellStatus right = _gridRef.Map[xRight, y2].Status;
-        CellType leftType = _gridRef.Map[xLeft, y1].CellType;
-        CellType rightType = _gridRef.Map[xRight, y2].CellType;
+        int yLeft = _roomsBounds[i].FirstPoint.Y - 1;
+        int yRight = _roomsBounds[i].SecondPoint.Y + 1;
 
-        if (left == CellStatus.VISITED && leftType == CellType.FLOOR)
+        CellType leftType = _gridRef.Map[x, yLeft].CellType;
+        CellType rightType = _gridRef.Map[x, yRight].CellType;
+        
+        //Debug.Log("Left: [" + x + " " + yLeft + "] - " + leftType + " Right: [" + x + " " + yRight + "] - " + rightType);
+        
+        if (leftType == CellType.FLOOR)
         {
-          _doorwayCandidates.Add(new Int2(_roomsBounds[i].FirstPoint.X, y1));
+          //Debug.Log("\tCandidate for doorway " + x + " " + _roomsBounds[i].FirstPoint.Y);
+          _doorwayCandidates.Add(new Int2(x, _roomsBounds[i].FirstPoint.Y));
         }
         
-        if (right == CellStatus.VISITED && rightType == CellType.FLOOR)
+        if (rightType == CellType.FLOOR)
         {
-          _doorwayCandidates.Add(new Int2(_roomsBounds[i].SecondPoint.X, y2));
+          //Debug.Log("\tCandidate for doorway " + x + " " + _roomsBounds[i].SecondPoint.Y);
+          _doorwayCandidates.Add(new Int2(x, _roomsBounds[i].SecondPoint.Y));
         }
       }
 
       if (_doorwayCandidates.Count == 0)
       {
         Debug.Log("Removing orphaned room: " + _roomsBounds[i].FirstPoint + " " + _roomsBounds[i].SecondPoint);
-        _roomsBounds.RemoveAt(i);
+
+        for (int x = _roomsBounds[i].FirstPoint.X; x < _roomsBounds[i].SecondPoint.X; x++)
+        {
+          for (int y = _roomsBounds[i].FirstPoint.Y; y < _roomsBounds[i].SecondPoint.Y; y++)
+          {
+            _gridRef.Map[x, y].CellType = CellType.WALL;
+            _gridRef.Map[x, y].Status = CellStatus.UNVISITED;
+          }
+        }
       }
       else
       {
