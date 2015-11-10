@@ -17,6 +17,8 @@ public class App : MonoSingleton<App>
   public GameObject ButtonPrefab;
   public GameObject ObjectsInstancesTransform;
 
+  int _nameSuffix = 0;
+
   char[,] _mapLayout;
   List<string> _map = new System.Collections.Generic.List<string>();
 
@@ -139,11 +141,11 @@ public class App : MonoSingleton<App>
           break;
       case "LAYOUT":
           //ParseLayout(node);
-          ParseLayoutNew(node);
+          ParseLayout(node);
           break;
       case "OBJECT":
           //SpawnObject(node);
-          SpawnObjectNew(node);
+          SpawnObject(node);
           break;
         case "OBJECTRANGE":
           SpawnObjects(node);
@@ -173,6 +175,9 @@ public class App : MonoSingleton<App>
       return;
     }
 
+    InstantiatePrefab(x, layer, y, go);
+
+    /*
     Vector3 goPosition = Vector3.zero;    
     int yOffset = layer * GlobalConstants.WallScaleFactor;
 
@@ -184,6 +189,7 @@ public class App : MonoSingleton<App>
     
     go.transform.position = goPosition;
     go.transform.parent = ObjectsInstancesTransform.transform;
+    */
   }
 
   void SpawnBlocks(XmlNode node)
@@ -203,14 +209,15 @@ public class App : MonoSingleton<App>
       return;
     }
 
-    Vector3 goPosition = Vector3.zero;
-
-    int yOffset = layer * GlobalConstants.WallScaleFactor;
+    //Vector3 goPosition = Vector3.zero;
 
     for (int x = xStart; x <= xEnd; x++)
     {
       for (int y = yStart; y <= yEnd; y++)
       {
+        InstantiatePrefab(x, layer, y, go);
+
+        /*
         go = (GameObject)Instantiate(go);
 
         goPosition.x = x * GlobalConstants.WallScaleFactor;
@@ -219,11 +226,12 @@ public class App : MonoSingleton<App>
 
         go.transform.position = goPosition;
         go.transform.parent = ObjectsInstancesTransform.transform;
+        */
       }
     }
   }
 
-  void ParseLayoutNew(XmlNode node)
+  void ParseLayout(XmlNode node)
   {
     var mapLayout = Regex.Split(node.InnerText, "\r\n");
     for (int i = 0; i < mapLayout.Length; i++)
@@ -253,6 +261,7 @@ public class App : MonoSingleton<App>
     }
   }
 
+  /*
   void ParseLayout(XmlNode node)
   {
     var mapLayout = Regex.Split(node.InnerText, "\r\n");
@@ -294,26 +303,31 @@ public class App : MonoSingleton<App>
       x++;
     }
   }
+  */
 
-  void InstantiatePrefab(int x, int y, GameObject goToInstantiate)
+  void InstantiatePrefab(int x, int z, GameObject goToInstantiate)
   {
     Vector3 goPosition = Vector3.zero;
 
     GameObject go = (GameObject)Instantiate(goToInstantiate);
+
     goPosition = go.transform.position;
     goPosition.x = x * GlobalConstants.WallScaleFactor;
-    goPosition.z = y * GlobalConstants.WallScaleFactor;
+    goPosition.z = z * GlobalConstants.WallScaleFactor;
     go.transform.position = goPosition;
     go.transform.parent = ObjectsInstancesTransform.transform;
   }
 
-  void InstantiatePrefab(int x, int yOffset, int z, GameObject goToInstantiate, int facing)
+  void InstantiatePrefab(int x, int yOffset, int z, GameObject goToInstantiate, int facing = 0)
   {
     GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[facing];
 
     Vector3 goPosition = Vector3.zero;
     
     GameObject go = (GameObject)Instantiate(goToInstantiate);
+
+    go.name = string.Format("{0}_{1}", go.name, _nameSuffix);
+
     goPosition = go.transform.position;
     goPosition.x = x * GlobalConstants.WallScaleFactor;
     goPosition.z = z * GlobalConstants.WallScaleFactor;
@@ -321,9 +335,11 @@ public class App : MonoSingleton<App>
     go.transform.position = goPosition;
     go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
     go.transform.parent = ObjectsInstancesTransform.transform;
+
+    _nameSuffix++;
   }
 
-  void SpawnObjectNew(XmlNode node)
+  void SpawnObject(XmlNode node)
   {
     int x = int.Parse(node.Attributes["x"].InnerText);
     int y = int.Parse(node.Attributes["y"].InnerText);
@@ -369,6 +385,7 @@ public class App : MonoSingleton<App>
     }
   }
 
+  /*
   Vector2 _dictionaryKey = Vector2.zero;
   void SpawnObject(XmlNode node)
   {
@@ -438,7 +455,8 @@ public class App : MonoSingleton<App>
         _mapObjectsHashListByPosition.Add(_dictionaryKey, new List<int>(){ objectName.GetHashCode() });
       }
     }
-  }    
+  }  
+  */
 
   // ********************** HELPER FUNCTIONS ********************** //
 
