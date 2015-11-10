@@ -122,7 +122,7 @@ public class InputController : MonoSingleton<InputController>
     }
 
     char emptyCell = App.Instance.GetMapLayoutPoint(newX, newZ);
-    bool doorAhead = false;
+    bool obstacleAhead = false;
         
     Ray ray = new Ray(RaycastPoint.position, new Vector3(xComponent, 0.0f, zComponent));
 
@@ -139,18 +139,11 @@ public class InputController : MonoSingleton<InputController>
     {
       if (hit.collider != null)
       {
-        var bmo = hit.collider.gameObject.GetComponentInParent<BehaviourMapObject>();
-        if (bmo != null)
-        {
-          if (bmo.MapObjectInstance is DoorMapObject)
-          {
-            doorAhead = true;
-          }
-        }
+        obstacleAhead = true;
       }
     }
 
-    return (emptyCell == '.' && !doorAhead);
+    return (emptyCell == '.' && !obstacleAhead);
   }
 
   void TurnCamera(int from, int to, bool turnRight)

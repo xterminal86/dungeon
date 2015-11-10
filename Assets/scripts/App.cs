@@ -82,6 +82,9 @@ public class App : MonoSingleton<App>
       case MapFilename.GROWING_TREE:
         LoadMap("Assets/maps/growing_tree_test_map.xml");
         break;
+      case MapFilename.TOWN:
+        LoadMap("Assets/maps/town.xml");
+        break;
       default:
         LoadMap("Assets/maps/test_map.xml");
         break;
@@ -135,12 +138,118 @@ public class App : MonoSingleton<App>
           _cameraAngles = CameraPivot.transform.eulerAngles;
           break;
       case "LAYOUT":
-          ParseLayout(node);
+          //ParseLayout(node);
+          ParseLayoutNew(node);
           break;
       case "OBJECT":
-          SpawnObject(node);
+          //SpawnObject(node);
+          SpawnObjectNew(node);
+          break;
+        case "OBJECTRANGE":
+          SpawnObjects(node);
+          break;
+        case "BLOCKRANGE":
+          SpawnBlocks(node);
+          break;
+        case "BLOCK":
+          SpawnBlock(node);
           break;
       }
+    }
+  }
+
+  void SpawnBlock(XmlNode node)
+  {
+    int x = int.Parse(node.Attributes["x"].InnerText);
+    int y = int.Parse(node.Attributes["y"].InnerText);
+    int layer = int.Parse(node.Attributes["layer"].InnerText);
+    string blockId = node.Attributes["id"].InnerText;
+
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(blockId);
+    
+    if (go == null)
+    {
+      Debug.LogWarning("Couldn't find prefab: " + blockId);
+      return;
+    }
+
+    Vector3 goPosition = Vector3.zero;    
+    int yOffset = layer * GlobalConstants.WallScaleFactor;
+
+    go = (GameObject)Instantiate(go);
+    
+    goPosition.x = x * GlobalConstants.WallScaleFactor;
+    goPosition.z = y * GlobalConstants.WallScaleFactor;
+    goPosition.y = yOffset;
+    
+    go.transform.position = goPosition;
+    go.transform.parent = ObjectsInstancesTransform.transform;
+  }
+
+  void SpawnBlocks(XmlNode node)
+  {
+    int xStart = int.Parse(node.Attributes["xStart"].InnerText);
+    int yStart = int.Parse(node.Attributes["yStart"].InnerText);    
+    int xEnd = int.Parse(node.Attributes["xEnd"].InnerText);
+    int yEnd = int.Parse(node.Attributes["yEnd"].InnerText);
+    int layer = int.Parse(node.Attributes["layer"].InnerText);
+    string blockId = node.Attributes["id"].InnerText;
+
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(blockId);
+
+    if (go == null)
+    {
+      Debug.LogWarning("Couldn't find prefab: " + blockId);
+      return;
+    }
+
+    Vector3 goPosition = Vector3.zero;
+
+    int yOffset = layer * GlobalConstants.WallScaleFactor;
+
+    for (int x = xStart; x <= xEnd; x++)
+    {
+      for (int y = yStart; y <= yEnd; y++)
+      {
+        go = (GameObject)Instantiate(go);
+
+        goPosition.x = x * GlobalConstants.WallScaleFactor;
+        goPosition.z = y * GlobalConstants.WallScaleFactor;
+        goPosition.y = yOffset;
+
+        go.transform.position = goPosition;
+        go.transform.parent = ObjectsInstancesTransform.transform;
+      }
+    }
+  }
+
+  void ParseLayoutNew(XmlNode node)
+  {
+    var mapLayout = Regex.Split(node.InnerText, "\r\n");
+    for (int i = 0; i < mapLayout.Length; i++)
+    {
+      if (mapLayout[i] != string.Empty) 
+      {
+        _map.Add(mapLayout[i]);
+      }
+    }
+    
+    _mapColumns = _map[0].Length;
+    _mapRows = _map.Count;
+    
+    _mapLayout = new char[_mapRows, _mapColumns];
+
+    int x = 0, y = 0;
+    foreach (var line in _map)
+    {
+      for (int i = 0; i < line.Length; i++)
+      {
+        _mapLayout[x, y] = line[i];
+        y++;
+      }
+
+      y = 0;
+      x++;
     }
   }
 
@@ -171,34 +280,92 @@ public class App : MonoSingleton<App>
                 
         if (line[i] == '#')
         {
-          go = (GameObject)Instantiate(WallPrefab);
-          goPosition = go.transform.position;
-          goPosition.x = x * GlobalConstants.WallScaleFactor;
-          goPosition.z = y * GlobalConstants.WallScaleFactor;
-          go.transform.position = goPosition;
-          go.transform.parent = ObjectsInstancesTransform.transform;
+          InstantiatePrefab(x, y, WallPrefab);
         }
         else if (line[i] == '.')
         {
-          go = (GameObject)Instantiate(FloorPrefab);
-          goPosition = go.transform.position;
-          goPosition.x = x * GlobalConstants.WallScaleFactor;
-          goPosition.z = y * GlobalConstants.WallScaleFactor;
-          go.transform.position = goPosition;
-          go.transform.parent = ObjectsInstancesTransform.transform;
-
-          go = (GameObject)Instantiate(CeilingPrefab);
-          goPosition = go.transform.position;
-          goPosition.x = x * GlobalConstants.WallScaleFactor;
-          goPosition.z = y * GlobalConstants.WallScaleFactor;
-          go.transform.position = goPosition;
-          go.transform.parent = ObjectsInstancesTransform.transform;
+          InstantiatePrefab(x, y, FloorPrefab);
+          InstantiatePrefab(x, y, CeilingPrefab);
         }
         y++;        
       }
       
       y = 0;
       x++;
+    }
+  }
+
+  void InstantiatePrefab(int x, int y, GameObject goToInstantiate)
+  {
+    Vector3 goPosition = Vector3.zero;
+
+    GameObject go = (GameObject)Instantiate(goToInstantiate);
+    goPosition = go.transform.position;
+    goPosition.x = x * GlobalConstants.WallScaleFactor;
+    goPosition.z = y * GlobalConstants.WallScaleFactor;
+    go.transform.position = goPosition;
+    go.transform.parent = ObjectsInstancesTransform.transform;
+  }
+
+  void InstantiatePrefab(int x, int yOffset, int z, GameObject goToInstantiate, int facing)
+  {
+    GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[facing];
+
+    Vector3 goPosition = Vector3.zero;
+    
+    GameObject go = (GameObject)Instantiate(goToInstantiate);
+    goPosition = go.transform.position;
+    goPosition.x = x * GlobalConstants.WallScaleFactor;
+    goPosition.z = z * GlobalConstants.WallScaleFactor;
+    goPosition.y = (yOffset == 0) ? go.transform.position.y : yOffset * GlobalConstants.WallScaleFactor;
+    go.transform.position = goPosition;
+    go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
+    go.transform.parent = ObjectsInstancesTransform.transform;
+  }
+
+  void SpawnObjectNew(XmlNode node)
+  {
+    int x = int.Parse(node.Attributes["x"].InnerText);
+    int y = int.Parse(node.Attributes["y"].InnerText);
+    int layer = int.Parse(node.Attributes["layer"].InnerText);
+    int facing = int.Parse(node.Attributes["facing"].InnerText);
+    string blockId = node.Attributes["id"].InnerText;
+
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(blockId);
+    
+    if (go == null)
+    {
+      Debug.LogWarning("Couldn't find prefab: " + blockId);
+      return;
+    }
+
+    InstantiatePrefab(x, layer, y, go, facing);
+  }
+
+  void SpawnObjects(XmlNode node)
+  {
+    int xStart = int.Parse(node.Attributes["xStart"].InnerText);
+    int yStart = int.Parse(node.Attributes["yStart"].InnerText);    
+    int xEnd = int.Parse(node.Attributes["xEnd"].InnerText);
+    int yEnd = int.Parse(node.Attributes["yEnd"].InnerText);
+    int layer = int.Parse(node.Attributes["layer"].InnerText);
+    int facing = int.Parse(node.Attributes["facing"].InnerText);
+    string blockId = node.Attributes["id"].InnerText;
+    
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(blockId);
+    
+    if (go == null)
+    {
+      Debug.LogWarning("Couldn't find prefab: " + blockId);
+      return;
+    }
+
+    for (int x = xStart; x <= xEnd; x++)
+    {
+      for (int y = yStart; y <= yEnd; y++)
+      {
+        InstantiatePrefab(x, layer, y, go, facing);
+      }
     }
   }
 
@@ -271,7 +438,6 @@ public class App : MonoSingleton<App>
         _mapObjectsHashListByPosition.Add(_dictionaryKey, new List<int>(){ objectName.GetHashCode() });
       }
     }
-
   }    
 
   // ********************** HELPER FUNCTIONS ********************** //
@@ -342,6 +508,7 @@ public class App : MonoSingleton<App>
     TEST,
     BINARY_TREE,
     SIDEWINDER,
-    GROWING_TREE
+    GROWING_TREE,
+    TOWN
   }
 }
