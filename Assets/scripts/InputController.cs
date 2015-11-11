@@ -143,7 +143,8 @@ public class InputController : MonoSingleton<InputController>
       }
     }
 
-    return (emptyCell == '.' && !obstacleAhead);
+    //return (emptyCell == '.' && !obstacleAhead);
+    return !obstacleAhead;
   }
 
   void TurnCamera(int from, int to, bool turnRight)
