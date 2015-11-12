@@ -34,6 +34,34 @@ public static class GlobalConstants
     { Orientation.WEST, 180.0f }
   };
 
+  public static Dictionary<SoundNames, int> SoundHashByName = new Dictionary<SoundNames, int>()
+  {
+    { SoundNames.FS_GRASS1, "fs-grass1".GetHashCode() },
+    { SoundNames.FS_GRASS2, "fs-grass2".GetHashCode() },
+    { SoundNames.FS_GRASS3, "fs-grass3".GetHashCode() },
+    { SoundNames.FS_GRASS4, "fs-grass4".GetHashCode() },
+    { SoundNames.ACT_WOODEN_DOOR_OPEN, "act-door-wooden-open".GetHashCode() },
+    { SoundNames.ACT_WOODEN_DOOR_CLOSE, "act-door-wooden-close".GetHashCode() }
+  };
+
+  public static List<int> FootstepsGrass = new List<int>()
+  {
+    SoundHashByName[SoundNames.FS_GRASS1],
+    SoundHashByName[SoundNames.FS_GRASS2],
+    SoundHashByName[SoundNames.FS_GRASS3],
+    SoundHashByName[SoundNames.FS_GRASS4]
+  };
+
+  public enum SoundNames
+  {
+    FS_GRASS1 = 0,
+    FS_GRASS2,
+    FS_GRASS3,
+    FS_GRASS4,
+    ACT_WOODEN_DOOR_OPEN,
+    ACT_WOODEN_DOOR_CLOSE
+  }
+
   public enum MapAttributes
   {
     Floor = 0,

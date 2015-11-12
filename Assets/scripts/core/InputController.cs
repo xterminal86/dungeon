@@ -336,6 +336,31 @@ public class InputController : MonoSingleton<InputController>
     
     _isProcessing = false;
   }
+
+  Vector3 _cameraForwardVector = Vector3.zero;
+  public Vector3 GetCameraForwardVector()
+  {
+    int newX = (int)_cameraPos.x;
+    int newZ = (int)_cameraPos.z;
+    
+    int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+    int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+    
+    if (xComponent != 0)
+    {
+      newX += xComponent * GlobalConstants.WallScaleFactor;
+    }
+
+    if (zComponent != 0)
+    {
+      newZ += zComponent * GlobalConstants.WallScaleFactor;
+    }
+
+    _cameraForwardVector.x = xComponent;
+    _cameraForwardVector.z = zComponent;
+
+    return _cameraForwardVector;
+  }
 }
 
 public class CameraTurnArgument

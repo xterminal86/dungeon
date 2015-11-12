@@ -6,7 +6,8 @@ public class DoorMapObject : MapObject
   bool _lockInteraction = false;
   bool _isOpened = false;
 
-  float _animationSpeed = 2;
+  float _animationOpenSpeed = 2;
+  float _animationCloseSpeed = 3;
 
   Animation _animation;
 
@@ -21,8 +22,8 @@ public class DoorMapObject : MapObject
     _animation = BMO.GetComponent<Animation>();
     if (_animation != null)
     {
-      _animation["RotateMinus90"].speed = _animationSpeed;
-      _animation["Rotate90"].speed = _animationSpeed;
+      _animation["RotateMinus90"].speed = _animationOpenSpeed;
+      _animation["Rotate90"].speed = _animationCloseSpeed;
     }
   }
 
@@ -33,10 +34,18 @@ public class DoorMapObject : MapObject
       if (!_isOpened)
       {
         //BMO.StartSound.Play();
+        SoundManager.Instance.PlaySound(GlobalConstants.SoundNames.ACT_WOODEN_DOOR_OPEN, BMO.transform.position);
       }
       else
       {
-        //BMO.EndSound.Play();
+        /*
+        if (BMO.StartSound.isPlaying)
+        {
+          BMO.StartSound.Stop();
+        }
+        */
+
+        SoundManager.Instance.PlaySound(GlobalConstants.SoundNames.ACT_WOODEN_DOOR_CLOSE, BMO.transform.position);
       }
 
       _job = new Job(DoorToggleRoutine());
@@ -50,8 +59,6 @@ public class DoorMapObject : MapObject
     _lockInteraction = false;
 
     _isOpened = !_isOpened;
-
-    Debug.Log("Door finished");
   }
 
   IEnumerator DoorToggleRoutine()
@@ -62,14 +69,14 @@ public class DoorMapObject : MapObject
     {
       if (_animation != null)
       {
-        _animation[animationName].speed = _animationSpeed;
+        _animation[animationName].speed = _animationOpenSpeed;
       }
     }
     else
     {
       if (_animation != null)
       {
-        _animation[animationName].speed = -_animationSpeed;
+        _animation[animationName].speed = -_animationCloseSpeed;
         _animation[animationName].time = _animation[animationName].length;
       }
     }

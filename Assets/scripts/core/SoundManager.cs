@@ -3,45 +3,88 @@ using System.Collections.Generic;
 
 public class SoundManager : MonoSingleton<SoundManager> 
 {
-  public List<AudioSource> SoundEffects;
-  public List<AudioSource> MusicTracks;
+  [Range(0.0f, 1.0f)]
+  public float SoundVolume = 1.0f;
+  [Range(0.0f, 1.0f)]
+  public float MusicVolume = 1.0f;
 
-  public AudioSource AmbientSound;
-  public AudioSource ChoirSound;
-  public AudioSource Footstep1Sound;  
-  public AudioSource Footstep2Sound;
-  public AudioSource Footstep3Sound;
-  public AudioSource Footstep4Sound;
-  public AudioSource StoneDoorMovingSound;
-  public AudioSource StoneDoorCloseSound;
+  public Transform AudioSourcesHolder;
 
-  Dictionary<int, AudioSource> _soundMap = new Dictionary<int, AudioSource>();
+  public AudioSource AudioSourcePrefab;
+  public AudioSource MusicTrack;
+
+  public List<AudioClip> SoundEffects;
+
+  Dictionary<int, AudioSource> _audioSourcesByHash = new Dictionary<int, AudioSource>();
+
   protected override void Init()
   {
     base.Init();
 
-    _soundMap.Add(0, Footstep1Sound);
-    _soundMap.Add(1, Footstep2Sound);
-    _soundMap.Add(2, Footstep3Sound);
-    _soundMap.Add(3, Footstep4Sound);
+    MusicTrack.volume = MusicVolume;
+
+    MakeSoundsDatabase(SoundEffects);
+  }
+
+  void MakeSoundsDatabase(List<AudioClip> listOfSounds)
+  {
+    foreach (var item in listOfSounds)
+    {
+      AudioSource s = (AudioSource)Instantiate(AudioSourcePrefab);
+      s.transform.parent = AudioSourcesHolder;
+
+      s.clip = item;
+      s.volume = SoundVolume;
+      s.name = item.name;
+
+      int hash = s.name.GetHashCode();
+
+      _audioSourcesByHash.Add(hash, s);
+    }
+  }
+
+  public void PlaySound(GlobalConstants.SoundNames soundName)
+  {
+    if (GlobalConstants.SoundHashByName.ContainsKey(soundName))
+    {
+      int hash = GlobalConstants.SoundHashByName[soundName];
+      _audioSourcesByHash[hash].Play();
+    }
+  }
+
+  public void PlaySound(int hash)
+  {
+    if (_audioSourcesByHash.ContainsKey(hash))
+    {
+      _audioSourcesByHash[hash].Play();
+    }
+  }
+
+  public void PlaySound(GlobalConstants.SoundNames soundName, Vector3 pos)
+  {
+    if (GlobalConstants.SoundHashByName.ContainsKey(soundName))
+    {
+      int hash = GlobalConstants.SoundHashByName[soundName];
+      AudioSource.PlayClipAtPoint(_audioSourcesByHash[hash].clip, pos, _audioSourcesByHash[hash].volume);
+    }
   }
 
   int _lastPlayedSound = -1;
   public void PlayFootstepSound()
   {
-    int which = Random.Range(0, _soundMap.Count);
+    int which = Random.Range(0, GlobalConstants.FootstepsGrass.Count);
     if (_lastPlayedSound == which)
     {
       which++;
-      if (which > _soundMap.Count - 1) which = 0;
-      else if (which < 0) which = _soundMap.Count - 1;
+      if (which > GlobalConstants.FootstepsGrass.Count - 1) which = 0;
+      else if (which < 0) which = GlobalConstants.FootstepsGrass.Count - 1;
     }
-    _soundMap[which].Play();
+    PlaySound(GlobalConstants.FootstepsGrass[which]);
     _lastPlayedSound = which;
   }
 
   public void MapLoadingFinishedHandler()
   {
-    AmbientSound.Play();
+    MusicTrack.Play();
   }
 }
