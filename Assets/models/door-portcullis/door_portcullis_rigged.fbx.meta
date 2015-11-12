@@ -1,40 +1,90 @@
 fileFormatVersion: 2
-guid: 0170e5ffb53f64246bca8adc29ed1ccc
+guid: 248846db69cb1a94496330a8e29bf33c
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
     100000: Armature
-    100002: Armature|Bone
-    100004: Cube
-    100006: Cube.001
-    100008: Cube.002
-    100010: //RootNode
-    100012: Torus
-    100014: Torus.001
+    100002: Bone
+    100004: Bone_end
+    100006: Cone
+    100008: Cone.001
+    100010: Cone.002
+    100012: Cone.003
+    100014: Cone.004
+    100016: Cube.001
+    100018: Cube.002
+    100020: Cylinder.000
+    100022: Cylinder.001
+    100024: Cylinder.002
+    100026: Cylinder.003
+    100028: Cylinder.004
+    100030: //RootNode
     400000: Armature
-    400002: Armature|Bone
-    400004: Cube
-    400006: Cube.001
-    400008: Cube.002
-    400010: //RootNode
-    400012: Torus
-    400014: Torus.001
+    400002: Bone
+    400004: Bone_end
+    400006: Cone
+    400008: Cone.001
+    400010: Cone.002
+    400012: Cone.003
+    400014: Cone.004
+    400016: Cube.001
+    400018: Cube.002
+    400020: Cylinder.000
+    400022: Cylinder.001
+    400024: Cylinder.002
+    400026: Cylinder.003
+    400028: Cylinder.004
+    400030: //RootNode
     2300000: Cube.001
     2300002: Cube.002
+    2300004: Cone
+    2300006: Cone.001
+    2300008: Cone.002
+    2300010: Cone.003
+    2300012: Cone.004
+    2300014: Cylinder.000
+    2300016: Cylinder.001
+    2300018: Cylinder.002
+    2300020: Cylinder.003
+    2300022: Cylinder.004
     3300000: Cube.001
     3300002: Cube.002
-    4300000: Cube
-    4300002: Torus.001
-    4300004: Torus
-    4300006: Cube.002
-    4300008: Cube.001
-    7400000: Close
-    7400002: Open
+    3300004: Cone
+    3300006: Cone.001
+    3300008: Cone.002
+    3300010: Cone.003
+    3300012: Cone.004
+    3300014: Cylinder.000
+    3300016: Cylinder.001
+    3300018: Cylinder.002
+    3300020: Cylinder.003
+    3300022: Cylinder.004
+    4300000: Cone.004
+    4300002: Cylinder.004
+    4300004: Cylinder.003
+    4300006: Cone.003
+    4300008: Cone.002
+    4300010: Cylinder.002
+    4300012: Cylinder.000
+    4300014: Cone.001
+    4300016: Cone
+    4300018: Cylinder.001
+    4300020: Cube.002
+    4300022: Cube.001
+    7400000: Open
+    7400002: Close
     9500000: //RootNode
     11100000: //RootNode
-    13700000: Cube
-    13700002: Torus
-    13700004: Torus.001
+    13700000: Cone
+    13700002: Cone.001
+    13700004: Cone.002
+    13700006: Cone.003
+    13700008: Cone.004
+    13700010: Cylinder.000
+    13700012: Cylinder.001
+    13700014: Cylinder.002
+    13700016: Cylinder.003
+    13700018: Cylinder.004
   materials:
     importMaterials: 1
     materialName: 0
@@ -48,12 +98,12 @@ ModelImporter:
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
-    animationWrapMode: 0
+    animationWrapMode: 1
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Open
-      takeName: Rotate90
+      name: Close
+      takeName: Open
       firstFrame: 0
       lastFrame: 29
       wrapMode: 0
@@ -79,23 +129,39 @@ ModelImporter:
         weight: 1
       - path: Armature
         weight: 1
-      - path: Armature/Armature|Bone
+      - path: Armature/Bone
         weight: 1
-      - path: Cube
+      - path: Armature/Bone/Bone_end
+        weight: 1
+      - path: Cone
+        weight: 1
+      - path: Cone.001
+        weight: 1
+      - path: Cone.002
+        weight: 1
+      - path: Cone.003
+        weight: 1
+      - path: Cone.004
         weight: 1
       - path: Cube.001
         weight: 1
       - path: Cube.002
         weight: 1
-      - path: Torus
+      - path: Cylinder.000
         weight: 1
-      - path: Torus.001
+      - path: Cylinder.001
+        weight: 1
+      - path: Cylinder.002
+        weight: 1
+      - path: Cylinder.003
+        weight: 1
+      - path: Cylinder.004
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
     - serializedVersion: 16
-      name: Close
-      takeName: RotateMinus90
+      name: Open
+      takeName: Close
       firstFrame: 0
       lastFrame: 29
       wrapMode: 0
@@ -121,17 +187,33 @@ ModelImporter:
         weight: 1
       - path: Armature
         weight: 1
-      - path: Armature/Armature|Bone
+      - path: Armature/Bone
         weight: 1
-      - path: Cube
+      - path: Armature/Bone/Bone_end
+        weight: 1
+      - path: Cone
+        weight: 1
+      - path: Cone.001
+        weight: 1
+      - path: Cone.002
+        weight: 1
+      - path: Cone.003
+        weight: 1
+      - path: Cone.004
         weight: 1
       - path: Cube.001
         weight: 1
       - path: Cube.002
         weight: 1
-      - path: Torus
+      - path: Cylinder.000
         weight: 1
-      - path: Torus.001
+      - path: Cylinder.001
+        weight: 1
+      - path: Cylinder.002
+        weight: 1
+      - path: Cylinder.003
+        weight: 1
+      - path: Cylinder.004
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
