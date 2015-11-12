@@ -22,15 +22,16 @@
 	<BLOCK x="6" y="8" layer="0" id="block-brick" />
 	<BLOCK x="3" y="10" layer="0" id="cobblestone-bricks-aligned" />	
 	<BLOCK x="3" y="11" layer="0" id="block-brick" />	
-	<OBJECT x="3" y="12" layer="0" id="fence" facing="1" />
-	<OBJECT x="3" y="13" layer="0" id="wall-thin-cobblestone" facing="1" />
-	<OBJECT x="3" y="15" layer="0" id="wall-thin-cobblestone" facing="2" />
-	<OBJECT x="3" y="14" layer="0" id="wall-thin-cobblestone" facing="0" />
-	<OBJECT x="4" y="14" layer="0" id="wall-thin-window-centered" facing="2" />
-	<OBJECT x="4" y="15" layer="0" id="wall-thin-window-upper" facing="2" />
-	<OBJECT x="4" y="16" layer="0" id="door-wooden" facing="2" />
-	<OBJECTRANGE xStart="0" yStart="0" xEnd="0" yEnd="20" layer="0" id="fence" facing="1" />
-	<OBJECTRANGE xStart="0" yStart="0" xEnd="10" yEnd="0" layer="0" id="fence" facing="0" />
-	<OBJECTRANGE xStart="10" yStart="0" xEnd="10" yEnd="20" layer="0" id="fence" facing="1" />
-	<OBJECTRANGE xStart="0" yStart="20" xEnd="10" yEnd="20" layer="0" id="fence" facing="0" />
+	<OBJECT x="3" y="12" layer="0" id="fence" class="wall" facing="1" />
+	<OBJECT x="3" y="13" layer="0" id="wall-thin-cobblestone" class="wall" facing="1" />
+	<OBJECT x="3" y="15" layer="0" id="wall-thin-cobblestone" class="wall" facing="2" />
+	<OBJECT x="3" y="14" layer="0" id="wall-thin-cobblestone" class="wall" facing="0" />
+	<OBJECT x="4" y="14" layer="0" id="wall-thin-window-centered" class="wall" facing="2" />
+	<OBJECT x="4" y="15" layer="0" id="wall-thin-window-upper" class="wall" facing="2" />
+	<OBJECT x="4" y="16" layer="0" id="door-wooden" class="door" facing="2" />
+	<OBJECT x="5" y="8" layer="0" id="door-wooden" class="door" facing="1" />
+	<OBJECTRANGE xStart="0" yStart="0" xEnd="0" yEnd="20" layer="0" id="fence" class="wall" facing="1" />
+	<OBJECTRANGE xStart="0" yStart="0" xEnd="10" yEnd="0" layer="0" id="fence" class="wall" facing="0" />
+	<OBJECTRANGE xStart="10" yStart="0" xEnd="10" yEnd="20" layer="0" id="fence" class="wall" facing="1" />
+	<OBJECTRANGE xStart="0" yStart="20" xEnd="10" yEnd="20" layer="0" id="fence" class="wall" facing="0" />
 </MAP>

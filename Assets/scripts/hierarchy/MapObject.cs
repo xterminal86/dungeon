@@ -3,8 +3,9 @@ using System.Collections;
 
 public abstract class MapObject
 {
-  public string Name = string.Empty;
-  public int HashCode = -1;  
+  public string ClassName = string.Empty;
+  public string Id = string.Empty;
+
   public int Facing = -1;
 
   public CallbackO ActionCallback;
@@ -12,6 +13,12 @@ public abstract class MapObject
 
   public BehaviourMapObject BMO;
   public GameObject GameObjectToControl;
+
+  public MapObject()
+  {
+    ClassName = "MapObject";  
+    Id = "None";
+  }
 
   public virtual void ActionHandler(object sender)
   {

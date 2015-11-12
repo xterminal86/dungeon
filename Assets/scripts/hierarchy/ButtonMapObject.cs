@@ -13,9 +13,9 @@ public class ButtonMapObject : MapObject
     {
       _defaultColor = GameObjectToControl.renderer.material.color;
 
-      if (BMO.ShortSound != null)
+      if (BMO.StartSound != null)
       {
-        BMO.ShortSound.Play();
+        BMO.StartSound.Play();
       }
 
       JobManager.Instance.CreateJob(ButtonAnimationPressRoutine());

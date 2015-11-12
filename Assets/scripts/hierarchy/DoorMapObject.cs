@@ -1,6 +1,92 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
+public class DoorMapObject : MapObject
+{
+  bool _lockInteraction = false;
+  bool _isOpened = false;
+
+  float _animationSpeed = 2;
+
+  Animation _animation;
+
+  Job _job;
+
+  public DoorMapObject (string className, string id, BehaviourMapObject bmo)
+  {
+    ClassName = className;
+    Id = id;
+    BMO = bmo;
+
+    _animation = BMO.GetComponent<Animation>();
+    if (_animation != null)
+    {
+      _animation["RotateMinus90"].speed = _animationSpeed;
+      _animation["Rotate90"].speed = _animationSpeed;
+    }
+  }
+
+  public override void ActionHandler(object sender)
+  {
+    if (_animation != null && !_lockInteraction)
+    {
+      if (!_isOpened)
+      {
+        //BMO.StartSound.Play();
+      }
+      else
+      {
+        //BMO.EndSound.Play();
+      }
+
+      _job = new Job(DoorToggleRoutine());
+
+      _lockInteraction = true;
+    }
+  }
+
+  public override void ActionCompleteHandler(object sender)
+  {
+    _lockInteraction = false;
+
+    _isOpened = !_isOpened;
+
+    Debug.Log("Door finished");
+  }
+
+  IEnumerator DoorToggleRoutine()
+  {
+    string animationName = "RotateMinus90";
+
+    if (!_isOpened)
+    {
+      if (_animation != null)
+      {
+        _animation[animationName].speed = _animationSpeed;
+      }
+    }
+    else
+    {
+      if (_animation != null)
+      {
+        _animation[animationName].speed = -_animationSpeed;
+        _animation[animationName].time = _animation[animationName].length;
+      }
+    }
+
+    _animation.Play(animationName);
+
+    while (_animation.IsPlaying(animationName))
+    {
+      yield return null;
+    }
+
+    if (ActionCompleteCallback != null)
+      ActionCompleteCallback(this);
+  }
+}
+
+/*
 public class DoorMapObject : MapObject
 {
   public bool DoorIsOpen = false;
@@ -15,7 +101,7 @@ public class DoorMapObject : MapObject
     MapObject mo = sender as MapObject;
     if (mo != null)
     {
-      Debug.Log(string.Format("[{0}] was toggled by [{1}]", Name, mo.Name));
+      Debug.Log(string.Format("[{0}] was toggled by [{1}]", ClassName, mo.ClassName));
       if (_job != null)
       {
         _job.KillJob();
@@ -123,7 +209,7 @@ public class DoorMapObject : MapObject
       BMO.ShortSound.Play();
     }
 
-    Debug.Log (string.Format("[{0}] open status: {1}", Name, DoorIsOpen));
+    Debug.Log (string.Format("[{0}] open status: {1}", ClassName, DoorIsOpen));
   }
 }
 
@@ -133,3 +219,4 @@ enum DoorMovingState
   CLOSING,
   STILL
 }
+*/

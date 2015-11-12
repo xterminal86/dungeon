@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 public class SoundManager : MonoSingleton<SoundManager> 
 {
+  public List<AudioSource> SoundEffects;
+  public List<AudioSource> MusicTracks;
+
   public AudioSource AmbientSound;
   public AudioSource ChoirSound;
   public AudioSource Footstep1Sound;  

@@ -94,10 +94,10 @@ public class App : MonoSingleton<App>
         break;
     }
 
+    SetupModel();
+
     if (MapLoadingFinished != null)
       MapLoadingFinished();
-
-    SetupModel();
   }
 
   protected override void Init()
@@ -142,11 +142,9 @@ public class App : MonoSingleton<App>
           _cameraAngles = CameraPivot.transform.eulerAngles;
           break;
       case "LAYOUT":
-          //ParseLayout(node);
           ParseLayout(node);
           break;
       case "OBJECT":
-          //SpawnObject(node);
           SpawnObject(node);
           break;
         case "OBJECTRANGE":
@@ -178,20 +176,6 @@ public class App : MonoSingleton<App>
     }
 
     InstantiatePrefab(x, layer, y, go);
-
-    /*
-    Vector3 goPosition = Vector3.zero;    
-    int yOffset = layer * GlobalConstants.WallScaleFactor;
-
-    go = (GameObject)Instantiate(go);
-    
-    goPosition.x = x * GlobalConstants.WallScaleFactor;
-    goPosition.z = y * GlobalConstants.WallScaleFactor;
-    goPosition.y = yOffset;
-    
-    go.transform.position = goPosition;
-    go.transform.parent = ObjectsInstancesTransform.transform;
-    */
   }
 
   void SpawnBlocks(XmlNode node)
@@ -211,24 +195,11 @@ public class App : MonoSingleton<App>
       return;
     }
 
-    //Vector3 goPosition = Vector3.zero;
-
     for (int x = xStart; x <= xEnd; x++)
     {
       for (int y = yStart; y <= yEnd; y++)
       {
         InstantiatePrefab(x, layer, y, go);
-
-        /*
-        go = (GameObject)Instantiate(go);
-
-        goPosition.x = x * GlobalConstants.WallScaleFactor;
-        goPosition.z = y * GlobalConstants.WallScaleFactor;
-        goPosition.y = yOffset;
-
-        go.transform.position = goPosition;
-        go.transform.parent = ObjectsInstancesTransform.transform;
-        */
       }
     }
   }
@@ -263,50 +234,6 @@ public class App : MonoSingleton<App>
     }
   }
 
-  /*
-  void ParseLayout(XmlNode node)
-  {
-    var mapLayout = Regex.Split(node.InnerText, "\r\n");
-    for (int i = 0; i < mapLayout.Length; i++)
-    {
-      if (mapLayout[i] != string.Empty) 
-      {
-        _map.Add(mapLayout[i]);
-      }
-    }
-
-    _mapColumns = _map[0].Length;
-    _mapRows = _map.Count;
-
-    _mapLayout = new char[_mapRows, _mapColumns];
-
-    GameObject go;
-    Vector3 goPosition = Vector3.zero;
-    int x = 0, y = 0;
-    foreach (var line in _map)
-    {
-      for (int i = 0; i < line.Length; i++)
-      {
-        _mapLayout[x, y] = line[i];
-                
-        if (line[i] == '#')
-        {
-          InstantiatePrefab(x, y, WallPrefab);
-        }
-        else if (line[i] == '.')
-        {
-          InstantiatePrefab(x, y, FloorPrefab);
-          InstantiatePrefab(x, y, CeilingPrefab);
-        }
-        y++;        
-      }
-      
-      y = 0;
-      x++;
-    }
-  }
-  */
-
   void InstantiatePrefab(int x, int z, GameObject goToInstantiate)
   {
     Vector3 goPosition = Vector3.zero;
@@ -320,7 +247,7 @@ public class App : MonoSingleton<App>
     go.transform.parent = ObjectsInstancesTransform.transform;
   }
 
-  void InstantiatePrefab(int x, int yOffset, int z, GameObject goToInstantiate, int facing = 0)
+  GameObject InstantiatePrefab(int x, int yOffset, int z, GameObject goToInstantiate, int facing = 0)
   {
     GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[facing];
 
@@ -339,6 +266,8 @@ public class App : MonoSingleton<App>
     go.transform.parent = ObjectsInstancesTransform.transform;
 
     _nameSuffix++;
+
+    return go;
   }
 
   void SpawnObject(XmlNode node)
@@ -346,18 +275,20 @@ public class App : MonoSingleton<App>
     int x = int.Parse(node.Attributes["x"].InnerText);
     int y = int.Parse(node.Attributes["y"].InnerText);
     int layer = int.Parse(node.Attributes["layer"].InnerText);
+    string moClass = node.Attributes["class"].InnerText;
     int facing = int.Parse(node.Attributes["facing"].InnerText);
-    string blockId = node.Attributes["id"].InnerText;
+    string objectId = node.Attributes["id"].InnerText;
 
-    GameObject go = PrefabsManager.Instance.FindPrefabByName(blockId);
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(objectId);
     
     if (go == null)
     {
-      Debug.LogWarning("Couldn't find prefab: " + blockId);
+      Debug.LogWarning("Couldn't find prefab: " + objectId);
       return;
     }
 
-    InstantiatePrefab(x, layer, y, go, facing);
+    GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
+    CreateMapObject(sceneObject, facing, moClass, objectId);
   }
 
   void SpawnObjects(XmlNode node)
@@ -367,14 +298,15 @@ public class App : MonoSingleton<App>
     int xEnd = int.Parse(node.Attributes["xEnd"].InnerText);
     int yEnd = int.Parse(node.Attributes["yEnd"].InnerText);
     int layer = int.Parse(node.Attributes["layer"].InnerText);
+    string moClass = node.Attributes["class"].InnerText;
     int facing = int.Parse(node.Attributes["facing"].InnerText);
-    string blockId = node.Attributes["id"].InnerText;
+    string objectId = node.Attributes["id"].InnerText;
     
-    GameObject go = PrefabsManager.Instance.FindPrefabByName(blockId);
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(objectId);
     
     if (go == null)
     {
-      Debug.LogWarning("Couldn't find prefab: " + blockId);
+      Debug.LogWarning("Couldn't find prefab: " + objectId);
       return;
     }
 
@@ -382,7 +314,27 @@ public class App : MonoSingleton<App>
     {
       for (int y = yStart; y <= yEnd; y++)
       {
-        InstantiatePrefab(x, layer, y, go, facing);
+        GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
+        CreateMapObject(sceneObject, facing, moClass, objectId);
+
+        /*
+        BehaviourMapObject bmo = null;
+        if (moClass == "wall")
+        {
+          bmo = go.GetComponent<BehaviourMapObject>();
+          if (bmo != null)
+          {
+            bmo.MapObjectInstance = new WallMapObject();
+            (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
+            (bmo.MapObjectInstance as DoorMapObject).Facing = facing;
+          }
+        }
+        
+        if (bmo != null)
+        { 
+          bmo.MapObjectInstance.BMO = bmo;
+        }
+        */
       }
     }
   }
@@ -519,6 +471,34 @@ public class App : MonoSingleton<App>
     }
 
     return _searchResult;
+  }
+
+  void CreateMapObject(GameObject go, int facing, string moClass, string id)
+  {
+    BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
+    if (bmo == null)
+    {
+      return;
+    }
+
+    switch (moClass)
+    {
+      case "wall":
+        bmo.MapObjectInstance = new WallMapObject(moClass, id, bmo);
+        (bmo.MapObjectInstance as WallMapObject).ActionCallback += (bmo.MapObjectInstance as WallMapObject).ActionHandler;
+        break;
+
+      case "door":
+        bmo.MapObjectInstance = new DoorMapObject(moClass, id, bmo);
+        (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
+        (bmo.MapObjectInstance as DoorMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ActionCompleteHandler;
+        break;
+
+      default:
+        break;
+    }
+
+    bmo.MapObjectInstance.Facing = facing;
   }
 
   public enum MapFilename
