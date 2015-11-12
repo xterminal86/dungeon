@@ -18,6 +18,7 @@
 	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="8" layer="0" id="block-brick" />
 	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="8" layer="0" id="block-brick" />
 	<BLOCK x="4" y="2" layer="0" id="block-brick" />
+	  <OBJECT x="4" y="2" layer="0" id="lever" class="lever" facing="3" />
 	<BLOCK x="5" y="2" layer="1" id="block-brick" />
 	  <OBJECT x="5" y="2" layer="0" id="door-portcullis" class="door" facing="3" />
 	<BLOCK x="6" y="2" layer="0" id="block-brick" />

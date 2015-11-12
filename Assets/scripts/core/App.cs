@@ -494,6 +494,12 @@ public class App : MonoSingleton<App>
         (bmo.MapObjectInstance as DoorMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ActionCompleteHandler;
         break;
 
+      case "lever":
+        bmo.MapObjectInstance = new LeverMapObject(moClass, id, bmo);
+        (bmo.MapObjectInstance as LeverMapObject).ActionCallback += (bmo.MapObjectInstance as LeverMapObject).ActionHandler;
+        (bmo.MapObjectInstance as LeverMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as LeverMapObject).ActionCompleteHandler;
+        break;
+
       default:
         break;
     }

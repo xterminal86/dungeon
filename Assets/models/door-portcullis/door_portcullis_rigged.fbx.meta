@@ -71,8 +71,8 @@ ModelImporter:
     4300018: Cylinder.001
     4300020: Cube.002
     4300022: Cube.001
-    7400000: Open
-    7400002: Close
+    7400000: Close
+    7400002: Open
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cone
@@ -102,7 +102,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Close
+      name: Open
       takeName: Open
       firstFrame: 0
       lastFrame: 29
@@ -160,8 +160,8 @@ ModelImporter:
       maskType: 0
       maskSource: {instanceID: 0}
     - serializedVersion: 16
-      name: Open
-      takeName: Close
+      name: Close
+      takeName: Open
       firstFrame: 0
       lastFrame: 29
       wrapMode: 0

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0170e5ffb53f64246bca8adc29ed1ccc
+guid: 341e5b72caf20894fab0245da8e519df
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
@@ -7,34 +7,26 @@ ModelImporter:
     100002: Armature|Bone
     100004: Cube
     100006: Cube.001
-    100008: Cube.002
-    100010: //RootNode
-    100012: Torus
-    100014: Torus.001
+    100008: //RootNode
+    100010: Cylinder
     400000: Armature
     400002: Armature|Bone
     400004: Cube
     400006: Cube.001
-    400008: Cube.002
-    400010: //RootNode
-    400012: Torus
-    400014: Torus.001
+    400008: //RootNode
+    400010: Cylinder
     2300000: Cube.001
-    2300002: Cube.002
+    2300002: Cylinder
     3300000: Cube.001
-    3300002: Cube.002
+    3300002: Cylinder
     4300000: Cube
-    4300002: Torus.001
-    4300004: Torus
-    4300006: Cube.002
-    4300008: Cube.001
-    7400000: Close
-    7400002: Open
+    4300002: Cube.001
+    4300004: Cylinder
+    7400000: On
+    7400002: Off
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cube
-    13700002: Torus
-    13700004: Torus.001
   materials:
     importMaterials: 1
     materialName: 0
@@ -48,12 +40,12 @@ ModelImporter:
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
-    animationWrapMode: 0
+    animationWrapMode: 1
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Open
-      takeName: RotateMinus90
+      name: On
+      takeName: Action
       firstFrame: 0
       lastFrame: 29
       wrapMode: 0
@@ -85,53 +77,7 @@ ModelImporter:
         weight: 1
       - path: Cube.001
         weight: 1
-      - path: Cube.002
-        weight: 1
-      - path: Torus
-        weight: 1
-      - path: Torus.001
-        weight: 1
-      maskType: 0
-      maskSource: {instanceID: 0}
-    - serializedVersion: 16
-      name: Close
-      takeName: RotateMinus90
-      firstFrame: 0
-      lastFrame: 29
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask:
-      - path: 
-        weight: 1
-      - path: Armature
-        weight: 1
-      - path: Armature/Armature|Bone
-        weight: 1
-      - path: Cube
-        weight: 1
-      - path: Cube.001
-        weight: 1
-      - path: Cube.002
-        weight: 1
-      - path: Torus
-        weight: 1
-      - path: Torus.001
+      - path: Cylinder
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
