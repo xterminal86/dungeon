@@ -13,15 +13,17 @@ public class DoorMapObject : MapObject
 
   Job _job;
 
-  public DoorMapObject (string className, string id, BehaviourMapObject bmo)
+  public DoorMapObject (string className, string prefabName, BehaviourMapObject bmo)
   {
     ClassName = className;
-    Id = id;
+    PrefabName = prefabName;
     BMO = bmo;
 
-    _animation = BMO.GetComponent<Animation>();
+    _animation = BMO.GetComponentInParent<Animation>();
     if (_animation != null)
     {
+      Debug.Log(_animation);
+
       _animation["Open"].speed = _animationOpenSpeed;
       _animation["Close"].speed = _animationCloseSpeed;
     }

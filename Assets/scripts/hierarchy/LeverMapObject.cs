@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,10 +13,10 @@ public class LeverMapObject : MapObject
 
   Animation _animation;
 
-  public LeverMapObject(string className, string id, BehaviourMapObject bmo)
+  public LeverMapObject(string className, string prefabName, BehaviourMapObject bmo)
   {    
     ClassName = className;
-    Id = id;
+    PrefabName = prefabName;
     BMO = bmo;
 
     _animation = BMO.GetComponent<Animation>();    

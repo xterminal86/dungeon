@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,7 +7,7 @@ public class WallMapObject : MapObject
   public WallMapObject(string name, string id, BehaviourMapObject bmo)
   {
     ClassName = name;
-    Id = id;
+    PrefabName = id;
     BMO = bmo;
   }
 
@@ -17,6 +17,6 @@ public class WallMapObject : MapObject
 
   public override void ActionHandler(object sender)
   {
-    Debug.Log("You see: " + ClassName + " " + Id);
+    Debug.Log("You see: " + ClassName + " " + PrefabName);
   }
 }

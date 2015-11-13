@@ -14,28 +14,28 @@
 #####################
 </LAYOUT>
 <START x="1" y="1" facing="2" />
-	<BLOCKRANGE xStart="0" yStart="0" xEnd="10" yEnd="20" layer="-1" id="block-grass" />
-	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="8" layer="0" id="block-brick" />
-	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="8" layer="0" id="block-brick" />
-	<BLOCK x="4" y="2" layer="0" id="block-brick" />
-	  <OBJECT x="4" y="2" layer="0" id="lever" class="lever" facing="3" />
-	<BLOCK x="5" y="2" layer="1" id="block-brick" />
-	  <OBJECT x="5" y="2" layer="0" id="door-portcullis" class="door" facing="3" />
-	<BLOCK x="6" y="2" layer="0" id="block-brick" />
-	<BLOCK x="4" y="8" layer="0" id="block-brick" />
-	<BLOCK x="6" y="8" layer="0" id="block-brick" />
-	<BLOCK x="3" y="10" layer="0" id="cobblestone-bricks-aligned" />	
-	<BLOCK x="3" y="11" layer="0" id="block-brick" />	
-	<OBJECT x="3" y="12" layer="0" id="fence" class="wall" facing="1" />
-	<OBJECT x="3" y="13" layer="0" id="wall-thin-cobblestone" class="wall" facing="1" />
-	<OBJECT x="3" y="15" layer="0" id="wall-thin-cobblestone" class="wall" facing="2" />
-	<OBJECT x="3" y="14" layer="0" id="wall-thin-cobblestone" class="wall" facing="0" />
-	<OBJECT x="4" y="14" layer="0" id="wall-thin-window-centered" class="wall" facing="2" />
-	<OBJECT x="4" y="15" layer="0" id="wall-thin-window-upper" class="wall" facing="2" />
-	<OBJECT x="4" y="16" layer="0" id="door-wooden" class="door" facing="2" />
-	<OBJECT x="5" y="8" layer="0" id="door-wooden" class="door" facing="1" />	
-	<OBJECTRANGE xStart="0" yStart="0" xEnd="0" yEnd="20" layer="0" id="fence" class="wall" facing="1" />
-	<OBJECTRANGE xStart="0" yStart="0" xEnd="10" yEnd="0" layer="0" id="fence" class="wall" facing="0" />
-	<OBJECTRANGE xStart="10" yStart="0" xEnd="10" yEnd="20" layer="0" id="fence" class="wall" facing="1" />
-	<OBJECTRANGE xStart="0" yStart="20" xEnd="10" yEnd="20" layer="0" id="fence" class="wall" facing="0" />
+	<BLOCKRANGE xStart="0" yStart="0" xEnd="10" yEnd="20" layer="-1" prefab="block-grass" />
+	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="8" layer="0" prefab="block-brick" />
+	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="8" layer="0" prefab="block-brick" />
+	<BLOCK x="4" y="2" layer="0" prefab="block-brick" />
+	  <OBJECT x="4" y="2" layer="0" prefab="lever" class="lever" control="door-port1" facing="3" />
+	<BLOCK x="5" y="2" layer="1" prefab="block-brick" />
+	  <OBJECT x="5" y="2" layer="0" prefab="door-portcullis" class="door" id="door-port1" facing="3" />
+	<BLOCK x="6" y="2" layer="0" prefab="block-brick" />
+	<BLOCK x="4" y="8" layer="0" prefab="block-brick" />
+	<BLOCK x="6" y="8" layer="0" prefab="block-brick" />
+	<BLOCK x="3" y="10" layer="0" prefab="cobblestone-bricks-aligned" />	
+	<BLOCK x="3" y="11" layer="0" prefab="block-brick" />	
+	<OBJECT x="3" y="12" layer="0" prefab="fence" class="wall" facing="1" />
+	<OBJECT x="3" y="13" layer="0" prefab="wall-thin-cobblestone" class="wall" facing="1" />
+	<OBJECT x="3" y="15" layer="0" prefab="wall-thin-cobblestone" class="wall" facing="2" />
+	<OBJECT x="3" y="14" layer="0" prefab="wall-thin-cobblestone" class="wall" facing="0" />
+	<OBJECT x="4" y="14" layer="0" prefab="wall-thin-window-centered" class="wall" facing="2" />
+	<OBJECT x="4" y="15" layer="0" prefab="wall-thin-window-upper" class="wall" facing="2" />
+	<OBJECT x="4" y="16" layer="0" prefab="door-wooden" class="door" facing="2" />
+	<OBJECT x="5" y="8" layer="0" prefab="door-wooden" class="door" facing="1" />	
+	<OBJECTRANGE xStart="0" yStart="0" xEnd="0" yEnd="20" layer="0" prefab="fence" class="wall" facing="1" />
+	<OBJECTRANGE xStart="0" yStart="0" xEnd="10" yEnd="0" layer="0" prefab="fence" class="wall" facing="0" />
+	<OBJECTRANGE xStart="10" yStart="0" xEnd="10" yEnd="20" layer="0" prefab="fence" class="wall" facing="1" />
+	<OBJECTRANGE xStart="0" yStart="20" xEnd="10" yEnd="20" layer="0" prefab="fence" class="wall" facing="0" />
 </MAP>

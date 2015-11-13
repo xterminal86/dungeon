@@ -29,6 +29,7 @@ public class InputController : MonoSingleton<InputController>
     if (!_isProcessing)
     {
       ProcessKeyboard();
+      ProcessMouse();
     }
 
     _cameraPos.y += _cameraBob;
@@ -88,6 +89,28 @@ public class InputController : MonoSingleton<InputController>
       //Debug.Log (App.Instance.GetMapObjectByName("door_1"));
       //Debug.Log (App.Instance.GetGameObjectByName("door_1"));
       //Debug.Log (App.Instance.GetMapObjectByName("test"));
+    }
+  }
+
+  RaycastHit _raycastHit;      
+  void ProcessMouse()
+  {
+    if (Input.GetMouseButtonDown(0))
+    {
+      Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+      if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, GlobalConstants.WallScaleFactor + 1))
+      {
+        if (_raycastHit.collider != null)
+        {
+          BehaviourMapObject bmo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourMapObject>();
+          if (bmo != null)
+          {
+            if (bmo.MapObjectInstance.ActionCallback != null)
+              bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
+          }
+        }
+      }
     }
   }
 

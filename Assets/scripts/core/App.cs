@@ -165,13 +165,13 @@ public class App : MonoSingleton<App>
     int x = int.Parse(node.Attributes["x"].InnerText);
     int y = int.Parse(node.Attributes["y"].InnerText);
     int layer = int.Parse(node.Attributes["layer"].InnerText);
-    string blockId = node.Attributes["id"].InnerText;
+    string prefabName = node.Attributes["prefab"].InnerText;
 
-    GameObject go = PrefabsManager.Instance.FindPrefabByName(blockId);
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
     
     if (go == null)
     {
-      Debug.LogWarning("Couldn't find prefab: " + blockId);
+      Debug.LogWarning("Couldn't find prefab: " + prefabName);
       return;
     }
 
@@ -185,13 +185,13 @@ public class App : MonoSingleton<App>
     int xEnd = int.Parse(node.Attributes["xEnd"].InnerText);
     int yEnd = int.Parse(node.Attributes["yEnd"].InnerText);
     int layer = int.Parse(node.Attributes["layer"].InnerText);
-    string blockId = node.Attributes["id"].InnerText;
+    string prefabName = node.Attributes["prefab"].InnerText;
 
-    GameObject go = PrefabsManager.Instance.FindPrefabByName(blockId);
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
 
     if (go == null)
     {
-      Debug.LogWarning("Couldn't find prefab: " + blockId);
+      Debug.LogWarning("Couldn't find prefab: " + prefabName);
       return;
     }
 
@@ -277,18 +277,37 @@ public class App : MonoSingleton<App>
     int layer = int.Parse(node.Attributes["layer"].InnerText);
     string moClass = node.Attributes["class"].InnerText;
     int facing = int.Parse(node.Attributes["facing"].InnerText);
-    string objectId = node.Attributes["id"].InnerText;
+    string prefabName = node.Attributes["prefab"].InnerText;
 
-    GameObject go = PrefabsManager.Instance.FindPrefabByName(objectId);
+    string id = string.Empty;
+    string objectToControlId = string.Empty;
+
+    if (node.Attributes.GetNamedItem("id") != null)
+    {
+      id = node.Attributes["id"].InnerText;
+    }
+
+    if (node.Attributes.GetNamedItem("control") != null)
+    {
+      objectToControlId = node.Attributes["control"].InnerText;
+    }
+
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
     
     if (go == null)
     {
-      Debug.LogWarning("Couldn't find prefab: " + objectId);
+      Debug.LogWarning("Couldn't find prefab: " + prefabName);
       return;
     }
 
     GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
-    CreateMapObject(sceneObject, facing, moClass, objectId);
+
+    if (id != string.Empty)
+    {
+      _mapObjectsHashTable.Add(id.GetHashCode(), sceneObject);
+    }
+
+    CreateMapObject(sceneObject, facing, moClass, prefabName);
   }
 
   void SpawnObjects(XmlNode node)
@@ -300,13 +319,13 @@ public class App : MonoSingleton<App>
     int layer = int.Parse(node.Attributes["layer"].InnerText);
     string moClass = node.Attributes["class"].InnerText;
     int facing = int.Parse(node.Attributes["facing"].InnerText);
-    string objectId = node.Attributes["id"].InnerText;
+    string prefabName = node.Attributes["prefab"].InnerText;
     
-    GameObject go = PrefabsManager.Instance.FindPrefabByName(objectId);
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
     
     if (go == null)
     {
-      Debug.LogWarning("Couldn't find prefab: " + objectId);
+      Debug.LogWarning("Couldn't find prefab: " + prefabName);
       return;
     }
 
@@ -315,7 +334,7 @@ public class App : MonoSingleton<App>
       for (int y = yStart; y <= yEnd; y++)
       {
         GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
-        CreateMapObject(sceneObject, facing, moClass, objectId);
+        CreateMapObject(sceneObject, facing, moClass, prefabName);
 
         /*
         BehaviourMapObject bmo = null;
@@ -473,29 +492,38 @@ public class App : MonoSingleton<App>
     return _searchResult;
   }
 
-  void CreateMapObject(GameObject go, int facing, string moClass, string id)
+  void CreateMapObject(GameObject go, int facing, string moClass, string prefabName)
   {
     BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
     if (bmo == null)
     {
+      Debug.LogWarning("Could not get BMO component from " + prefabName);
       return;
     }
 
     switch (moClass)
     {
       case "wall":
-        bmo.MapObjectInstance = new WallMapObject(moClass, id, bmo);
+        bmo.MapObjectInstance = new WallMapObject(moClass, prefabName, bmo);
         (bmo.MapObjectInstance as WallMapObject).ActionCallback += (bmo.MapObjectInstance as WallMapObject).ActionHandler;
         break;
 
       case "door":
-        bmo.MapObjectInstance = new DoorMapObject(moClass, id, bmo);
-        (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
-        (bmo.MapObjectInstance as DoorMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ActionCompleteHandler;
+        bmo.MapObjectInstance = new DoorMapObject(moClass, prefabName, bmo);
+        if (prefabName == "door-wooden")
+        {
+          (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
+          (bmo.MapObjectInstance as DoorMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ActionCompleteHandler;
+        }
+        else if (prefabName == "door-portcullis")
+        {
+          (bmo.MapObjectInstance as DoorMapObject).ControlCallback += (bmo.MapObjectInstance as DoorMapObject).ControlHandler;
+          (bmo.MapObjectInstance as DoorMapObject).ControlCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ControlCompleteHandler;
+        }
         break;
 
       case "lever":
-        bmo.MapObjectInstance = new LeverMapObject(moClass, id, bmo);
+        bmo.MapObjectInstance = new LeverMapObject(moClass, prefabName, bmo);
         (bmo.MapObjectInstance as LeverMapObject).ActionCallback += (bmo.MapObjectInstance as LeverMapObject).ActionHandler;
         (bmo.MapObjectInstance as LeverMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as LeverMapObject).ActionCompleteHandler;
         break;
