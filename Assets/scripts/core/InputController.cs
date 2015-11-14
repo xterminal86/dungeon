@@ -114,7 +114,7 @@ public class InputController : MonoSingleton<InputController>
 
             //Debug.Log(_raycastHit.distance + " " + d);
 
-            if ((d - float.Epsilon) <= 2.0f && (facing == 2 || facing == 0))
+            if ((d - float.Epsilon) <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
             {
               if (bmo.MapObjectInstance.ActionCallback != null)
                 bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
