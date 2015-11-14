@@ -100,14 +100,29 @@ public class InputController : MonoSingleton<InputController>
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
       if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, GlobalConstants.WallScaleFactor + 1))
-      {
+      {          
         if (_raycastHit.collider != null)
         {
           BehaviourMapObject bmo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourMapObject>();
           if (bmo != null)
           {
-            if (bmo.MapObjectInstance.ActionCallback != null)
-              bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
+            // TODO: Disable interaction with objects when not facing them.
+            // Commented out code works partially.
+
+            /*
+            Vector3 f = GetCameraForwardVector();
+            Vector3 d = _raycastHit.point - ray.origin;
+            float angle = Vector3.Angle(f, d);
+        
+            //Debug.Log(angle);
+        
+            int facing = Mathf.Abs(bmo.MapObjectInstance.Facing - App.Instance.CameraOrientation);
+
+            if ( (facing == 2 || facing == 0) && angle < 35.0f) */
+            {
+              if (bmo.MapObjectInstance.ActionCallback != null)
+                bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
+            }
           }
         }
       }

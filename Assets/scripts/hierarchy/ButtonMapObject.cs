@@ -3,71 +3,55 @@ using System.Collections;
 
 public class ButtonMapObject : MapObject
 {
-  const float _buttonDepressMax = 1.05f;
-  const float _buttonPressSpeed = 0.25f;
-  const float _colorChangeSpeed = 2.0f;
+  Animation _animation;
 
-  public override void ActionHandler(object sender)
+  bool _lockInteraction = false;
+
+  string _animationName = "Action";
+
+  float _animationSpeed = 4;
+
+  public ButtonMapObject(string className, string prefabName, BehaviourMapObject bmo)
   {
-    if (!_pushing)
+    ClassName = className;
+    PrefabName = prefabName;
+    BMO = bmo;
+
+    _animation = BMO.GetComponentInParent<Animation>();
+    if (_animation != null)
     {
-      _defaultColor = GameObjectToControl.renderer.material.color;
-
-      if (BMO.StartSound != null)
-      {
-        BMO.StartSound.Play();
-      }
-
-      JobManager.Instance.CreateJob(ButtonAnimationPressRoutine());
+      _animation[_animationName].time = 0;
+      _animation[_animationName].speed = _animationSpeed;    
     }
   }
 
-  Color _defaultColor = Color.white;
-  bool _pushing = false;
-  IEnumerator ButtonAnimationPressRoutine()
+  public override void ActionHandler(object sender)
   {
-    _pushing = true;
-
-    Color color = _defaultColor;
-    Vector3 position = GameObjectToControl.transform.localPosition;
-    float cond = 1.0f;
-    while (cond < 1.1f)
+    if (_animation != null && !_lockInteraction)
     {
-      cond += Time.smoothDeltaTime * _buttonPressSpeed;
+      BMO.StartSound.Play();
 
-      if (cond < 1.05f)
-      {  
-        position.z -= Time.smoothDeltaTime * _buttonPressSpeed;
+      Job _job = new Job(LeverToggleRoutine());
 
-        color.r -= Time.smoothDeltaTime * _colorChangeSpeed;
-        color.g -= Time.smoothDeltaTime * _colorChangeSpeed;
-        color.b -= Time.smoothDeltaTime * _colorChangeSpeed;
-      }
-      else
-      {
-        position.z += Time.smoothDeltaTime * _buttonPressSpeed;
+      _lockInteraction = true;
+    }
+  }
 
-        color.r += Time.smoothDeltaTime * _colorChangeSpeed;
-        color.g += Time.smoothDeltaTime * _colorChangeSpeed;
-        color.b += Time.smoothDeltaTime * _colorChangeSpeed;
-      }
+  public override void ActionCompleteHandler(object sender)
+  {
+    _lockInteraction = false;
+  }
 
-      GameObjectToControl.transform.localPosition = position;
-      GameObjectToControl.renderer.material.color = color;
+  IEnumerator LeverToggleRoutine()
+  {    
+    _animation.Play(_animationName);
 
+    while (_animation.IsPlaying(_animationName))
+    {
       yield return null;
     }
 
-    position.z = 1.0f;
-
-    GameObjectToControl.transform.localPosition = position;    
-    GameObjectToControl.renderer.material.color = _defaultColor;
-
-    _pushing = false;
-
     if (ActionCompleteCallback != null)
-    {
       ActionCompleteCallback(this);
-    }
-  }  
+  }
 }

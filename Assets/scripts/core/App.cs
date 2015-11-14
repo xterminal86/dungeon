@@ -497,7 +497,7 @@ public class App : MonoSingleton<App>
     BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
     if (bmo == null)
     {
-      Debug.LogWarning("Could not get BMO component from " + prefabName);
+      //Debug.LogWarning("Could not get BMO component from " + prefabName);
       return;
     }
 
@@ -526,6 +526,12 @@ public class App : MonoSingleton<App>
         bmo.MapObjectInstance = new LeverMapObject(moClass, prefabName, bmo);
         (bmo.MapObjectInstance as LeverMapObject).ActionCallback += (bmo.MapObjectInstance as LeverMapObject).ActionHandler;
         (bmo.MapObjectInstance as LeverMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as LeverMapObject).ActionCompleteHandler;
+        break;
+
+      case "button":
+        bmo.MapObjectInstance = new ButtonMapObject(moClass, prefabName, bmo);
+        (bmo.MapObjectInstance as ButtonMapObject).ActionCallback += (bmo.MapObjectInstance as ButtonMapObject).ActionHandler;
+        (bmo.MapObjectInstance as ButtonMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as ButtonMapObject).ActionCompleteHandler;
         break;
 
       default:

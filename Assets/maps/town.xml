@@ -22,6 +22,7 @@
 	<BLOCK x="5" y="2" layer="1" prefab="block-brick" />
 	  <OBJECT x="5" y="2" layer="0" prefab="door-portcullis" class="door" id="door-port1" facing="3" />
 	<BLOCK x="6" y="2" layer="0" prefab="block-brick" />
+	  <OBJECT x="6" y="2" layer="0" prefab="button" class="button" facing="3" />
 	<BLOCK x="4" y="8" layer="0" prefab="block-brick" />
 	<BLOCK x="6" y="8" layer="0" prefab="block-brick" />
 	<BLOCK x="3" y="10" layer="0" prefab="cobblestone-bricks-aligned" />	

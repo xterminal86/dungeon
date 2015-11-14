@@ -21,9 +21,7 @@ public class DoorMapObject : MapObject
 
     _animation = BMO.GetComponentInParent<Animation>();
     if (_animation != null)
-    {
-      Debug.Log(_animation);
-
+    {      
       _animation["Open"].speed = _animationOpenSpeed;
       _animation["Close"].speed = _animationCloseSpeed;
     }
