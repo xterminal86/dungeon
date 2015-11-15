@@ -31,6 +31,7 @@
 	<OBJECT x="3" y="13" layer="0" prefab="wall-thin-cobblestone" class="wall" facing="1" />
 	<OBJECT x="3" y="15" layer="0" prefab="wall-thin-cobblestone" class="wall" facing="2" />
 	<OBJECT x="3" y="14" layer="0" prefab="wall-thin-cobblestone" class="wall" facing="0" />
+	<OBJECT x="4" y="13" layer="0" prefab="wall-thin-window-wide" class="wall" facing="2" />
 	<OBJECT x="4" y="14" layer="0" prefab="wall-thin-window-centered" class="wall" facing="2" />
 	<OBJECT x="4" y="15" layer="0" prefab="wall-thin-window-upper" class="wall" facing="2" />
 	<OBJECT x="4" y="16" layer="0" prefab="door-wooden" class="door" facing="2" />

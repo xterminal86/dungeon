@@ -105,16 +105,17 @@ public class InputController : MonoSingleton<InputController>
         {
           BehaviourMapObject bmo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourMapObject>();
           if (bmo != null)
-          {
-            // TODO: Disable interaction with objects when they are facing the same direction
-            // but are on the far side of the block
-            
+          {            
             float d = Vector3.Distance(App.Instance.CameraPos, bmo.transform.position);
             int facing = Mathf.Abs(bmo.MapObjectInstance.Facing - App.Instance.CameraOrientation);
 
+            float dCond = d - float.Epsilon;
+
             //Debug.Log(_raycastHit.distance + " " + d);
 
-            if ((d - float.Epsilon) <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
+            //if (dCond <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
+            if ( (facing == 2 && dCond <= GlobalConstants.WallScaleFactor) || 
+                 (facing == 0 && dCond <= 0.0f) )
             {
               if (bmo.MapObjectInstance.ActionCallback != null)
                 bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
