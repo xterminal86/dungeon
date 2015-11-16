@@ -5,13 +5,14 @@ using System.Collections.Generic;
 public class LeverMapObject : MapObject 
 {
   bool _lockInteraction = false;
-  bool _isOn = false;
 
   string _animationName = "On";
 
   float _animationSpeed = 4;
 
   Animation _animation;
+
+  public MapObject ControlledObject;
 
   public LeverMapObject(string className, string prefabName, BehaviourMapObject bmo)
   {    
@@ -36,7 +37,7 @@ public class LeverMapObject : MapObject
 
   IEnumerator LeverToggleRoutine()
   {    
-    if (_isOn)
+    if (IsOpen)
     {
       _animation[_animationName].time = _animation[_animationName].length;
       _animation[_animationName].speed = -_animationSpeed;
@@ -54,14 +55,13 @@ public class LeverMapObject : MapObject
       yield return null;
     }
 
-    if (ActionCompleteCallback != null)
-      ActionCompleteCallback(this);
-  }
+    if (ControlledObject != null)
+    {
+      if (ControlledObject.ControlCallback != null && IsOpen == ControlledObject.IsOpen)
+        ControlledObject.ControlCallback(this);
+    }
 
-  public override void ActionCompleteHandler(object sender)
-  {
-    _lockInteraction = false;
-
-    _isOn = !_isOn;
+    _lockInteraction = false;    
+    IsOpen = !IsOpen;
   }
 }

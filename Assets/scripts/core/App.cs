@@ -307,7 +307,7 @@ public class App : MonoSingleton<App>
       _mapObjectsHashTable.Add(id.GetHashCode(), sceneObject);
     }
 
-    CreateMapObject(sceneObject, facing, moClass, prefabName);
+    CreateMapObject(sceneObject, facing, moClass, prefabName, objectToControlId);
   }
 
   void SpawnObjects(XmlNode node)
@@ -334,7 +334,7 @@ public class App : MonoSingleton<App>
       for (int y = yStart; y <= yEnd; y++)
       {
         GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
-        CreateMapObject(sceneObject, facing, moClass, prefabName);
+        CreateMapObject(sceneObject, facing, moClass, prefabName, string.Empty);
 
         /*
         BehaviourMapObject bmo = null;
@@ -452,7 +452,7 @@ public class App : MonoSingleton<App>
     return null;
   }
 
-  public MapObject GetMapObjectByName(string name)
+  public MapObject GetMapObjectById(string name)
   {
     int hash = name.GetHashCode();
     if (_mapObjectsHashTable.ContainsKey(hash))
@@ -492,7 +492,7 @@ public class App : MonoSingleton<App>
     return _searchResult;
   }
 
-  void CreateMapObject(GameObject go, int facing, string moClass, string prefabName)
+  void CreateMapObject(GameObject go, int facing, string moClass, string prefabName, string objectToControlId)
   {
     BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
     if (bmo == null)
@@ -508,32 +508,43 @@ public class App : MonoSingleton<App>
         (bmo.MapObjectInstance as WallMapObject).ActionCallback += (bmo.MapObjectInstance as WallMapObject).ActionHandler;
         break;
 
-      case "door":
+      case "door-openable":
         bmo.MapObjectInstance = new DoorMapObject(moClass, prefabName, bmo);
-        if (prefabName == "door-wooden")
-        {
-          (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
-          (bmo.MapObjectInstance as DoorMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ActionCompleteHandler;
-        }
-        else if (prefabName == "door-portcullis")
-        {
-          (bmo.MapObjectInstance as DoorMapObject).ControlCallback += (bmo.MapObjectInstance as DoorMapObject).ControlHandler;
-          (bmo.MapObjectInstance as DoorMapObject).ControlCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ControlCompleteHandler;
-        }
+        (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
+        break;
+
+      case "door-controllable":
+        bmo.MapObjectInstance = new DoorMapObject(moClass, prefabName, bmo);
+        (bmo.MapObjectInstance as DoorMapObject).ControlCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
         break;
 
       case "lever":
         bmo.MapObjectInstance = new LeverMapObject(moClass, prefabName, bmo);
         (bmo.MapObjectInstance as LeverMapObject).ActionCallback += (bmo.MapObjectInstance as LeverMapObject).ActionHandler;
-        (bmo.MapObjectInstance as LeverMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as LeverMapObject).ActionCompleteHandler;
-        break;
 
+        if (objectToControlId != string.Empty)
+        {
+          MapObject mo = GetMapObjectById(objectToControlId);
+          if (mo != null)
+          {
+            (bmo.MapObjectInstance as LeverMapObject).ControlledObject = mo;
+          }
+        }
+        break;
+      
       case "button":
         bmo.MapObjectInstance = new ButtonMapObject(moClass, prefabName, bmo);
         (bmo.MapObjectInstance as ButtonMapObject).ActionCallback += (bmo.MapObjectInstance as ButtonMapObject).ActionHandler;
-        (bmo.MapObjectInstance as ButtonMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as ButtonMapObject).ActionCompleteHandler;
+        
+        if (objectToControlId != string.Empty)
+        {
+          MapObject mo = GetMapObjectById(objectToControlId);
+          if (mo != null)
+          {
+            (bmo.MapObjectInstance as ButtonMapObject).ControlledObject = mo;
+          }
+        }
         break;
-
       default:
         break;
     }

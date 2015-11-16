@@ -11,6 +11,8 @@ public class ButtonMapObject : MapObject
 
   float _animationSpeed = 4;
 
+  public MapObject ControlledObject;
+
   public ButtonMapObject(string className, string prefabName, BehaviourMapObject bmo)
   {
     ClassName = className;
@@ -37,11 +39,6 @@ public class ButtonMapObject : MapObject
     }
   }
 
-  public override void ActionCompleteHandler(object sender)
-  {
-    _lockInteraction = false;
-  }
-
   IEnumerator LeverToggleRoutine()
   {    
     _animation.Play(_animationName);
@@ -51,7 +48,12 @@ public class ButtonMapObject : MapObject
       yield return null;
     }
 
-    if (ActionCompleteCallback != null)
-      ActionCompleteCallback(this);
+    if (ControlledObject != null)
+    {
+      if (ControlledObject.ControlCallback != null)
+        ControlledObject.ControlCallback(this);
+    }
+
+    _lockInteraction = false;
   }
 }
