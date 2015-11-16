@@ -8,6 +8,8 @@ public class DoorMapObject : MapObject
   float _animationOpenSpeed = 2;
   float _animationCloseSpeed = 3;
 
+  string _animationName = "Open";
+
   Animation _animation;
 
   Job _job;
@@ -21,8 +23,8 @@ public class DoorMapObject : MapObject
     _animation = BMO.GetComponentInParent<Animation>();
     if (_animation != null)
     {      
-      _animation["Open"].speed = _animationOpenSpeed;
-      _animation["Close"].speed = _animationCloseSpeed;
+      _animation[_animationName].time = 0;
+      _animation[_animationName].speed = _animationOpenSpeed;
     }
   }
 
@@ -50,34 +52,37 @@ public class DoorMapObject : MapObject
     }
   }
 
+  float _animationTime = 0.0f;
   IEnumerator DoorToggleRoutine()
   {
     IsBeingInteracted = true;
 
-    string animationName = "Close";
-
-    if (!IsOpen)
+    if (IsOpen)
     {
-      if (_animation != null)
-      {
-        _animation[animationName].speed = _animationOpenSpeed;
-      }
+      _animation[_animationName].time = _animation[_animationName].length;
+      _animation[_animationName].speed = -_animationCloseSpeed;
     }
     else
     {
-      if (_animation != null)
-      {
-        _animation[animationName].speed = -_animationCloseSpeed;
-        _animation[animationName].time = _animation[animationName].length;
-      }
+      _animation[_animationName].time = 0;
+      _animation[_animationName].speed = _animationOpenSpeed;
     }
 
-    _animation.Play(animationName);
+    _animation.Play(_animationName);
 
-    while (_animation.IsPlaying(animationName))
+    // Presumably _animation.IsPlaying() doesn't work if object is outside camera view
+
+    //while (_animation.IsPlaying(_animationName))
+    while (_animationTime < _animation[_animationName].length)
     {
+      //Debug.Log(_animation[_animationName].time + " " + _animation[_animationName].length);
+      _animationTime += Time.fixedDeltaTime;
       yield return null;
     }
+
+    //Debug.Log("Here");
+
+    _animationTime = 0.0f;
 
     _lockInteraction = false;    
     IsOpen = !IsOpen;

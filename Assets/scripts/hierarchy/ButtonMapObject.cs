@@ -33,13 +33,13 @@ public class ButtonMapObject : MapObject
     {
       BMO.StartSound.Play();
 
-      Job _job = new Job(LeverToggleRoutine());
+      Job _job = new Job(ButtonToggleRoutine());
 
       _lockInteraction = true;
     }
   }
 
-  IEnumerator LeverToggleRoutine()
+  IEnumerator ButtonToggleRoutine()
   {    
     _animation.Play(_animationName);
 
