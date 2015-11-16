@@ -52,7 +52,6 @@ public class DoorMapObject : MapObject
     }
   }
 
-  float _animationTime = 0.0f;
   IEnumerator DoorToggleRoutine()
   {
     IsBeingInteracted = true;
@@ -70,19 +69,12 @@ public class DoorMapObject : MapObject
 
     _animation.Play(_animationName);
 
-    // Presumably _animation.IsPlaying() doesn't work if object is outside camera view
+    // Set animation type in Animation component to "Always animate"
 
-    //while (_animation.IsPlaying(_animationName))
-    while (_animationTime < _animation[_animationName].length)
-    {
-      //Debug.Log(_animation[_animationName].time + " " + _animation[_animationName].length);
-      _animationTime += Time.fixedDeltaTime;
+    while (_animation.IsPlaying(_animationName))    
+    {      
       yield return null;
     }
-
-    //Debug.Log("Here");
-
-    _animationTime = 0.0f;
 
     _lockInteraction = false;    
     IsOpen = !IsOpen;
