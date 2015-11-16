@@ -85,6 +85,6 @@ public class SoundManager : MonoSingleton<SoundManager>
 
   public void MapLoadingFinishedHandler()
   {
-    //MusicTrack.Play();
+    MusicTrack.Play();
   }
 }

@@ -21,7 +21,7 @@
 	<BLOCK x="5" y="2" layer="1" prefab="block-brick" />
 	  <OBJECT x="5" y="2" layer="0" prefab="door-portcullis" class="door-controllable" id="door-port1" facing="3" />
 	  <OBJECT x="4" y="2" layer="0" prefab="lever" class="lever" control="door-port1" facing="3" />
-	  <OBJECT x="4" y="2" layer="0" prefab="lever" class="lever" control="door-port1" facing="2" />
+	  <OBJECT x="4" y="2" layer="0" prefab="lever" class="lever" control="door-port1" facing="1" />
 	<BLOCK x="6" y="2" layer="0" prefab="block-brick" />		
 	<BLOCK x="4" y="8" layer="0" prefab="block-brick" />
 	<BLOCK x="6" y="8" layer="0" prefab="block-brick" />
@@ -36,8 +36,8 @@
 	<OBJECT x="4" y="15" layer="0" prefab="wall-thin-window-upper" class="wall" facing="2" />
 	<OBJECT x="4" y="16" layer="0" prefab="door-wooden" class="door-openable" facing="2" />
 	<OBJECT x="5" y="8" layer="0" prefab="door-wooden" class="door-openable" facing="1" />
-	<OBJECT x="7" y="1" layer="0" prefab="door-wooden" class="door-controllable" id="door-wood1" facing="2" />
-		<OBJECT x="6" y="2" layer="0" prefab="button" class="button" control="door-wood1" facing="3" />
+	<OBJECT x="7" y="1" layer="0" prefab="door-iron" class="door-controllable" id="door-iron1" facing="2" />
+		<OBJECT x="6" y="2" layer="0" prefab="button" class="button" control="door-iron1" facing="3" />
 	<OBJECTRANGE xStart="0" yStart="0" xEnd="0" yEnd="20" layer="0" prefab="fence" class="wall" facing="1" />
 	<OBJECTRANGE xStart="0" yStart="0" xEnd="10" yEnd="0" layer="0" prefab="fence" class="wall" facing="0" />
 	<OBJECTRANGE xStart="10" yStart="0" xEnd="10" yEnd="20" layer="0" prefab="fence" class="wall" facing="1" />
