@@ -314,6 +314,9 @@ public class InputController : MonoSingleton<InputController>
   {
     CameraMoveArgument ca = arg as CameraMoveArgument;
     if (ca == null) yield return null;
+
+    SoundManager.Instance.PlaySound(GlobalConstants.SoundNames.PLAYER_CANNOT_MOVE);
+
     _isProcessing = true;
     
     int newX = (int)_cameraPos.x;
@@ -350,7 +353,7 @@ public class InputController : MonoSingleton<InputController>
         }
       }
       else
-      {
+      {        
         if (xComponent != 0)
         {
           if (cond < half) _cameraPos.x -= xComponent * Time.deltaTime * ca.Speed;
@@ -369,7 +372,7 @@ public class InputController : MonoSingleton<InputController>
     _cameraPos.x = newX;
     _cameraPos.z = newZ;
     
-    _isProcessing = false;
+    _isProcessing = false;    
   }
 
   Vector3 _cameraForwardVector = Vector3.zero;

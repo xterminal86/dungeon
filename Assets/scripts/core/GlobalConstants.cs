@@ -41,7 +41,8 @@ public static class GlobalConstants
     { SoundNames.FS_GRASS3, "fs-grass3".GetHashCode() },
     { SoundNames.FS_GRASS4, "fs-grass4".GetHashCode() },
     { SoundNames.ACT_WOODEN_DOOR_OPEN, "act-door-wooden-open".GetHashCode() },
-    { SoundNames.ACT_WOODEN_DOOR_CLOSE, "act-door-wooden-close".GetHashCode() }
+    { SoundNames.ACT_WOODEN_DOOR_CLOSE, "act-door-wooden-close".GetHashCode() },
+    { SoundNames.PLAYER_CANNOT_MOVE, "player-cannot-move".GetHashCode() }
   };
 
   public static List<int> FootstepsGrass = new List<int>()
@@ -59,7 +60,8 @@ public static class GlobalConstants
     FS_GRASS3,
     FS_GRASS4,
     ACT_WOODEN_DOOR_OPEN,
-    ACT_WOODEN_DOOR_CLOSE
+    ACT_WOODEN_DOOR_CLOSE,
+    PLAYER_CANNOT_MOVE
   }
 
   public enum MapAttributes
