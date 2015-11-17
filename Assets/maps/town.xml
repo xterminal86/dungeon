@@ -14,7 +14,7 @@
 #####################
 </LAYOUT>
 <START x="1" y="1" facing="2" />
-	<BLOCKRANGE xStart="0" yStart="0" xEnd="10" yEnd="20" layer="-1" prefab="block-grass" />
+	<BLOCKRANGE xStart="0" yStart="0" xEnd="10" yEnd="20" layer="0" prefab="floor-grass" />
 	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="8" layer="0" prefab="block-brick" />
 	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="8" layer="0" prefab="block-brick" />
 	<BLOCK x="4" y="2" layer="0" prefab="block-brick" />	  

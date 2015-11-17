@@ -9,12 +9,16 @@ ModelImporter:
     100006: Cube.001
     100008: //RootNode
     100010: Cylinder
+    100012: Bone
+    100014: Bone_end
     400000: Armature
     400002: Armature|Bone
     400004: Cube
     400006: Cube.001
     400008: //RootNode
     400010: Cylinder
+    400012: Bone
+    400014: Bone_end
     2300000: Cube.001
     2300002: Cylinder
     3300000: Cube.001

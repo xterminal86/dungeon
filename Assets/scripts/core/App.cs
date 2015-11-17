@@ -262,7 +262,7 @@ public class App : MonoSingleton<App>
     goPosition.z = z * GlobalConstants.WallScaleFactor;
     goPosition.y = (yOffset == 0) ? go.transform.position.y : yOffset * GlobalConstants.WallScaleFactor;
     go.transform.position = goPosition;
-    go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
+    go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o], Space.World);
     go.transform.parent = ObjectsInstancesTransform.transform;
 
     _nameSuffix++;
