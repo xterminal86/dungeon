@@ -39,8 +39,11 @@ public class InputController : MonoSingleton<InputController>
     App.Instance.CameraPivot.transform.position = App.Instance.CameraPos;
 	}
 
+  bool _doMove = false;
   void ProcessKeyboard ()
   {
+    _doMove = false;
+
     if (Input.GetKey(KeyCode.E)) 
     {      
       TurnCamera(App.Instance.CameraOrientation, App.Instance.CameraOrientation + 1, true);
@@ -51,37 +54,23 @@ public class InputController : MonoSingleton<InputController>
     }
     else if (Input.GetKey(KeyCode.W)) 
     {
-      int posX = (int)App.Instance.CameraPos.x;
-      int posZ = (int)App.Instance.CameraPos.z;
-      _cameraMoveArgument.From = new Vector2(posX, posZ);
-      _cameraMoveArgument.Speed = GlobalConstants.CameraMoveSpeed;
-      _cameraMoveArgument.MoveBackwards = false;
-      bool res = CanMove(posX, posZ, false);
-      if (res)
-      {
-        StartCoroutine("CameraMoveRoutine", _cameraMoveArgument);
-      }
-      else
-      {
-        StartCoroutine("CameraCannotMoveRoutine", _cameraMoveArgument);
-      }
+      _cameraMoveArgument.MoveType = CameraMoveType.FORWARD;
+      _doMove = true;
     }
     else if (Input.GetKey(KeyCode.S)) 
     {
-      int posX = (int)App.Instance.CameraPos.x;
-      int posZ = (int)App.Instance.CameraPos.z;
-      _cameraMoveArgument.From = new Vector2(posX, posZ);
-      _cameraMoveArgument.Speed = GlobalConstants.CameraMoveSpeed;
-      _cameraMoveArgument.MoveBackwards = true;
-      bool res = CanMove(posX, posZ, true);
-      if (res)
-      {
-        StartCoroutine("CameraMoveRoutine", _cameraMoveArgument);
-      }
-      else
-      {
-        StartCoroutine("CameraCannotMoveRoutine", _cameraMoveArgument);
-      }
+      _cameraMoveArgument.MoveType = CameraMoveType.BACKWARD;
+      _doMove = true;
+    }
+    else if (Input.GetKey(KeyCode.A)) 
+    {
+      _cameraMoveArgument.MoveType = CameraMoveType.STRAFE_LEFT;
+      _doMove = true;
+    }
+    else if (Input.GetKey(KeyCode.D)) 
+    {
+      _cameraMoveArgument.MoveType = CameraMoveType.STRAFE_RIGHT;
+      _doMove = true;
     }
     else if (Input.GetKeyDown(KeyCode.Space))
     {
@@ -89,6 +78,23 @@ public class InputController : MonoSingleton<InputController>
       //Debug.Log (App.Instance.GetMapObjectByName("door_1"));
       //Debug.Log (App.Instance.GetGameObjectByName("door_1"));
       //Debug.Log (App.Instance.GetMapObjectByName("test"));
+    }
+
+    if (_doMove)
+    {
+      int posX = (int)App.Instance.CameraPos.x;
+      int posZ = (int)App.Instance.CameraPos.z;
+      _cameraMoveArgument.From = new Vector2(posX, posZ);
+      _cameraMoveArgument.Speed = GlobalConstants.CameraMoveSpeed;
+      bool res = CanMove(posX, posZ, _cameraMoveArgument.MoveType);
+      if (res)
+      {
+        StartCoroutine("CameraMoveRoutine", _cameraMoveArgument);
+      }
+      else
+      {
+        StartCoroutine("CameraCannotMoveRoutine", _cameraMoveArgument);
+      }
     }
   }
 
@@ -131,7 +137,7 @@ public class InputController : MonoSingleton<InputController>
     base.Init ();
   }
 
-  bool CanMove(int posX, int posZ, bool moveBackwards)
+  bool CanMove(int posX, int posZ, CameraMoveType moveType)
   {
     int newX = (int)_cameraPos.x / GlobalConstants.WallScaleFactor;
     int newZ = (int)_cameraPos.z / GlobalConstants.WallScaleFactor;
@@ -139,15 +145,25 @@ public class InputController : MonoSingleton<InputController>
     int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
     int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
     
-    if (!moveBackwards)
+    if (moveType == CameraMoveType.FORWARD)
     {
       if (xComponent != 0) newX += xComponent;
       if (zComponent != 0) newZ += zComponent;
     }
-    else
+    else if (moveType == CameraMoveType.BACKWARD)
     {
       if (xComponent != 0) newX -= xComponent;
       if (zComponent != 0) newZ -= zComponent;
+    }
+    else if (moveType == CameraMoveType.STRAFE_LEFT)
+    {
+      if (xComponent != 0) newZ += xComponent;
+      if (zComponent != 0) newX -= zComponent;
+    }
+    else if (moveType == CameraMoveType.STRAFE_RIGHT)
+    {
+      if (xComponent != 0) newZ -= xComponent;
+      if (zComponent != 0) newX += zComponent;
     }
 
     // Check bounds
@@ -161,11 +177,26 @@ public class InputController : MonoSingleton<InputController>
         
     Ray ray = new Ray(RaycastPoint.position, new Vector3(xComponent, 0.0f, zComponent));
 
-    if (moveBackwards)
+    Vector3 tmp = ray.direction;
+
+    if (moveType == CameraMoveType.BACKWARD)
     {
-      Vector3 tmp = ray.direction;
       if (xComponent != 0) tmp.x = -ray.direction.x;
       if (zComponent != 0) tmp.z = -ray.direction.z;
+      ray.direction = tmp;
+    }
+    else if (moveType == CameraMoveType.STRAFE_LEFT)
+    {
+      tmp = Vector3.zero;
+      if (xComponent != 0) tmp.z = ray.direction.x;
+      if (zComponent != 0) tmp.x = -ray.direction.z;
+      ray.direction = tmp;
+    }
+    else if (moveType == CameraMoveType.STRAFE_RIGHT)
+    {
+      tmp = Vector3.zero;
+      if (xComponent != 0) tmp.z = -ray.direction.x;
+      if (zComponent != 0) tmp.x = ray.direction.z;
       ray.direction = tmp;
     }
 
@@ -234,6 +265,7 @@ public class InputController : MonoSingleton<InputController>
   {
     CameraMoveArgument ca = arg as CameraMoveArgument;
     if (ca == null) yield return null;
+   
     _isProcessing = true;
 
     int newX = (int)_cameraPos.x;
@@ -242,15 +274,25 @@ public class InputController : MonoSingleton<InputController>
     int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
     int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
 
-    if (!ca.MoveBackwards)
+    if (ca.MoveType == CameraMoveType.FORWARD)
     {
       if (xComponent != 0) newX += xComponent * GlobalConstants.WallScaleFactor;
       if (zComponent != 0) newZ += zComponent * GlobalConstants.WallScaleFactor;
     }
-    else
+    else if (ca.MoveType == CameraMoveType.BACKWARD)
     {
       if (xComponent != 0) newX -= xComponent * GlobalConstants.WallScaleFactor;
       if (zComponent != 0) newZ -= zComponent * GlobalConstants.WallScaleFactor;
+    }
+    else if (ca.MoveType == CameraMoveType.STRAFE_LEFT)
+    {
+      if (xComponent != 0) newZ += xComponent * GlobalConstants.WallScaleFactor;
+      if (zComponent != 0) newX -= zComponent * GlobalConstants.WallScaleFactor;
+    }
+    else if (ca.MoveType == CameraMoveType.STRAFE_RIGHT)
+    {
+      if (xComponent != 0) newZ -= xComponent * GlobalConstants.WallScaleFactor;
+      if (zComponent != 0) newX += zComponent * GlobalConstants.WallScaleFactor;
     }
 
     _cameraBob = 0.0f;
@@ -283,15 +325,25 @@ public class InputController : MonoSingleton<InputController>
       }
       */
 
-      if (!ca.MoveBackwards)
+      if (ca.MoveType == CameraMoveType.FORWARD)
       {
         if (xComponent != 0) _cameraPos.x += xComponent * Time.deltaTime * ca.Speed;
         else if (zComponent != 0) _cameraPos.z += zComponent * Time.deltaTime * ca.Speed;
       }
-      else
+      else if (ca.MoveType == CameraMoveType.BACKWARD)
       {
         if (xComponent != 0) _cameraPos.x -= xComponent * Time.deltaTime * ca.Speed;
         else if (zComponent != 0) _cameraPos.z -= zComponent * Time.deltaTime * ca.Speed;
+      }
+      else if (ca.MoveType == CameraMoveType.STRAFE_LEFT)
+      {
+        if (xComponent != 0) _cameraPos.z += xComponent * Time.deltaTime * ca.Speed;
+        else if (zComponent != 0) _cameraPos.x -= zComponent * Time.deltaTime * ca.Speed;
+      }
+      else if (ca.MoveType == CameraMoveType.STRAFE_RIGHT)
+      {
+        if (xComponent != 0) _cameraPos.z -= xComponent * Time.deltaTime * ca.Speed;
+        else if (zComponent != 0) _cameraPos.x += zComponent * Time.deltaTime * ca.Speed;
       }
 
       yield return null;
@@ -339,7 +391,7 @@ public class InputController : MonoSingleton<InputController>
       }
       */
 
-      if (!ca.MoveBackwards)
+      if (ca.MoveType == CameraMoveType.FORWARD)
       {
         if (xComponent != 0)
         {
@@ -352,7 +404,7 @@ public class InputController : MonoSingleton<InputController>
           else _cameraPos.z -= zComponent * Time.deltaTime * ca.Speed;
         }
       }
-      else
+      else if (ca.MoveType == CameraMoveType.BACKWARD)
       {        
         if (xComponent != 0)
         {
@@ -363,6 +415,32 @@ public class InputController : MonoSingleton<InputController>
         {
           if (cond < half) _cameraPos.z -= zComponent * Time.deltaTime * ca.Speed;
           else _cameraPos.z += zComponent * Time.deltaTime * ca.Speed;
+        }
+      }
+      else if (ca.MoveType == CameraMoveType.STRAFE_LEFT)
+      {        
+        if (xComponent != 0)
+        {
+          if (cond < half) _cameraPos.z += xComponent * Time.deltaTime * ca.Speed;
+          else _cameraPos.z -= xComponent * Time.deltaTime * ca.Speed;
+        }
+        else if (zComponent != 0)
+        {
+          if (cond < half) _cameraPos.x -= zComponent * Time.deltaTime * ca.Speed;
+          else _cameraPos.x += zComponent * Time.deltaTime * ca.Speed;
+        }
+      }
+      else if (ca.MoveType == CameraMoveType.STRAFE_RIGHT)
+      {        
+        if (xComponent != 0)
+        {
+          if (cond < half) _cameraPos.z -= xComponent * Time.deltaTime * ca.Speed;
+          else _cameraPos.z += xComponent * Time.deltaTime * ca.Speed;
+        }
+        else if (zComponent != 0)
+        {
+          if (cond < half) _cameraPos.x += zComponent * Time.deltaTime * ca.Speed;
+          else _cameraPos.x -= zComponent * Time.deltaTime * ca.Speed;
         }
       }
       
@@ -414,5 +492,13 @@ public class CameraMoveArgument
   public Vector2 From;
   public Vector2 To;
   public float Speed;
-  public bool MoveBackwards;
+  public CameraMoveType MoveType;
+}
+
+public enum CameraMoveType
+{
+  FORWARD = 0,
+  BACKWARD,
+  STRAFE_LEFT,
+  STRAFE_RIGHT
 }
