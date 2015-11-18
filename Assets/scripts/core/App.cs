@@ -9,12 +9,6 @@ public class App : MonoSingleton<App>
 {
   public GameObject TestModel;
 
-  public GameObject DummyObjectPrefab;
-  public GameObject WallPrefab;
-  public GameObject FloorPrefab;
-  public GameObject CeilingPrefab;
-  public GameObject DoorPrefab;
-  public GameObject ButtonPrefab;
   public GameObject ObjectsInstancesTransform;
 
   int _nameSuffix = 0;
@@ -88,6 +82,9 @@ public class App : MonoSingleton<App>
         break;
       case MapFilename.TOWN:
         LoadMap("Assets/maps/town.xml");
+        break;
+      case MapFilename.DUNGEON1:
+        LoadMap("Assets/maps/dungeon1.xml");
         break;
       default:
         LoadMap("Assets/maps/test_map.xml");
@@ -560,6 +557,7 @@ public class App : MonoSingleton<App>
     BINARY_TREE,
     SIDEWINDER,
     GROWING_TREE,
-    TOWN
+    TOWN,
+    DUNGEON1
   }
 }

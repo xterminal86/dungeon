@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<MAP>
+<LAYOUT>
+###########################
+#.........................#
+#.........................#
+#.#####.#####....#.#.#.#..#
+#.#...#.#...#.............#
+#.#.........#....#.#.#.#..#
+#.#...#.#...#.............#
+#.#####.#####....#.#.#.#..#
+#.........................#
+###########################
+</LAYOUT>
+<START x="1" y="1" facing="0" />
+<BLOCKRANGE xStart="0" yStart="0" xEnd="0" yEnd="26" layer="0" prefab="block-tiles" facing="0" />	
+	<BLOCKRANGE xStart="0" yStart="0" xEnd="0" yEnd="26" layer="1" prefab="block-tiles" facing="0" />	
+<BLOCKRANGE xStart="0" yStart="0" xEnd="9" yEnd="0" layer="0" prefab="block-tiles" facing="0" />	
+	<BLOCKRANGE xStart="0" yStart="0" xEnd="9" yEnd="0" layer="1" prefab="block-tiles" facing="0" />	
+<BLOCKRANGE xStart="9" yStart="0" xEnd="9" yEnd="26" layer="0" prefab="block-tiles" facing="0" />
+	<BLOCKRANGE xStart="9" yStart="0" xEnd="9" yEnd="26" layer="1" prefab="block-tiles" facing="0" />
+<BLOCKRANGE xStart="0" yStart="26" xEnd="9" yEnd="26" layer="0" prefab="block-tiles" facing="0" />		
+	<BLOCKRANGE xStart="0" yStart="26" xEnd="9" yEnd="26" layer="1" prefab="block-tiles" facing="0" />		
+<BLOCKRANGE xStart="1" yStart="1" xEnd="8" yEnd="25" layer="2" prefab="ceiling-bricks-big" facing="0" />
+<BLOCKRANGE xStart="1" yStart="1" xEnd="8" yEnd="25" layer="0" prefab="floor-bricks-small" facing="0" />
+<BLOCK x="3" y="17" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="3" y="17" layer="1" prefab="wall-column-tiles" />
+<BLOCK x="3" y="19" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="3" y="19" layer="1" prefab="wall-column-tiles" />
+<BLOCK x="3" y="21" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="3" y="21" layer="1" prefab="wall-column-tiles" />	
+<BLOCK x="3" y="23" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="3" y="23" layer="1" prefab="wall-column-tiles" />	
+<BLOCK x="5" y="17" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="5" y="17" layer="1" prefab="wall-column-tiles" />
+<BLOCK x="5" y="19" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="5" y="19" layer="1" prefab="wall-column-tiles" />	
+<BLOCK x="5" y="21" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="5" y="21" layer="1" prefab="wall-column-tiles" />	
+<BLOCK x="5" y="23" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="5" y="23" layer="1" prefab="wall-column-tiles" />	
+<BLOCK x="7" y="17" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="7" y="17" layer="1" prefab="wall-column-tiles" />
+<BLOCK x="7" y="19" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="7" y="19" layer="1" prefab="wall-column-tiles" />	
+<BLOCK x="7" y="21" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="7" y="21" layer="1" prefab="wall-column-tiles" />	
+<BLOCK x="7" y="23" layer="0" prefab="wall-column-tiles" />	
+	<BLOCK x="7" y="23" layer="1" prefab="wall-column-tiles" />
+<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="6" layer="0" prefab="block-tiles" facing="0" />	
+	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="6" layer="1" prefab="block-tiles" facing="0" />	
+<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="6" layer="0" prefab="block-tiles" facing="0" />	
+	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="6" layer="1" prefab="block-tiles" facing="0" />	
+<BLOCK x="4" y="2" layer="0" prefab="block-tiles" />
+	<BLOCK x="4" y="2" layer="1" prefab="block-tiles" />
+<BLOCK x="5" y="2" layer="0" prefab="block-tiles" />
+	<BLOCK x="5" y="2" layer="1" prefab="block-tiles" />
+<BLOCK x="6" y="2" layer="0" prefab="block-tiles" />
+	<BLOCK x="6" y="2" layer="1" prefab="block-tiles" />
+</MAP>
