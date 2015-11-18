@@ -11,7 +11,7 @@ public static class GlobalConstants
   public static int CameraMoveSpeed = 4;
   public static float DoorOpenSpeed = 1.0f;
   public static float CameraBobSpeed = 0.5f;
-
+  
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
   {
     { MapAttributes.Floor, "floor" }, { MapAttributes.Wall, "wall" }, { MapAttributes.Ceiling, "ceiling" },
@@ -48,7 +48,7 @@ public static class GlobalConstants
     { SoundNames.ACT_WOODEN_DOOR_CLOSE, "act-door-wooden-close".GetHashCode() },
     { SoundNames.PLAYER_CANNOT_MOVE, "player-cannot-move".GetHashCode() }
   };
-
+    
   public static List<int> FootstepsGrass = new List<int>()
   {
     SoundHashByName[SoundNames.FS_GRASS1],
@@ -79,7 +79,7 @@ public static class GlobalConstants
     ACT_WOODEN_DOOR_CLOSE,
     PLAYER_CANNOT_MOVE
   }
-
+    
   public enum MapAttributes
   {
     Floor = 0,

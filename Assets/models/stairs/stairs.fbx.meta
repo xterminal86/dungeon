@@ -1,25 +1,66 @@
 fileFormatVersion: 2
-guid: 0a9913e68b70d5f41b4acb4cf5ba09ce
+guid: 2e3f5f29d48dda945865f51efef89c04
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: Armature
-    100002: Bone
-    100004: Bone_end
-    100006: Cube
-    100008: //RootNode
-    100010: Armature|Bone
-    400000: Armature
-    400002: Bone
-    400004: Bone_end
-    400006: Cube
-    400008: //RootNode
-    400010: Armature|Bone
-    4300000: Cube
-    7400000: Open
+    100000: Cube
+    100002: Cube.001
+    100004: Cube.002
+    100006: Cube.003
+    100008: Cube.004
+    100010: Cube.005
+    100012: Cube.006
+    100014: Cube.007
+    100016: Cube.008
+    100018: Cube.009
+    100020: Cube.010
+    100022: //RootNode
+    400000: Cube
+    400002: Cube.001
+    400004: Cube.002
+    400006: Cube.003
+    400008: Cube.004
+    400010: Cube.005
+    400012: Cube.006
+    400014: Cube.007
+    400016: Cube.008
+    400018: Cube.009
+    400020: Cube.010
+    400022: //RootNode
+    2300000: Cube
+    2300002: Cube.001
+    2300004: Cube.002
+    2300006: Cube.003
+    2300008: Cube.004
+    2300010: Cube.005
+    2300012: Cube.006
+    2300014: Cube.007
+    2300016: Cube.008
+    2300018: Cube.009
+    2300020: Cube.010
+    3300000: Cube
+    3300002: Cube.001
+    3300004: Cube.002
+    3300006: Cube.003
+    3300008: Cube.004
+    3300010: Cube.005
+    3300012: Cube.006
+    3300014: Cube.007
+    3300016: Cube.008
+    3300018: Cube.009
+    3300020: Cube.010
+    4300000: Cube.010
+    4300002: Cube.009
+    4300004: Cube.008
+    4300006: Cube.007
+    4300008: Cube.006
+    4300010: Cube.005
+    4300012: Cube.004
+    4300014: Cube.003
+    4300016: Cube.002
+    4300018: Cube.001
+    4300020: Cube
     9500000: //RootNode
-    11100000: //RootNode
-    13700000: Cube
   materials:
     importMaterials: 1
     materialName: 0
@@ -33,7 +74,7 @@ ModelImporter:
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
-    animationWrapMode: 1
+    animationWrapMode: 0
     extraExposedTransformPaths: []
     clipAnimations: []
     isReadable: 1
@@ -71,6 +112,6 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 1
+  animationType: 2
   additionalBone: 0
   userData: 

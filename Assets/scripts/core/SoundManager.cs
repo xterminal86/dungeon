@@ -11,8 +11,8 @@ public class SoundManager : MonoSingleton<SoundManager>
   public Transform AudioSourcesHolder;
 
   public AudioSource AudioSourcePrefab;
-  public AudioSource MusicTrack;
-
+  
+  public List<AudioSource> MusicTracks;
   public List<AudioClip> SoundEffects;
 
   Dictionary<int, AudioSource> _audioSourcesByHash = new Dictionary<int, AudioSource>();
@@ -21,7 +21,10 @@ public class SoundManager : MonoSingleton<SoundManager>
   {
     base.Init();
 
-    MusicTrack.volume = MusicVolume;
+    foreach (var item in MusicTracks)
+    {
+      item.volume = MusicVolume;
+    }
 
     MakeSoundsDatabase(SoundEffects);
   }
@@ -83,8 +86,22 @@ public class SoundManager : MonoSingleton<SoundManager>
     _lastPlayedSound = which;
   }
 
+  public void PlayMusicTrack(string trackName)
+  {    
+    foreach (var item in MusicTracks)
+    {
+      if (trackName == item.name)
+      {
+        if (!item.isPlaying)
+        {
+          item.Play();
+        }
+        break;        
+      }
+    }
+  }
+
   public void MapLoadingFinishedHandler()
-  {
-    //MusicTrack.Play();
+  {    
   }
 }

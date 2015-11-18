@@ -141,6 +141,10 @@ public class App : MonoSingleton<App>
       case "LAYOUT":
           ParseLayout(node);
           break;
+      case "MUSIC":
+          string trackName = node.Attributes["track"].InnerText;
+          SoundManager.Instance.PlayMusicTrack(trackName);
+          break;
       case "OBJECT":
           SpawnObject(node);
           break;
@@ -163,6 +167,12 @@ public class App : MonoSingleton<App>
     int y = int.Parse(node.Attributes["y"].InnerText);
     int layer = int.Parse(node.Attributes["layer"].InnerText);
     string prefabName = node.Attributes["prefab"].InnerText;
+    int facing = 0;
+
+    if (node.Attributes.GetNamedItem("facing") != null)
+    {
+      facing = int.Parse(node.Attributes["facing"].InnerText);
+    }
 
     GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
     
@@ -172,7 +182,7 @@ public class App : MonoSingleton<App>
       return;
     }
 
-    InstantiatePrefab(x, layer, y, go);
+    InstantiatePrefab(x, layer, y, go, facing);
   }
 
   void SpawnBlocks(XmlNode node)
@@ -278,6 +288,12 @@ public class App : MonoSingleton<App>
 
     string id = string.Empty;
     string objectToControlId = string.Empty;
+    string doorSoundType = string.Empty;
+
+    float animationOpenSpeed = 1.0f;
+    float animationCloseSpeed = 1.0f;
+
+    Vector2 animationSpeeds = Vector2.one;
 
     if (node.Attributes.GetNamedItem("id") != null)
     {
@@ -288,6 +304,23 @@ public class App : MonoSingleton<App>
     {
       objectToControlId = node.Attributes["control"].InnerText;
     }
+
+    if (node.Attributes.GetNamedItem("doorSound") != null)
+    {
+      doorSoundType = node.Attributes["doorSound"].InnerText;
+    }
+
+    if (node.Attributes.GetNamedItem("openSpeed") != null)
+    {
+      animationOpenSpeed = float.Parse(node.Attributes["openSpeed"].InnerText);
+    }
+
+    if (node.Attributes.GetNamedItem("closeSpeed") != null)
+    {
+      animationCloseSpeed = float.Parse(node.Attributes["closeSpeed"].InnerText);
+    }
+
+    animationSpeeds.Set(animationOpenSpeed, animationCloseSpeed);
 
     GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
     
@@ -304,7 +337,7 @@ public class App : MonoSingleton<App>
       _mapObjectsHashTable.Add(id.GetHashCode(), sceneObject);
     }
 
-    CreateMapObject(sceneObject, facing, moClass, prefabName, objectToControlId);
+    CreateMapObject(sceneObject, facing, moClass, prefabName, objectToControlId, doorSoundType, animationSpeeds);
   }
 
   void SpawnObjects(XmlNode node)
@@ -331,7 +364,7 @@ public class App : MonoSingleton<App>
       for (int y = yStart; y <= yEnd; y++)
       {
         GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
-        CreateMapObject(sceneObject, facing, moClass, prefabName, string.Empty);
+        CreateMapObject(sceneObject, facing, moClass, prefabName, string.Empty, string.Empty, Vector2.one);
 
         /*
         BehaviourMapObject bmo = null;
@@ -489,7 +522,7 @@ public class App : MonoSingleton<App>
     return _searchResult;
   }
 
-  void CreateMapObject(GameObject go, int facing, string moClass, string prefabName, string objectToControlId)
+  void CreateMapObject(GameObject go, int facing, string moClass, string prefabName, string objectToControlId, string doorSoundType, Vector2 animationSpeeds)
   {
     BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
     if (bmo == null)
@@ -507,11 +540,23 @@ public class App : MonoSingleton<App>
 
       case "door-openable":
         bmo.MapObjectInstance = new DoorMapObject(moClass, prefabName, bmo);
+        if (doorSoundType != string.Empty)
+        {
+          (bmo.MapObjectInstance as DoorMapObject).DoorSoundType = doorSoundType;
+        }
+        (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = animationSpeeds.x;
+        (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = animationSpeeds.y;
         (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
         break;
 
       case "door-controllable":
         bmo.MapObjectInstance = new DoorMapObject(moClass, prefabName, bmo);
+        if (doorSoundType != string.Empty)
+        {
+          (bmo.MapObjectInstance as DoorMapObject).DoorSoundType = doorSoundType;
+        }
+        (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = animationSpeeds.x;
+        (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = animationSpeeds.y;
         (bmo.MapObjectInstance as DoorMapObject).ControlCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
         break;
 

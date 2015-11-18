@@ -13,13 +13,14 @@
 #...................#
 #####################
 </LAYOUT>
+<MUSIC track="music-town" />
 <START x="1" y="1" facing="2" />
 	<BLOCKRANGE xStart="0" yStart="0" xEnd="10" yEnd="20" layer="0" prefab="floor-grass" />
 	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="8" layer="0" prefab="block-brick" />
 	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="8" layer="0" prefab="block-brick" />
 	<BLOCK x="4" y="2" layer="0" prefab="block-brick" />	  
-	<BLOCK x="5" y="2" layer="1" prefab="block-brick" />
-	  <OBJECT x="5" y="2" layer="0" prefab="door-portcullis" class="door-controllable" id="door-port1" facing="3" />
+	<BLOCK x="5" y="2" layer="1" prefab="wall-half-brick" facing="3" />
+	  <OBJECT x="5" y="2" layer="0" prefab="door-portcullis" class="door-controllable" id="door-port1" facing="3" doorSound="sliding" openSpeed="2" closeSpeed="3" />
 	  <OBJECT x="4" y="2" layer="0" prefab="lever" class="lever" control="door-port1" facing="3" />
 	  <OBJECT x="4" y="2" layer="0" prefab="lever" class="lever" control="door-port1" facing="1" />
 	<BLOCK x="6" y="2" layer="0" prefab="block-brick" />		
@@ -34,9 +35,9 @@
 	<OBJECT x="4" y="13" layer="0" prefab="wall-thin-window-wide" class="wall" facing="2" />
 	<OBJECT x="4" y="14" layer="0" prefab="wall-thin-window-centered" class="wall" facing="2" />
 	<OBJECT x="4" y="15" layer="0" prefab="wall-thin-window-upper" class="wall" facing="2" />
-	<OBJECT x="4" y="16" layer="0" prefab="door-wooden" class="door-openable" facing="2" />
-	<OBJECT x="5" y="8" layer="0" prefab="door-wooden" class="door-openable" facing="1" />
-	<OBJECT x="7" y="1" layer="0" prefab="door-iron" class="door-controllable" id="door-iron1" facing="2" />
+	<OBJECT x="4" y="16" layer="0" prefab="door-wooden" class="door-openable" facing="2" doorSound="openable" openSpeed="2" closeSpeed="3" />
+	<OBJECT x="5" y="8" layer="0" prefab="door-wooden" class="door-openable" facing="1" doorSound="openable" openSpeed="2" closeSpeed="3" />
+	<OBJECT x="7" y="1" layer="0" prefab="door-iron" class="door-controllable" id="door-iron1" facing="2" doorSound="openable" openSpeed="2" closeSpeed="3" />
 		<OBJECT x="6" y="2" layer="0" prefab="button" class="button" control="door-iron1" facing="3" />
 		<OBJECT x="7" y="2" layer="0" prefab="button" class="button" control="door-iron1" facing="2" />
 	<OBJECTRANGE xStart="0" yStart="0" xEnd="0" yEnd="20" layer="0" prefab="fence" class="wall" facing="1" />
