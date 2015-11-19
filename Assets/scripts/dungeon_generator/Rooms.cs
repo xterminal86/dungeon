@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class Rooms : GenerationAlgorithmBase
 {
   Grid _gridRef;
 
+  Dictionary<Int2, int> _doors = new Dictionary<Int2, int>();
   List<RoomBounds> _roomsBounds = new List<RoomBounds>();
 
   bool _noRoomsIntersection = false;
@@ -42,6 +45,65 @@ public class Rooms : GenerationAlgorithmBase
       GenerateMaze();
       MakeDoorways();
     }
+
+    FindStartingPos();
+    SaveToFile();
+  }
+
+  void FindStartingPos()
+  {
+    for (int x = 0; x < _gridRef.MapHeight; x++)
+    {
+      for (int y = 0; y < _gridRef.MapWidth; y++)
+      {
+        if (_gridRef.Map[x, y].CellType == CellType.FLOOR)
+        {
+          _serializableMap.CameraPos.X = x;
+          _serializableMap.CameraPos.Y = y;
+          return;
+        }
+      }
+    }
+  }
+
+  public override void SaveToFile()
+  {
+    _serializableMap.MapWdith = _gridRef.MapWidth;
+    _serializableMap.MapHeight = _gridRef.MapHeight;
+    
+    _binaryFilename = string.Format("SerializedMaps/{0}.map", this.ToString());
+    
+    FileStream fs = new FileStream(_binaryFilename, FileMode.Create);
+    BinaryFormatter bf = new BinaryFormatter();
+    
+    for (int x = 0; x < _gridRef.MapHeight; x++)
+    {
+      for (int y = 0; y < _gridRef.MapWidth; y++)
+      {
+        switch (_gridRef.Map[x, y].CellType)
+        {
+          case CellType.FLOOR:
+            PackBlock(x, y, 0, "floor-bricks-small", 0, false);
+            PackBlock(x, y, 2, "floor-bricks-big", 0, true);
+            break;
+          case CellType.WALL:
+            PackBlock(x, y, 0, "block-tiles", 0, false);
+            PackBlock(x, y, 1, "block-tiles", 0, false);
+            break;
+        }
+      }
+    }
+
+    foreach (var item in _doors)
+    {
+      PackObject(item.Key.X, item.Key.Y, 0, item.Value, 
+                 "door-wooden", "door-openable", "openable", 
+                 2.0f, 3.0f, string.Empty, string.Empty);
+      PackBlock(item.Key.X, item.Key.Y, 1, "wall-half-tiles", 0, false);
+    }
+
+    bf.Serialize(fs, _serializableMap);
+    fs.Close();
   }
 
   int _iterations = 0;
@@ -190,12 +252,14 @@ public class Rooms : GenerationAlgorithmBase
     _maze.Do(_gridRef);
   }
 
+  Dictionary<Int2, int> _doorsWithFacing = new Dictionary<Int2, int>();
   List<Int2> _doorwayCandidates = new List<Int2>();
   void MakeDoorways()
   {
     for (int i = 0; i < _roomsBounds.Count; i++)
     {
       _doorwayCandidates.Clear();
+      _doorsWithFacing.Clear();
 
       Debug.Log("Processing room " + _roomsBounds[i]);
 
@@ -215,12 +279,14 @@ public class Rooms : GenerationAlgorithmBase
         {
           //Debug.Log("\tCandidate for doorway " + _roomsBounds[i].FirstPoint.X + " " + y);
           _doorwayCandidates.Add(new Int2(_roomsBounds[i].FirstPoint.X, y));
+          _doorsWithFacing.Add(new Int2(_roomsBounds[i].FirstPoint.X, y), (int)GlobalConstants.Orientation.NORTH);
         }
 
         if (downType == CellType.FLOOR)
         {
           //Debug.Log("\tCandidate for doorway " + _roomsBounds[i].SecondPoint.X + " " + y);
           _doorwayCandidates.Add(new Int2(_roomsBounds[i].SecondPoint.X, y));
+          _doorsWithFacing.Add(new Int2(_roomsBounds[i].SecondPoint.X, y), (int)GlobalConstants.Orientation.SOUTH);
         }
       }
 
@@ -240,12 +306,14 @@ public class Rooms : GenerationAlgorithmBase
         {
           //Debug.Log("\tCandidate for doorway " + x + " " + _roomsBounds[i].FirstPoint.Y);
           _doorwayCandidates.Add(new Int2(x, _roomsBounds[i].FirstPoint.Y));
+          _doorsWithFacing.Add(new Int2(x, _roomsBounds[i].FirstPoint.Y), (int)GlobalConstants.Orientation.WEST);
         }
         
         if (rightType == CellType.FLOOR)
         {
           //Debug.Log("\tCandidate for doorway " + x + " " + _roomsBounds[i].SecondPoint.Y);
           _doorwayCandidates.Add(new Int2(x, _roomsBounds[i].SecondPoint.Y));
+          _doorsWithFacing.Add(new Int2(x, _roomsBounds[i].SecondPoint.Y), (int)GlobalConstants.Orientation.EAST);
         }
       }
 
@@ -268,6 +336,20 @@ public class Rooms : GenerationAlgorithmBase
         Int2 pos = _doorwayCandidates[doorwayIndex];
         Debug.Log("Making doorway at " + pos);
         _gridRef.Map[pos.X, pos.Y].CellType = CellType.FLOOR;
+
+        SaveDoorway(pos);
+      }
+    }
+  }
+
+  void SaveDoorway(Int2 pos)
+  {
+    foreach (var item in _doorsWithFacing)
+    {
+      if (item.Key.X == pos.X && item.Key.Y == pos.Y)
+      {
+        _doors.Add(item.Key, item.Value);
+        return;
       }
     }
   }

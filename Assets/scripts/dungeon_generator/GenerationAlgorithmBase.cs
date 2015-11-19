@@ -66,7 +66,7 @@ public abstract class GenerationAlgorithmBase
   { 
   }
 
-  protected virtual void SerializeBlock(int x, int y, int layer, string prefabName, int facing, bool flipFlag)
+  protected virtual void PackBlock(int x, int y, int layer, string prefabName, int facing, bool flipFlag)
   {
     SerializableBlock newCell = new SerializableBlock();
 
@@ -78,5 +78,25 @@ public abstract class GenerationAlgorithmBase
     newCell.FlipFlag = flipFlag;
     
     _serializableMap.SerializableBlocksList.Add(newCell);
+  }
+
+  protected virtual void PackObject(int x, int y, int layer, int facing, string prefabName, 
+                                    string objectClassName, string doorSoundType, float animationOpenSpeed,
+                                    float animationCloseSpeed, string objectId, string objectToControlId)
+  {
+    SerializableObject newObject = new SerializableObject();
+
+    newObject.X = x;
+    newObject.Y = y;
+    newObject.Layer = layer;
+    newObject.PrefabName = prefabName;
+    newObject.ObjectClassName = objectClassName;
+    newObject.DoorSoundType = doorSoundType;
+    newObject.AnimationOpenSpeed = animationOpenSpeed;
+    newObject.AnimationCloseSpeed = animationCloseSpeed;
+    newObject.ObjectId = objectId;
+    newObject.ObjectToControlId = objectToControlId;
+
+    _serializableMap.SerializableObjectsList.Add(newObject);
   }
 }

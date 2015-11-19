@@ -94,7 +94,7 @@ public class BinaryTree : GenerationAlgorithmBase
     _serializableMap.MapWdith = _gridRef.MapWidth;
     _serializableMap.MapHeight = _gridRef.MapHeight;
 
-    _binaryFilename = string.Format("{0}.map", this.ToString());
+    _binaryFilename = string.Format("SerializedMaps/{0}.map", this.ToString());
 
     FileStream fs = new FileStream(_binaryFilename, FileMode.Create);
     BinaryFormatter bf = new BinaryFormatter();
@@ -106,12 +106,12 @@ public class BinaryTree : GenerationAlgorithmBase
         switch (_gridRef.Map[x, y].CellType)
         {
           case CellType.FLOOR:
-            SerializeBlock(x, y, 0, "floor-bricks-small", 0, false);
-            SerializeBlock(x, y, 2, "floor-bricks-big", 0, true);
+            PackBlock(x, y, 0, "floor-bricks-small", 0, false);
+            PackBlock(x, y, 2, "floor-bricks-big", 0, true);
             break;
           case CellType.WALL:
-            SerializeBlock(x, y, 0, "block-tiles", 0, false);
-            SerializeBlock(x, y, 1, "block-tiles", 0, false);
+            PackBlock(x, y, 0, "block-tiles", 0, false);
+            PackBlock(x, y, 1, "block-tiles", 0, false);
             break;
         }
       }

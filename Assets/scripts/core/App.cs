@@ -64,7 +64,8 @@ public class App : MonoSingleton<App>
     switch (MapFilenameField)
     {
       case MapFilename.ROOMS:
-        LoadMap("Assets/maps/rooms_test_map.xml");
+        //LoadMap("Assets/maps/rooms_test_map.xml");
+        LoadMapBinary("SerializedMaps/Rooms.map");
         break;
       case MapFilename.ROOMS_CONNECTED:
         LoadMap("Assets/maps/rooms_test_map2.xml");
@@ -74,7 +75,7 @@ public class App : MonoSingleton<App>
         break;
       case MapFilename.BINARY_TREE:
         //LoadMap("Assets/maps/binary_tree_map.xml");
-        LoadMapBinary("BinaryTree.map");
+        LoadMapBinary("SerializedMaps/BinaryTree.map");
         break;
       case MapFilename.SIDEWINDER:
         LoadMap("Assets/maps/sidewinder_map.xml");
@@ -184,6 +185,11 @@ public class App : MonoSingleton<App>
     {
       SpawnBlock(item);
       //Debug.Log(item.ToString());
+    }
+
+    foreach (var item in sc.SerializableObjectsList)
+    {
+      SpawnObject(item);
     }
   }
 
@@ -399,6 +405,43 @@ public class App : MonoSingleton<App>
       _mapObjectsHashTable.Add(id.GetHashCode(), sceneObject);
     }
 
+    CreateMapObject(sceneObject, facing, moClass, prefabName, objectToControlId, doorSoundType, animationSpeeds);
+  }
+
+  void SpawnObject(SerializableObject so)
+  {
+    int x = so.X;
+    int y = so.Y;
+    int layer = so.Layer;
+    int facing = so.Facing;
+    string moClass = so.ObjectClassName;
+    string prefabName = so.PrefabName;    
+    string id = so.ObjectId;
+    string objectToControlId = so.ObjectToControlId;
+    string doorSoundType = so.DoorSoundType;
+    
+    float animationOpenSpeed = so.AnimationOpenSpeed;
+    float animationCloseSpeed = so.AnimationCloseSpeed;
+    
+    Vector2 animationSpeeds = Vector2.one;
+
+    animationSpeeds.Set(animationOpenSpeed, animationCloseSpeed);
+    
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
+    
+    if (go == null)
+    {
+      Debug.LogWarning("Couldn't find prefab: " + prefabName);
+      return;
+    }
+    
+    GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
+    
+    if (id != string.Empty)
+    {
+      _mapObjectsHashTable.Add(id.GetHashCode(), sceneObject);
+    }
+    
     CreateMapObject(sceneObject, facing, moClass, prefabName, objectToControlId, doorSoundType, animationSpeeds);
   }
 

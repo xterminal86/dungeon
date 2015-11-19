@@ -122,7 +122,7 @@ public class SerializableObject
   public float AnimationOpenSpeed = 1.0f;
   public float AnimationCloseSpeed = 1.0f;
   public string ObjectId = string.Empty;
-  public string ControllableObjectId = string.Empty;
+  public string ObjectToControlId = string.Empty;
 
   public override string ToString()
   {
