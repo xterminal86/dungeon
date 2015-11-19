@@ -40,6 +40,10 @@ public class DoorMapObject : MapObject
         {
           BMO.StartSound.Play();
         }
+        else
+        {
+          BMO.EndSound.Play();
+        }
       }
       else if (DoorSoundType == "sliding")
       {
@@ -90,13 +94,6 @@ public class DoorMapObject : MapObject
 
       BMO.EndSound.Play();
     }
-    else if (DoorSoundType == "openable")
-    {
-      if (!IsOpen)
-      {
-        BMO.EndSound.Play();
-      }
-    }    
   }
 }
 

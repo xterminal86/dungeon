@@ -14,13 +14,14 @@
 #####################
 </LAYOUT>
 <MUSIC track="music-town" />
+<FOG density="0" />
 <START x="1" y="1" facing="2" />
 	<BLOCKRANGE xStart="0" yStart="0" xEnd="10" yEnd="20" layer="0" prefab="floor-grass" />
 	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="8" layer="0" prefab="block-brick" />
 	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="8" layer="0" prefab="block-brick" />
 	<BLOCK x="4" y="2" layer="0" prefab="block-brick" />	  
 	<BLOCK x="5" y="2" layer="1" prefab="wall-half-brick" facing="3" />
-	  <OBJECT x="5" y="2" layer="0" prefab="door-portcullis" class="door-controllable" id="door-port1" facing="3" doorSound="sliding" openSpeed="2" closeSpeed="3" />
+	  <OBJECT x="5" y="2" layer="0" prefab="door-portcullis" class="door-controllable" id="door-port1" facing="3" doorSound="openable" openSpeed="2" closeSpeed="3" />
 	  <OBJECT x="4" y="2" layer="0" prefab="lever" class="lever" control="door-port1" facing="3" />
 	  <OBJECT x="4" y="2" layer="0" prefab="lever" class="lever" control="door-port1" facing="1" />
 	<BLOCK x="6" y="2" layer="0" prefab="block-brick" />		

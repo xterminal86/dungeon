@@ -13,6 +13,7 @@
 ###########################
 </LAYOUT>
 <MUSIC track="music-dungeon1" />
+<FOG density="0.1" />
 <START x="1" y="1" facing="0" />
 <BLOCKRANGE xStart="0" yStart="0" xEnd="0" yEnd="26" layer="0" prefab="block-tiles" facing="0" />	
 	<BLOCKRANGE xStart="0" yStart="0" xEnd="0" yEnd="26" layer="1" prefab="block-tiles" facing="0" />	

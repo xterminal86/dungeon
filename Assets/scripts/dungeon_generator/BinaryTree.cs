@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class BinaryTree : GenerationAlgorithmBase
-{  
+{
+  Grid _gridRef;
+
   /// <summary>
   /// Adaptation of "Binary Tree" algorithm (from e-book "Mazes for Programmers" by Jamis Buck, ISBN-13: 978-1-68050-055-4, p. 6)
   /// 
@@ -20,6 +24,8 @@ public class BinaryTree : GenerationAlgorithmBase
   /// <param name="grid"></param>
   public override void Do(Grid grid)
   {
+    _gridRef = grid;
+
     Int2 tmp = new Int2();
     for (int x = 1; x < grid.MapHeight - 2; x++)
     {
@@ -62,5 +68,56 @@ public class BinaryTree : GenerationAlgorithmBase
     {
       grid.Map[grid.MapHeight - 2, i].CellType = CellType.FLOOR;
     }
-  }  
+
+    FindStartingPos();
+    SaveToFile();
+  }
+
+  void FindStartingPos()
+  {
+    for (int x = 0; x < _gridRef.MapHeight; x++)
+    {
+      for (int y = 0; y < _gridRef.MapWidth; y++)
+      {
+        if (_gridRef.Map[x, y].CellType == CellType.FLOOR)
+        {
+          _serializableMap.CameraPos.X = x;
+          _serializableMap.CameraPos.Y = y;
+          return;
+        }
+      }
+    }
+  }
+
+  public override void SaveToFile()
+  {
+    _serializableMap.MapWdith = _gridRef.MapWidth;
+    _serializableMap.MapHeight = _gridRef.MapHeight;
+
+    _binaryFilename = string.Format("{0}.map", this.ToString());
+
+    FileStream fs = new FileStream(_binaryFilename, FileMode.Create);
+    BinaryFormatter bf = new BinaryFormatter();
+
+    for (int x = 0; x < _gridRef.MapHeight; x++)
+    {
+      for (int y = 0; y < _gridRef.MapWidth; y++)
+      {
+        switch (_gridRef.Map[x, y].CellType)
+        {
+          case CellType.FLOOR:
+            SerializeBlock(x, y, 0, "floor-bricks-small", 0, false);
+            SerializeBlock(x, y, 2, "floor-bricks-big", 0, true);
+            break;
+          case CellType.WALL:
+            SerializeBlock(x, y, 0, "block-tiles", 0, false);
+            SerializeBlock(x, y, 1, "block-tiles", 0, false);
+            break;
+        }
+      }
+    }
+
+    bf.Serialize(fs, _serializableMap);
+    fs.Close();
+  }
 }

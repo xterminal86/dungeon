@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class GenerationAlgorithmBase 
 {
+  protected SerializableMap _serializableMap = new SerializableMap();
+  protected string _binaryFilename = string.Empty;
+
   public virtual void Do(Grid grid)
   {
   }
@@ -55,5 +60,23 @@ public abstract class GenerationAlgorithmBase
         }
       }
     }
+  }
+
+  public virtual void SaveToFile() 
+  { 
+  }
+
+  protected virtual void SerializeBlock(int x, int y, int layer, string prefabName, int facing, bool flipFlag)
+  {
+    SerializableBlock newCell = new SerializableBlock();
+
+    newCell.X = x;
+    newCell.Y = y;
+    newCell.Layer = layer;
+    newCell.PrefabName = prefabName;
+    newCell.Facing = facing;
+    newCell.FlipFlag = flipFlag;
+    
+    _serializableMap.SerializableBlocksList.Add(newCell);
   }
 }

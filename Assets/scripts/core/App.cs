@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class App : MonoSingleton<App>
 {
   public GameObject TestModel;
-
   public GameObject ObjectsInstancesTransform;
 
   int _nameSuffix = 0;
@@ -72,7 +73,8 @@ public class App : MonoSingleton<App>
         LoadMap("Assets/maps/test_map.xml");
         break;
       case MapFilename.BINARY_TREE:
-        LoadMap("Assets/maps/binary_tree_map.xml");
+        //LoadMap("Assets/maps/binary_tree_map.xml");
+        LoadMapBinary("BinaryTree.map");
         break;
       case MapFilename.SIDEWINDER:
         LoadMap("Assets/maps/sidewinder_map.xml");
@@ -91,7 +93,7 @@ public class App : MonoSingleton<App>
         break;
     }
 
-    SetupModel();
+    //SetupModel();
 
     if (MapLoadingFinished != null)
       MapLoadingFinished();
@@ -130,13 +132,12 @@ public class App : MonoSingleton<App>
         case "START":
           int x = int.Parse(node.Attributes["x"].InnerText);
           int y = int.Parse(node.Attributes["y"].InnerText);
-          CameraOrientation = int.Parse(node.Attributes["facing"].InnerText);
-          GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[CameraOrientation];
-          _cameraPos.x = x * GlobalConstants.WallScaleFactor;
-          _cameraPos.z = y * GlobalConstants.WallScaleFactor;
-          CameraPivot.transform.position = _cameraPos;
-          CameraPivot.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
-          _cameraAngles = CameraPivot.transform.eulerAngles;
+          int facing = int.Parse(node.Attributes["facing"].InnerText);
+          SetupCamera(x, y, facing);
+          break;
+      case "FOG":
+          float density = float.Parse(node.Attributes["density"].InnerText);
+          UnityEngine.RenderSettings.fogDensity = density;
           break;
       case "LAYOUT":
           ParseLayout(node);
@@ -158,6 +159,31 @@ public class App : MonoSingleton<App>
           SpawnBlock(node);
           break;
       }
+    }
+  }
+
+  void LoadMapBinary(string fileName)
+  {
+    FileStream fs = new FileStream(fileName, FileMode.Open);
+    BinaryFormatter bf = new BinaryFormatter();
+
+    SerializableMap sc = new SerializableMap();
+
+    sc = (SerializableMap)bf.Deserialize(fs);
+
+    fs.Close();
+
+    _mapColumns = sc.MapWdith;
+    _mapRows = sc.MapHeight;
+
+    _mapLayout = new char[_mapRows, _mapColumns];
+
+    SetupCamera(sc.CameraPos.X, sc.CameraPos.Y, sc.CameraPos.Facing);
+
+    foreach (var item in sc.SerializableBlocksList)
+    {
+      SpawnBlock(item);
+      //Debug.Log(item.ToString());
     }
   }
 
@@ -188,6 +214,26 @@ public class App : MonoSingleton<App>
       return;
     }
 
+    InstantiatePrefab(x, layer, y, go, facing, flip);
+  }
+
+  void SpawnBlock(SerializableBlock cellInfo)
+  {
+    int x = cellInfo.X;
+    int y = cellInfo.Y;
+    int layer = cellInfo.Layer;
+    string prefabName = cellInfo.PrefabName;
+    int facing = cellInfo.Facing;
+    bool flip = cellInfo.FlipFlag;
+
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
+    
+    if (go == null)
+    {
+      Debug.LogWarning("Couldn't find prefab: " + prefabName);
+      return;
+    }
+    
     InstantiatePrefab(x, layer, y, go, facing, flip);
   }
 
@@ -516,6 +562,17 @@ public class App : MonoSingleton<App>
     }
 
     bmo.MapObjectInstance.Facing = facing;
+  }
+
+  void SetupCamera(int x, int y, int facing)
+  {
+    CameraOrientation = facing;
+    GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[CameraOrientation];
+    _cameraPos.x = x * GlobalConstants.WallScaleFactor;
+    _cameraPos.z = y * GlobalConstants.WallScaleFactor;
+    CameraPivot.transform.position = _cameraPos;
+    CameraPivot.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
+    _cameraAngles = CameraPivot.transform.eulerAngles;
   }
 
   public enum MapFilename

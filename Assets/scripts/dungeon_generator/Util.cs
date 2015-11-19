@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -76,4 +77,63 @@ public class RoomBounds
   {
     return string.Format("[RoomBounds] -> [" + FirstPoint + " " + SecondPoint + "]");
   }
+}
+
+// ********************* SERIALIZATION ********************* //
+
+[Serializable]
+public class SerializableMap
+{
+  public int MapWdith = 0;
+  public int MapHeight = 0;
+
+  public CameraStartingPos CameraPos = new CameraStartingPos();
+  public List<SerializableBlock> SerializableBlocksList = new List<SerializableBlock>();
+  public List<SerializableObject> SerializableObjectsList = new List<SerializableObject>();
+}
+
+[Serializable]
+public class SerializableBlock
+{
+  public int X = -1;
+  public int Y = -1;
+  public int Layer = -1;
+  public int Facing = 0;
+  public string PrefabName = string.Empty;
+  public bool FlipFlag = false;
+
+  public override string ToString()
+  {
+    return string.Format("X = {0} Y = {1} Layer = {2} Facing = {3} PrefabName = {4} FlipFlag = {5}", 
+                          X, Y, Layer, Facing, PrefabName, FlipFlag);
+  }
+}
+
+[Serializable]
+public class SerializableObject
+{
+  public int X = -1;
+  public int Y = -1;
+  public int Layer = -1;
+  public int Facing = 0;
+  public string PrefabName = string.Empty;
+  public string ObjectClassName = string.Empty;
+  public string DoorSoundType = string.Empty;
+  public float AnimationOpenSpeed = 1.0f;
+  public float AnimationCloseSpeed = 1.0f;
+  public string ObjectId = string.Empty;
+  public string ControllableObjectId = string.Empty;
+
+  public override string ToString()
+  {
+    return string.Format("X = {0} Y = {1} Layer = {2} Facing = {3} PrefabName = {4}", X, Y, Layer, Facing, PrefabName);
+  }
+}
+
+[Serializable]
+public class CameraStartingPos
+{
+  public int X = -1;
+  public int Y = -1;
+  public int Facing = 0;
 }
