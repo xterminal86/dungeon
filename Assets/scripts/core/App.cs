@@ -168,10 +168,16 @@ public class App : MonoSingleton<App>
     int layer = int.Parse(node.Attributes["layer"].InnerText);
     string prefabName = node.Attributes["prefab"].InnerText;
     int facing = 0;
+    bool flip = false;
 
     if (node.Attributes.GetNamedItem("facing") != null)
     {
       facing = int.Parse(node.Attributes["facing"].InnerText);
+    }
+
+    if (node.Attributes.GetNamedItem("flip") != null)
+    {
+      flip = bool.Parse(node.Attributes["flip"].InnerText);
     }
 
     GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
@@ -182,7 +188,7 @@ public class App : MonoSingleton<App>
       return;
     }
 
-    InstantiatePrefab(x, layer, y, go, facing);
+    InstantiatePrefab(x, layer, y, go, facing, flip);
   }
 
   void SpawnBlocks(XmlNode node)
@@ -193,6 +199,7 @@ public class App : MonoSingleton<App>
     int yEnd = int.Parse(node.Attributes["yEnd"].InnerText);
     int layer = int.Parse(node.Attributes["layer"].InnerText);
     string prefabName = node.Attributes["prefab"].InnerText;
+    bool flip = false;
 
     GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
 
@@ -202,11 +209,16 @@ public class App : MonoSingleton<App>
       return;
     }
 
+    if (node.Attributes.GetNamedItem("flip") != null)
+    {
+      flip = bool.Parse(node.Attributes["flip"].InnerText);
+    }
+
     for (int x = xStart; x <= xEnd; x++)
     {
       for (int y = yStart; y <= yEnd; y++)
       {
-        InstantiatePrefab(x, layer, y, go);
+        InstantiatePrefab(x, layer, y, go, 0, flip);
       }
     }
   }
@@ -254,7 +266,7 @@ public class App : MonoSingleton<App>
     go.transform.parent = ObjectsInstancesTransform.transform;
   }
 
-  GameObject InstantiatePrefab(int x, int yOffset, int z, GameObject goToInstantiate, int facing = 0)
+  GameObject InstantiatePrefab(int x, int yOffset, int z, GameObject goToInstantiate, int facing = 0, bool flip = false)
   {
     GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[facing];
 
@@ -270,6 +282,10 @@ public class App : MonoSingleton<App>
     goPosition.y = (yOffset == 0) ? go.transform.position.y : yOffset * GlobalConstants.WallScaleFactor;
     go.transform.position = goPosition;
     go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o], Space.World);
+    if (flip)
+    {
+      go.transform.Rotate(Vector3.right, 180.0f, Space.World);
+    }
     go.transform.parent = ObjectsInstancesTransform.transform;
 
     _nameSuffix++;
@@ -365,101 +381,9 @@ public class App : MonoSingleton<App>
       {
         GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
         CreateMapObject(sceneObject, facing, moClass, prefabName, string.Empty, string.Empty, Vector2.one);
-
-        /*
-        BehaviourMapObject bmo = null;
-        if (moClass == "wall")
-        {
-          bmo = go.GetComponent<BehaviourMapObject>();
-          if (bmo != null)
-          {
-            bmo.MapObjectInstance = new WallMapObject();
-            (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
-            (bmo.MapObjectInstance as DoorMapObject).Facing = facing;
-          }
-        }
-        
-        if (bmo != null)
-        { 
-          bmo.MapObjectInstance.BMO = bmo;
-        }
-        */
       }
     }
   }
-
-  /*
-  Vector2 _dictionaryKey = Vector2.zero;
-  void SpawnObject(XmlNode node)
-  {
-    GameObject go = null;
-    BehaviourMapObject bmo = null;
-    int x = int.Parse(node.Attributes["x"].InnerText);
-    int y = int.Parse(node.Attributes["y"].InnerText);    
-    string objectType = node.Attributes["type"].InnerText;
-    string objectName = node.Attributes["name"].InnerText;
-    int orientation = int.Parse(node.Attributes["facing"].InnerText);
-    _dictionaryKey.Set(x, y);
-    switch(objectType)
-    {
-      case "door":
-        go = (GameObject)Instantiate(DoorPrefab);
-        bmo = go.GetComponent<BehaviourMapObject>();
-        if (bmo != null)
-        {
-          bmo.MapObjectInstance = new DoorMapObject();
-          (bmo.MapObjectInstance as DoorMapObject).DoorIsOpen = bool.Parse(node.Attributes["open"].InnerText);
-        }
-        break;
-      case "button":
-        go = (GameObject)Instantiate(ButtonPrefab);
-        bmo = go.GetComponent<BehaviourMapObject>();
-        if (bmo != null)
-        {
-          bmo.MapObjectInstance = new ButtonMapObject();          
-          MapObject mo = GetMapObjectByName(node.Attributes["connect"].InnerText);
-          bmo.MapObjectInstance.ActionCallback += bmo.MapObjectInstance.ActionHandler;
-          bmo.MapObjectInstance.ActionCompleteCallback += mo.ActionCompleteHandler;
-        }
-        break;
-      case "dummy":
-        go = (GameObject)Instantiate(DummyObjectPrefab);
-        break;
-      default:
-        break;
-    }
-    
-    if (go != null)
-    {
-      if (bmo != null)
-      { 
-        bmo.MapObjectInstance.Name = objectName;
-        bmo.MapObjectInstance.HashCode = objectName.GetHashCode();
-        bmo.MapObjectInstance.Facing = int.Parse(node.Attributes["facing"].InnerText);
-        bmo.MapObjectInstance.BMO = bmo;
-        bmo.MapObjectInstance.GameObjectToControl = bmo.Model;
-      }
-
-      GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[orientation];
-      Vector3 position = new Vector3(y * GlobalConstants.WallScaleFactor,
-                                     go.transform.position.y,
-                                     x * GlobalConstants.WallScaleFactor);
-      go.transform.position = position;
-      go.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
-      go.transform.parent = ObjectsInstancesTransform.transform;
-      _mapObjectsHashTable[objectName.GetHashCode()] = go;
-
-      if (_mapObjectsHashListByPosition.ContainsKey(_dictionaryKey))
-      {
-        _mapObjectsHashListByPosition[_dictionaryKey].Add(objectName.GetHashCode());
-      }
-      else
-      {
-        _mapObjectsHashListByPosition.Add(_dictionaryKey, new List<int>(){ objectName.GetHashCode() });
-      }
-    }
-  }  
-  */
 
   // ********************** HELPER FUNCTIONS ********************** //
 
