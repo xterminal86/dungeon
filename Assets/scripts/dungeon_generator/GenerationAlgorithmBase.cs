@@ -89,6 +89,7 @@ public abstract class GenerationAlgorithmBase
     newObject.X = x;
     newObject.Y = y;
     newObject.Layer = layer;
+    newObject.Facing = facing;
     newObject.PrefabName = prefabName;
     newObject.ObjectClassName = objectClassName;
     newObject.DoorSoundType = doorSoundType;

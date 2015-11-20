@@ -99,7 +99,7 @@ public class Rooms : GenerationAlgorithmBase
       PackObject(item.Key.X, item.Key.Y, 0, item.Value, 
                  "door-wooden", "door-openable", "openable", 
                  2.0f, 3.0f, string.Empty, string.Empty);
-      PackBlock(item.Key.X, item.Key.Y, 1, "wall-half-tiles", 0, false);
+      PackBlock(item.Key.X, item.Key.Y, 1, "wall-half-tiles", item.Value, false);
     }
 
     bf.Serialize(fs, _serializableMap);
