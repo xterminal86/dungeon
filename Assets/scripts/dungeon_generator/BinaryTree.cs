@@ -106,16 +106,20 @@ public class BinaryTree : GenerationAlgorithmBase
         switch (_gridRef.Map[x, y].CellType)
         {
           case CellType.FLOOR:
-            PackBlock(x, y, 0, "floor-bricks-small", 0, false);
-            PackBlock(x, y, 2, "floor-bricks-big", 0, true);
+            PackBlock(x, y, 0, "floor-grass", 0, false, (int)GlobalConstants.FootstepSoundType.GRASS);
+            //PackBlock(x, y, 2, "floor-bricks-big", 0, true);
             break;
           case CellType.WALL:
-            PackBlock(x, y, 0, "block-tiles", 0, false);
-            PackBlock(x, y, 1, "block-tiles", 0, false);
+            PackBlock(x, y, 0, "floor-grass", 0, false);
+            PackBlock(x, y, 0, "tree-birch", 0, false);
+            //PackBlock(x, y, 0, "block-tiles", 0, false);
+            //PackBlock(x, y, 1, "block-tiles", 0, false);
             break;
         }
       }
     }
+
+    _serializableMap.MusicTrack = "amb-forest";
 
     bf.Serialize(fs, _serializableMap);
     fs.Close();
