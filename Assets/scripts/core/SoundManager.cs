@@ -12,8 +12,8 @@ public class SoundManager : MonoSingleton<SoundManager>
 
   public AudioSource AudioSourcePrefab;
   
-  public List<AudioSource> MusicTracks;
-  public List<AudioClip> SoundEffects;
+  public List<AudioClip> MusicTracks = new List<AudioClip>();
+  public List<AudioClip> SoundEffects = new List<AudioClip>();
 
   Dictionary<int, AudioSource> _audioSourcesByHash = new Dictionary<int, AudioSource>();
 
@@ -21,17 +21,31 @@ public class SoundManager : MonoSingleton<SoundManager>
   {
     base.Init();
 
-    foreach (var item in MusicTracks)
-    {
-      item.volume = MusicVolume;
-    }
-
-    MakeSoundsDatabase(SoundEffects);
+    MakeMusicDatabase();
+    MakeSoundsDatabase();
   }
 
-  void MakeSoundsDatabase(List<AudioClip> listOfSounds)
+  void MakeMusicDatabase()
   {
-    foreach (var item in listOfSounds)
+    foreach (var item in MusicTracks)
+    {
+      AudioSource s = (AudioSource)Instantiate(AudioSourcePrefab);
+      s.transform.parent = AudioSourcesHolder;
+      
+      s.clip = item;
+      s.volume = MusicVolume;
+      s.name = item.name;
+      s.loop = true;
+
+      int hash = s.name.GetHashCode();
+      
+      _audioSourcesByHash.Add(hash, s);
+    }
+  }
+
+  void MakeSoundsDatabase()
+  {
+    foreach (var item in SoundEffects)
     {
       AudioSource s = (AudioSource)Instantiate(AudioSourcePrefab);
       s.transform.parent = AudioSourcesHolder;
@@ -86,18 +100,19 @@ public class SoundManager : MonoSingleton<SoundManager>
     _lastPlayedSound = which;
   }
 
+  int _currentPlayingTrack = -1;
   public void PlayMusicTrack(string trackName)
   {    
-    foreach (var item in MusicTracks)
+    int hash = trackName.GetHashCode();
+    if (_audioSourcesByHash.ContainsKey(hash))
     {
-      if (trackName == item.name)
+      if (_currentPlayingTrack != -1 && _audioSourcesByHash[_currentPlayingTrack].isPlaying)
       {
-        if (!item.isPlaying)
-        {
-          item.Play();
-        }
-        break;        
+        _audioSourcesByHash[_currentPlayingTrack].Stop();
       }
+
+      _audioSourcesByHash[hash].Play();
+      _currentPlayingTrack = hash;
     }
   }
 

@@ -87,6 +87,8 @@ public class SerializableMap
   public int MapWdith = 0;
   public int MapHeight = 0;
 
+  public string MusicTrack = string.Empty;
+
   public CameraStartingPos CameraPos = new CameraStartingPos();
   public List<SerializableBlock> SerializableBlocksList = new List<SerializableBlock>();
   public List<SerializableObject> SerializableObjectsList = new List<SerializableObject>();
@@ -101,6 +103,7 @@ public class SerializableBlock
   public int Facing = 0;
   public string PrefabName = string.Empty;
   public bool FlipFlag = false;
+  public int FootstepSoundType = 0;
 
   public override string ToString()
   {

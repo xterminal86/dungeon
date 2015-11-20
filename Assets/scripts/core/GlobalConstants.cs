@@ -80,7 +80,18 @@ public static class GlobalConstants
     ACT_WOODEN_DOOR_CLOSE,
     PLAYER_CANNOT_MOVE
   }
-    
+
+  public enum FootstepSoundType
+  {
+    DUMMY = 0,
+    DIRT,
+    GRASS,
+    STONE,
+    TILE,
+    WOOD,
+    METAL
+  }
+
   public enum MapAttributes
   {
     Floor = 0,

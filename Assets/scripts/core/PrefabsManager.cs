@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PrefabsManager : MonoSingleton<PrefabsManager>
 {
-  public List<GameObject> Prefabs;
+  public List<GameObject> Prefabs = new List<GameObject>();
 
   protected override void Init()
   {

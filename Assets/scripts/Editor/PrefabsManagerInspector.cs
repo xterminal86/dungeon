@@ -7,32 +7,60 @@ using System.IO;
 [CustomEditor(typeof(PrefabsManager))]
 public class PrefabsManagerInspector : Editor 
 {
+  string _prefabsList = string.Empty;
+
   public override void OnInspectorGUI()
   {
     PrefabsManager pm = target as PrefabsManager;
 
     if (pm == null) return;
 
-    string[] paths = { "Assets/prefabs-release" };
+    string prefabsPath = "Assets/prefabs-release";
 
-    DrawDefaultInspector();
-
-    if (GUILayout.Button("Generate List"))
+    if (GUILayout.Button("Generate Prefabs List"))
     {
       pm.Prefabs.Clear();
-
-      string[] dirs = Directory.GetDirectories("Assets/prefabs-release", "*", SearchOption.AllDirectories);
-      for (int i = 0; i < dirs.Length; i++)
+      
+      string[] dirs = Directory.GetDirectories(prefabsPath, "*", SearchOption.AllDirectories);
+      if (dirs.Length == 0)
       {
-        string[] array = Directory.GetFiles(dirs[i], "*.prefab");
-
-        for (int j = 0; j < array.Length; j++)
+        LoadPrefabs(pm.Prefabs, prefabsPath);
+      }
+      else
+      {
+        for (int i = 0; i < dirs.Length; i++)
         {
-          GameObject o = AssetDatabase.LoadAssetAtPath(array[j], typeof(GameObject)) as GameObject;
-          pm.Prefabs.Add(o);
+          LoadPrefabs(pm.Prefabs, dirs[i]);
         }
       }
     }
+
+    if (pm.Prefabs.Count != 0)
+    {
+      _prefabsList = string.Empty;
+
+      int counter = 0;
+      foreach (var item in pm.Prefabs)
+      {
+        if (item != null)
+        {
+          _prefabsList += string.Format("{0}: {1}\n", counter, item.name);
+          counter++;
+        }
+      }
+
+      EditorGUILayout.HelpBox(_prefabsList, MessageType.None);
+    }
   }
 
+  void LoadPrefabs(List<GameObject> listToAdd, string path)
+  {
+    string[] array = Directory.GetFiles(path, "*.prefab");
+    
+    for (int j = 0; j < array.Length; j++)
+    {
+      GameObject o = AssetDatabase.LoadAssetAtPath(array[j], typeof(GameObject)) as GameObject;
+      listToAdd.Add(o);
+    }
+  }
 }
