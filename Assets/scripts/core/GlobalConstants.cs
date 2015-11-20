@@ -35,51 +35,47 @@ public static class GlobalConstants
     { Orientation.WEST, 180.0f }
   };
 
-  public static Dictionary<SoundNames, int> SoundHashByName = new Dictionary<SoundNames, int>()
+  public static List<int> FootstepsDummy = new List<int>()
   {
-    { SoundNames.FS_GRASS1, "fs-grass1".GetHashCode() },
-    { SoundNames.FS_GRASS2, "fs-grass2".GetHashCode() },
-    { SoundNames.FS_GRASS3, "fs-grass3".GetHashCode() },
-    { SoundNames.FS_GRASS4, "fs-grass4".GetHashCode() },
-    { SoundNames.FS_TILE1, "fs-tile1".GetHashCode() },
-    { SoundNames.FS_TILE2, "fs-tile2".GetHashCode() },
-    { SoundNames.FS_TILE3, "fs-tile3".GetHashCode() },
-    { SoundNames.FS_TILE4, "fs-tile4".GetHashCode() },
-    { SoundNames.ACT_WOODEN_DOOR_OPEN, "act-door-wooden-open".GetHashCode() },
-    { SoundNames.ACT_WOODEN_DOOR_CLOSE, "act-door-wooden-close".GetHashCode() },
-    { SoundNames.PLAYER_CANNOT_MOVE, "player-cannot-move".GetHashCode() }
+    "fs-dummy1".GetHashCode(),
+    "fs-dummy2".GetHashCode()
   };
-    
+
   public static List<int> FootstepsGrass = new List<int>()
   {
-    SoundHashByName[SoundNames.FS_GRASS1],
-    SoundHashByName[SoundNames.FS_GRASS2],
-    SoundHashByName[SoundNames.FS_GRASS3],
-    SoundHashByName[SoundNames.FS_GRASS4]
+    "fs-grass1".GetHashCode(),
+    "fs-grass2".GetHashCode(),
+    "fs-grass3".GetHashCode(),
+    "fs-grass4".GetHashCode()
   };
 
   public static List<int> FootstepsTile = new List<int>()
   {
-    SoundHashByName[SoundNames.FS_TILE1],
-    SoundHashByName[SoundNames.FS_TILE2],
-    SoundHashByName[SoundNames.FS_TILE3],
-    SoundHashByName[SoundNames.FS_TILE4]
+    "fs-tile1".GetHashCode(),
+    "fs-tile2".GetHashCode(),
+    "fs-tile3".GetHashCode(),
+    "fs-tile4".GetHashCode()
   };
 
-  public enum SoundNames
+  public static List<int> FootstepsWood = new List<int>()
   {
-    FS_GRASS1 = 0,
-    FS_GRASS2,
-    FS_GRASS3,
-    FS_GRASS4,
-    FS_TILE1,
-    FS_TILE2,
-    FS_TILE3,
-    FS_TILE4,
-    ACT_WOODEN_DOOR_OPEN,
-    ACT_WOODEN_DOOR_CLOSE,
-    PLAYER_CANNOT_MOVE
-  }
+    "fs-wood1".GetHashCode(),
+    "fs-wood2".GetHashCode(),
+    "fs-wood3".GetHashCode(),
+    "fs-wood4".GetHashCode(),
+    "fs-wood5".GetHashCode()
+  };
+
+  public static Dictionary<FootstepSoundType, List<int>> FootstepsListByType = new Dictionary<FootstepSoundType, List<int>>()
+  {
+    { FootstepSoundType.DUMMY, FootstepsDummy },
+    { FootstepSoundType.DIRT, FootstepsDummy },
+    { FootstepSoundType.GRASS, FootstepsGrass },
+    { FootstepSoundType.STONE, FootstepsDummy },
+    { FootstepSoundType.TILE, FootstepsTile },
+    { FootstepSoundType.WOOD, FootstepsWood },
+    { FootstepSoundType.METAL, FootstepsDummy }
+  };
 
   public enum FootstepSoundType
   {

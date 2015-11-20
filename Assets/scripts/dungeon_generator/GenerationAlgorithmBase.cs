@@ -66,7 +66,7 @@ public abstract class GenerationAlgorithmBase
   { 
   }
 
-  protected virtual void PackBlock(int x, int y, int layer, string prefabName, int facing, bool flipFlag)
+  protected virtual void PackBlock(int x, int y, int layer, string prefabName, int facing, bool flipFlag, int footstepSoundType = -1)
   {
     SerializableBlock newCell = new SerializableBlock();
 
@@ -76,7 +76,8 @@ public abstract class GenerationAlgorithmBase
     newCell.PrefabName = prefabName;
     newCell.Facing = facing;
     newCell.FlipFlag = flipFlag;
-    
+    newCell.FootstepSoundType = footstepSoundType;
+
     _serializableMap.SerializableBlocksList.Add(newCell);
   }
 

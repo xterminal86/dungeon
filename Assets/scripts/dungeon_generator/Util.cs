@@ -103,7 +103,7 @@ public class SerializableBlock
   public int Facing = 0;
   public string PrefabName = string.Empty;
   public bool FlipFlag = false;
-  public int FootstepSoundType = 0;
+  public int FootstepSoundType = -1;
 
   public override string ToString()
   {

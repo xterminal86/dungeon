@@ -60,11 +60,11 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
   }
 
-  public void PlaySound(GlobalConstants.SoundNames soundName)
+  public void PlaySound(string name)
   {
-    if (GlobalConstants.SoundHashByName.ContainsKey(soundName))
+    int hash = name.GetHashCode();
+    if (_audioSourcesByHash.ContainsKey(hash))
     {
-      int hash = GlobalConstants.SoundHashByName[soundName];
       _audioSourcesByHash[hash].Play();
     }
   }
@@ -77,27 +77,25 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
   }
 
-  public void PlaySound(GlobalConstants.SoundNames soundName, Vector3 pos)
-  {
-    if (GlobalConstants.SoundHashByName.ContainsKey(soundName))
-    {
-      int hash = GlobalConstants.SoundHashByName[soundName];
-      AudioSource.PlayClipAtPoint(_audioSourcesByHash[hash].clip, pos, _audioSourcesByHash[hash].volume);
-    }
-  }
-
   int _lastPlayedSound = -1;
-  public void PlayFootstepSound()
+  public void PlayFootstepSound(GlobalConstants.FootstepSoundType type)
   {
-    int which = Random.Range(0, GlobalConstants.FootstepsGrass.Count);
-    if (_lastPlayedSound == which)
+    if (GlobalConstants.FootstepsListByType.ContainsKey(type))
     {
-      which++;
-      if (which > GlobalConstants.FootstepsGrass.Count - 1) which = 0;
-      else if (which < 0) which = GlobalConstants.FootstepsGrass.Count - 1;
+      int which = Random.Range(0, GlobalConstants.FootstepsListByType[type].Count);
+      if (_lastPlayedSound == which)
+      {
+        which++;
+
+        if (which > GlobalConstants.FootstepsListByType[type].Count - 1)
+        {
+          which = 0;
+        }
+      }
+
+      PlaySound(GlobalConstants.FootstepsListByType[type][which]);
+      _lastPlayedSound = which;
     }
-    PlaySound(GlobalConstants.FootstepsGrass[which]);
-    _lastPlayedSound = which;
   }
 
   int _currentPlayingTrack = -1;

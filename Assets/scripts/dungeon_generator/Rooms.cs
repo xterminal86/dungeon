@@ -83,7 +83,7 @@ public class Rooms : GenerationAlgorithmBase
         switch (_gridRef.Map[x, y].CellType)
         {
           case CellType.FLOOR:
-            PackBlock(x, y, 0, "floor-bricks-small", 0, false);
+            PackBlock(x, y, 0, "floor-bricks-small", 0, false, (int)GlobalConstants.FootstepSoundType.TILE);
             PackBlock(x, y, 2, "floor-bricks-big", 0, true);
             break;
           case CellType.WALL:
@@ -101,6 +101,8 @@ public class Rooms : GenerationAlgorithmBase
                  2.0f, 3.0f, string.Empty, string.Empty);
       PackBlock(item.Key.X, item.Key.Y, 1, "wall-half-tiles", item.Value, false);
     }
+
+    _serializableMap.MusicTrack = "amb-hum";
 
     bf.Serialize(fs, _serializableMap);
     fs.Close();

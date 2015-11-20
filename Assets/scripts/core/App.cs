@@ -14,6 +14,12 @@ public class App : MonoSingleton<App>
 
   int _nameSuffix = 0;
 
+  int[,] _footstepSounds;
+  public int[,] FootstepSounds
+  {
+    get { return _footstepSounds; }
+  }
+
   char[,] _mapLayout;
   List<string> _map = new System.Collections.Generic.List<string>();
 
@@ -177,13 +183,27 @@ public class App : MonoSingleton<App>
     _mapColumns = sc.MapWdith;
     _mapRows = sc.MapHeight;
 
+    _footstepSounds = new int[_mapRows, _mapColumns];
     _mapLayout = new char[_mapRows, _mapColumns];
 
     SetupCamera(sc.CameraPos.X, sc.CameraPos.Y, sc.CameraPos.Facing);
 
+    string musicTrack = sc.MusicTrack;
+
+    if (!string.IsNullOrEmpty(musicTrack))
+    {
+      SoundManager.Instance.PlayMusicTrack(musicTrack);
+    }
+
     foreach (var item in sc.SerializableBlocksList)
     {
       SpawnBlock(item);
+
+      if (item.FootstepSoundType != -1)
+      {
+        _footstepSounds[item.X, item.Y] = item.FootstepSoundType;
+      }
+
       //Debug.Log(item.ToString());
     }
 
@@ -616,6 +636,9 @@ public class App : MonoSingleton<App>
     CameraPivot.transform.position = _cameraPos;
     CameraPivot.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
     _cameraAngles = CameraPivot.transform.eulerAngles;
+
+    InputController.Instance.PlayerMapPos.X = x;
+    InputController.Instance.PlayerMapPos.Y = y;
   }
 
   public enum MapFilename

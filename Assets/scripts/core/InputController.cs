@@ -6,6 +6,8 @@ public class InputController : MonoSingleton<InputController>
 {
   public Transform RaycastPoint;
 
+  public Int2 PlayerMapPos = new Int2();
+
   CameraTurnArgument _cameraTurnArgument = new CameraTurnArgument();
   CameraMoveArgument _cameraMoveArgument = new CameraMoveArgument();
   void Awake () 
@@ -296,6 +298,9 @@ public class InputController : MonoSingleton<InputController>
       if (zComponent != 0) newX += zComponent * GlobalConstants.WallScaleFactor;
     }
 
+    int dx = (newX - (int)_cameraPos.x) / GlobalConstants.WallScaleFactor;
+    int dz = (newZ - (int)_cameraPos.z) / GlobalConstants.WallScaleFactor;
+
     _cameraBob = 0.0f;
 
     bool _bobFlag = false;
@@ -357,8 +362,14 @@ public class InputController : MonoSingleton<InputController>
     // If we want to change camera height, we should do this by changing the camera inside the pivot GameObject.
     _cameraPos.y = 0.0f;  
     _cameraPos.z = newZ;
+         
+    PlayerMapPos.X += dx;
+    PlayerMapPos.Y += dz;
 
-    SoundManager.Instance.PlayFootstepSound();
+    if (App.Instance.FootstepSounds[PlayerMapPos.X, PlayerMapPos.Y] != -1)
+    {
+      SoundManager.Instance.PlayFootstepSound((GlobalConstants.FootstepSoundType)App.Instance.FootstepSounds[PlayerMapPos.X, PlayerMapPos.Y]);
+    }
 
     _isProcessing = false;
   }
@@ -368,7 +379,7 @@ public class InputController : MonoSingleton<InputController>
     CameraMoveArgument ca = arg as CameraMoveArgument;
     if (ca == null) yield return null;
 
-    SoundManager.Instance.PlaySound(GlobalConstants.SoundNames.PLAYER_CANNOT_MOVE);
+    SoundManager.Instance.PlaySound("player-cannot-move");
 
     _isProcessing = true;
     
