@@ -47,20 +47,23 @@ public class App : MonoSingleton<App>
   [HideInInspector]
   public Callback MapLoadingFinished;
 
-  [Header("Fog settings")]
-  public Color FogColor = Color.black;
-  public float FogDensity = 0.2f;
-  public bool EnableFog = true;
-  public FogMode Type = FogMode.ExponentialSquared;
-
   public MapFilename MapFilenameField;
 
+  [Header("Fog settings")]
+  public bool EnableFog = true;
+  public FogMode Type = FogMode.ExponentialSquared;
+  public Color FogColor = Color.black;
+  [Range(0.0f, 1.0f)]
+  public float FogDensity = 0.2f;
+    
   void Awake()
   {
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
     UnityEngine.RenderSettings.fogColor = FogColor;
     UnityEngine.RenderSettings.fogDensity = FogDensity;
+    UnityEngine.RenderSettings.fogStartDistance = 0.0f;
+    UnityEngine.RenderSettings.fogEndDistance = Camera.main.farClipPlane;
 
     MapLoadingFinished += InputController.Instance.MapLoadingFinishedHandler;
     MapLoadingFinished += SoundManager.Instance.MapLoadingFinishedHandler;

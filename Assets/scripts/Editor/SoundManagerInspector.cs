@@ -91,6 +91,11 @@ public class SoundManagerInspector : Editor
       
       EditorGUILayout.HelpBox(_soundsList, MessageType.None);
     }
+
+    if (GUI.changed)
+    {
+      EditorUtility.SetDirty(target);
+    }
   }
 
   void LoadFiles(List<AudioClip> listToAdd, string path, string filter)

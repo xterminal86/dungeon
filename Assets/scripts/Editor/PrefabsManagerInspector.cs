@@ -14,7 +14,7 @@ public class PrefabsManagerInspector : Editor
     PrefabsManager pm = target as PrefabsManager;
 
     if (pm == null) return;
-
+        
     string prefabsPath = "Assets/prefabs-release";
 
     if (GUILayout.Button("Generate Prefabs List"))
@@ -50,6 +50,11 @@ public class PrefabsManagerInspector : Editor
       }
 
       EditorGUILayout.HelpBox(_prefabsList, MessageType.None);
+    }
+
+    if (GUI.changed)
+    {
+      EditorUtility.SetDirty(target);
     }
   }
 
