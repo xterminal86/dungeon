@@ -599,7 +599,7 @@ public class App : MonoSingleton<App>
       case "lever":
         bmo.MapObjectInstance = new LeverMapObject(moClass, prefabName, bmo);
         (bmo.MapObjectInstance as LeverMapObject).ActionCallback += (bmo.MapObjectInstance as LeverMapObject).ActionHandler;
-
+          
         if (objectToControlId != string.Empty)
         {
           MapObject mo = GetMapObjectById(objectToControlId);
@@ -608,12 +608,13 @@ public class App : MonoSingleton<App>
             (bmo.MapObjectInstance as LeverMapObject).ControlledObject = mo;
           }
         }
+
         break;
       
       case "button":
         bmo.MapObjectInstance = new ButtonMapObject(moClass, prefabName, bmo);
         (bmo.MapObjectInstance as ButtonMapObject).ActionCallback += (bmo.MapObjectInstance as ButtonMapObject).ActionHandler;
-        
+
         if (objectToControlId != string.Empty)
         {
           MapObject mo = GetMapObjectById(objectToControlId);
@@ -622,7 +623,9 @@ public class App : MonoSingleton<App>
             (bmo.MapObjectInstance as ButtonMapObject).ControlledObject = mo;
           }
         }
+
         break;
+
       default:
         break;
     }
@@ -643,7 +646,7 @@ public class App : MonoSingleton<App>
     InputController.Instance.PlayerMapPos.X = x;
     InputController.Instance.PlayerMapPos.Y = y;
   }
-
+    
   public enum MapFilename
   {
     ROOMS = 0,
