@@ -12,13 +12,13 @@ public class App : MonoSingleton<App>
   public GameObject TestModel;
   public GameObject ObjectsInstancesTransform;
 
-  int _nameSuffix = 0;
-
-  int[,] _footstepSounds;
-  public int[,] FootstepSounds
+  int[,] _floorBlockByPosition;
+  public int[,] FloorBlockByPosition
   {
-    get { return _footstepSounds; }
+    get { return _floorBlockByPosition; }
   }
+
+  int _nameSuffix = 0;
 
   char[,] _mapLayout;
   List<string> _map = new System.Collections.Generic.List<string>();
@@ -186,7 +186,7 @@ public class App : MonoSingleton<App>
     _mapColumns = sc.MapWdith;
     _mapRows = sc.MapHeight;
 
-    _footstepSounds = new int[_mapRows, _mapColumns];
+    _floorBlockByPosition = new int[_mapRows, _mapColumns];
     _mapLayout = new char[_mapRows, _mapColumns];
 
     SetupCamera(sc.CameraPos.X, sc.CameraPos.Y, sc.CameraPos.Facing);
@@ -204,7 +204,7 @@ public class App : MonoSingleton<App>
 
       if (item.FootstepSoundType != -1)
       {
-        _footstepSounds[item.X, item.Y] = item.FootstepSoundType;
+        _floorBlockByPosition[item.X, item.Y] = item.FootstepSoundType;
       }
 
       //Debug.Log(item.ToString());
@@ -313,6 +313,15 @@ public class App : MonoSingleton<App>
     _mapRows = _map.Count;
     
     _mapLayout = new char[_mapRows, _mapColumns];
+    _floorBlockByPosition = new int[_mapRows, _mapColumns];
+    for (int i = 0; i < _mapRows; i++)
+    {
+      for (int j = 0; j < _mapColumns; j++)
+      {
+        _floorBlockByPosition[i, j] = -1;
+      }
+    }
+
 
     int x = 0, y = 0;
     foreach (var line in _map)
@@ -457,7 +466,7 @@ public class App : MonoSingleton<App>
       Debug.LogWarning("Couldn't find prefab: " + prefabName);
       return;
     }
-    
+
     GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
     
     if (id != string.Empty)
@@ -646,7 +655,7 @@ public class App : MonoSingleton<App>
     InputController.Instance.PlayerMapPos.X = x;
     InputController.Instance.PlayerMapPos.Y = y;
   }
-    
+
   public enum MapFilename
   {
     ROOMS = 0,

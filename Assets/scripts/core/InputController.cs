@@ -366,9 +366,9 @@ public class InputController : MonoSingleton<InputController>
     PlayerMapPos.X += dx;
     PlayerMapPos.Y += dz;
 
-    if (App.Instance.FootstepSounds[PlayerMapPos.X, PlayerMapPos.Y] != -1)
+    if (App.Instance.FloorBlockByPosition[PlayerMapPos.X, PlayerMapPos.Y] != -1)
     {
-      SoundManager.Instance.PlayFootstepSound((GlobalConstants.FootstepSoundType)App.Instance.FootstepSounds[PlayerMapPos.X, PlayerMapPos.Y]);
+      SoundManager.Instance.PlayFootstepSound((GlobalConstants.FootstepSoundType)App.Instance.FloorBlockByPosition[PlayerMapPos.X, PlayerMapPos.Y]);
     }
 
     _isProcessing = false;
