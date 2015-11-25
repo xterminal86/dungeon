@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class GeneratedMap
 {
-  protected int _mapWidth, _mapHeight;
+  protected const int _maxIdleIterations = 1000;
 
+  protected int _mapWidth, _mapHeight;
+  
   protected GeneratedMapCell[,] _map;
   public GeneratedMapCell[,] Map
   {

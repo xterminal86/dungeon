@@ -62,8 +62,7 @@ public static class GlobalConstants
     "fs-wood1".GetHashCode(),
     "fs-wood2".GetHashCode(),
     "fs-wood3".GetHashCode(),
-    "fs-wood4".GetHashCode(),
-    "fs-wood5".GetHashCode()
+    "fs-wood4".GetHashCode()    
   };
 
   public static List<int> FootstepsDirt = new List<int>()

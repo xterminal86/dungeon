@@ -55,7 +55,7 @@ public class App : MonoSingleton<App>
   [Range(0.0f, 1.0f)]
   public float FogDensity = 0.2f;
 
-  int _generatedMapWidth = 100, _generatedMapHeight = 100;
+  int _generatedMapWidth = 20, _generatedMapHeight = 20;
   GeneratedMap _generatedMap;
 
   void Awake()
