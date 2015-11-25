@@ -9,10 +9,8 @@ public class BehaviourMapObject : MonoBehaviour
 
   public MapObject MapObjectInstance;
 
-  Collider _collider;
   void Start()
   {
-    _collider = GetComponentInChildren<BoxCollider>();
     if (LoopingSound != null)
     {
       LoopingSound.Play();

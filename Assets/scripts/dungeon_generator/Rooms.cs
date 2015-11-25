@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -68,7 +68,7 @@ public class Rooms : GenerationAlgorithmBase
 
   public override void SaveToFile()
   {
-    _serializableMap.MapWdith = _gridRef.MapWidth;
+    _serializableMap.MapWidth = _gridRef.MapWidth;
     _serializableMap.MapHeight = _gridRef.MapHeight;
     
     _binaryFilename = string.Format("SerializedMaps/{0}.map", this.ToString());

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
-using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public class App : MonoSingleton<App>
@@ -12,16 +11,16 @@ public class App : MonoSingleton<App>
   public GameObject TestModel;
   public GameObject ObjectsInstancesTransform;
 
-  int[,] _floorBlockByPosition;
-  public int[,] FloorBlockByPosition
+  int[,] _floorSoundTypeByPosition;
+  public int[,] FloorSoundTypeByPosition
   {
-    get { return _floorBlockByPosition; }
+    get { return _floorSoundTypeByPosition; }
   }
 
   int _nameSuffix = 0;
 
   char[,] _mapLayout;
-  List<string> _map = new System.Collections.Generic.List<string>();
+  List<string> _map = new List<string>();
 
   Dictionary<int, GameObject> _mapObjectsHashTable = new Dictionary<int, GameObject>();
   Dictionary<Vector2, List<int>> _mapObjectsHashListByPosition = new Dictionary<Vector2, List<int>>();
@@ -55,7 +54,10 @@ public class App : MonoSingleton<App>
   public Color FogColor = Color.black;
   [Range(0.0f, 1.0f)]
   public float FogDensity = 0.2f;
-    
+
+  int _generatedMapWidth = 100, _generatedMapHeight = 100;
+  GeneratedMap _generatedMap;
+
   void Awake()
   {
     UnityEngine.RenderSettings.fog = EnableFog;
@@ -98,12 +100,21 @@ public class App : MonoSingleton<App>
       case MapFilename.DUNGEON1:
         LoadMap("Assets/maps/dungeon1.xml");
         break;
+      case MapFilename.GEN_VILLAGE:
+        _generatedMap = new Village(_generatedMapWidth, _generatedMapHeight);
+        break;
       default:
         LoadMap("Assets/maps/test_map.xml");
         break;
     }
 
     //SetupModel();
+
+    if (_generatedMap != null)
+    {
+      _generatedMap.Generate();
+      BuildMap();
+    }
 
     if (MapLoadingFinished != null)
       MapLoadingFinished();
@@ -112,6 +123,34 @@ public class App : MonoSingleton<App>
   protected override void Init()
   {
     base.Init();
+  }
+
+  void BuildMap()
+  {
+    _mapColumns = _generatedMapWidth;
+    _mapRows = _generatedMapHeight;
+
+    //_mapLayout = new char[_generatedMapWidth, _generatedMapHeight];
+
+    _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
+
+    for (int x = 0; x < _generatedMapHeight; x++)
+    {
+      for (int y = 0; y < _generatedMapWidth; y++)
+      {
+        foreach (var block in _generatedMap.Map[x, y].Blocks)
+        {
+          if (block.FootstepSoundType != -1)
+          {
+            _floorSoundTypeByPosition[x, y] = block.FootstepSoundType;
+          }
+
+          SpawnBlock(block);
+        }
+      }
+    }
+
+    SetupCamera(_generatedMap.CameraPos.X, _generatedMap.CameraPos.Y, _generatedMap.CameraPos.Facing);
   }
 
   void SetupModel()
@@ -183,10 +222,10 @@ public class App : MonoSingleton<App>
 
     fs.Close();
 
-    _mapColumns = sc.MapWdith;
+    _mapColumns = sc.MapWidth;
     _mapRows = sc.MapHeight;
 
-    _floorBlockByPosition = new int[_mapRows, _mapColumns];
+    _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
     _mapLayout = new char[_mapRows, _mapColumns];
 
     SetupCamera(sc.CameraPos.X, sc.CameraPos.Y, sc.CameraPos.Facing);
@@ -204,7 +243,7 @@ public class App : MonoSingleton<App>
 
       if (item.FootstepSoundType != -1)
       {
-        _floorBlockByPosition[item.X, item.Y] = item.FootstepSoundType;
+        _floorSoundTypeByPosition[item.X, item.Y] = item.FootstepSoundType;
       }
 
       //Debug.Log(item.ToString());
@@ -313,12 +352,12 @@ public class App : MonoSingleton<App>
     _mapRows = _map.Count;
     
     _mapLayout = new char[_mapRows, _mapColumns];
-    _floorBlockByPosition = new int[_mapRows, _mapColumns];
+    _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
     for (int i = 0; i < _mapRows; i++)
     {
       for (int j = 0; j < _mapColumns; j++)
       {
-        _floorBlockByPosition[i, j] = -1;
+        _floorSoundTypeByPosition[i, j] = -1;
       }
     }
 
@@ -510,6 +549,8 @@ public class App : MonoSingleton<App>
 
   public char GetMapLayoutPoint(int x, int y)
   {
+    if (_mapLayout == null) return '#';
+
     int lx = Mathf.Clamp(x, 0, _mapRows);
     int ly = Mathf.Clamp(y, 0, _mapColumns);
 
@@ -665,6 +706,7 @@ public class App : MonoSingleton<App>
     SIDEWINDER,
     GROWING_TREE,
     TOWN,
-    DUNGEON1
+    DUNGEON1,
+    GEN_VILLAGE
   }
 }

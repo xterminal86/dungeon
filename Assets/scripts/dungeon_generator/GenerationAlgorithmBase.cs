@@ -63,7 +63,7 @@ public abstract class GenerationAlgorithmBase
   }
 
   public virtual void SaveToFile() 
-  { 
+  {
   }
 
   protected virtual void PackBlock(int x, int y, int layer, string prefabName, int facing, bool flipFlag, int footstepSoundType = -1)

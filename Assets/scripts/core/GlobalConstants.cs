@@ -66,10 +66,18 @@ public static class GlobalConstants
     "fs-wood5".GetHashCode()
   };
 
+  public static List<int> FootstepsDirt = new List<int>()
+  {
+    "fs-dirt1".GetHashCode(),
+    "fs-dirt2".GetHashCode(),
+    "fs-dirt3".GetHashCode(),
+    "fs-dirt4".GetHashCode()
+  };
+
   public static Dictionary<FootstepSoundType, List<int>> FootstepsListByType = new Dictionary<FootstepSoundType, List<int>>()
   {
     { FootstepSoundType.DUMMY, FootstepsDummy },
-    { FootstepSoundType.DIRT, FootstepsDummy },
+    { FootstepSoundType.DIRT, FootstepsDirt },
     { FootstepSoundType.GRASS, FootstepsGrass },
     { FootstepSoundType.STONE, FootstepsDummy },
     { FootstepSoundType.TILE, FootstepsTile },
@@ -104,4 +112,44 @@ public static class GlobalConstants
     SOUTH,
     WEST
   }
+
+  public enum StaticPrefabsEnum
+  {
+    FLOOR_GRASS = 0,
+    FLOOR_DIRT,
+    FLOOR_WOODEN,
+    BLOCK_BRICKS_RED,
+    TREE_BIRCH,
+    FENCE
+  }
+
+  public static Dictionary<StaticPrefabsEnum, string> StaticPrefabsNamesById = new Dictionary<StaticPrefabsEnum, string>()
+  {
+    { StaticPrefabsEnum.FLOOR_GRASS, "floor-grass" },
+    { StaticPrefabsEnum.FLOOR_DIRT, "floor-dirt" },
+    { StaticPrefabsEnum.FLOOR_WOODEN, "floor-wooden" },
+    { StaticPrefabsEnum.BLOCK_BRICKS_RED, "block-bricks-red" },
+    { StaticPrefabsEnum.TREE_BIRCH, "block-tree-birch" },
+    { StaticPrefabsEnum.FENCE, "block-fence" }
+  };
+
+  public enum ObjectPrefabsEnum
+  {
+    DOOR_IRON = 0,
+    DOOR_PORTCULLIS,
+    DOOR_STONE,
+    DOOR_WOODEN,
+    BUTTON,
+    LEVER
+  }
+
+  public static Dictionary<ObjectPrefabsEnum, string> ObjectPrefabsNamesById = new Dictionary<ObjectPrefabsEnum, string>()
+  {
+    { ObjectPrefabsEnum.DOOR_IRON, "door-iron" },
+    { ObjectPrefabsEnum.DOOR_PORTCULLIS, "door-portcullis" },
+    { ObjectPrefabsEnum.DOOR_STONE, "door-stone" },
+    { ObjectPrefabsEnum.DOOR_WOODEN, "door-wooden" },
+    { ObjectPrefabsEnum.BUTTON, "button" },
+    { ObjectPrefabsEnum.LEVER, "lever" }
+  };
 }

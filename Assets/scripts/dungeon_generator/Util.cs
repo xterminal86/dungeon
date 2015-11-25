@@ -84,7 +84,7 @@ public class RoomBounds
 [Serializable]
 public class SerializableMap
 {
-  public int MapWdith = 0;
+  public int MapWidth = 0;
   public int MapHeight = 0;
 
   public string MusicTrack = string.Empty;
