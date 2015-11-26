@@ -151,6 +151,8 @@ public class App : MonoSingleton<App>
     }
 
     SetupCamera(_generatedMap.CameraPos.X, _generatedMap.CameraPos.Y, _generatedMap.CameraPos.Facing);
+
+    SoundManager.Instance.PlayMusicTrack(_generatedMap.MusicTrack);
   }
 
   void SetupModel()

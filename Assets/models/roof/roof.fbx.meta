@@ -1,20 +1,20 @@
 fileFormatVersion: 2
-guid: 9ba156db8ca09b24b8c27798bd4d257f
+guid: d39996255c4d8a441aeae03330795a02
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: Cube
-    100002: Plane
-    100004: //RootNode
-    400000: Cube
-    400002: Plane
-    400004: //RootNode
-    2300000: Cube
-    2300002: Plane
-    3300000: Cube
-    3300002: Plane
-    4300000: Plane
-    4300002: Cube
+    100000: //RootNode
+    100002: Roof-Corner
+    100004: Roof-Main
+    400000: //RootNode
+    400002: Roof-Corner
+    400004: Roof-Main
+    2300000: Roof-Corner
+    2300002: Roof-Main
+    3300000: Roof-Corner
+    3300002: Roof-Main
+    4300000: Roof-Corner
+    4300002: Roof-Main
     9500000: //RootNode
   materials:
     importMaterials: 1
