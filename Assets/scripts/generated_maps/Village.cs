@@ -6,30 +6,16 @@ public class Village : GeneratedMap
 {
   List<RoomBounds> _roomsBounds = new List<RoomBounds>();
 
-  bool[,] _occupiedCells;
   public Village(int width, int height) : base(width, height)
-  {
-    _occupiedCells = new bool[width, height];
-    ResetOccupiedCells();
+  {    
   }
-
-  void ResetOccupiedCells()
-  {
-    for (int i = 0; i < _mapWidth; i++)
-    {
-      for (int j = 0; j < _mapHeight; j++)
-      {
-        _occupiedCells[i, j] = false;
-      }
-    }         
-  }
-
+    
   public override void Generate()
   {
     GenerateBuildings();
     ConnectBuildings();
-    //GenerateTrees(80, 3);
-    //GenerateGrass();
+    GenerateTrees(80, 2);
+    GenerateGrass();
 
     FindStartingPos();
 
@@ -38,7 +24,7 @@ public class Village : GeneratedMap
 
   int _iterations = 0;
   int _maxBuildings = 5;
-  int _roomsDistance = 2;
+  int _roomsDistance = 5;
   int _roomMinWidth = 5, _roomMinHeight = 5, _roomMaxWidth = 11, _roomMaxHeight = 11;
   void GenerateBuildings()
   {
@@ -100,14 +86,13 @@ public class Village : GeneratedMap
     {
       for (int y = 0; y < _mapWidth; y++)
       {
-        SerializableBlock b = new SerializableBlock();
-        b.X = x;
-        b.Y = y;
-        b.Layer = 0;
-        b.PrefabName = GlobalConstants.StaticPrefabsNamesById[GlobalConstants.StaticPrefabsEnum.FLOOR_GRASS];
-        b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.GRASS;        
-        
-        _map[x, y].Blocks.Add(b);
+        if (_map[x, y].CellType == GeneratedCellType.NONE || _map[x, y].CellType == GeneratedCellType.OBSTACLE)
+        {
+          SerializableBlock b = CreateBlock(x, y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_GRASS);
+          b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.GRASS;
+
+          _map[x, y].Blocks.Add(b);
+        }
       }
     }
   }
@@ -130,12 +115,8 @@ public class Village : GeneratedMap
       bool res = IsValid(x, y, minDistance);
       if (res)
       {
-        SerializableBlock b = new SerializableBlock();
-        b.X = x;
-        b.Y = y;
-        b.Layer = 0;
-        b.PrefabName = GlobalConstants.StaticPrefabsNamesById[GlobalConstants.StaticPrefabsEnum.TREE_BIRCH];
-
+        SerializableBlock b = CreateBlock(x, y, 0, GlobalConstants.StaticPrefabsEnum.TREE_BIRCH);
+        
         _map[x, y].Blocks.Add(b);
 
         counter++;
@@ -151,7 +132,7 @@ public class Village : GeneratedMap
 
   bool IsValid(int x, int y, int minDistance)
   {
-    if (!_occupiedCells[x, y])
+    if (_map[x, y].CellType == GeneratedCellType.NONE)
     {
       int xStart = Mathf.Clamp(x - minDistance, 0, _mapHeight - 1);
       int xEnd = Mathf.Clamp(x + minDistance, 0, _mapHeight - 1);
@@ -167,14 +148,15 @@ public class Village : GeneratedMap
             continue;
           }
 
-          if (_occupiedCells[i, j])
+          if (_map[i, j].CellType != GeneratedCellType.NONE)
           {
             return false;
           }
         }
       }
-            
-      _occupiedCells[x, y] = true;
+
+      _map[x, y].CellType = GeneratedCellType.OBSTACLE;
+
       return true;
     }
     
@@ -238,55 +220,56 @@ public class Village : GeneratedMap
     }
 
     PlaceWalls(cellPos, roomWidth, roomHeight);
+    MakeDoorway(cellPos, roomWidth, roomHeight);
     PlaceFloor(cellPos, roomWidth, roomHeight);
+    PlaceRoof(cellPos, roomWidth, roomHeight);    
   }
 
   void PlaceWalls(Vector2 cellPos, int roomWidth, int roomHeight)
   {
+    int startX = (int)cellPos.x;
+    int endX = (int)cellPos.x + roomHeight - 1;
+    int startY = (int)cellPos.y;
+    int endY = (int)cellPos.y + roomWidth - 1;
+
     // Left and right walls
     for (int i = (int)cellPos.x; i < (int)cellPos.x + roomHeight; i++) 
     {
-      SerializableBlock blockLeft = new SerializableBlock();
-      blockLeft.X = i;
-      blockLeft.Y = (int)cellPos.y;
-      blockLeft.Layer = 0;
-      blockLeft.PrefabName = GlobalConstants.StaticPrefabsNamesById[GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED];
+      for (int layer = 0; layer < 2; layer++)
+      {        
+        //SerializableBlock blockLeft = CreateBlock(i, (int)cellPos.y, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED);        
+        //SerializableBlock blockRight = CreateBlock(i, (int)cellPos.y + roomWidth - 1, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED);
+                
+        SerializableBlock blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.WEST);
+        SerializableBlock blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.EAST);
 
-      SerializableBlock blockRight = new SerializableBlock();
-      blockRight.X = i;
-      blockRight.Y = (int)cellPos.y + roomWidth - 1;
-      blockRight.Layer = 0;
-      blockRight.PrefabName = GlobalConstants.StaticPrefabsNamesById[GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED];
-
-      _map[blockLeft.X, blockLeft.Y].Blocks.Add(blockLeft);
-      _map[blockRight.X, blockRight.Y].Blocks.Add(blockRight);
+        _map[blockLeft.X, blockLeft.Y].Blocks.Add(blockLeft);
+        _map[blockRight.X, blockRight.Y].Blocks.Add(blockRight);
+      }
     }
 
     // Up and down walls
-    for (int i = (int)cellPos.y + 1; i < (int)cellPos.y + roomWidth - 1; i++) 
+    for (int i = (int)cellPos.y; i < (int)cellPos.y + roomWidth; i++) 
     {
-      SerializableBlock blockUp = new SerializableBlock();
-      blockUp.X = (int)cellPos.x;
-      blockUp.Y = i;
-      blockUp.Layer = 0;
-      blockUp.PrefabName = GlobalConstants.StaticPrefabsNamesById[GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED];
+      for (int layer = 0; layer < 2; layer++)
+      {        
+        //SerializableBlock blockUp = CreateBlock((int)cellPos.x, i, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED);
+        //SerializableBlock blockDown = CreateBlock((int)cellPos.x + roomHeight - 1, i, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED);
 
-      SerializableBlock blockDown = new SerializableBlock();
-      blockDown.X = (int)cellPos.x + roomHeight - 1;
-      blockDown.Y = i;
-      blockDown.Layer = 0;
-      blockDown.PrefabName = GlobalConstants.StaticPrefabsNamesById[GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED];
+        SerializableBlock blockUp = CreateBlock(startX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.NORTH);
+        SerializableBlock blockDown = CreateBlock(endX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.SOUTH);
 
-      _map[blockUp.X, blockUp.Y].Blocks.Add(blockUp);
-      _map[blockDown.X, blockDown.Y].Blocks.Add(blockDown);
+        _map[blockUp.X, blockUp.Y].Blocks.Add(blockUp);
+        _map[blockDown.X, blockDown.Y].Blocks.Add(blockDown);
+      }
     }
   }
 
   void PlaceFloor(Vector2 cellPos, int roomWidth, int roomHeight)
   {
-    for (int i = (int)cellPos.x + 1; i < (int)cellPos.x + roomHeight - 1; i++)
+    for (int i = (int)cellPos.x; i < (int)cellPos.x + roomHeight; i++)
     {
-      for (int j = (int)cellPos.y + 1; j < (int)cellPos.y + roomWidth - 1; j++)
+      for (int j = (int)cellPos.y; j < (int)cellPos.y + roomWidth; j++)
       {
         SerializableBlock block = new SerializableBlock();
         block.X = i;
@@ -300,11 +283,206 @@ public class Village : GeneratedMap
     }
   }
 
+  void PlaceRoof(Vector2 cellPos, int roomWidth, int roomHeight)
+  {
+    int startX = (int)cellPos.x;
+    int endX = (int)cellPos.x + roomHeight - 1;
+    int startY = (int)cellPos.y;
+    int endY = (int)cellPos.y + roomWidth - 1;
+    int layer = 2;
+
+    /*
+    
+    // Roofs with overhang
+    
+    int startX = (int)cellPos.x - 1;
+    int endX = (int)cellPos.x + roomHeight;
+    int startY = (int)cellPos.y - 1;
+    int endY = (int)cellPos.y + roomWidth;
+    
+    */
+
+    while ((endX - startX >= 1) && (endY - startY) >= 1)
+    {
+      MakePerimeter(startX, endX, startY, endY, layer);
+
+      startX++;
+      startY++;
+      endX--;
+      endY--;
+
+      layer++;
+    }
+  }
+
+  Dictionary<Int2, GlobalConstants.Orientation> _doorwayCandidates = new Dictionary<Int2, GlobalConstants.Orientation>();
+  List<Int2> _doorwayPositions = new List<Int2>();
+  void MakeDoorway(Vector2 cellPos, int roomWidth, int roomHeight)
+  {
+    _doorwayCandidates.Clear();
+    _doorwayPositions.Clear();
+
+    int startX = (int)cellPos.x;
+    int endX = (int)cellPos.x + roomHeight - 1;
+    int startY = (int)cellPos.y;
+    int endY = (int)cellPos.y + roomWidth - 1;
+    int layer = 0;
+        
+    for (int i = startX; i < endX; i++)
+    {
+      if (i == startX || i == endX)
+      {
+        continue;
+      }
+
+      Int2 pos1 = new Int2();
+
+      pos1.X = i;
+      pos1.Y = startY;
+
+      _doorwayCandidates.Add(pos1, GlobalConstants.Orientation.WEST);
+      _doorwayPositions.Add(pos1);
+      
+      Int2 pos2 = new Int2();
+
+      pos2.X = i;
+      pos2.Y = endY;
+
+      _doorwayCandidates.Add(pos2, GlobalConstants.Orientation.EAST);
+      _doorwayPositions.Add(pos2);
+    }
+
+    for (int i = startY; i < endY; i++)
+    {
+      if (i == startY || i == endY)
+      {
+        continue;
+      }
+
+      Int2 pos1 = new Int2();
+
+      pos1.X = startX;
+      pos1.Y = i;
+
+      _doorwayCandidates.Add(pos1, GlobalConstants.Orientation.NORTH);
+      _doorwayPositions.Add(pos1);
+
+      Int2 pos2 = new Int2();
+
+      pos2.X = endX;
+      pos2.Y = i;
+
+      _doorwayCandidates.Add(pos2, GlobalConstants.Orientation.SOUTH);
+      _doorwayPositions.Add(pos2);
+    }
+
+    int index = Random.Range(0, _doorwayPositions.Count);
+    Int2 p = _doorwayPositions[index];
+
+    foreach (var item in _doorwayCandidates)
+    {
+      if (item.Key.X == p.X && item.Key.Y == p.Y)
+      {
+        for (int i = 0; i < _map[p.X, p.Y].Blocks.Count; i++)
+        {
+          if (_map[p.X, p.Y].Blocks[i].Layer == layer)
+          {
+            _map[p.X, p.Y].Blocks.RemoveAt(i);
+            SerializableObject obj = CreateDoor(p.X, p.Y, layer, GlobalConstants.ObjectPrefabsEnum.DOOR_WOODEN, (int)item.Value, "door-openable");
+            _map[p.X, p.Y].Objects.Add(obj);
+            return;
+          }
+        }
+      }
+    }
+  }
+
+  void MakePerimeter(int startX, int endX, int startY, int endY, int layer)
+  {
+    SerializableBlock roof1;
+    SerializableBlock roof2;
+
+    for (int i = startX; i <= endX; i++)
+    {
+      if (i == startX)
+      {
+        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_CORNER, (int)GlobalConstants.Orientation.NORTH);
+        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_CORNER, (int)GlobalConstants.Orientation.EAST);
+      }
+      else if (i == endX)
+      {
+        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_CORNER, (int)GlobalConstants.Orientation.WEST);
+        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_CORNER, (int)GlobalConstants.Orientation.SOUTH);
+      }
+      else
+      {
+        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_LINE, (int)GlobalConstants.Orientation.WEST);
+        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_LINE, (int)GlobalConstants.Orientation.EAST);
+      }
+
+      _map[i, startY].Blocks.Add(roof1);
+      _map[i, endY].Blocks.Add(roof2);
+    }
+
+    for (int i = startY + 1; i <= endY - 1; i++)
+    {
+      roof1 = CreateBlock(startX, i, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_LINE, (int)GlobalConstants.Orientation.NORTH);
+      roof2 = CreateBlock(endX, i, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_LINE, (int)GlobalConstants.Orientation.SOUTH);
+
+      _map[i, startY].Blocks.Add(roof1);
+      _map[i, endY].Blocks.Add(roof2);
+    }
+  }
+
+  SerializableBlock CreateBlock(int x, int y, int layer, GlobalConstants.StaticPrefabsEnum type, int facing = 0)
+  {
+    SerializableBlock b = new SerializableBlock();
+
+    b.X = x;
+    b.Y = y;
+    b.Layer = layer;
+    b.Facing = facing;
+    b.PrefabName = GlobalConstants.StaticPrefabsNamesById[type];
+
+    return b;
+  }
+  
+  SerializableObject CreateObject(int x, int y, int layer, GlobalConstants.ObjectPrefabsEnum type, int facing, string objectClassName)
+  {
+    SerializableObject obj = new SerializableObject();
+
+    obj.X = x;
+    obj.Y = y;
+    obj.Layer = layer;
+    obj.Facing = facing;
+    obj.PrefabName = GlobalConstants.ObjectPrefabsNamesById[type];
+    obj.ObjectClassName = objectClassName;
+    
+    return obj;
+  }
+
+  SerializableObject CreateDoor(int x, int y, int layer, GlobalConstants.ObjectPrefabsEnum type, int facing, string objectClassName)
+  {
+    SerializableObject obj = new SerializableObject();
+
+    obj.X = x;
+    obj.Y = y;
+    obj.Layer = layer;
+    obj.Facing = facing;
+    obj.PrefabName = GlobalConstants.ObjectPrefabsNamesById[type];
+    obj.ObjectClassName = objectClassName;
+    obj.DoorSoundType = "openable";
+    obj.AnimationOpenSpeed = 2.0f;
+    obj.AnimationCloseSpeed = 3.0f;
+
+    return obj;
+  }
+
   void FindStartingPos()
   {
-    _cameraPos.X = 1;
-    _cameraPos.Y = 1;
-    _cameraPos.Facing = 0;
+    _cameraPos.X = 0;
+    _cameraPos.Y = 0;
+    _cameraPos.Facing = 2;
 
     /*
     for (int x = 0; x < _mapHeight; x++)

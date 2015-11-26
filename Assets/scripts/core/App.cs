@@ -55,7 +55,7 @@ public class App : MonoSingleton<App>
   [Range(0.0f, 1.0f)]
   public float FogDensity = 0.2f;
 
-  int _generatedMapWidth = 20, _generatedMapHeight = 20;
+  int _generatedMapWidth = 25, _generatedMapHeight = 25;
   GeneratedMap _generatedMap;
 
   void Awake()
@@ -146,6 +146,11 @@ public class App : MonoSingleton<App>
           }
 
           SpawnBlock(block);
+        }
+
+        foreach (var obj in _generatedMap.Map[x, y].Objects)
+        {
+          SpawnObject(obj);
         }
       }
     }

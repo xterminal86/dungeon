@@ -66,5 +66,6 @@ public enum GeneratedCellType
 {
   NONE = 0,
   ROAD,
-  ROOM
+  ROOM,
+  OBSTACLE
 }

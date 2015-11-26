@@ -119,6 +119,11 @@ public static class GlobalConstants
     FLOOR_WOODEN,
     FLOOR_COBBLESTONE,
     BLOCK_BRICKS_RED,
+    ROOF_WOODEN_LINE,
+    ROOF_WOODEN_CORNER,
+    ROOF_COBBLESTONE_LINE,
+    ROOF_COBBLESTONE_CORNER,
+    WALL_THIN_WOODEN,
     TREE_BIRCH,
     FENCE
   }
@@ -131,6 +136,11 @@ public static class GlobalConstants
     { StaticPrefabsEnum.FLOOR_COBBLESTONE, "floor-cobblestone" },
     { StaticPrefabsEnum.BLOCK_BRICKS_RED, "block-bricks-red" },
     { StaticPrefabsEnum.TREE_BIRCH, "block-tree-birch" },
+    { StaticPrefabsEnum.ROOF_WOODEN_LINE, "roof-wooden-line" },
+    { StaticPrefabsEnum.ROOF_WOODEN_CORNER, "roof-wooden-corner" },
+    { StaticPrefabsEnum.ROOF_COBBLESTONE_LINE, "roof-cobblestone-line" },
+    { StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, "roof-cobblestone-corner" },
+    { StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-thin-wooden" },
     { StaticPrefabsEnum.FENCE, "block-fence" }
   };
 
