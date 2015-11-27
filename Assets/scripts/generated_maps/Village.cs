@@ -221,8 +221,73 @@ public class Village : GeneratedMap
 
     PlaceWalls(cellPos, roomWidth, roomHeight);
     MakeDoorway(cellPos, roomWidth, roomHeight);
+    MakeWindows(cellPos, roomWidth, roomHeight);
     PlaceFloor(cellPos, roomWidth, roomHeight);
-    PlaceRoof(cellPos, roomWidth, roomHeight);    
+    PlaceRoof(cellPos, roomWidth, roomHeight);
+  }
+
+  int _windowDistance = 3;
+  void MakeWindows(Vector2 cellPos, int roomWidth, int roomHeight)
+  {
+    int startX = (int)cellPos.x;
+    int endX = (int)cellPos.x + roomHeight - 1;
+    int startY = (int)cellPos.y;
+    int endY = (int)cellPos.y + roomWidth - 1;
+    int layer = 0;
+
+    int counter = 0;
+
+    int facing1 = 0, facing2 = 0;
+    Int2 windowPosition1 = new Int2();
+    Int2 windowPosition2 = new Int2();
+
+    int middle = (_windowDistance - 1) / 2;
+
+    for (int i = startX + 1; i < endX - 1; i++)
+    {
+      counter = 0;
+
+      for (int d = 0; d < _windowDistance; d++)
+      {
+        if (_map[i + d, startY].Objects.Count != 0 || HasBlock(i + d, startY, SerializableBlockType.WINDOW))
+        {
+          counter = 0;
+          break;
+        }
+
+        if (counter == middle)
+        {
+          windowPosition1.X = i + d;
+          windowPosition1.Y = startY;
+
+          windowPosition2.X = i + d;
+          windowPosition2.Y = endY;
+        }
+
+        counter++;
+      }
+
+      if (counter != 0)
+      {
+        Debug.Log("windowPosition1: " + _map[windowPosition1.X, windowPosition1.Y].Blocks[0]);
+        Debug.Log("windowPosition2: " + _map[windowPosition2.X, windowPosition2.Y].Blocks[0]);
+
+        facing1 = _map[windowPosition1.X, windowPosition1.Y].Blocks[0].Facing;
+        facing2 = _map[windowPosition2.X, windowPosition2.Y].Blocks[0].Facing;
+
+        RemoveBlockAtPosition(windowPosition1.X, windowPosition1.Y, 0);
+        RemoveBlockAtPosition(windowPosition2.X, windowPosition2.Y, 0);
+
+        SerializableBlock window1 = CreateBlock(windowPosition1.X, windowPosition1.Y, 0, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, facing1);
+        window1.BlockType = SerializableBlockType.WINDOW;
+
+        SerializableBlock window2 = CreateBlock(windowPosition2.X, windowPosition2.Y, 0, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, facing2);
+        window2.BlockType = SerializableBlockType.WINDOW;
+
+        _map[windowPosition1.X, windowPosition1.Y].Blocks.Add(window1);
+        _map[windowPosition2.X, windowPosition2.Y].Blocks.Add(window2);
+      }
+    }
   }
 
   void PlaceWalls(Vector2 cellPos, int roomWidth, int roomHeight)
@@ -374,13 +439,8 @@ public class Village : GeneratedMap
     int endY = (int)cellPos.y + roomWidth - 1;
     int layer = 0;
         
-    for (int i = startX; i < endX; i++)
+    for (int i = startX + 1; i < endX - 1; i++)
     {
-      if (i == startX || i == endX)
-      {
-        continue;
-      }
-
       Int2 pos1 = new Int2();
 
       pos1.X = i;
@@ -398,13 +458,8 @@ public class Village : GeneratedMap
       _doorwayPositions.Add(pos2);
     }
 
-    for (int i = startY; i < endY; i++)
+    for (int i = startY + 1; i < endY - 1; i++)
     {
-      if (i == startY || i == endY)
-      {
-        continue;
-      }
-
       Int2 pos1 = new Int2();
 
       pos1.X = startX;
@@ -429,16 +484,12 @@ public class Village : GeneratedMap
     {
       if (item.Key.X == p.X && item.Key.Y == p.Y)
       {
-        for (int i = 0; i < _map[p.X, p.Y].Blocks.Count; i++)
-        {
-          if (_map[p.X, p.Y].Blocks[i].Layer == layer)
-          {
-            _map[p.X, p.Y].Blocks.RemoveAt(i);
-            SerializableObject obj = CreateDoor(p.X, p.Y, layer, GlobalConstants.ObjectPrefabsEnum.DOOR_WOODEN, (int)item.Value, "door-openable");
-            _map[p.X, p.Y].Objects.Add(obj);
-            return;
-          }
-        }
+        RemoveBlockAtPosition(p.X, p.Y, layer);
+
+        SerializableObject obj = CreateDoor(p.X, p.Y, layer, GlobalConstants.ObjectPrefabsEnum.DOOR_WOODEN, (int)item.Value, "door-openable");
+        _map[p.X, p.Y].Objects.Add(obj);
+
+        break;
       }
     }
   }

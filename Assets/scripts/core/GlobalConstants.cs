@@ -127,6 +127,7 @@ public static class GlobalConstants
     ROOF_COBBLESTONE_CORNER,
     ROOF_COBBLESTONE_CLOSING,
     WALL_THIN_WOODEN,
+    WALL_THIN_WOODEN_WINDOW,
     TREE_BIRCH,
     FENCE
   }
@@ -147,6 +148,7 @@ public static class GlobalConstants
     { StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, "roof-cobblestone-corner" },
     { StaticPrefabsEnum.ROOF_COBBLESTONE_CLOSING, "roof-cobblestone-closing" },
     { StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-thin-wooden" },
+    { StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-thin-wooden-window" },
     { StaticPrefabsEnum.FENCE, "block-fence" }
   };
 

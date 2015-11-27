@@ -79,6 +79,12 @@ public class RoomBounds
   }
 }
 
+public enum SerializableBlockType
+{
+  NONE = 0,
+  WINDOW
+}
+
 // ********************* SERIALIZATION ********************* //
 
 [Serializable]
@@ -104,6 +110,7 @@ public class SerializableBlock
   public string PrefabName = string.Empty;
   public bool FlipFlag = false;
   public int FootstepSoundType = -1;
+  public SerializableBlockType BlockType = SerializableBlockType.NONE;
 
   public override string ToString()
   {

@@ -52,6 +52,31 @@ public class GeneratedMap
     
     return new Vector2(x, y);
   }
+
+  public void RemoveBlockAtPosition(int x, int y, int layer)
+  {
+    for (int i = 0; i < _map[x, y].Blocks.Count; i++)
+    {
+      if (_map[x, y].Blocks[i].Layer == layer)
+      {
+        _map[x, y].Blocks.RemoveAt(i);
+        break;
+      }
+    }
+  }
+
+  public bool HasBlock(int x, int y, SerializableBlockType blockType)
+  {
+    foreach (var block in _map[x, y].Blocks)
+    {
+      if (block.BlockType == blockType)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
 
 public class GeneratedMapCell
