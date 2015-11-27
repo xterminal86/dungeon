@@ -25,7 +25,7 @@ public class Village : GeneratedMap
   int _iterations = 0;
   int _maxBuildings = 5;
   int _roomsDistance = 5;
-  int _roomMinWidth = 5, _roomMinHeight = 5, _roomMaxWidth = 11, _roomMaxHeight = 11;
+  int _roomMinWidth = 5, _roomMinHeight = 5, _roomMaxWidth = 7, _roomMaxHeight = 7;
   void GenerateBuildings()
   {
     while (_iterations < _maxBuildings)
@@ -232,16 +232,23 @@ public class Village : GeneratedMap
     int startY = (int)cellPos.y;
     int endY = (int)cellPos.y + roomWidth - 1;
 
+    SerializableBlock blockLeft, blockRight;
+
     // Left and right walls
-    for (int i = (int)cellPos.x; i < (int)cellPos.x + roomHeight; i++) 
+    for (int i = startX; i <= endX; i++) 
     {
       for (int layer = 0; layer < 2; layer++)
-      {        
-        //SerializableBlock blockLeft = CreateBlock(i, (int)cellPos.y, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED);        
-        //SerializableBlock blockRight = CreateBlock(i, (int)cellPos.y + roomWidth - 1, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED);
-                
-        SerializableBlock blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.WEST);
-        SerializableBlock blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.EAST);
+      { 
+        if (i == startX || i == endX)
+        {
+          blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_WOODEN_LOG);        
+          blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_WOODEN_LOG);
+        }
+        else
+        {                
+          blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.WEST);
+          blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.EAST);
+        }
 
         _map[blockLeft.X, blockLeft.Y].Blocks.Add(blockLeft);
         _map[blockRight.X, blockRight.Y].Blocks.Add(blockRight);
@@ -249,13 +256,10 @@ public class Village : GeneratedMap
     }
 
     // Up and down walls
-    for (int i = (int)cellPos.y; i < (int)cellPos.y + roomWidth; i++) 
+    for (int i = startY + 1; i <= endY - 1; i++) 
     {
       for (int layer = 0; layer < 2; layer++)
-      {        
-        //SerializableBlock blockUp = CreateBlock((int)cellPos.x, i, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED);
-        //SerializableBlock blockDown = CreateBlock((int)cellPos.x + roomHeight - 1, i, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_BRICKS_RED);
-
+      { 
         SerializableBlock blockUp = CreateBlock(startX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.NORTH);
         SerializableBlock blockDown = CreateBlock(endX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.SOUTH);
 
@@ -289,19 +293,22 @@ public class Village : GeneratedMap
     int endX = (int)cellPos.x + roomHeight - 1;
     int startY = (int)cellPos.y;
     int endY = (int)cellPos.y + roomWidth - 1;
-    int layer = 2;
 
     /*
-    
     // Roofs with overhang
     
     int startX = (int)cellPos.x - 1;
     int endX = (int)cellPos.x + roomHeight;
     int startY = (int)cellPos.y - 1;
     int endY = (int)cellPos.y + roomWidth;
-    
     */
 
+    int layer = 2;
+
+    int stepsX = endX - startX + 1;
+    int stepsY = endY - startY + 1;
+
+    int counter = 0;
     while ((endX - startX >= 1) && (endY - startY) >= 1)
     {
       MakePerimeter(startX, endX, startY, endY, layer);
@@ -312,6 +319,45 @@ public class Village : GeneratedMap
       endY--;
 
       layer++;
+
+      counter++;
+    }
+
+    CloseRoofHoles(startX, startY, stepsX, stepsY, layer);
+  }
+
+  /// <summary>
+  /// If room size is NxN and N is odd, then our roof will have one hole in the center.
+  /// If room size is WxH and W > H (i.e. has more columns than rows) then it closes itself only
+  /// if width is even.
+  /// If W < H then room closes itself only if H is even.
+  /// If width and height are both even, room closes itself, so we don't have to do anything.
+  /// 
+  /// Again, don't forget that room of size e.g. 7x6 has 7 rows and 6 columns.
+  /// 
+  /// </summary>
+  void CloseRoofHoles(int startX, int startY, int stepsX, int stepsY, int layer)
+  {
+    if (stepsX > stepsY && stepsY % 2 != 0)
+    {
+      for (int i = 0; i < stepsX - stepsY + 1; i++)
+      {
+        SerializableBlock b = CreateBlock(startX + i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_CLOSING, (int)GlobalConstants.Orientation.EAST);
+        _map[startX + i, startY].Blocks.Add(b);
+      }
+    }
+    else if (stepsX < stepsY && stepsX % 2 != 0)
+    {
+      for (int i = 0; i < stepsY - stepsX + 1; i++)
+      {
+        SerializableBlock b = CreateBlock(startX, startY + i, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_CLOSING, (int)GlobalConstants.Orientation.SOUTH);
+        _map[startX, startY + i].Blocks.Add(b);
+      }
+    }
+    else if (stepsX == stepsY && stepsX % 2 != 0 && stepsY % 2 != 0)
+    {
+      SerializableBlock b = CreateBlock(startX, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_CLOSING, (int)GlobalConstants.Orientation.SOUTH);
+      _map[startX, startY].Blocks.Add(b);
     }
   }
 
@@ -399,6 +445,8 @@ public class Village : GeneratedMap
 
   void MakePerimeter(int startX, int endX, int startY, int endY, int layer)
   {
+    //Debug.Log("Size: " + (endX - startX) + " " + (endY - startY) + " | " + startX + " " + endX + " " + startY + " " + endY + " " + layer);
+
     SerializableBlock roof1;
     SerializableBlock roof2;
 
@@ -406,18 +454,18 @@ public class Village : GeneratedMap
     {
       if (i == startX)
       {
-        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_CORNER, (int)GlobalConstants.Orientation.NORTH);
-        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_CORNER, (int)GlobalConstants.Orientation.EAST);
+        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, (int)GlobalConstants.Orientation.NORTH);
+        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, (int)GlobalConstants.Orientation.EAST);
       }
       else if (i == endX)
       {
-        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_CORNER, (int)GlobalConstants.Orientation.WEST);
-        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_CORNER, (int)GlobalConstants.Orientation.SOUTH);
+        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, (int)GlobalConstants.Orientation.WEST);
+        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, (int)GlobalConstants.Orientation.SOUTH);
       }
       else
       {
-        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_LINE, (int)GlobalConstants.Orientation.WEST);
-        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_LINE, (int)GlobalConstants.Orientation.EAST);
+        roof1 = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_LINE, (int)GlobalConstants.Orientation.WEST);
+        roof2 = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_LINE, (int)GlobalConstants.Orientation.EAST);
       }
 
       _map[i, startY].Blocks.Add(roof1);
@@ -426,15 +474,15 @@ public class Village : GeneratedMap
 
     for (int i = startY + 1; i <= endY - 1; i++)
     {
-      roof1 = CreateBlock(startX, i, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_LINE, (int)GlobalConstants.Orientation.NORTH);
-      roof2 = CreateBlock(endX, i, layer, GlobalConstants.StaticPrefabsEnum.ROOF_WOODEN_LINE, (int)GlobalConstants.Orientation.SOUTH);
+      roof1 = CreateBlock(startX, i, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_LINE, (int)GlobalConstants.Orientation.NORTH);
+      roof2 = CreateBlock(endX, i, layer, GlobalConstants.StaticPrefabsEnum.ROOF_COBBLESTONE_LINE, (int)GlobalConstants.Orientation.SOUTH);
 
       _map[i, startY].Blocks.Add(roof1);
       _map[i, endY].Blocks.Add(roof2);
     }
   }
 
-  SerializableBlock CreateBlock(int x, int y, int layer, GlobalConstants.StaticPrefabsEnum type, int facing = 0)
+  SerializableBlock CreateBlock(int x, int y, int layer, GlobalConstants.StaticPrefabsEnum type, int facing = 0, bool flip = false)
   {
     SerializableBlock b = new SerializableBlock();
 
@@ -442,6 +490,7 @@ public class Village : GeneratedMap
     b.Y = y;
     b.Layer = layer;
     b.Facing = facing;
+    b.FlipFlag = flip;
     b.PrefabName = GlobalConstants.StaticPrefabsNamesById[type];
 
     return b;
