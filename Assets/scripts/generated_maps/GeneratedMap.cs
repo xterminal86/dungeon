@@ -77,6 +77,19 @@ public class GeneratedMap
 
     return false;
   }
+
+  public SerializableBlock GetBlock(int x, int y, int layer)
+  {
+    foreach (var item in _map[x, y].Blocks)
+    {
+      if (item.X == x && item.Y == y && item.Layer == layer)
+      {
+        return item;
+      }
+    }
+
+    return null;
+  }
 }
 
 public class GeneratedMapCell
