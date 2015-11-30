@@ -8,6 +8,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class App : MonoSingleton<App>
 {
+  public Terrain Mountains;
+
   public GameObject TestModel;
   public GameObject ObjectsInstancesTransform;
 
@@ -115,7 +117,7 @@ public class App : MonoSingleton<App>
       _generatedMap.Generate();
       BuildMap();
     }
-
+        
     if (MapLoadingFinished != null)
       MapLoadingFinished();
   }
