@@ -56,6 +56,8 @@ public class App : MonoSingleton<App>
   public Color FogColor = Color.black;
   [Range(0.0f, 1.0f)]
   public float FogDensity = 0.2f;
+  [Range(1.0f, 100.0f)]
+  public float LinearFogWidth = 1.0f;
 
   int _generatedMapWidth = 25, _generatedMapHeight = 25;
   GeneratedMap _generatedMap;
@@ -66,8 +68,8 @@ public class App : MonoSingleton<App>
     UnityEngine.RenderSettings.fogMode = Type;
     UnityEngine.RenderSettings.fogColor = FogColor;
     UnityEngine.RenderSettings.fogDensity = FogDensity;
-    UnityEngine.RenderSettings.fogStartDistance = 0.0f;
-    UnityEngine.RenderSettings.fogEndDistance = Camera.main.farClipPlane;
+    UnityEngine.RenderSettings.fogStartDistance = Camera.main.farClipPlane - LinearFogWidth * 2;
+    UnityEngine.RenderSettings.fogEndDistance = Camera.main.farClipPlane - LinearFogWidth;
 
     MapLoadingFinished += InputController.Instance.MapLoadingFinishedHandler;
     MapLoadingFinished += SoundManager.Instance.MapLoadingFinishedHandler;
