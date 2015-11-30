@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Text;
 
 /// <summary>
-/// A Star pathfinder
+/// A* pathfinder (no diagonal movement)
 /// </summary>
-public class Pathfinder
+public class AStar
 {
   Int2 _start = new Int2();
   Int2 _end = new Int2();
@@ -19,10 +19,10 @@ public class Pathfinder
   GeneratedMapCell[,] _map;
 
   int _hvCost = 10;
-  int _diagonalCost = 15;
+  int _diagonalCost = 1500;
 
   int _mapWidth = 0, _mapHeight = 0;
-  public Pathfinder(GeneratedMapCell[,] map, int width, int height)
+  public AStar(GeneratedMapCell[,] map, int width, int height)
   {
     _map = map;
 
@@ -33,10 +33,10 @@ public class Pathfinder
   }
 
   /// <summary>
-  /// Найти первую свободную клетку вокруг данной, ближайшую по направлению к точке назначения
+  /// Find first empty cell around current, closest to the destination point
   /// </summary>
-  /// <param name="aroundThis">Точка, вокруг которой ищем</param>
-  /// <returns>Координаты найденной точки или null</returns>
+  /// <param name="aroundThis">Point around which we search</param>
+  /// <returns>Its coordinates if found or null otherwise</returns>
   Int2 FindEmptyCell(Int2 aroundThis)
   {
     Int2 pointFound = new Int2();
@@ -46,11 +46,53 @@ public class Pathfinder
     int hx = aroundThis.X + 1;
     int hy = aroundThis.Y + 1;
 
-    lx = Mathf.Clamp(lx, 0, _mapHeight);
-    ly = Mathf.Clamp(ly, 0, _mapWidth);
-    hx = Mathf.Clamp(hx, 0, _mapHeight);
-    hy = Mathf.Clamp(hy, 0, _mapWidth);
-        
+    lx = Mathf.Clamp(lx, 0, _mapHeight - 1);
+    ly = Mathf.Clamp(ly, 0, _mapWidth - 1);
+    hx = Mathf.Clamp(hx, 0, _mapHeight - 1);
+    hy = Mathf.Clamp(hy, 0, _mapWidth - 1);
+
+    /*
+    bool found = false;
+    int cost = -1;
+    int minCost = int.MaxValue;
+
+    cost = ManhattanDistance(new Int2(lx, aroundThis.Y), _start);
+    if (cost < minCost)
+    {
+      found = true;
+      minCost = cost;
+      pointFound.X = lx;
+      pointFound.Y = aroundThis.Y;
+    }
+
+    cost = ManhattanDistance(new Int2(hx, aroundThis.Y), _start);
+    if (cost < minCost)
+    {
+      found = true;
+      minCost = cost;
+      pointFound.X = hx;
+      pointFound.Y = aroundThis.Y;
+    }
+
+    cost = ManhattanDistance(new Int2(aroundThis.X, ly), _start);
+    if (cost < minCost)
+    {
+      found = true;
+      minCost = cost;
+      pointFound.X = aroundThis.X;
+      pointFound.Y = ly;
+    }
+
+    cost = ManhattanDistance(new Int2(aroundThis.X, hy), _start);
+    if (cost < minCost)
+    {
+      found = true;
+      minCost = cost;
+      pointFound.X = aroundThis.X;
+      pointFound.Y = hy;
+    }
+    */
+
     int minCost = int.MaxValue;
     bool found = false;
     for (int x = lx; x <= hx; x++)
@@ -80,36 +122,15 @@ public class Pathfinder
   }
 
   /// <summary>
-  /// В случае, когда точка назначения попала на препятствие, то пробуем найти ближайшую точку рядом с ней.
-  /// Если нашли, то точка назначения становится этой точкой, иначе никуда не идём вообще.  
+  /// Returns traversal cost between two points
   /// </summary>
-  /// <param name="pos">Точка назначения</param>
-  void FindNearestNode(Int2 pos)
-  {
-    Int2 pointFound = FindEmptyCell(pos);
-
-    if (pointFound != null)
-    {
-      _end = pointFound;
-      //Debug.Log(string.Format("Found: going to {0} instead", _end));
-    }
-    else
-    {
-      //Debug.Log("Seems like we can't get there... :(");
-      _end = _start;
-    }
-  }
-
-  /// <summary>
-  /// Возвращает стоимость перемещения между двумя точками
-  /// </summary>
-  /// <param name="point">Точка 1</param>
-  /// <param name="goal">Точка 2</param>
-  /// <returns>Стоимость перемещения</returns>
+  /// <param name="point">Point 1</param>
+  /// <param name="goal">Point 2</param>
+  /// <returns>Cost of the traversal</returns>
   int TraverseCost(Int2 point, Int2 goal)
   {
     if (point.X == goal.X || point.Y == goal.Y)
-    {
+    {    
       return _hvCost;
     }
 
@@ -117,15 +138,11 @@ public class Pathfinder
   }
 
   /// <summary>
-  /// Эвристическая функция оценки расстояния от данной точки до точки назначения (для A* алгоритма)
+  /// Heuristic
   /// </summary>
-  /// <param name="point">Данная точка</param>
-  /// <param name="end">Точка назначения</param>
-  /// <returns>"Стоимость" до точки назначения</returns>
   int ManhattanDistance(Int2 point, Int2 end)
   {
-    int cost = Mathf.Abs( (Mathf.Abs(end.Y) - Mathf.Abs(point.Y)) + 
-                          (Mathf.Abs(end.X) - Mathf.Abs(point.X)) ) * _hvCost;
+    int cost = ( Mathf.Abs(end.Y - point.Y) + Mathf.Abs(end.X - point.X) ) * _hvCost;
 
     //Debug.Log(string.Format("Manhattan distance remaining from {0} to {1}: {2}", point.ToString(), end.ToString(), cost));
 
@@ -133,10 +150,8 @@ public class Pathfinder
   }
 
   /// <summary>
-  /// Метод ищет элемент с самой низкой итоговой стоимостью из списка узлов пути
+  /// Searches for the element with lowest total cost
   /// </summary>
-  /// <param name="list"></param>
-  /// <returns></returns>
   int FindCheapestElement(List<PathNode> list)
   {
     int f = int.MaxValue;
@@ -154,15 +169,11 @@ public class Pathfinder
       count++;      
     }
 
+    //Debug.Log("Cheapest element " + list[index].Coordinate + " " + list[index].CostF);
+
     return index;
   }
 
-  /// <summary>
-  /// Возвращает элемент из заданного списка с заданными координатами
-  /// </summary>
-  /// <param name="nodeCoordinate">Координаты карты</param>
-  /// <param name="listToLookIn">Список, в котором производится поиск</param>
-  /// <returns>Элемент из заданного списка с заданными координатами или null</returns>
   PathNode FindNode(Int2 nodeCoordinate, List<PathNode> listToLookIn)
   {
     foreach (var item in listToLookIn)
@@ -177,12 +188,6 @@ public class Pathfinder
     return null;
   }
 
-  /// <summary>
-  /// Проверяет есть ли в данном списке элемент с данными координатами
-  /// </summary>
-  /// <param name="nodeCoordinate">Координаты точки</param>
-  /// <param name="listToLookIn">Список, в котором производится поиск</param>
-  /// <returns>true, если элемент есть, иначе false</returns>
   bool IsNodePresent(Int2 nodeCoordinate, List<PathNode> listToLookIn)
   {
     foreach (var item in listToLookIn)
@@ -198,9 +203,8 @@ public class Pathfinder
   }
 
   /// <summary>
-  /// Создаёт следующие узлы пути для работы алгоритма вокруг данной точки
+  /// Creates next nodes for algorithm
   /// </summary>
-  /// <param name="node"></param>
   void LookAround(PathNode node)
   {    
     int lowerX = node.Coordinate.X - 1;
@@ -208,32 +212,40 @@ public class Pathfinder
     int higherX = node.Coordinate.X + 1;
     int higherY = node.Coordinate.Y + 1;
 
-    lowerX = Mathf.Clamp(lowerX, 0, _mapHeight);
-    lowerY = Mathf.Clamp(lowerY, 0, _mapWidth);
-    higherX = Mathf.Clamp(higherX, 0, _mapHeight);
-    higherY = Mathf.Clamp(higherY, 0, _mapWidth);
-        
+    lowerX = Mathf.Clamp(lowerX, 0, _mapHeight - 1);
+    lowerY = Mathf.Clamp(lowerY, 0, _mapWidth - 1);
+    higherX = Mathf.Clamp(higherX, 0, _mapHeight - 1);
+    higherY = Mathf.Clamp(higherY, 0, _mapWidth - 1);
+
     Int2 coordinate = new Int2();
     for (int x = lowerX; x <= higherX; x++)
     {
       for (int y = lowerY; y <= higherY; y++)
       {
-        // Закомментировать условие, если допускается срезать углы рядом с препятствием
+        // Comment out the following condition if diagonal cutting of obstacles is allowed
 
-        if (_map[higherX, node.Coordinate.Y] != -1 && (x == higherX && (y == higherY || y == lowerY)) ||
-            _map[lowerX, node.Coordinate.Y] != -1 && (x == lowerX && (y == higherY || y == lowerY)) ||
-            _map[node.Coordinate.X, lowerY] != -1 && (y == lowerY && (x == lowerX || x == higherX)) ||
-            _map[node.Coordinate.X, higherY] != -1 && (y == higherY && (x == lowerX || x == higherX)))
+        if ( (_map[higherX, node.Coordinate.Y].CellType == GeneratedCellType.ROOM || 
+              _map[higherX, node.Coordinate.Y].CellType == GeneratedCellType.ROAD ) && 
+              (x == higherX && (y == higherY || y == lowerY)) ||
+             (_map[lowerX, node.Coordinate.Y].CellType == GeneratedCellType.ROOM ||
+              _map[lowerX, node.Coordinate.Y].CellType == GeneratedCellType.ROAD) && 
+              (x == lowerX && (y == higherY || y == lowerY)) ||
+             (_map[node.Coordinate.X, lowerY].CellType == GeneratedCellType.ROOM ||
+              _map[node.Coordinate.X, lowerY].CellType == GeneratedCellType.ROAD) && 
+              (y == lowerY && (x == lowerX || x == higherX)) ||
+             (_map[node.Coordinate.X, higherY].CellType == GeneratedCellType.ROOM ||
+              _map[node.Coordinate.X, higherY].CellType == GeneratedCellType.ROAD) && 
+              (y == higherY && (x == lowerX || x == higherX)))
         {
           continue;
         }
-        
+
         coordinate.X = x;
         coordinate.Y = y;
 
         bool isInClosedList = IsNodePresent(coordinate, _closedList);
         
-        if (_map[x, y] == -1 && !isInClosedList)
+        if (_map[x, y].CellType != GeneratedCellType.ROOM && !isInClosedList)
         {
           bool isInOpenList = IsNodePresent(coordinate, _openList);
 
@@ -250,39 +262,34 @@ public class Pathfinder
       }
     }
   }
-  
-  /// <summary>
-  /// Тест на завершение работы алгоритма A*
-  /// </summary>
-  /// <returns></returns>
+
   bool ExitCondition()
   {
     return (_openList.Count == 0 || IsNodePresent(_end, _closedList));    
   }
 
   /// <summary>
-  /// Метод пытается построить путь между заданными точками по алгоритму A*,
-  /// и возвращает его в виде списка узлов, которые нужно пройти, чтобы добраться до точки назначения.
+  /// Method tries to build a path by A* algorithm and returns it as list of nodes
+  /// to traverse from start to end
   /// </summary>
-  /// <param name="start">Исходная точка</param>
-  /// <param name="end">Точка назначения</param>
-  /// <returns>Список узлов пути в порядке следования кординат до цели</returns>
+  /// <param name="start">Starting point</param>
+  /// <param name="end">Destination point</param>
+  /// <returns>List of nodes from start to end</returns>
   public List<PathNode> FindPath(Int2 start, Int2 end)
   {
     _start = start;
     _end = end;
 
-    if (_map[_end.X, _end.Y] != -1)
+    if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE)
     {
-      //Debug.Log("Goal is on the obstacle! Trying to find nearest cell...");
-      FindNearestNode(_end);
+      Debug.Log("Goal is on the obstacle!");
     }
 
     _path.Clear();
     _openList.Clear();
     _closedList.Clear();
 
-    // Алгоритм A* начинается здесь
+    // A* starts here
 
     PathNode node = new PathNode(start);
     node.CostH = ManhattanDistance(start, end);
@@ -310,9 +317,6 @@ public class Pathfinder
     return _path;
   }
 
-  /// <summary>
-  /// Метод создания итогового пути до цели
-  /// </summary>
   void ConstructPath()
   {
     var node = FindNode(_end, _closedList);
@@ -329,7 +333,7 @@ public class Pathfinder
       _path.RemoveAt(0);
     }
 
-    //PrintPath();
+    PrintPath();
   }
   
   void PrintPath()
@@ -340,7 +344,7 @@ public class Pathfinder
 
     foreach (var item in _path)
     {
-      sb.Append(string.Format("[{0};{1}] => ", item.Coordinate.X, item.Coordinate.Y));
+      sb.Append(string.Format("[{0};{1} costF: {2}] => ", item.Coordinate.X, item.Coordinate.Y, item.CostF));
     }
 
     sb.Append("Done!");
@@ -364,7 +368,7 @@ public class Pathfinder
   }
 
   /// <summary>
-  /// Класс узла пути
+  /// Helper class of path node
   /// </summary>
   public class PathNode
   {
@@ -395,16 +399,16 @@ public class Pathfinder
       return Coordinate.ToString();
     }
 
-    // Координата карты этого узла
+    // Map coordinate of this node
     public Int2 Coordinate = new Int2();
-    // Ссылка на родительский узел
+    // Reference to parent node
     public PathNode ParentNode = null;
 
-    // Итоговая стоимость
+    // Total cost
     public int CostF = 0;
-    // Стоимость перехода в данную точку из стартовой, с учётом уже пройденного пути
+    // Cost of traversal here from the starting point with regard of already traversed path
     public int CostG = 0;
-    // Эвристическая стоимость
+    // Heuristic cost
     public int CostH = 0;
   }
 }

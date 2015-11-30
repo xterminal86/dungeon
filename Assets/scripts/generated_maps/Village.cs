@@ -78,8 +78,32 @@ public class Village : GeneratedMap
 
   void ConnectBuildings()
   {
-    //Pathfinder p = new Pathfinder(_map, _mapWidth, _mapHeight);
-    //p.FindPath(
+    Debug.Log(_roadMarks[0] + " " + _roadMarks[1]);
+
+    RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
+    var road = rb.BuildRoad(_roadMarks[0], _roadMarks[1]);
+
+    foreach (var item in road)
+    {
+      Debug.Log(item);
+    }
+
+    /*
+    RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
+
+    for (int i = 0; i < _roadMarks.Count - 1; i++)
+    {
+      var road = rb.BuildRoad(_roadMarks[i], _roadMarks[i + 1]);
+
+      foreach (var item in road)
+      {
+        SerializableBlock b = CreateBlock(item.X, item.Y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS);
+        b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.STONE;
+
+        _map[item.X, item.Y].Blocks.Add(b);
+      }
+    }
+    */
   }
 
   void GenerateGrass()
@@ -441,9 +465,39 @@ public class Village : GeneratedMap
         SerializableObject obj = CreateDoor(p.X, p.Y, layer, GlobalConstants.ObjectPrefabsEnum.DOOR_WOODEN, (int)item.Value, "door-openable");
         _map[p.X, p.Y].Objects.Add(obj);
 
+        MarkRoadSpot(p, item.Value);
+
         break;
       }
     }
+  }
+
+  List<Int2> _roadMarks = new List<Int2>();
+  void MarkRoadSpot(Int2 point, GlobalConstants.Orientation doorFacing)
+  {
+    Int2 marker = new Int2();
+    if (doorFacing == GlobalConstants.Orientation.EAST)
+    {
+      marker.X = point.X;
+      marker.Y = point.Y + 1;
+    }
+    else if (doorFacing == GlobalConstants.Orientation.SOUTH)
+    {
+      marker.X = point.X + 1;
+      marker.Y = point.Y;
+    }
+    else if (doorFacing == GlobalConstants.Orientation.WEST)
+    {
+      marker.X = point.X;
+      marker.Y = point.Y - 1;
+    }
+    else if (doorFacing == GlobalConstants.Orientation.NORTH)
+    {
+      marker.X = point.X - 1;
+      marker.Y = point.Y;
+    }
+
+    _roadMarks.Add(marker);
   }
 
   void FindWindowOnColumn(int startX, int endX, int columnY, int windowDistance)
