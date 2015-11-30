@@ -207,7 +207,7 @@ public class RoadBuilder
 
     if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE)
     {
-      Debug.Log("Goal is on the obstacle!");
+      Debug.Log(end + " - Goal is on the obstacle!");
     }
 
     _path.Clear();
