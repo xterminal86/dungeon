@@ -1,145 +1,105 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
+/// <summary>
+/// A* pathfinder (no diagonal movement)
+/// </summary>
 public class RoadBuilder
 {
+  Int2 _start = new Int2();
+  Int2 _end = new Int2();
+    
+  List<PathNode> _path = new List<PathNode>();
+
+  List<PathNode> _openList = new List<PathNode>();
+  List<PathNode> _closedList = new List<PathNode>();
+
   GeneratedMapCell[,] _map;
 
-  int _mapWidth = -1;
-  int _mapHeight = -1;
-
   int _hvCost = 10;
+  int _diagonalCost = 20;
 
-  Int2 _startintPoint = new Int2();
-  Int2 _endingPoint = new Int2();
-
-  public RoadBuilder(GeneratedMapCell[,] map, int mapWidth, int mapHeight)
+  int _mapWidth = 0, _mapHeight = 0;
+  public RoadBuilder(GeneratedMapCell[,] map, int width, int height)
   {
     _map = map;
-    _mapWidth = mapWidth;
-    _mapHeight = mapHeight;
+
+    _mapWidth = width;
+    _mapHeight = height;
+
+    //PrintMap();
   }
-
-  int _safeguard = 1000;
-  int _idleCounter = 0;
-
-  List<Node> _closedList = new List<Node>();
-  List<Node> _openList = new List<Node>();
-
-  List<Int2> _road = new List<Int2>();
-  public List<Int2> BuildRoad(Int2 start, Int2 end)
+    
+  /// <summary>
+  /// Returns traversal cost between two points
+  /// </summary>
+  /// <param name="point">Point 1</param>
+  /// <param name="goal">Point 2</param>
+  /// <returns>Cost of the traversal</returns>
+  int TraverseCost(Int2 point, Int2 goal)
   {
-    _startintPoint = start;
-    _endingPoint = end;
-
-    _openList.Clear();
-    _closedList.Clear();
-
-    Node startingNode = new Node(start);
-    startingNode.Cost = ManhattanDistance(start, end);
-
-    _openList.Add(startingNode);
-
-    bool exit = false;
-
-    _idleCounter = 0;
-
-    while (!exit)
-    {
-      if (_idleCounter > _safeguard)
-      {
-        Debug.LogWarning("Terminated by safeguard");
-        break;
-      }
-
-      int index = FindCheapestNode(_openList);
-
-      _closedList.Add(_openList[index]);
-
-      LookAround(_openList[index]);
-
-      if (IsNodePresent(end, _closedList) || index == -1)
-      {
-        exit = true;
-      }
-
-      _idleCounter++;
+    if (point.X == goal.X || point.Y == goal.Y)
+    {    
+      return _hvCost;
     }
 
-    ConstructPath();
-
-    return _road;
+    return _diagonalCost;
   }
 
-  void ConstructPath()
+  /// <summary>
+  /// Heuristic
+  /// </summary>
+  int ManhattanDistance(Int2 point, Int2 end)
   {
-    _road.Clear();
+    int cost = ( Mathf.Abs(end.Y - point.Y) + Mathf.Abs(end.X - point.X) ) * _hvCost;
 
-    foreach (var item in _closedList)
-    {
-      _road.Add(item.Coordinate);
-    }
+    //Debug.Log(string.Format("Manhattan distance remaining from {0} to {1}: {2}", point.ToString(), end.ToString(), cost));
+
+    return cost;
   }
 
-  List<Int2> _around = new List<Int2>();
-  void LookAround(Node node)
+  /// <summary>
+  /// Searches for the element with lowest total cost
+  /// </summary>
+  int FindCheapestElement(List<PathNode> list)
   {
-    _around.Clear();
-
-    int x = node.Coordinate.X;
-    int y = node.Coordinate.Y;
-
-    int xUp = node.Coordinate.X - 1;
-    int xDown = node.Coordinate.X + 1;
-    int yLeft = node.Coordinate.Y - 1;
-    int yRight = node.Coordinate.Y + 1;
-
-    xUp = Mathf.Clamp(xUp, 0, _mapHeight - 1);
-    xDown = Mathf.Clamp(xDown, 0, _mapHeight - 1);
-    yLeft = Mathf.Clamp(yLeft, 0, _mapWidth - 1);
-    yRight = Mathf.Clamp(yRight, 0, _mapWidth - 1);
-
-    Int2 up = new Int2(xUp, y);
-    Int2 down = new Int2(xDown, y);
-    Int2 left = new Int2(x, yLeft);
-    Int2 right = new Int2(x, yRight);
-
-    _around.Add(up);
-    _around.Add(down);
-    _around.Add(left);
-    _around.Add(right);
-
-    foreach (var item in _around)
-    {
-      if (!IsNodePresent(item, _openList) && _map[item.X, item.Y].CellType != GeneratedCellType.ROOM)
-      {
-        Node n = new Node(item);
-        n.Cost = ManhattanDistance(item, _endingPoint);
-
-        _openList.Add(n);
-      }
-    }
-  }
-
-  int FindCheapestNode(List<Node> list)
-  {
+    int f = int.MaxValue;
     int index = -1;
-    int cost = int.MaxValue;
+    int count = 0;
 
-    for (int i = 0; i < list.Count; i++)
+    foreach (var item in list)
     {
-      if (list[i].Cost < cost)
+      if (item.CostF < f)
       {
-        cost = list[i].Cost;
-        index = i;
+        f = item.CostF;
+        index = count;
       }
+
+      count++;      
     }
+
+    //Debug.Log("Cheapest element " + list[index].Coordinate + " " + list[index].CostF);
 
     return index;
   }
 
-  bool IsNodePresent(Int2 nodeCoordinate, List<Node> listToLookIn)
+  PathNode FindNode(Int2 nodeCoordinate, List<PathNode> listToLookIn)
+  {
+    foreach (var item in listToLookIn)
+    {
+      if (nodeCoordinate.X == item.Coordinate.X &&
+          nodeCoordinate.Y == item.Coordinate.Y)
+      {
+        return item;
+      }
+    }
+
+    return null;
+  }
+
+  bool IsNodePresent(Int2 nodeCoordinate, List<PathNode> listToLookIn)
   {
     foreach (var item in listToLookIn)
     {
@@ -149,33 +109,235 @@ public class RoadBuilder
         return true;
       }
     }
-    
+
     return false;
   }
 
-  int ManhattanDistance(Int2 point, Int2 end)
+  void LookAround4(PathNode node)
   {
-    int cost = ( Mathf.Abs(end.Y - point.Y) + Mathf.Abs(end.X - point.X) ) * _hvCost;
-    
-    //Debug.Log(string.Format("Manhattan distance remaining from {0} to {1}: {2}", point.ToString(), end.ToString(), cost));
-    
-    return cost;
+    sbyte[,] direction = new sbyte[4, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
+
+    Int2 coordinate = new Int2();
+    for (int i = 0; i < 4; i++)
+    {
+      coordinate.X = node.Coordinate.X + direction[i, 0];
+      coordinate.Y = node.Coordinate.Y + direction[i, 1];
+
+      coordinate.X = Mathf.Clamp(coordinate.X, 0, _mapHeight - 1);
+      coordinate.Y = Mathf.Clamp(coordinate.Y, 0, _mapWidth - 1);
+
+      bool isInClosedList = IsNodePresent(coordinate, _closedList);
+
+      if (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM && !isInClosedList)
+      {
+        bool isInOpenList = IsNodePresent(coordinate, _openList);
+
+        if (!isInOpenList)
+        {
+          PathNode newNode = new PathNode(new Int2(coordinate.X, coordinate.Y), node);
+          newNode.CostG = node.CostG + TraverseCost(node.Coordinate, newNode.Coordinate);
+          newNode.CostH = ManhattanDistance(newNode.Coordinate, _end);
+          newNode.CostF = newNode.CostG + newNode.CostH;
+
+          _openList.Add(newNode);
+        }
+      }      
+    }    
   }
 
-  public class Node
+  /// <summary>
+  /// Creates next nodes for algorithm
+  /// </summary>
+  void LookAround9(PathNode node)
+  {    
+    int lowerX = node.Coordinate.X - 1;
+    int lowerY = node.Coordinate.Y - 1;
+    int higherX = node.Coordinate.X + 1;
+    int higherY = node.Coordinate.Y + 1;
+
+    lowerX = Mathf.Clamp(lowerX, 0, _mapHeight - 1);
+    lowerY = Mathf.Clamp(lowerY, 0, _mapWidth - 1);
+    higherX = Mathf.Clamp(higherX, 0, _mapHeight - 1);
+    higherY = Mathf.Clamp(higherY, 0, _mapWidth - 1);
+
+    Int2 coordinate = new Int2();
+    for (int x = lowerX; x <= higherX; x++)
+    {
+      for (int y = lowerY; y <= higherY; y++)
+      {        
+        coordinate.X = x;
+        coordinate.Y = y;
+
+        bool isInClosedList = IsNodePresent(coordinate, _closedList);
+        
+        if (_map[x, y].CellType != GeneratedCellType.ROOM && !isInClosedList)
+        {
+          bool isInOpenList = IsNodePresent(coordinate, _openList);
+
+          if (!isInOpenList)
+          {
+            PathNode newNode = new PathNode(new Int2(x, y), node);
+            newNode.CostG = node.CostG + TraverseCost(node.Coordinate, newNode.Coordinate);
+            newNode.CostH = ManhattanDistance(newNode.Coordinate, _end);
+            newNode.CostF = newNode.CostG + newNode.CostH;
+
+            _openList.Add(newNode);
+          }
+        }
+      }
+    }
+  }
+
+  bool ExitCondition()
   {
-    public Node(Int2 coord)
+    return (_openList.Count == 0 || IsNodePresent(_end, _closedList));    
+  }
+
+  /// <summary>
+  /// Method tries to build a path by A* algorithm and returns it as list of nodes
+  /// to traverse from start to end
+  /// </summary>
+  /// <param name="start">Starting point</param>
+  /// <param name="end">Destination point</param>
+  /// <returns>List of nodes from start to end</returns>
+  public List<PathNode> BuildRoad(Int2 start, Int2 end)
+  {
+    _start = start;
+    _end = end;
+
+    if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE)
+    {
+      Debug.Log("Goal is on the obstacle!");
+    }
+
+    _path.Clear();
+    _openList.Clear();
+    _closedList.Clear();
+
+    // A* starts here
+
+    PathNode node = new PathNode(start);
+    node.CostH = ManhattanDistance(start, end);
+    node.CostF = node.CostG + node.CostH;
+
+    _openList.Add(node);
+
+    bool exit = false;
+    while (!exit)
+    {
+      int index = FindCheapestElement(_openList);
+
+      var closedNode = _openList[index];
+      _closedList.Add(closedNode);
+
+      _openList.RemoveAt(index);
+
+      //LookAround9(closedNode);
+      LookAround4(closedNode);
+
+      exit = ExitCondition();
+    }
+
+    ConstructPath();
+    
+    return _path;
+  }
+
+  void ConstructPath(bool printPath = false)
+  {
+    var node = FindNode(_end, _closedList);
+
+    while (node != null)
+    {
+      _path.Add(node);
+      node = node.ParentNode;
+    }
+
+    if (_path.Count != 0)
+    {
+      _path.Reverse();
+      _path.RemoveAt(0);
+    }
+
+    if (printPath)
+    {
+      PrintPath();
+    }
+  }
+  
+  void PrintPath()
+  {
+    StringBuilder sb = new StringBuilder();
+
+    sb.Append(string.Format("Path from {0} to {1} :", _start.ToString(), _end.ToString()));
+
+    foreach (var item in _path)
+    {
+      sb.Append(string.Format("[{0};{1} costF: {2}] => ", item.Coordinate.X, item.Coordinate.Y, item.CostF));
+    }
+
+    sb.Append("Done!");
+
+    Debug.Log(sb.ToString());
+  }
+
+  void PrintMap()
+  {
+    StringBuilder sb = new StringBuilder();
+
+    for (int x = 0; x < _mapHeight; x++)
+    {
+      for (int y = 0; y < _mapWidth; y++)
+      {
+        sb.Append(string.Format("({0};{1}) => {2} | ", x, y, _map[x, y]));
+      }
+    }
+
+    Debug.Log("Map array: " + sb.ToString());
+  }
+
+  /// <summary>
+  /// Helper class of path node
+  /// </summary>
+  public class PathNode
+  {
+    public PathNode(Int2 coord)
+    {
+      Coordinate.X = coord.X;
+      Coordinate.Y = coord.Y;           
+    }
+
+    public PathNode(PathNode rhs)
+    {
+      Coordinate = rhs.Coordinate;
+      ParentNode = rhs.ParentNode;
+      CostF = rhs.CostF;
+      CostG = rhs.CostG;
+      CostH = rhs.CostH;
+    }
+
+    public PathNode(Int2 coord, PathNode parent)
     {
       Coordinate.X = coord.X;
       Coordinate.Y = coord.Y;
+      ParentNode = parent;
     }
 
     public override string ToString()
     {
-      return string.Format("[{0};{1} cost: {2}]", Coordinate.X, Coordinate.Y, Cost);
+      return Coordinate.ToString();
     }
 
+    // Map coordinate of this node
     public Int2 Coordinate = new Int2();
-    public int Cost = int.MaxValue;
-  };
+    // Reference to parent node
+    public PathNode ParentNode = null;
+
+    // Total cost
+    public int CostF = 0;
+    // Cost of traversal here from the starting point with regard of already traversed path
+    public int CostG = 0;
+    // Heuristic cost
+    public int CostH = 0;
+  }
 }

@@ -116,7 +116,7 @@ public static class GlobalConstants
   {
     FLOOR_GRASS = 0,
     FLOOR_DIRT,
-    FLOOR_WOODEN,
+    FLOOR_WOODEN_BLACK,
     FLOOR_COBBLESTONE,
     FLOOR_COBBLESTONE_BRICKS,
     BLOCK_BRICKS_RED,
@@ -136,7 +136,7 @@ public static class GlobalConstants
   {
     { StaticPrefabsEnum.FLOOR_GRASS, "floor-grass" },
     { StaticPrefabsEnum.FLOOR_DIRT, "floor-dirt" },
-    { StaticPrefabsEnum.FLOOR_WOODEN, "floor-wooden" },
+    { StaticPrefabsEnum.FLOOR_WOODEN_BLACK, "floor-wooden-black" },
     { StaticPrefabsEnum.FLOOR_COBBLESTONE, "floor-cobblestone" },
     { StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS, "floor-cobblestone-bricks" },
     { StaticPrefabsEnum.BLOCK_BRICKS_RED, "block-bricks-red" },

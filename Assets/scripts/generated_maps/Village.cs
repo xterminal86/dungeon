@@ -77,33 +77,47 @@ public class Village : GeneratedMap
   }
 
   void ConnectBuildings()
-  {
-    Debug.Log(_roadMarks[0] + " " + _roadMarks[1]);
-
-    RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
-    var road = rb.BuildRoad(_roadMarks[0], _roadMarks[1]);
-
-    foreach (var item in road)
+  {    
+    if (_roadMarks.Count > 1)
     {
-      Debug.Log(item);
-    }
+      RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
 
-    /*
-    RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
+      SerializableBlock b = CreateBlock(_roadMarks[0].X, _roadMarks[0].Y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS);
+      b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.STONE;
 
-    for (int i = 0; i < _roadMarks.Count - 1; i++)
-    {
-      var road = rb.BuildRoad(_roadMarks[i], _roadMarks[i + 1]);
+      _map[_roadMarks[0].X, _roadMarks[0].Y].Blocks.Add(b);
+      _map[_roadMarks[0].X, _roadMarks[0].Y].CellType = GeneratedCellType.ROAD;          
 
-      foreach (var item in road)
+      for (int i = 0; i < _roadMarks.Count - 1; i++)
       {
-        SerializableBlock b = CreateBlock(item.X, item.Y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS);
-        b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.STONE;
+        var road = rb.BuildRoad(_roadMarks[i], _roadMarks[i + 1]);
 
-        _map[item.X, item.Y].Blocks.Add(b);
+        foreach (var item in road)
+        { 
+          if (!FindBlock(item.Coordinate, _map[item.Coordinate.X, item.Coordinate.Y].Blocks))          
+          {
+            b = CreateBlock(item.Coordinate.X, item.Coordinate.Y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS);
+            b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.STONE;          
+
+            _map[item.Coordinate.X, item.Coordinate.Y].Blocks.Add(b);
+            _map[item.Coordinate.X, item.Coordinate.Y].CellType = GeneratedCellType.ROAD;          
+          }          
+        }
+      }
+    }    
+  }
+
+  bool FindBlock(Int2 coords, List<SerializableBlock> listToSearch)
+  {
+    foreach (var item in listToSearch)
+    {
+      if (item.X == coords.X && item.Y == coords.Y)
+      {
+        return true;
       }
     }
-    */
+
+    return false;
   }
 
   void GenerateGrass()
@@ -320,7 +334,7 @@ public class Village : GeneratedMap
         block.X = i;
         block.Y = j;
         block.Layer = 0;
-        block.PrefabName = GlobalConstants.StaticPrefabsNamesById[GlobalConstants.StaticPrefabsEnum.FLOOR_WOODEN];
+        block.PrefabName = GlobalConstants.StaticPrefabsNamesById[GlobalConstants.StaticPrefabsEnum.FLOOR_WOODEN_BLACK];
         block.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.WOOD;
 
         _map[i, j].Blocks.Add(block);
