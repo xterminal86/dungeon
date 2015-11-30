@@ -72,7 +72,16 @@ public class SoundManager : MonoSingleton<SoundManager>
   public void PlaySound(int hash)
   {
     if (_audioSourcesByHash.ContainsKey(hash))
+    {      
+      _audioSourcesByHash[hash].Play();
+    }
+  }
+
+  public void PlaySound(int hash, float pitchOffset)
+  {
+    if (_audioSourcesByHash.ContainsKey(hash))
     {
+      _audioSourcesByHash[hash].pitch = 1 + Random.Range(-pitchOffset, pitchOffset);
       _audioSourcesByHash[hash].Play();
     }
   }
@@ -93,7 +102,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
       }
 
-      PlaySound(GlobalConstants.FootstepsListByType[type][which]);
+      PlaySound(GlobalConstants.FootstepsListByType[type][which], 0.1f);
       _lastPlayedSound = which;
     }
   }

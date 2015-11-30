@@ -73,12 +73,20 @@ public static class GlobalConstants
     "fs-dirt4".GetHashCode()
   };
 
+  public static List<int> FootstepsStone = new List<int>()
+  {
+    "fs-stone1".GetHashCode(),
+    "fs-stone2".GetHashCode(),
+    "fs-stone3".GetHashCode(),
+    "fs-stone4".GetHashCode()
+  };
+
   public static Dictionary<FootstepSoundType, List<int>> FootstepsListByType = new Dictionary<FootstepSoundType, List<int>>()
   {
     { FootstepSoundType.DUMMY, FootstepsDummy },
     { FootstepSoundType.DIRT, FootstepsDirt },
     { FootstepSoundType.GRASS, FootstepsGrass },
-    { FootstepSoundType.STONE, FootstepsDummy },
+    { FootstepSoundType.STONE, FootstepsStone },
     { FootstepSoundType.TILE, FootstepsTile },
     { FootstepSoundType.WOOD, FootstepsWood },
     { FootstepSoundType.METAL, FootstepsDummy }
