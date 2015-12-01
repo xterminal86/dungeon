@@ -23,7 +23,7 @@ public class Village : GeneratedMap
   }
 
   int _iterations = 0;
-  int _maxBuildings = 5;
+  int _maxBuildings = 10;
   int _roomsDistance = 5;
   int _roomMinWidth = 5, _roomMinHeight = 5, _roomMaxWidth = 7, _roomMaxHeight = 7;
   void GenerateBuildings()

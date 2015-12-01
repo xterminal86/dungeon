@@ -135,7 +135,7 @@ public class App : MonoSingleton<App>
 
   int _terrainAddedWidth = 10;
   void MakeMountains()
-  {
+  {    
     Vector3 terrainSize = new Vector3((_generatedMapWidth + _terrainAddedWidth) * GlobalConstants.WallScaleFactor, 
                                       GlobalConstants.DefaultVillageMountainsSize.y,
                                       (_generatedMapHeight + _terrainAddedWidth) * GlobalConstants.WallScaleFactor);
@@ -198,10 +198,7 @@ public class App : MonoSingleton<App>
         }
       }
     }
-
-    //Mountains.terrainData.size = new Vector3(100 * _generatedMapWidth, Mountains.terrainData.heightmapHeight, 100 * _generatedMapHeight);
-    //Mountains.transform.position.Set(-_generatedMapWidth, -2, -_generatedMapHeight);
-
+    
     SetupCamera(_generatedMap.CameraPos.X, _generatedMap.CameraPos.Y, _generatedMap.CameraPos.Facing);
 
     SoundManager.Instance.PlayMusicTrack(_generatedMap.MusicTrack);
