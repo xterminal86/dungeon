@@ -26,6 +26,7 @@ public class InputController : MonoSingleton<InputController>
   bool _isProcessing = false;
   Vector3 _cameraAngles = Vector3.zero;
   Vector3 _cameraPos = Vector3.zero;
+  float _currentMoveSpeed = 0.0f;
 	void Update () 
   {
     if (!_isProcessing)
@@ -76,10 +77,13 @@ public class InputController : MonoSingleton<InputController>
     }
     else if (Input.GetKeyDown(KeyCode.Space))
     {
-      //Debug.Log(App.Instance.GetMapObjectsByPosition(1, 3)[0]);
-      //Debug.Log (App.Instance.GetMapObjectByName("door_1"));
-      //Debug.Log (App.Instance.GetGameObjectByName("door_1"));
-      //Debug.Log (App.Instance.GetMapObjectByName("test"));
+    }
+
+    _currentMoveSpeed = GlobalConstants.CameraMoveSpeed;
+
+    if (Input.GetKey(KeyCode.LeftShift))
+    {
+      _currentMoveSpeed = GlobalConstants.CameraMoveSpeed * 2.0f;
     }
 
     if (_doMove)
@@ -87,7 +91,7 @@ public class InputController : MonoSingleton<InputController>
       int posX = (int)App.Instance.CameraPos.x;
       int posZ = (int)App.Instance.CameraPos.z;
       _cameraMoveArgument.From = new Vector2(posX, posZ);
-      _cameraMoveArgument.Speed = GlobalConstants.CameraMoveSpeed;
+      _cameraMoveArgument.Speed = _currentMoveSpeed;
       bool res = CanMove(posX, posZ, _cameraMoveArgument.MoveType);
       if (res)
       {

@@ -698,23 +698,18 @@ public class Village : GeneratedMap
 
   void FindStartingPos()
   {
-    _cameraPos.X = 0;
-    _cameraPos.Y = 0;
-    _cameraPos.Facing = 2;
-
-    /*
     for (int x = 0; x < _mapHeight; x++)
     {
       for (int y = 0; y < _mapWidth; y++)
       {
-        if (_gridRef.Map[x, y].CellType == CellType.FLOOR)
+        if (_map[x, y].CellType != GeneratedCellType.OBSTACLE)
         {
-          _serializableMap.CameraPos.X = x;
-          _serializableMap.CameraPos.Y = y;
+          _cameraPos.X = x;
+          _cameraPos.Y = y;
+          _cameraPos.Facing = (int)GlobalConstants.Orientation.SOUTH;
           return;
         }
       }
     }
-    */
   }
 }

@@ -133,26 +133,28 @@ public class App : MonoSingleton<App>
     base.Init();
   }
 
+  int _terrainAddedWidth = 10;
   void MakeMountains()
   {
-    Vector3 terrainSize = new Vector3(_generatedMapWidth * GlobalConstants.WallScaleFactor, 
+    Vector3 terrainSize = new Vector3((_generatedMapWidth + _terrainAddedWidth) * GlobalConstants.WallScaleFactor, 
                                       GlobalConstants.DefaultVillageMountainsSize.y,
-                                      _generatedMapHeight * GlobalConstants.WallScaleFactor);
+                                      (_generatedMapHeight + _terrainAddedWidth) * GlobalConstants.WallScaleFactor);
     
     Mountains.terrainData.size = terrainSize;
-    
-    Vector3 terrainPosition = new Vector3(-1, 0, -terrainSize.z - 1);
+
+    Vector3 terrainPosition = new Vector3(-1 - _terrainAddedWidth, 0, -terrainSize.z - 1);
     Terrain t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
     
-    terrainPosition = new Vector3(-terrainSize.x - 1, 0, -1);
+    terrainPosition = new Vector3(-terrainSize.x - 1, 0, -1 - _terrainAddedWidth);
     t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
     
-    terrainPosition = new Vector3(-1, 0, terrainSize.z - 1);
+    terrainPosition = new Vector3(-1 - _terrainAddedWidth, 0, terrainSize.z - (_terrainAddedWidth * 2 + 1));
     t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
     
-    terrainPosition = new Vector3(terrainSize.x - 1, 0, -1);
+    terrainPosition = new Vector3(terrainSize.x - (_terrainAddedWidth * 2 + 1), 0, -1);
     t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
 
+    /*
     terrainPosition = new Vector3(-terrainSize.x - 1, 0, -terrainSize.z - 1);
     t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
 
@@ -164,6 +166,7 @@ public class App : MonoSingleton<App>
 
     terrainPosition = new Vector3(terrainSize.x - 1, 0, -terrainSize.z - 1);
     t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    */
   }
 
   void BuildMap()
