@@ -78,23 +78,7 @@ public class App : MonoSingleton<App>
 
     _cameraPos = CameraPivot.transform.position;
 
-    Vector3 terrainSize = new Vector3(_generatedMapWidth * GlobalConstants.WallScaleFactor, 
-                                      GlobalConstants.DefaultVillageMountainsSize.y,
-                                      _generatedMapHeight * GlobalConstants.WallScaleFactor);
-
-    Mountains.terrainData.size = terrainSize;
-
-    Vector3 terrainPosition = new Vector3(-1, 0, -terrainSize.z - 1);
-    Terrain t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
-
-    terrainPosition = new Vector3(-terrainSize.x - 1, 0, -1);
-    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
-
-    terrainPosition = new Vector3(-1, 0, terrainSize.z - 1);
-    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
-
-    terrainPosition = new Vector3(terrainSize.x - 1, 0, -1);
-    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    MakeMountains();
 
     switch (MapFilenameField)
     {
@@ -147,6 +131,39 @@ public class App : MonoSingleton<App>
   protected override void Init()
   {
     base.Init();
+  }
+
+  void MakeMountains()
+  {
+    Vector3 terrainSize = new Vector3(_generatedMapWidth * GlobalConstants.WallScaleFactor, 
+                                      GlobalConstants.DefaultVillageMountainsSize.y,
+                                      _generatedMapHeight * GlobalConstants.WallScaleFactor);
+    
+    Mountains.terrainData.size = terrainSize;
+    
+    Vector3 terrainPosition = new Vector3(-1, 0, -terrainSize.z - 1);
+    Terrain t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    
+    terrainPosition = new Vector3(-terrainSize.x - 1, 0, -1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    
+    terrainPosition = new Vector3(-1, 0, terrainSize.z - 1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    
+    terrainPosition = new Vector3(terrainSize.x - 1, 0, -1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+
+    terrainPosition = new Vector3(-terrainSize.x - 1, 0, -terrainSize.z - 1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+
+    terrainPosition = new Vector3(terrainSize.x - 1, 0, terrainSize.z - 1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+
+    terrainPosition = new Vector3(-terrainSize.x - 1, 0, terrainSize.z - 1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+
+    terrainPosition = new Vector3(terrainSize.x - 1, 0, -terrainSize.z - 1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
   }
 
   void BuildMap()
