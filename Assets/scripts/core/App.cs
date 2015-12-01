@@ -59,7 +59,7 @@ public class App : MonoSingleton<App>
   [Range(1.0f, 100.0f)]
   public float LinearFogWidth = 1.0f;
 
-  int _generatedMapWidth = 25, _generatedMapHeight = 25;
+  int _generatedMapWidth = 50, _generatedMapHeight = 50;
   GeneratedMap _generatedMap;
 
   void Awake()
@@ -71,10 +71,30 @@ public class App : MonoSingleton<App>
     UnityEngine.RenderSettings.fogStartDistance = Camera.main.farClipPlane - LinearFogWidth * 2;
     UnityEngine.RenderSettings.fogEndDistance = Camera.main.farClipPlane - LinearFogWidth;
 
+    Camera.main.backgroundColor = FogColor;
+
     MapLoadingFinished += InputController.Instance.MapLoadingFinishedHandler;
     MapLoadingFinished += SoundManager.Instance.MapLoadingFinishedHandler;
 
     _cameraPos = CameraPivot.transform.position;
+
+    Vector3 terrainSize = new Vector3(_generatedMapWidth * GlobalConstants.WallScaleFactor, 
+                                      GlobalConstants.DefaultVillageMountainsSize.y,
+                                      _generatedMapHeight * GlobalConstants.WallScaleFactor);
+
+    Mountains.terrainData.size = terrainSize;
+
+    Vector3 terrainPosition = new Vector3(-1, 0, -terrainSize.z - 1);
+    Terrain t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+
+    terrainPosition = new Vector3(-terrainSize.x - 1, 0, -1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+
+    terrainPosition = new Vector3(-1, 0, terrainSize.z - 1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+
+    terrainPosition = new Vector3(terrainSize.x - 1, 0, -1);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
 
     switch (MapFilenameField)
     {
