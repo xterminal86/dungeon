@@ -748,6 +748,10 @@ public class App : MonoSingleton<App>
     InputController.Instance.PlayerMapPos.Y = y;
   }
 
+  void OnLevelWasLoaded(int level)
+  {
+  }
+
   public enum MapFilename
   {
     ROOMS = 0,
