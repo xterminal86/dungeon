@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class TitleScreen : MonoBehaviour 
 {
@@ -9,6 +10,9 @@ public class TitleScreen : MonoBehaviour
   public GameObject Stairs;
   public GameObject Torch;
 
+  public Image ScreenFader;
+
+  Color _screenFaderColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
   void Awake()
   {
     RenderSettings.fog = true;
@@ -22,12 +26,32 @@ public class TitleScreen : MonoBehaviour
 
   public void NewGameHandler()
   {
-    Application.LoadLevel("main");
+    ScreenFader.gameObject.SetActive(true);
+    StartCoroutine(NewGameRoutine());
   }
 
   public void ExitGameHandler()
   {
     Application.Quit();
+  }
+
+  float _fadeSpeed = 1.0f;
+  IEnumerator NewGameRoutine()
+  {
+    float alpha = 0.0f;
+
+    while (alpha < 1.0f)
+    {
+      _screenFaderColor.a = alpha;
+
+      alpha += Time.smoothDeltaTime * _fadeSpeed;
+
+      ScreenFader.color = _screenFaderColor;
+
+      yield return null;
+    }
+
+    Application.LoadLevel("main");
   }
 
   void SetupScene()
