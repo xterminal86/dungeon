@@ -126,6 +126,8 @@ public class App : MonoSingleton<App>
         
     if (MapLoadingFinished != null)
       MapLoadingFinished();
+
+    ScreenFader.Instance.FadeIn();
   }
 
   protected override void Init()

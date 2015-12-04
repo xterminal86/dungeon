@@ -57,6 +57,8 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
           _instantiated = true;
 
           DontDestroyOnLoad(_instance.gameObject);
+
+          Instance.Init();
         }
 			}
 
@@ -64,26 +66,15 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
 		}
 	}
 
-  void Awake()
-  {
-    Instance.Init();
-  }
-
   protected virtual void Init()
   {
   }
-
-	protected void OnEnable()
-	{
-		applicationIsQuitting = false;
-	}
-
+  	
 	protected void OnDestroy()
 	{
     _instantiated = false;
-		if (Application.isPlaying) applicationIsQuitting = true;
+		applicationIsQuitting = true;
 	}
-
 
   public static bool isInstantinated { get { return _instantiated; } }
 }
