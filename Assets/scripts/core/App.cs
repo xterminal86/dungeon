@@ -123,11 +123,11 @@ public class App : MonoSingleton<App>
       _generatedMap.Generate();
       BuildMap();
     }
-        
-    if (MapLoadingFinished != null)
-      MapLoadingFinished();
 
     ScreenFader.Instance.FadeIn();
+
+    if (MapLoadingFinished != null)
+      MapLoadingFinished();    
   }
 
   protected override void Init()

@@ -56,15 +56,18 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
         {
           _instantiated = true;
 
-          DontDestroyOnLoad(_instance.gameObject);
-
-          Instance.Init();
+          DontDestroyOnLoad(_instance.gameObject);          
         }
 			}
 
       return _instance;
 		}
 	}
+
+  void Awake()
+  {
+    Instance.Init();
+  }
 
   protected virtual void Init()
   {
