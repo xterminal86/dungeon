@@ -18,7 +18,7 @@ public class TitleScreen : MonoBehaviour
     RenderSettings.fogMode = FogMode.Linear;
     RenderSettings.fogColor = Color.black;
     RenderSettings.fogStartDistance = 0;
-    RenderSettings.fogEndDistance = 20;
+    RenderSettings.fogEndDistance = 18;
 
     SetupScene();
   }
