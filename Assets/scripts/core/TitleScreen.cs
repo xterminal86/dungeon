@@ -17,10 +17,25 @@ public class TitleScreen : MonoBehaviour
     RenderSettings.fogStartDistance = 0;
     RenderSettings.fogEndDistance = 20;
 
+    SetupScene();
+  }
+
+  public void NewGameHandler()
+  {
+    Application.LoadLevel("main");
+  }
+
+  public void ExitGameHandler()
+  {
+    Application.Quit();
+  }
+
+  void SetupScene()
+  {
     Vector3 cameraPos = Camera.main.transform.position;
-
+    
     // Walls
-
+    
     var go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 2, 0, cameraPos.z + 4), Quaternion.identity);
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x + 2, 0, cameraPos.z + 4), Quaternion.identity);
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 2, 2, cameraPos.z + 4), Quaternion.identity);
@@ -29,30 +44,30 @@ public class TitleScreen : MonoBehaviour
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x + 4, 0, cameraPos.z + 4), Quaternion.identity);
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 4, 2, cameraPos.z + 4), Quaternion.identity);
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x + 4, 2, cameraPos.z + 4), Quaternion.identity);
-
+    
     // Torches
-
+    
     go = (GameObject)Instantiate(Torch, new Vector3(cameraPos.x - 1.5f, 0, cameraPos.z + 4), Quaternion.identity);
     go.transform.Rotate(Vector3.up, 180.0f, Space.World);
-
+    
     go = (GameObject)Instantiate(Torch, new Vector3(cameraPos.x + 1.5f, 0, cameraPos.z + 4), Quaternion.identity);
     go.transform.Rotate(Vector3.up, 180.0f, Space.World);
-
+    
     // Floor
-
+    
     go = (GameObject)Instantiate(Floor, new Vector3(cameraPos.x - 2, 0, cameraPos.z + 2), Quaternion.identity);
     go = (GameObject)Instantiate(Floor, new Vector3(cameraPos.x, 0, cameraPos.z + 2), Quaternion.identity);
     go = (GameObject)Instantiate(Floor, new Vector3(cameraPos.x + 2, 0, cameraPos.z + 2), Quaternion.identity);
     go = (GameObject)Instantiate(Floor, new Vector3(cameraPos.x - 4, 0, cameraPos.z + 2), Quaternion.identity);
     go = (GameObject)Instantiate(Floor, new Vector3(cameraPos.x + 4, 0, cameraPos.z + 2), Quaternion.identity);
-
+    
     // Stairs
-
+    
     go = (GameObject)Instantiate(Stairs, new Vector3(cameraPos.x, 0, cameraPos.z + 4), Quaternion.identity);
     go.transform.Rotate(Vector3.up, 180.0f, Space.World);
-
+    
     // Stairs hall
-
+    
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x + 1.8f, 0, cameraPos.z + 6), Quaternion.identity);
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x + 1.8f, 2, cameraPos.z + 6), Quaternion.identity);
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 1.8f, 0, cameraPos.z + 6), Quaternion.identity);
@@ -65,10 +80,5 @@ public class TitleScreen : MonoBehaviour
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x + 1.8f, 2, cameraPos.z + 10), Quaternion.identity);
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 1.8f, 0, cameraPos.z + 10), Quaternion.identity);
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 1.8f, 2, cameraPos.z + 10), Quaternion.identity);
-  }
-
-  public void NewGameHandler()
-  {
-    Application.LoadLevel("main");
   }
 }
