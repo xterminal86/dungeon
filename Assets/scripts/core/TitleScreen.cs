@@ -144,7 +144,13 @@ public class TitleScreen : MonoBehaviour
     
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 1.8f, 2, cameraPos.z + 10), Quaternion.identity);
     go.transform.parent = SceneHolder;
-    
+
+    go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 1.8f, 4, cameraPos.z + 10), Quaternion.identity);
+    go.transform.parent = SceneHolder;
+
+    go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x + 1.8f, 4, cameraPos.z + 10), Quaternion.identity);
+    go.transform.parent = SceneHolder;
+
     go = (GameObject)Instantiate(Wall, new Vector3(cameraPos.x - 1.8f, 2, cameraPos.z + 12), Quaternion.identity);
     go.transform.parent = SceneHolder;
     
