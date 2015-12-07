@@ -14,7 +14,6 @@ public class ScreenFader : MonoSingleton<ScreenFader>
   protected override void Init()
   {
     FaderImage.color = _faderColor;
-    FaderImage.gameObject.SetActive(false);
   }
 
   public void FadeOut()
@@ -25,6 +24,7 @@ public class ScreenFader : MonoSingleton<ScreenFader>
 
   public void FadeIn()
   {
+    FaderImage.gameObject.SetActive(true);
     StartCoroutine(FadeInRoutine());
   }
 

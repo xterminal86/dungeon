@@ -21,6 +21,8 @@ public class TitleScreen : MonoBehaviour
     RenderSettings.fogEndDistance = 18;
 
     SetupScene();
+
+    ScreenFader.Instance.FadeIn();
   }
 
   public void NewGameHandler()
@@ -72,11 +74,11 @@ public class TitleScreen : MonoBehaviour
     
     // Torches
     
-    go = (GameObject)Instantiate(Torch, new Vector3(cameraPos.x - 1.5f, 0, cameraPos.z + 4), Quaternion.identity);
+    go = (GameObject)Instantiate(Torch, new Vector3(cameraPos.x - 2.0f, -0.125f, cameraPos.z + 4), Quaternion.identity);
     go.transform.parent = SceneHolder;
     go.transform.Rotate(Vector3.up, 180.0f, Space.World);
     
-    go = (GameObject)Instantiate(Torch, new Vector3(cameraPos.x + 1.5f, 0, cameraPos.z + 4), Quaternion.identity);
+    go = (GameObject)Instantiate(Torch, new Vector3(cameraPos.x + 2.0f, -0.125f, cameraPos.z + 4), Quaternion.identity);
     go.transform.parent = SceneHolder;
     go.transform.Rotate(Vector3.up, 180.0f, Space.World);
     
