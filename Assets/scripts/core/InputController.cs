@@ -128,7 +128,8 @@ public class InputController : MonoSingleton<InputController>
 
             //if (dCond <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
             if ( (facing == 2 && dCond <= GlobalConstants.WallScaleFactor) || 
-                 (facing == 0 && dCond <= 0.0f) )
+                 (facing == 0 && dCond <= 0.0f) || 
+                 (bmo.transform.position.x == App.Instance.CameraPos.x && bmo.transform.position.z == App.Instance.CameraPos.z) )
             {
               if (bmo.MapObjectInstance.ActionCallback != null)
                 bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
