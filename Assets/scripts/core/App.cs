@@ -116,7 +116,7 @@ public class App : MonoSingleton<App>
         break;
     }
 
-    //SetupModel();
+    SetupModel();
 
     if (_generatedMap != null)
     {
