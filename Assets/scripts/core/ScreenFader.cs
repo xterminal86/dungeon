@@ -13,6 +13,7 @@ public class ScreenFader : MonoSingleton<ScreenFader>
 
   protected override void Init()
   {
+    FaderImage.gameObject.SetActive(true);
     FaderImage.color = _faderColor;
   }
 
