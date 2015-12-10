@@ -17,6 +17,8 @@ public class Village : GeneratedMap
     GenerateTrees(80, 2);
     GenerateGrass();
 
+    FillUnoccupiedCells();
+
     FindStartingPos();
 
     _musicTrack = "amb-forest";
@@ -156,7 +158,8 @@ public class Village : GeneratedMap
       if (res)
       {
         SerializableBlock b = CreateBlock(x, y, 0, GlobalConstants.StaticPrefabsEnum.TREE_BIRCH);
-        
+
+        _map[x, y].CellType = GeneratedCellType.OBSTACLE;
         _map[x, y].Blocks.Add(b);
 
         counter++;

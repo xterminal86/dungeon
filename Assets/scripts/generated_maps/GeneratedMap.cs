@@ -20,6 +20,12 @@ public class GeneratedMap
     get { return _cameraPos; }
   }
 
+  protected List<Int2> _unoccupiedCells = new List<Int2>();
+  public List<Int2> UnoccupiedCells
+  {
+    get { return _unoccupiedCells; }
+  }
+
   protected string _musicTrack = string.Empty;
   public string MusicTrack
   {
@@ -45,12 +51,36 @@ public class GeneratedMap
   {
   }
 
+  public virtual void FillUnoccupiedCells()
+  {
+    _unoccupiedCells.Clear();
+
+    for (int x = 0; x < _mapHeight; x++)
+    {
+      for (int y = 0; y < _mapWidth; y++)
+      {
+        if (_map[x, y].CellType == GeneratedCellType.NONE || _map[x, y].CellType == GeneratedCellType.ROAD)
+        {
+          _unoccupiedCells.Add(new Int2(x, y));
+        }
+      }
+    }
+  }
+
   protected Vector2 GetRandomCellPos()
   {
     int x = Random.Range(1, _mapHeight - 1);
     int y = Random.Range(1, _mapWidth - 1);
     
     return new Vector2(x, y);
+  }
+
+  Int2 _unoccupiedCell = new Int2();
+  public Int2 GetRandomUnoccupiedCell()
+  {
+    int index = Random.Range(0, _unoccupiedCells.Count - 1);
+
+    return _unoccupiedCells[index];
   }
 
   Int2 _pos = new Int2();
@@ -62,8 +92,8 @@ public class GeneratedMap
       {
         if (_map[x, y].CellType == GeneratedCellType.ROAD)
         {
-          _pos.X = x * GlobalConstants.WallScaleFactor;
-          _pos.Y = y * GlobalConstants.WallScaleFactor;
+          _pos.X = x;
+          _pos.Y = y;
 
           return _pos;
         }

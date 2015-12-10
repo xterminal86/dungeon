@@ -60,7 +60,21 @@ public class App : MonoSingleton<App>
   public float LinearFogWidth = 1.0f;
 
   int _generatedMapWidth = 50, _generatedMapHeight = 50;
+  public int GeneratedMapWidth
+  {
+    get { return _generatedMapWidth; }
+  }
+
+  public int GeneratedMapHeight
+  {
+    get { return _generatedMapHeight; }
+  }
+
   GeneratedMap _generatedMap;
+  public GeneratedMap GeneratedMap
+  {
+    get { return _generatedMap; }
+  }
 
   void Awake()
   {
@@ -209,7 +223,22 @@ public class App : MonoSingleton<App>
   void SetupModel()
   {
     Int2 pos = _generatedMap.GetRoadPosition();
-    GameObject go = (GameObject)Instantiate(TestModel, new Vector3(pos.X, 0, pos.Y), Quaternion.identity);
+    if (pos != null)
+    {
+      GameObject go = (GameObject)Instantiate(TestModel, 
+                       new Vector3(pos.X * GlobalConstants.WallScaleFactor, 0, 
+                                   pos.Y * GlobalConstants.WallScaleFactor), Quaternion.identity);
+      var mm = go.GetComponent<ModelMover>();
+      if (mm != null)
+      {
+        mm.ModelStartingPos.X = pos.X;
+        mm.ModelStartingPos.Y = pos.Y;
+      }
+    }
+    else
+    {
+      Debug.LogWarning("Could not find starting pos for model!");
+    }
   }
 
   int _mapColumns = 0;

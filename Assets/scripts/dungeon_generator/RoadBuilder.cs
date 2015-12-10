@@ -113,7 +113,7 @@ public class RoadBuilder
     return false;
   }
 
-  void LookAround4(PathNode node)
+  void LookAround4(PathNode node, bool avoidObstacles)
   {
     sbyte[,] direction = new sbyte[4, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
 
@@ -128,7 +128,12 @@ public class RoadBuilder
 
       bool isInClosedList = IsNodePresent(coordinate, _closedList);
 
-      if (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM && !isInClosedList)
+      bool condition = (avoidObstacles ? 
+                       (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM &&
+                        _map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.OBSTACLE && !isInClosedList) :
+                       (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM && !isInClosedList) );
+
+      if (condition)
       {
         bool isInOpenList = IsNodePresent(coordinate, _openList);
 
@@ -200,7 +205,7 @@ public class RoadBuilder
   /// <param name="start">Starting point</param>
   /// <param name="end">Destination point</param>
   /// <returns>List of nodes from start to end</returns>
-  public List<PathNode> BuildRoad(Int2 start, Int2 end)
+  public List<PathNode> BuildRoad(Int2 start, Int2 end, bool avoidObstacles = false)
   {
     _start = start;
     _end = end;
@@ -233,7 +238,7 @@ public class RoadBuilder
       _openList.RemoveAt(index);
 
       //LookAround9(closedNode);
-      LookAround4(closedNode);
+      LookAround4(closedNode, avoidObstacles);
 
       exit = ExitCondition();
     }
