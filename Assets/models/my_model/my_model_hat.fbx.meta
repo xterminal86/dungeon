@@ -62,6 +62,13 @@ ModelImporter:
     4300008: Arm.L
     4300010: Leg.L
     4300012: Torso
+    6400000: Arm.L 1
+    6400002: Arm.R 1
+    6400004: Head 1
+    6400006: HeadAccessory
+    6400008: Leg.L 1
+    6400010: Leg.R 1
+    6400012: Torso
     7400000: Idle
     7400002: Walk
     7400004: Clueless
