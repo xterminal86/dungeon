@@ -53,6 +53,26 @@ public class GeneratedMap
     return new Vector2(x, y);
   }
 
+  Int2 _pos = new Int2();
+  public Int2 GetRoadPosition()
+  {
+    for (int x = 0; x < _mapHeight; x++)
+    {
+      for (int y = 0; y < _mapWidth; y++)
+      {
+        if (_map[x, y].CellType == GeneratedCellType.ROAD)
+        {
+          _pos.X = x * GlobalConstants.WallScaleFactor;
+          _pos.Y = y * GlobalConstants.WallScaleFactor;
+
+          return _pos;
+        }
+      }
+    }
+
+    return null;
+  }
+
   public void RemoveBlockAtPosition(int x, int y, int layer)
   {
     for (int i = 0; i < _map[x, y].Blocks.Count; i++)

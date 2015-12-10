@@ -116,13 +116,13 @@ public class App : MonoSingleton<App>
         break;
     }
 
-    SetupModel();
-
     if (_generatedMap != null)
     {
       _generatedMap.Generate();
       BuildMap();
     }
+
+    SetupModel();
 
     ScreenFader.Instance.FadeIn();
 
@@ -208,7 +208,8 @@ public class App : MonoSingleton<App>
 
   void SetupModel()
   {
-    GameObject go = (GameObject)Instantiate(TestModel, new Vector3(4, 0, 4), Quaternion.identity);
+    Int2 pos = _generatedMap.GetRoadPosition();
+    GameObject go = (GameObject)Instantiate(TestModel, new Vector3(pos.X, 0, pos.Y), Quaternion.identity);
   }
 
   int _mapColumns = 0;

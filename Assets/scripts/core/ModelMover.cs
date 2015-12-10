@@ -8,7 +8,9 @@ public class ModelMover : MonoBehaviour
   {
     { 0, "Idle" },
     { 1, "Attack" },
-    { 2, "Walk" }
+    { 2, "Walk" },
+    { 3, "Talk" },
+    { 4, "Clueless" }
   };
 
   Animation _animationComponent;
@@ -34,7 +36,7 @@ public class ModelMover : MonoBehaviour
   float _time = 0.0f;
   IEnumerator PlayRandomAnimation()
   {
-    int index = Random.Range(0, 3);
+    int index = Random.Range(0, _animationComponent.GetClipCount());
 
     _animationComponent.Play(_animationsByIndex[index]);
 
