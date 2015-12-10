@@ -13,6 +13,7 @@ public static class GlobalConstants
   public static float DoorOpenSpeed = 1.0f;
   public static float CameraBobSpeed = 0.5f;
   public static float FadeSpeed = 1.0f;
+  public static float CharacterRotationSpeed = 100.0f;
   public static Vector3 DefaultVillageMountainsSize = new Vector3(25, 30, 25);
 
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
