@@ -84,7 +84,327 @@ ModelImporter:
     animationScaleError: .5
     animationWrapMode: 1
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Walk
+      takeName: Walk
+      firstFrame: 0
+      lastFrame: 44
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L 1
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L_end
+        weight: 1
+      - path: Skeleton/Arm.R
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R 1
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R_end
+        weight: 1
+      - path: Skeleton/Head
+        weight: 1
+      - path: Skeleton/Head/Head 1
+        weight: 1
+      - path: Skeleton/Head/Head 1/HeadAccessory
+        weight: 1
+      - path: Skeleton/Head/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L 1
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L_end
+        weight: 1
+      - path: Skeleton/Leg.R
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R 1
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Idle
+      takeName: Idle
+      firstFrame: 0
+      lastFrame: 19
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L 1
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L_end
+        weight: 1
+      - path: Skeleton/Arm.R
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R 1
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R_end
+        weight: 1
+      - path: Skeleton/Head
+        weight: 1
+      - path: Skeleton/Head/Head 1
+        weight: 1
+      - path: Skeleton/Head/Head 1/HeadAccessory
+        weight: 1
+      - path: Skeleton/Head/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L 1
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L_end
+        weight: 1
+      - path: Skeleton/Leg.R
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R 1
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Clueless
+      takeName: Clueless
+      firstFrame: 0
+      lastFrame: 34
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L 1
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L_end
+        weight: 1
+      - path: Skeleton/Arm.R
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R 1
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R_end
+        weight: 1
+      - path: Skeleton/Head
+        weight: 1
+      - path: Skeleton/Head/Head 1
+        weight: 1
+      - path: Skeleton/Head/Head 1/HeadAccessory
+        weight: 1
+      - path: Skeleton/Head/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L 1
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L_end
+        weight: 1
+      - path: Skeleton/Leg.R
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R 1
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Attack
+      takeName: Attack
+      firstFrame: 0
+      lastFrame: 14
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L 1
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L_end
+        weight: 1
+      - path: Skeleton/Arm.R
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R 1
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R_end
+        weight: 1
+      - path: Skeleton/Head
+        weight: 1
+      - path: Skeleton/Head/Head 1
+        weight: 1
+      - path: Skeleton/Head/Head 1/HeadAccessory
+        weight: 1
+      - path: Skeleton/Head/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L 1
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L_end
+        weight: 1
+      - path: Skeleton/Leg.R
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R 1
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Talk
+      takeName: Talk
+      firstFrame: 0
+      lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L 1
+        weight: 1
+      - path: Skeleton/Arm.L/Arm.L_end
+        weight: 1
+      - path: Skeleton/Arm.R
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R 1
+        weight: 1
+      - path: Skeleton/Arm.R/Arm.R_end
+        weight: 1
+      - path: Skeleton/Head
+        weight: 1
+      - path: Skeleton/Head/Head 1
+        weight: 1
+      - path: Skeleton/Head/Head 1/HeadAccessory
+        weight: 1
+      - path: Skeleton/Head/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L 1
+        weight: 1
+      - path: Skeleton/Leg.L/Leg.L_end
+        weight: 1
+      - path: Skeleton/Leg.R
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R 1
+        weight: 1
+      - path: Skeleton/Leg.R/Leg.R_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
     isReadable: 1
   meshes:
     lODScreenPercentages: []

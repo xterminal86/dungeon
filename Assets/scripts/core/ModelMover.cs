@@ -15,6 +15,8 @@ public class ModelMover : MonoBehaviour
     { 4, "Clueless" }
   };
 
+  float _moveSpeed = 0.0f;
+
   Animation _animationComponent;
   void Start () 
 	{
@@ -22,6 +24,12 @@ public class ModelMover : MonoBehaviour
     if (_animationComponent != null)
     {
       _animationComponent["Idle"].speed = 0.5f;
+
+      _animationComponent.Play("Idle");
+
+      float speed = _animationComponent["Walk"].speed;
+      float length = _animationComponent["Walk"].length;
+      _moveSpeed = length / speed;
     }
 	}
 		
@@ -31,12 +39,12 @@ public class ModelMover : MonoBehaviour
     if (!_working)
     {
       //JobManager.Instance.CreateJob(PlayRandomAnimation());
-      JobManager.Instance.CreateJob(FindPath());
+      JobManager.Instance.CreateJob(MoveOnPath());
       _working = true;
     }
 	}
 
-  IEnumerator FindPath()
+  IEnumerator MoveOnPath()
   {
     RoadBuilder rb = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
 
@@ -52,12 +60,14 @@ public class ModelMover : MonoBehaviour
     tmpPos.y = transform.position.y;
     tmpPos.z = transform.position.z;
 
+    _animationComponent.CrossFade("Walk");
+
     float delay = 0.0f;
     while (road.Count != 0)
     {
       delay += Time.smoothDeltaTime;
 
-      if (delay > 1.0f)
+      if (delay > _moveSpeed)
       {
         delay = 0.0f;
 
@@ -71,6 +81,8 @@ public class ModelMover : MonoBehaviour
 
       yield return null;
     }
+
+    _animationComponent.CrossFade("Idle");
   }
 
   float _time = 0.0f;
