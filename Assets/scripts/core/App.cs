@@ -231,8 +231,8 @@ public class App : MonoSingleton<App>
       var mm = go.GetComponent<ModelMover>();
       if (mm != null)
       {
-        mm.ModelStartingPos.X = pos.X;
-        mm.ModelStartingPos.Y = pos.Y;
+        mm.ModelPos.X = pos.X;
+        mm.ModelPos.Y = pos.Y;
       }
     }
     else

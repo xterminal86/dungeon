@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ModelMover : MonoBehaviour 
 {
-  public Int2 ModelStartingPos = new Int2();
+  public Int2 ModelPos = new Int2();
 
   Dictionary<int, string> _animationsByIndex = new Dictionary<int, string>()
   {
@@ -32,7 +32,9 @@ public class ModelMover : MonoBehaviour
       _moveSpeed = length / speed;
     }
 	}
-		
+
+  Vector3 _modelPosition = Vector3.zero;
+
   bool _working = false;
   void Update () 
 	{
@@ -42,6 +44,8 @@ public class ModelMover : MonoBehaviour
       JobManager.Instance.CreateJob(MoveOnPath());
       _working = true;
     }
+
+    transform.position = _modelPosition;
 	}
 
   IEnumerator MoveOnPath()
@@ -50,18 +54,16 @@ public class ModelMover : MonoBehaviour
 
     Int2 destination = App.Instance.GeneratedMap.GetRandomUnoccupiedCell();
 
-    Debug.Log("Going from " + ModelStartingPos + " to " + destination);
+    Debug.Log("Going from " + ModelPos + " to " + destination);
 
-    var road = rb.BuildRoad(ModelStartingPos, destination, true);
+    var road = rb.BuildRoad(ModelPos, destination, true);
 
-    Vector3 tmpPos = Vector3.zero;
-
-    tmpPos.x = transform.position.x;
-    tmpPos.y = transform.position.y;
-    tmpPos.z = transform.position.z;
+    _modelPosition.x = transform.position.x;
+    _modelPosition.y = transform.position.y;
+    _modelPosition.z = transform.position.z;
 
     _animationComponent.CrossFade("Walk");
-
+        
     float delay = 0.0f;
     while (road.Count != 0)
     {
@@ -71,18 +73,36 @@ public class ModelMover : MonoBehaviour
       {
         delay = 0.0f;
 
-        tmpPos.x = road[0].Coordinate.X * GlobalConstants.WallScaleFactor;
-        tmpPos.z = road[0].Coordinate.Y * GlobalConstants.WallScaleFactor;
+        _modelPosition.x = road[0].Coordinate.X * GlobalConstants.WallScaleFactor;
+        _modelPosition.z = road[0].Coordinate.Y * GlobalConstants.WallScaleFactor;
 
-        transform.position = tmpPos;
+        ModelPos.X = road[0].Coordinate.X;
+        ModelPos.Y = road[0].Coordinate.Y;
 
         road.RemoveAt(0);
       }
 
       yield return null;
-    }
+    }    
 
     _animationComponent.CrossFade("Idle");
+
+    JobManager.Instance.CreateJob(DelayRoutine());
+  }
+
+  float _delay = 5.0f;
+  IEnumerator DelayRoutine()
+  {
+    float time = 0.0f;
+
+    while (time < _delay)
+    {
+      time += Time.smoothDeltaTime;
+
+      yield return null;
+    }
+
+    _working = false;
   }
 
   float _time = 0.0f;
