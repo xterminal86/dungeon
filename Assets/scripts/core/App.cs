@@ -225,7 +225,7 @@ public class App : MonoSingleton<App>
   {
     foreach (var item in Characters)
     {
-      Int2 pos = _generatedMap.GetRoadPosition();
+      Int2 pos = _generatedMap.GetRandomUnoccupiedCell();
       SpawnCharacter(item, pos);
     }
   }

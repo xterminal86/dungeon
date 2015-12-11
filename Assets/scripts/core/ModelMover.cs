@@ -61,7 +61,7 @@ public class ModelMover : MonoBehaviour
 
     Int2 destination = App.Instance.GeneratedMap.GetRandomUnoccupiedCell();
 
-    Debug.Log("Going from " + ModelPos + " to " + destination);
+    //Debug.Log(name + ": going from " + ModelPos + " to " + destination);
 
     var road = rb.BuildRoad(ModelPos, destination, true);
 

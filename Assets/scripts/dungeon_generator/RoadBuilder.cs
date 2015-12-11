@@ -210,7 +210,7 @@ public class RoadBuilder
     _start = start;
     _end = end;
 
-    if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE)
+    if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
     {
       Debug.Log(end + " - Goal is on the obstacle! : " + _map[_end.X, _end.Y].CellType + " (this is not an error)");
     }
