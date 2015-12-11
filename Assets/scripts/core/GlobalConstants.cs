@@ -10,6 +10,8 @@ public static class GlobalConstants
   public static int CameraTurnSpeed = 350;
   public static int CameraMoveSpeed = 4;
   public static int CameraCannotMoveSpeed = 2;
+  public static int WanderingMinDelaySeconds = 5;
+  public static int WanderingMaxDelaySeconds = 15;
   public static float DoorOpenSpeed = 1.0f;
   public static float CameraBobSpeed = 0.5f;
   public static float FadeSpeed = 1.0f;

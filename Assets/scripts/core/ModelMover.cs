@@ -29,7 +29,8 @@ public class ModelMover : MonoBehaviour
 
       float speed = _animationComponent["Walk"].speed;
       float length = _animationComponent["Walk"].length;
-      _moveSpeed = length / speed;
+
+      _moveSpeed = (length / speed) * GlobalConstants.WallScaleFactor;
     }
 	}
 
@@ -187,9 +188,11 @@ public class ModelMover : MonoBehaviour
     yield return null;
   }
 
-  float _delay = 5.0f;
+  float _delay = 0.0f;
   IEnumerator DelayRoutine()
   {
+    _delay = Random.Range(GlobalConstants.WanderingMinDelaySeconds + 1, GlobalConstants.WanderingMaxDelaySeconds + 1);
+
     float time = 0.0f;
 
     while (time < _delay)

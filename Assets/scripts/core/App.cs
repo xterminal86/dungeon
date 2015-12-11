@@ -11,6 +11,7 @@ public class App : MonoSingleton<App>
   public Terrain Mountains;
 
   public GameObject TestModel;
+  public GameObject TestModel2;
   public GameObject ObjectsInstancesTransform;
 
   int[,] _floorSoundTypeByPosition;
@@ -225,19 +226,25 @@ public class App : MonoSingleton<App>
     Int2 pos = _generatedMap.GetRoadPosition();
     if (pos != null)
     {
-      GameObject go = (GameObject)Instantiate(TestModel, 
-                       new Vector3(pos.X * GlobalConstants.WallScaleFactor, 0, 
-                                   pos.Y * GlobalConstants.WallScaleFactor), Quaternion.identity);
-      var mm = go.GetComponent<ModelMover>();
-      if (mm != null)
-      {
-        mm.ModelPos.X = pos.X;
-        mm.ModelPos.Y = pos.Y;
-      }
+      SpawnModel(TestModel, pos);
+      SpawnModel(TestModel2, pos);
     }
     else
     {
       Debug.LogWarning("Could not find starting pos for model!");
+    }
+  }
+
+  void SpawnModel(GameObject model, Int2 pos)
+  {
+    GameObject go = (GameObject)Instantiate(model, 
+                                            new Vector3(pos.X * GlobalConstants.WallScaleFactor, 0, 
+                pos.Y * GlobalConstants.WallScaleFactor), Quaternion.identity);
+    var mm = go.GetComponent<ModelMover>();
+    if (mm != null)
+    {
+      mm.ModelPos.X = pos.X;
+      mm.ModelPos.Y = pos.Y;
     }
   }
 
