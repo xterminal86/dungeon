@@ -31,6 +31,8 @@ public class ModelMover : MonoBehaviour
       float length = _animationComponent["Walk"].length;
 
       _moveSpeed = (length / speed) * GlobalConstants.WallScaleFactor;
+
+      _animationComponent["Walk"].speed = GlobalConstants.WallScaleFactor;
     }
 	}
 

@@ -10,8 +10,8 @@ public class App : MonoSingleton<App>
 {
   public Terrain Mountains;
 
-  public GameObject TestModel;
-  public GameObject TestModel2;
+  public List<GameObject> Characters;
+
   public GameObject ObjectsInstancesTransform;
 
   int[,] _floorSoundTypeByPosition;
@@ -137,7 +137,7 @@ public class App : MonoSingleton<App>
       BuildMap();
     }
 
-    SetupModel();
+    SetupCharacters();
 
     ScreenFader.Instance.FadeIn();
 
@@ -221,21 +221,16 @@ public class App : MonoSingleton<App>
     SoundManager.Instance.PlayMusicTrack(_generatedMap.MusicTrack);
   }
 
-  void SetupModel()
+  void SetupCharacters()
   {
-    Int2 pos = _generatedMap.GetRoadPosition();
-    if (pos != null)
+    foreach (var item in Characters)
     {
-      SpawnModel(TestModel, pos);
-      SpawnModel(TestModel2, pos);
-    }
-    else
-    {
-      Debug.LogWarning("Could not find starting pos for model!");
+      Int2 pos = _generatedMap.GetRoadPosition();
+      SpawnCharacter(item, pos);
     }
   }
 
-  void SpawnModel(GameObject model, Int2 pos)
+  void SpawnCharacter(GameObject model, Int2 pos)
   {
     GameObject go = (GameObject)Instantiate(model, 
                                             new Vector3(pos.X * GlobalConstants.WallScaleFactor, 0, 
