@@ -61,8 +61,6 @@ public class ScreenFader : MonoSingleton<ScreenFader>
       
       FaderImage.color = _faderColor;
 
-      //Debug.Log(_alpha);
-
       yield return null;
     }
 

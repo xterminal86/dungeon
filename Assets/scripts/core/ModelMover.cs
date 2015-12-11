@@ -62,79 +62,129 @@ public class ModelMover : MonoBehaviour
 
     var road = rb.BuildRoad(ModelPos, destination, true);
 
-    int dx = road[0].Coordinate.X - ModelPos.X;
-    int dy = road[0].Coordinate.Y - ModelPos.Y;
+    _currentMapPos.X = ModelPos.X;
+    _currentMapPos.Y = ModelPos.Y;
 
-    float angleStart = transform.rotation.eulerAngles.y;
-    float angleEnd = 0.0f;
-
-    if (dy == 1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.EAST];
-    else if (dy == -1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.WEST];
-    else if (dx == 1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.SOUTH];
-    else if (dx == -1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
-
-    Debug.Log("dx, dy " + dx + " " + dy + " " + road[0].Coordinate);
-    Debug.Log("Rotating from " + angleStart + " to " + angleEnd);
-
-    Vector3 tmpRotation = transform.rotation.eulerAngles;
-
-    float counter = 0.0f;
-    while (counter < angleEnd)
+    while (road.Count != 0)
     {
-      counter += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
-      tmpRotation.y += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
+      int dx = road[0].Coordinate.X - _currentMapPos.X;
+      int dy = road[0].Coordinate.Y - _currentMapPos.Y;
 
-      transform.rotation = Quaternion.Euler(tmpRotation);      
+      float angleStart = transform.rotation.eulerAngles.y;
+      float angleEnd = 0.0f;
 
-      yield return null;
-    }
+      if (dy == 1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.EAST];
+      else if (dy == -1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.WEST];
+      else if (dx == 1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.SOUTH];
+      else if (dx == -1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
 
-    tmpRotation.y = angleEnd;
-    transform.rotation = Quaternion.Euler(tmpRotation);      
+      //Debug.Log("dx, dy " + dx + " " + dy + " " + road[0].Coordinate);
+      //Debug.Log("Rotating from " + angleStart + " to " + angleEnd);
 
-    /*
-    RoadBuilder rb = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
-
-    Int2 destination = App.Instance.GeneratedMap.GetRandomUnoccupiedCell();
-
-    Debug.Log("Going from " + ModelPos + " to " + destination);
-
-    var road = rb.BuildRoad(ModelPos, destination, true);
-        
-    _modelPosition.x = transform.position.x;
-    _modelPosition.y = transform.position.y;
-    _modelPosition.z = transform.position.z;
-
-    _animationComponent.CrossFade("Walk");
-
-    int nextPathCellIndex = 0;
-        
-    while (ModelPos.X != destination.X && ModelPos.Y != destination.Y)
-    {
-      int dx = road[nextPathCellIndex].Coordinate.X - ModelPos.X;
-      int dy = road[nextPathCellIndex].Coordinate.Y - ModelPos.Y;
-
-      _modelPosition.x += dx * (Time.smoothDeltaTime * _moveSpeed);
-      _modelPosition.z += dy * (Time.smoothDeltaTime * _moveSpeed);
-
-      ModelPos.X = Mathf.FloorToInt(_modelPosition.x / GlobalConstants.WallScaleFactor);
-      ModelPos.Y = Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
-
-      if (dx == 0 && dy == 0)
+      if ((int)angleStart != (int)angleEnd)
       {
-        _modelPosition.x = ModelPos.X * GlobalConstants.WallScaleFactor;
-        _modelPosition.z = ModelPos.Y * GlobalConstants.WallScaleFactor;
+        StartCoroutine("RotateModel", angleEnd);
 
-        nextPathCellIndex++;
+        while (!_rotateDone)
+        {
+          yield return null;
+        }
       }
+
+      StartCoroutine("MoveModel", road[0].Coordinate);
+
+      while (!_moveDone)
+      {
+        yield return null;
+      }
+
+      road.RemoveAt(0);
 
       yield return null;
     }
 
     _animationComponent.CrossFade("Idle");
 
-    JobManager.Instance.CreateJob(DelayRoutine());
-    */
+    yield return null;
+
+    StartCoroutine(DelayRoutine());
+  }
+
+  bool _rotateDone = false;
+  IEnumerator RotateModel(float angle)
+  {
+    _animationComponent.CrossFade("Idle");
+
+    _rotateDone = false;
+
+    Vector3 tmpRotation = transform.rotation.eulerAngles;
+
+    int d = (int)angle - (int)tmpRotation.y;
+
+    float counter = 0.0f;
+    while (counter < Mathf.Abs(d))
+    {
+      counter += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
+
+      if (d > 0)
+      {
+        tmpRotation.y += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
+      }
+      else 
+      {
+        tmpRotation.y -= Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
+      }
+
+      transform.rotation = Quaternion.Euler(tmpRotation);      
+      
+      yield return null;
+    }
+    
+    tmpRotation.y = angle;
+    transform.rotation = Quaternion.Euler(tmpRotation);      
+
+    _rotateDone = true;
+
+    yield return null;
+  }
+
+  bool _moveDone = false;
+  Int2 _currentMapPos = new Int2();
+  IEnumerator MoveModel(Int2 newMapPos)
+  {
+    _animationComponent.CrossFade("Walk");
+
+    _moveDone = false;
+
+    _currentMapPos.X = (int)_modelPosition.x / GlobalConstants.WallScaleFactor;
+    _currentMapPos.Y = (int)_modelPosition.z / GlobalConstants.WallScaleFactor;
+
+    int dx = newMapPos.X - _currentMapPos.X;
+    int dy = newMapPos.Y - _currentMapPos.Y;
+
+    while (dx != 0 || dy != 0)
+    {
+      _modelPosition.x += dx * (Time.smoothDeltaTime * _moveSpeed);
+      _modelPosition.z += dy * (Time.smoothDeltaTime * _moveSpeed);
+
+      _currentMapPos.X = dx < 0 ? Mathf.CeilToInt(_modelPosition.x / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.x / GlobalConstants.WallScaleFactor);
+      _currentMapPos.Y = dy < 0 ? Mathf.CeilToInt(_modelPosition.z / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
+
+      dx = newMapPos.X - _currentMapPos.X;
+      dy = newMapPos.Y - _currentMapPos.Y;
+
+      yield return null;
+    }
+
+    _modelPosition.x = newMapPos.X * GlobalConstants.WallScaleFactor;
+    _modelPosition.z = newMapPos.Y * GlobalConstants.WallScaleFactor;
+
+    ModelPos.X = newMapPos.X;
+    ModelPos.Y = newMapPos.Y;
+
+    _moveDone = true;
+
+    yield return null;
   }
 
   float _delay = 5.0f;
