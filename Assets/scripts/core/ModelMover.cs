@@ -32,7 +32,7 @@ public class ModelMover : MonoBehaviour
 
       _moveSpeed = (length / speed) * GlobalConstants.WallScaleFactor;
 
-      _animationComponent["Walk"].speed = GlobalConstants.WallScaleFactor;
+      _animationComponent["Walk"].speed = GlobalConstants.WallScaleFactor * 2;
     }
 	}
 
@@ -50,6 +50,13 @@ public class ModelMover : MonoBehaviour
 
     transform.position = _modelPosition;
 	}
+
+  void StopAnimation(string animationName)
+  {
+    _animationComponent[animationName].time = 0.0f;
+    _animationComponent.Sample();
+    _animationComponent.Stop(animationName);
+  }
 
   IEnumerator MoveOnPath()
   {    
@@ -106,7 +113,8 @@ public class ModelMover : MonoBehaviour
       yield return null;
     }
 
-    _animationComponent.CrossFade("Idle");
+    StopAnimation("Walk");
+    _animationComponent.Play("Idle");
 
     yield return null;
 
@@ -116,7 +124,8 @@ public class ModelMover : MonoBehaviour
   bool _rotateDone = false;
   IEnumerator RotateModel(float angle)
   {
-    _animationComponent.CrossFade("Idle");
+    StopAnimation("Walk");
+    _animationComponent.Play("Idle");
 
     _rotateDone = false;
 
@@ -155,7 +164,8 @@ public class ModelMover : MonoBehaviour
   Int2 _currentMapPos = new Int2();
   IEnumerator MoveModel(Int2 newMapPos)
   {
-    _animationComponent.CrossFade("Walk");
+    StopAnimation("Idle");
+    _animationComponent.Play("Walk");
 
     _moveDone = false;
 
