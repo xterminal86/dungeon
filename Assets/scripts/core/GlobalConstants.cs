@@ -18,6 +18,13 @@ public static class GlobalConstants
   public static float CharacterRotationSpeed = 100.0f;
   public static Vector3 DefaultVillageMountainsSize = new Vector3(25, 30, 25);
 
+  // Model Animation Names
+
+  public static string AnimationIdleName = "Idle";
+  public static string AnimationWalkName = "Walk";
+  public static string AnimationAttackName = "Attack";
+  public static string AnimationTalkName = "Talk";
+
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
   {
     { MapAttributes.Floor, "floor" }, { MapAttributes.Wall, "wall" }, { MapAttributes.Ceiling, "ceiling" },
@@ -96,7 +103,7 @@ public static class GlobalConstants
     { FootstepSoundType.WOOD, FootstepsWood },
     { FootstepSoundType.METAL, FootstepsDummy }
   };
-
+      
   public enum FootstepSoundType
   {
     DUMMY = 0,

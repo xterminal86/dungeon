@@ -5,16 +5,7 @@ using System.Collections.Generic;
 public class ModelMover : MonoBehaviour 
 {
   public Int2 ModelPos = new Int2();
-
-  Dictionary<int, string> _animationsByIndex = new Dictionary<int, string>()
-  {
-    { 0, "Idle" },
-    { 1, "Attack" },
-    { 2, "Walk" },
-    { 3, "Talk" },
-    { 4, "Clueless" }
-  };
-
+  
   float _moveSpeed = 0.0f;
 
   Animation _animationComponent;
@@ -23,16 +14,16 @@ public class ModelMover : MonoBehaviour
     _animationComponent = GetComponent<Animation>();
     if (_animationComponent != null)
     {
-      _animationComponent["Idle"].speed = 0.5f;
+      _animationComponent[GlobalConstants.AnimationIdleName].speed = 0.5f;
 
-      _animationComponent.Play("Idle");
+      _animationComponent.Play(GlobalConstants.AnimationIdleName);
 
-      float speed = _animationComponent["Walk"].speed;
-      float length = _animationComponent["Walk"].length;
+      float speed = _animationComponent[GlobalConstants.AnimationWalkName].speed;
+      float length = _animationComponent[GlobalConstants.AnimationWalkName].length;
 
       _moveSpeed = (length / speed) * GlobalConstants.WallScaleFactor;
 
-      _animationComponent["Walk"].speed = GlobalConstants.WallScaleFactor * 2;
+      _animationComponent[GlobalConstants.AnimationWalkName].speed = GlobalConstants.WallScaleFactor * 2;
     }
 	}
 
@@ -42,7 +33,7 @@ public class ModelMover : MonoBehaviour
   void Update () 
 	{
     if (!_working)
-    {
+    {      
       //JobManager.Instance.CreateJob(PlayRandomAnimation());
       JobManager.Instance.CreateJob(MoveOnPath());
       _working = true;
@@ -50,7 +41,7 @@ public class ModelMover : MonoBehaviour
 
     transform.position = _modelPosition;
 	}
-
+  
   void StopAnimation(string animationName)
   {
     _animationComponent[animationName].time = 0.0f;
@@ -113,19 +104,19 @@ public class ModelMover : MonoBehaviour
       yield return null;
     }
 
-    StopAnimation("Walk");
-    _animationComponent.Play("Idle");
-
-    yield return null;
+    StopAnimation(GlobalConstants.AnimationWalkName);
+    _animationComponent.Play(GlobalConstants.AnimationIdleName);
 
     StartCoroutine(DelayRoutine());
+
+    yield return null;    
   }
 
   bool _rotateDone = false;
   IEnumerator RotateModel(float angle)
   {
-    StopAnimation("Walk");
-    _animationComponent.Play("Idle");
+    StopAnimation(GlobalConstants.AnimationWalkName);
+    _animationComponent.Play(GlobalConstants.AnimationIdleName);
 
     _rotateDone = false;
 
@@ -133,19 +124,14 @@ public class ModelMover : MonoBehaviour
 
     int d = (int)angle - (int)tmpRotation.y;
 
+    float sign = Mathf.Sign(d);
+
     float counter = 0.0f;
     while (counter < Mathf.Abs(d))
     {
       counter += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
 
-      if (d > 0)
-      {
-        tmpRotation.y += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
-      }
-      else 
-      {
-        tmpRotation.y -= Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
-      }
+      tmpRotation.y += sign * (Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed);
 
       transform.rotation = Quaternion.Euler(tmpRotation);      
       
@@ -164,8 +150,8 @@ public class ModelMover : MonoBehaviour
   Int2 _currentMapPos = new Int2();
   IEnumerator MoveModel(Int2 newMapPos)
   {
-    StopAnimation("Idle");
-    _animationComponent.Play("Walk");
+    StopAnimation(GlobalConstants.AnimationIdleName);
+    _animationComponent.Play(GlobalConstants.AnimationWalkName);
 
     _moveDone = false;
 
@@ -215,25 +201,7 @@ public class ModelMover : MonoBehaviour
     }
 
     _working = false;
-  }
 
-  float _time = 0.0f;
-  IEnumerator PlayRandomAnimation()
-  {
-    int index = Random.Range(0, _animationComponent.GetClipCount());
-
-    _animationComponent.Play(_animationsByIndex[index]);
-
-    float speed = _animationComponent[_animationsByIndex[index]].speed;
-    float length = _animationComponent[_animationsByIndex[index]].length;
-    float cond = length / speed;
-    while (_time < cond)
-    {
-      _time += Time.deltaTime;
-      yield return null;
-    }
-
-    _working = false;
-    _time = 0.0f;
-  }
+    yield return null;
+  }    
 }
