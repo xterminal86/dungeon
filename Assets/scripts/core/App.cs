@@ -240,6 +240,8 @@ public class App : MonoSingleton<App>
     {
       mm.ModelPos.X = pos.X;
       mm.ModelPos.Y = pos.Y;
+
+      mm.Actor = new NpcActor(new WanderingState(mm));
     }
   }
 
