@@ -77,6 +77,19 @@ public class InputController : MonoSingleton<InputController>
     }
     else if (Input.GetKeyDown(KeyCode.Space))
     {
+      Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+      if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, GlobalConstants.WallScaleFactor + 1))
+      {
+        if (_raycastHit.collider != null)
+        {
+          ModelMover mm = _raycastHit.collider.gameObject.GetComponent<ModelMover>();
+          if (mm != null)
+          {
+            Debug.Log("You see: " + mm.CharacterName);
+          }
+        }
+      }
     }
 
     _currentMoveSpeed = GlobalConstants.CameraMoveSpeed;
