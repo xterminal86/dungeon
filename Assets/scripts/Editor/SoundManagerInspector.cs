@@ -16,6 +16,8 @@ public class SoundManagerInspector : Editor
 
     if (sm == null) return;
 
+    sm.AudioSourcePrefab = (AudioSource)EditorGUILayout.ObjectField("Audio Source FX Prefab", sm.AudioSourcePrefab, typeof(AudioSource));
+
     sm.SoundVolume = EditorGUILayout.Slider("Sound Volume", sm.SoundVolume, 0.0f, 1.0f);
     sm.MusicVolume = EditorGUILayout.Slider("Music Volume", sm.MusicVolume, 0.0f, 1.0f);
 

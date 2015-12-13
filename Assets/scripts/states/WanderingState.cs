@@ -30,8 +30,18 @@ public class WanderingState : GameObjectState
     _model.transform.position = _modelPosition;
   }
 
+  void PlayFootstepSound3D(Int2 mapPos, Vector3 position3D)
+  {
+    if (App.Instance.FloorSoundTypeByPosition[mapPos.X, mapPos.Y] != -1)
+    {
+      SoundManager.Instance.PlayFootstepSound((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[mapPos.X, mapPos.Y], position3D);
+    }
+  }
+
   IEnumerator MoveOnPath()
   {
+    _firstStepSound = false;
+
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
@@ -71,6 +81,8 @@ public class WanderingState : GameObjectState
         {
           yield return null;
         }
+
+        _firstStepSound = false;
       }
 
       JobManager.Instance.CreateJob(MoveModel(road[0].Coordinate));
@@ -89,7 +101,7 @@ public class WanderingState : GameObjectState
     _animationComponent.Play(GlobalConstants.AnimationIdleName);
 
     JobManager.Instance.CreateJob(DelayRoutine());
-
+    
     yield return null;
   }
 
@@ -146,21 +158,28 @@ public class WanderingState : GameObjectState
     yield return null;
   }
 
+  bool _firstStepSound = false;
   bool _moveDone = false;
   Int2 _currentMapPos = new Int2();
   IEnumerator MoveModel(Int2 newMapPos)
   {
     StopAnimation(GlobalConstants.AnimationIdleName);
     _animationComponent.Play(GlobalConstants.AnimationWalkName);
-
+          
     _moveDone = false;
-
+    
     _currentMapPos.X = (int)_modelPosition.x / GlobalConstants.WallScaleFactor;
     _currentMapPos.Y = (int)_modelPosition.z / GlobalConstants.WallScaleFactor;
 
     int dx = newMapPos.X - _currentMapPos.X;
     int dy = newMapPos.Y - _currentMapPos.Y;
 
+    if (!_firstStepSound)
+    {
+      PlayFootstepSound3D(_model.ModelPos, _modelPosition);
+      _firstStepSound = true;
+    }
+  
     while (dx != 0 || dy != 0)
     {
       _modelPosition.x += dx * (Time.smoothDeltaTime * _model.WalkingSpeed);
@@ -170,11 +189,11 @@ public class WanderingState : GameObjectState
       _currentMapPos.Y = dy < 0 ? Mathf.CeilToInt(_modelPosition.z / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
 
       dx = newMapPos.X - _currentMapPos.X;
-      dy = newMapPos.Y - _currentMapPos.Y;
+      dy = newMapPos.Y - _currentMapPos.Y;      
 
       yield return null;
     }
-
+        
     _modelPosition.x = newMapPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.z = newMapPos.Y * GlobalConstants.WallScaleFactor;
 
@@ -182,6 +201,8 @@ public class WanderingState : GameObjectState
     _model.ModelPos.Y = newMapPos.Y;
 
     _moveDone = true;
+
+    PlayFootstepSound3D(_model.ModelPos, _modelPosition);
 
     yield return null;
   }

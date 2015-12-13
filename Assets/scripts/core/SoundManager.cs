@@ -82,7 +82,28 @@ public class SoundManager : MonoSingleton<SoundManager>
     if (_audioSourcesByHash.ContainsKey(hash))
     {
       _audioSourcesByHash[hash].pitch = 1 + Random.Range(-pitchOffset, pitchOffset);
-      _audioSourcesByHash[hash].Play();
+      _audioSourcesByHash[hash].Play();      
+    }
+  }
+
+  public void PlaySound(int hash, float pitchOffset, Vector3 position, bool is3D)
+  {
+    if (_audioSourcesByHash.ContainsKey(hash))
+    {
+      _audioSourcesByHash[hash].pitch = 1 + Random.Range(-pitchOffset, pitchOffset);
+      GameObject go = new GameObject("SFX-3D");
+      go.transform.position = position;
+      AudioSource a = go.AddComponent<AudioSource>();
+      a.playOnAwake = false;
+      a.panLevel = is3D ? 1.0f : 0.0f;
+      a.volume = is3D ? SoundVolume : 1.0f;
+      a.maxDistance = AudioSourcePrefab.maxDistance;
+      a.minDistance = AudioSourcePrefab.minDistance;
+      //a.rolloffMode = AudioSourcePrefab.rolloffMode;      
+      a.rolloffMode = AudioRolloffMode.Linear;
+      a.clip = _audioSourcesByHash[hash].clip;      
+      a.Play();
+      Destroy(go, a.clip.length);
     }
   }
 
@@ -106,6 +127,27 @@ public class SoundManager : MonoSingleton<SoundManager>
       _lastPlayedSound = which;
     }
   }
+
+  public void PlayFootstepSound(GlobalConstants.FootstepSoundType type, Vector3 position, bool is3D = true)
+  {
+    if (GlobalConstants.FootstepsListByType.ContainsKey(type))
+    {
+      int which = Random.Range(0, GlobalConstants.FootstepsListByType[type].Count);
+      if (_lastPlayedSound == which)
+      {
+        which++;
+
+        if (which > GlobalConstants.FootstepsListByType[type].Count - 1)
+        {
+          which = 0;
+        }
+      }
+
+      PlaySound(GlobalConstants.FootstepsListByType[type][which], 0.1f, position, is3D);
+
+      _lastPlayedSound = which;
+    }
+  }  
 
   int _currentPlayingTrack = -1;
   public void PlayMusicTrack(string trackName)
