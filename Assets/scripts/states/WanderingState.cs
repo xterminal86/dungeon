@@ -105,14 +105,33 @@ public class WanderingState : GameObjectState
 
     int d = (int)angle - (int)tmpRotation.y;
 
+    // If model has 270 rotation around y and has to rotate to 0, 
+    // we should rotate towards shortest direction, not from 270 to 0 backwards, 
+    // so we introduce special condition.
+    // Same thing when angles are reversed, because we rely on sign variable in tmpRotation.y change.
+    //
+    // TLDR:
+    // Case 1: from = 270, to = 0, we have sign = -1, so we would decrement current rotation from 270 to 0, instead of just going to 0 (i.e. 360).
+    // Case 2: from = 0, to = 270, we have sign = +1, so we would increment current rotation from 0 to 270 - same thing reversed.
+    
+    bool specialRotation = ((int)angle == 270 && (int)tmpRotation.y == 0) || ((int)angle == 0 && (int)tmpRotation.y == 270);
+    int cond = specialRotation ? 90 : Mathf.Abs(d);
+
     float sign = Mathf.Sign(d);
 
     float counter = 0.0f;
-    while (counter < Mathf.Abs(d))
+    while (counter < cond)
     {
       counter += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
 
-      tmpRotation.y += sign * (Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed);
+      if (specialRotation)
+      {
+        tmpRotation.y -= sign * (Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed);
+      }
+      else
+      {
+        tmpRotation.y += sign * (Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed);
+      }
 
       _model.transform.rotation = Quaternion.Euler(tmpRotation);
 

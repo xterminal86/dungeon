@@ -1,0 +1,5 @@
+1) Compass
+2) Dialogues with NPCs (3 buttons, like, "Name", "Job", "Gossip", "Bye")
+3) Merchants
+4) Decor objects (fountains, flowers, tables etc.)
+5) Weather and day/night change
