@@ -1,9 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class InputController : MonoSingleton<InputController> 
 {
+  public Image CompassImage;
+
   public Transform RaycastPoint;
 
   public Int2 PlayerMapPos = new Int2();
@@ -20,11 +23,13 @@ public class InputController : MonoSingleton<InputController>
   {
     _cameraAngles = App.Instance.CameraAngles;
     _cameraPos = App.Instance.CameraPos;
+    _compassSpriteAngles.z = _cameraAngles.y + 90.0f;
   }
 
   float _cameraBob = 0.0f;
   bool _isProcessing = false;
   Vector3 _cameraAngles = Vector3.zero;
+  Vector3 _compassSpriteAngles = Vector3.zero;
   Vector3 _cameraPos = Vector3.zero;
   float _currentMoveSpeed = 0.0f;
 	void Update () 
@@ -40,6 +45,8 @@ public class InputController : MonoSingleton<InputController>
     App.Instance.CameraPivot.transform.eulerAngles = _cameraAngles;
     App.Instance.CameraPos = _cameraPos;
     App.Instance.CameraPivot.transform.position = App.Instance.CameraPos;
+
+    CompassImage.transform.eulerAngles = _compassSpriteAngles;
 	}
 
   bool _doMove = false;
@@ -269,12 +276,21 @@ public class InputController : MonoSingleton<InputController>
         break;
       }
 
-      if (ca.TurnRight) _cameraAngles.y += Time.deltaTime * ca.Speed;
-      else _cameraAngles.y -= Time.deltaTime * ca.Speed;
+      if (ca.TurnRight)
+      {
+        _cameraAngles.y += Time.deltaTime * ca.Speed;
+        _compassSpriteAngles.z += Time.deltaTime * ca.Speed;
+      }
+      else
+      {
+        _cameraAngles.y -= Time.deltaTime * ca.Speed;
+        _compassSpriteAngles.z -= Time.deltaTime * ca.Speed;
+      }
       yield return null;
     }
 
     _cameraAngles.y = toAngle;
+    _compassSpriteAngles.z = 90.0f + toAngle;
 
     App.Instance.CameraOrientation = ca.To;
 
