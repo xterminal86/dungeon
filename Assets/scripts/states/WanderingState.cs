@@ -34,7 +34,7 @@ public class WanderingState : GameObjectState
   {
     if (App.Instance.FloorSoundTypeByPosition[mapPos.X, mapPos.Y] != -1)
     {
-      SoundManager.Instance.PlayFootstepSound((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[mapPos.X, mapPos.Y], position3D);
+      SoundManager.Instance.PlayFootstepSound(_model.name, (GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[mapPos.X, mapPos.Y], position3D);
     }
   }
 

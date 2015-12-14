@@ -10,10 +10,12 @@ public class SoundManager : MonoSingleton<SoundManager>
 
   public Transform AudioSourcesHolder;
 
-  public AudioSource AudioSourcePrefab;
-  
+  public AudioSource AudioSourceOneShotPrefab;
+
   public List<AudioClip> MusicTracks = new List<AudioClip>();
   public List<AudioClip> SoundEffects = new List<AudioClip>();
+
+  public Dictionary<int, int> LastPlayedSoundOfChar = new Dictionary<int, int>();
 
   Dictionary<int, AudioSource> _audioSourcesByHash = new Dictionary<int, AudioSource>();
 
@@ -29,7 +31,7 @@ public class SoundManager : MonoSingleton<SoundManager>
   {
     foreach (var item in MusicTracks)
     {
-      AudioSource s = (AudioSource)Instantiate(AudioSourcePrefab);
+      AudioSource s = (AudioSource)Instantiate(AudioSourceOneShotPrefab);
       s.transform.parent = AudioSourcesHolder;
       
       s.clip = item;
@@ -47,7 +49,7 @@ public class SoundManager : MonoSingleton<SoundManager>
   {
     foreach (var item in SoundEffects)
     {
-      AudioSource s = (AudioSource)Instantiate(AudioSourcePrefab);
+      AudioSource s = (AudioSource)Instantiate(AudioSourceOneShotPrefab);
       s.transform.parent = AudioSourcesHolder;
 
       s.clip = item;
@@ -97,23 +99,23 @@ public class SoundManager : MonoSingleton<SoundManager>
       a.playOnAwake = false;
       a.panLevel = is3D ? 1.0f : 0.0f;
       a.volume = is3D ? SoundVolume : 1.0f;
-      a.maxDistance = AudioSourcePrefab.maxDistance;
-      a.minDistance = AudioSourcePrefab.minDistance;
+      a.maxDistance = AudioSourceOneShotPrefab.maxDistance;
+      a.minDistance = AudioSourceOneShotPrefab.minDistance;
       //a.rolloffMode = AudioSourcePrefab.rolloffMode;      
       a.rolloffMode = AudioRolloffMode.Linear;
-      a.clip = _audioSourcesByHash[hash].clip;      
+      a.clip = _audioSourcesByHash[hash].clip;
       a.Play();
       Destroy(go, a.clip.length);
     }
   }
 
-  int _lastPlayedSound = -1;
-  public void PlayFootstepSound(GlobalConstants.FootstepSoundType type)
+  int _lastPlayedSoundOfPlayer = -1;
+  public void PlayFootstepSoundPlayer(GlobalConstants.FootstepSoundType type)
   {
     if (GlobalConstants.FootstepsListByType.ContainsKey(type))
     {
       int which = Random.Range(0, GlobalConstants.FootstepsListByType[type].Count);
-      if (_lastPlayedSound == which)
+      if (_lastPlayedSoundOfPlayer == which)
       {
         which++;
 
@@ -124,28 +126,29 @@ public class SoundManager : MonoSingleton<SoundManager>
       }
 
       PlaySound(GlobalConstants.FootstepsListByType[type][which], 0.1f);
-      _lastPlayedSound = which;
+      _lastPlayedSoundOfPlayer = which;
     }
   }
 
-  public void PlayFootstepSound(GlobalConstants.FootstepSoundType type, Vector3 position, bool is3D = true)
+  public void PlayFootstepSound(string gameObjectName, GlobalConstants.FootstepSoundType type, Vector3 position, bool is3D = true)
   {
     if (GlobalConstants.FootstepsListByType.ContainsKey(type))
     {
-      int which = Random.Range(0, GlobalConstants.FootstepsListByType[type].Count);
-      if (_lastPlayedSound == which)
+      int which = Random.Range(0, GlobalConstants.Footsteps3dListByType[type].Count);
+      int hash = gameObjectName.GetHashCode();
+      if (LastPlayedSoundOfChar[hash] == which)
       {
-        which++;
+        LastPlayedSoundOfChar[hash]++;
 
-        if (which > GlobalConstants.FootstepsListByType[type].Count - 1)
+        if (which > GlobalConstants.Footsteps3dListByType[type].Count - 1)
         {
           which = 0;
         }
       }
 
-      PlaySound(GlobalConstants.FootstepsListByType[type][which], 0.1f, position, is3D);
+      PlaySound(GlobalConstants.Footsteps3dListByType[type][which], 0.1f, position, is3D);
 
-      _lastPlayedSound = which;
+      LastPlayedSoundOfChar[hash] = which;
     }
   }  
 

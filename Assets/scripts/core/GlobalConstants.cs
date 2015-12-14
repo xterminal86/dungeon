@@ -56,12 +56,26 @@ public static class GlobalConstants
     "fs-dummy2".GetHashCode()
   };
 
+  public static List<int> FootstepsDummy3d = new List<int>()
+  {
+    "fs-dummy1-3d".GetHashCode(),
+    "fs-dummy2-3d".GetHashCode()
+  };
+
   public static List<int> FootstepsGrass = new List<int>()
   {
     "fs-grass1".GetHashCode(),
     "fs-grass2".GetHashCode(),
     "fs-grass3".GetHashCode(),
     "fs-grass4".GetHashCode()
+  };
+
+  public static List<int> FootstepsGrass3d = new List<int>()
+  {
+    "fs-grass1-3d".GetHashCode(),
+    "fs-grass2-3d".GetHashCode(),
+    "fs-grass3-3d".GetHashCode(),
+    "fs-grass4-3d".GetHashCode()
   };
 
   public static List<int> FootstepsTile = new List<int>()
@@ -72,12 +86,28 @@ public static class GlobalConstants
     "fs-tile4".GetHashCode()
   };
 
+  public static List<int> FootstepsTile3d = new List<int>()
+  {
+    "fs-tile1-3d".GetHashCode(),
+    "fs-tile2-3d".GetHashCode(),
+    "fs-tile3-3d".GetHashCode(),
+    "fs-tile4-3d".GetHashCode()
+  };
+
   public static List<int> FootstepsWood = new List<int>()
   {
     "fs-wood1".GetHashCode(),
     "fs-wood2".GetHashCode(),
     "fs-wood3".GetHashCode(),
     "fs-wood4".GetHashCode()    
+  };
+
+  public static List<int> FootstepsWood3d = new List<int>()
+  {
+    "fs-wood1-3d".GetHashCode(),
+    "fs-wood2-3d".GetHashCode(),
+    "fs-wood3-3d".GetHashCode(),
+    "fs-wood4-3d".GetHashCode()    
   };
 
   public static List<int> FootstepsDirt = new List<int>()
@@ -88,12 +118,28 @@ public static class GlobalConstants
     "fs-dirt4".GetHashCode()
   };
 
+  public static List<int> FootstepsDirt3d = new List<int>()
+  {
+    "fs-dirt1-3d".GetHashCode(),
+    "fs-dirt2-3d".GetHashCode(),
+    "fs-dirt3-3d".GetHashCode(),
+    "fs-dirt4-3d".GetHashCode()
+  };
+
   public static List<int> FootstepsStone = new List<int>()
   {
     "fs-stone1".GetHashCode(),
     "fs-stone2".GetHashCode(),
     "fs-stone3".GetHashCode(),
     "fs-stone4".GetHashCode()
+  };
+
+  public static List<int> FootstepsStone3d = new List<int>()
+  {
+    "fs-stone1-3d".GetHashCode(),
+    "fs-stone2-3d".GetHashCode(),
+    "fs-stone3-3d".GetHashCode(),
+    "fs-stone4-3d".GetHashCode()
   };
 
   public static Dictionary<FootstepSoundType, List<int>> FootstepsListByType = new Dictionary<FootstepSoundType, List<int>>()
@@ -106,7 +152,18 @@ public static class GlobalConstants
     { FootstepSoundType.WOOD, FootstepsWood },
     { FootstepSoundType.METAL, FootstepsDummy }
   };
-      
+    
+  public static Dictionary<FootstepSoundType, List<int>> Footsteps3dListByType = new Dictionary<FootstepSoundType, List<int>>()
+  {
+    { FootstepSoundType.DUMMY, FootstepsDummy3d },
+    { FootstepSoundType.DIRT, FootstepsDirt3d },
+    { FootstepSoundType.GRASS, FootstepsGrass3d },
+    { FootstepSoundType.STONE, FootstepsStone3d },
+    { FootstepSoundType.TILE, FootstepsTile3d },
+    { FootstepSoundType.WOOD, FootstepsWood3d },
+    { FootstepSoundType.METAL, FootstepsDummy3d }
+  };
+
   public enum FootstepSoundType
   {
     DUMMY = 0,

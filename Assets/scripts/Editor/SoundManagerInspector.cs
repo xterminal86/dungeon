@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ public class SoundManagerInspector : Editor
 
     if (sm == null) return;
 
-    sm.AudioSourcePrefab = (AudioSource)EditorGUILayout.ObjectField("Audio Source FX Prefab", sm.AudioSourcePrefab, typeof(AudioSource));
+    sm.AudioSourceOneShotPrefab = (AudioSource)EditorGUILayout.ObjectField("Audio Source One Shot Prefab", sm.AudioSourceOneShotPrefab, typeof(AudioSource));
 
     sm.SoundVolume = EditorGUILayout.Slider("Sound Volume", sm.SoundVolume, 0.0f, 1.0f);
     sm.MusicVolume = EditorGUILayout.Slider("Music Volume", sm.MusicVolume, 0.0f, 1.0f);

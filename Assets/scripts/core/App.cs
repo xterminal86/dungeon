@@ -238,6 +238,8 @@ public class App : MonoSingleton<App>
     var mm = go.GetComponent<ModelMover>();
     if (mm != null)
     {
+      SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+
       mm.ModelPos.X = pos.X;
       mm.ModelPos.Y = pos.Y;
 

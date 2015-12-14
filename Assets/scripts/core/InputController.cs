@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class InputController : MonoSingleton<InputController> 
 {
   public Image CompassImage;
-  public AudioSource PlayerFootstepsAudioSource;
 
   public Transform RaycastPoint;
 
@@ -403,7 +402,8 @@ public class InputController : MonoSingleton<InputController>
 
     if (App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y] != -1)
     {
-      SoundManager.Instance.PlayFootstepSound((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y], App.Instance.CameraPos, false);
+      SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y]);
+      //SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y], App.Instance.CameraPos);
     }
 
     _isProcessing = false;
