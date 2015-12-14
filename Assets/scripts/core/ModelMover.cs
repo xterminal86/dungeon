@@ -9,10 +9,12 @@ using System.Collections.Generic;
 /// </summary>
 public class ModelMover : MonoBehaviour 
 {
-  public string CharacterName = string.Empty;
+  public string ActorName = string.Empty;
 
   public Int2 ModelPos = new Int2();
-  
+
+  public Transform RaycastPoint;
+
   public ActorBase Actor;
   
   float _walkingSpeed = 0.0f;

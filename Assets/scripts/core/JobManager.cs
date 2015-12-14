@@ -3,10 +3,9 @@ using System.Collections;
 
 public class JobManager : MonoSingleton<JobManager>
 {
-  Job _job;
-  public void CreateJob(IEnumerator coroutineMethod)
+  public Job CreateJob(IEnumerator coroutineMethod)
   {
-    _job = new Job(coroutineMethod);
+    return new Job(coroutineMethod);
   }
 }
 

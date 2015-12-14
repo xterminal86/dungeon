@@ -244,6 +244,7 @@ public class App : MonoSingleton<App>
       mm.ModelPos.Y = pos.Y;
 
       mm.Actor = new NpcActor(new WanderingState(mm));
+      mm.Actor.ActorName = mm.ActorName;
     }
   }
 

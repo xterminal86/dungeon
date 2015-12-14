@@ -38,6 +38,7 @@ public class WanderingState : GameObjectState
     }
   }
 
+  List<RoadBuilder.PathNode> _road;
   IEnumerator MoveOnPath()
   {
     _firstStepSound = false;
@@ -52,15 +53,15 @@ public class WanderingState : GameObjectState
 
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);
 
-    var road = rb.BuildRoad(_model.ModelPos, destination, true);
+    _road = rb.BuildRoad(_model.ModelPos, destination, true);
 
     _currentMapPos.X = _model.ModelPos.X;
     _currentMapPos.Y = _model.ModelPos.Y;
 
-    while (road.Count != 0)
+    while (_road.Count != 0)
     {
-      int dx = road[0].Coordinate.X - _currentMapPos.X;
-      int dy = road[0].Coordinate.Y - _currentMapPos.Y;
+      int dx = _road[0].Coordinate.X - _currentMapPos.X;
+      int dy = _road[0].Coordinate.Y - _currentMapPos.Y;
 
       float angleStart = _model.transform.rotation.eulerAngles.y;
       float angleEnd = 0.0f;
@@ -85,14 +86,14 @@ public class WanderingState : GameObjectState
         _firstStepSound = false;
       }
 
-      JobManager.Instance.CreateJob(MoveModel(road[0].Coordinate));
+      JobManager.Instance.CreateJob(MoveModel(_road[0].Coordinate));
 
       while (!_moveDone)
       {
         yield return null;
       }
 
-      road.RemoveAt(0);
+      _road.RemoveAt(0);
 
       yield return null;
     }
@@ -161,6 +162,7 @@ public class WanderingState : GameObjectState
   bool _firstStepSound = false;
   bool _moveDone = false;
   Int2 _currentMapPos = new Int2();
+  RaycastHit _raycastHit;
   IEnumerator MoveModel(Int2 newMapPos)
   {
     StopAnimation(GlobalConstants.AnimationIdleName);
@@ -173,6 +175,33 @@ public class WanderingState : GameObjectState
 
     int dx = newMapPos.X - _currentMapPos.X;
     int dy = newMapPos.Y - _currentMapPos.Y;
+
+    /*
+    if (_model.RaycastPoint != null)
+    {
+      int dirX = (int)Mathf.Sin(_model.transform.eulerAngles.y * Mathf.Deg2Rad);
+      int dirZ = (int)Mathf.Cos(_model.transform.eulerAngles.y * Mathf.Deg2Rad);
+
+      Vector3 raycastDir = new Vector3(_model.RaycastPoint.position.x + dirX, 
+                                _model.RaycastPoint.position.y, 
+                                _model.RaycastPoint.position.z + dirZ);
+
+      Ray r = new Ray(_model.RaycastPoint.position, raycastDir);
+      if (Physics.Raycast(r.origin, r.direction, out _raycastHit))
+      {
+        if (_raycastHit.collider != null)
+        {
+          ModelMover mm = _raycastHit.collider.gameObject.GetComponent<ModelMover>();
+          if (mm != null)
+          {
+            _road.Clear();
+            _moveDone = true;
+            yield break;
+          }
+        }
+      }
+    }
+    */
 
     if (!_firstStepSound)
     {

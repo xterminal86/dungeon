@@ -93,7 +93,7 @@ public class InputController : MonoSingleton<InputController>
           ModelMover mm = _raycastHit.collider.gameObject.GetComponent<ModelMover>();
           if (mm != null)
           {
-            Debug.Log("You see: " + mm.CharacterName);
+            Debug.Log("You see: " + mm.ActorName);
           }
         }
       }
@@ -115,12 +115,12 @@ public class InputController : MonoSingleton<InputController>
       bool res = CanMove(posX, posZ, _cameraMoveArgument.MoveType);
       if (res)
       {
-        StartCoroutine("CameraMoveRoutine", _cameraMoveArgument);
+        StartCoroutine(CameraMoveRoutine(_cameraMoveArgument));
       }
       else
       {
         _cameraMoveArgument.Speed = GlobalConstants.CameraCannotMoveSpeed;
-        StartCoroutine("CameraCannotMoveRoutine", _cameraMoveArgument);
+        StartCoroutine(CameraCannotMoveRoutine(_cameraMoveArgument));
       }
     }
   }
@@ -231,10 +231,7 @@ public class InputController : MonoSingleton<InputController>
     RaycastHit hit;      
     if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
     {
-      if (hit.collider != null)
-      {
-        obstacleAhead = true;
-      }
+      obstacleAhead = (hit.collider != null);
     }
 
     //return (emptyCell == '.' && !obstacleAhead);
@@ -251,7 +248,7 @@ public class InputController : MonoSingleton<InputController>
     _cameraTurnArgument.From = from;
     _cameraTurnArgument.To = to;
     _cameraTurnArgument.TurnRight = turnRight;
-    StartCoroutine("CameraTurnRoutine", _cameraTurnArgument);
+    StartCoroutine(CameraTurnRoutine(_cameraTurnArgument));
   }
 
   // Due to unknown (or, more precise, not researched) accumulation of error,
