@@ -11,6 +11,10 @@ public class InputController : MonoSingleton<InputController>
 
   public Int2 PlayerMapPos = new Int2();
 
+  Vector3 _centerOfScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0.0f);
+
+  float _raycastDistance = GlobalConstants.WallScaleFactor + GlobalConstants.WallScaleFactor / 2;
+
   CameraTurnArgument _cameraTurnArgument = new CameraTurnArgument();
   CameraMoveArgument _cameraMoveArgument = new CameraMoveArgument();
   void Awake () 
@@ -84,10 +88,12 @@ public class InputController : MonoSingleton<InputController>
     }
     else if (Input.GetKeyDown(KeyCode.Space))
     {
-      Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+      Ray ray = Camera.main.ScreenPointToRay(_centerOfScreen);
 
-      if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, GlobalConstants.WallScaleFactor + 1))
+      if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, _raycastDistance))
       {
+        //Debug.DrawRay(ray.origin, ray.direction * _raycastDistance, Color.yellow, 10.0f, false);
+
         if (_raycastHit.collider != null)
         {
           ModelMover mm = _raycastHit.collider.gameObject.GetComponent<ModelMover>();
@@ -231,7 +237,10 @@ public class InputController : MonoSingleton<InputController>
     RaycastHit hit;      
     if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
     {
-      obstacleAhead = (hit.collider != null);
+      if (hit.collider != null)
+      {
+        obstacleAhead = (hit.collider.gameObject.GetComponent<ModelMover>() == null);
+      }
     }
 
     //return (emptyCell == '.' && !obstacleAhead);
