@@ -21,7 +21,7 @@ public class Job
   }
 
   public void KillJob()
-  {
+  {    
     JobManager.Instance.StopCoroutine(_coroutineMethod);
   }
 

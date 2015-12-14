@@ -11,13 +11,26 @@ public abstract class ActorBase
 
   public GameObjectState ActorState;
 
-  public ActorBase()
-  {
+  public ModelMover Model;
+  public Animation AnimationComponent;
 
+  public ActorBase(ModelMover model)
+  {
+    Model = model;
+    AnimationComponent = Model.GetComponent<Animation>();
   }
 
   public virtual void ChangeState(GameObjectState newState)
   {
     ActorState = newState;
+  }
+
+  public virtual void Perform()
+  {
+    ActorState.Run();
+  }
+
+  public virtual void Interact()
+  {
   }
 }

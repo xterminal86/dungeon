@@ -10,13 +10,13 @@ using System.Collections.Generic;
 public class ModelMover : MonoBehaviour 
 {
   public string ActorName = string.Empty;
-
-  public Int2 ModelPos = new Int2();
-
+     
   public Transform RaycastPoint;
 
   public ActorBase Actor;
-  
+
+  public Int2 ModelPos = new Int2();
+
   float _walkingSpeed = 0.0f;
   public float WalkingSpeed
   {
@@ -50,6 +50,6 @@ public class ModelMover : MonoBehaviour
   
   void Update () 
 	{
-    Actor.ActorState.Run();    
+    Actor.Perform();    
   }
 }

@@ -5,10 +5,14 @@ using System.Collections.Generic;
 /// <summary>
 /// Represents villager, that randomly wanders around and can give random hints to player.
 /// </summary>
-public class NpcActor : ActorBase 
+public class VillagerActor : ActorBase 
 {
-  public NpcActor(GameObjectState state)
+  public VillagerActor(ModelMover model) : base(model)
+  {    
+  }
+
+  public override void Interact()
   {
-    ChangeState(state);
+    Debug.Log("You see " + ActorName);
   }
 }

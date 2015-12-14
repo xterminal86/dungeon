@@ -10,12 +10,12 @@ public class WanderingState : GameObjectState
 {  
   Vector3 _modelPosition = Vector3.zero;
 
-  Animation _animationComponent;
+  ModelMover _model;
 
-  public WanderingState(ModelMover model)
+  public WanderingState(ActorBase actor)
   {
-    _model = model;
-    _animationComponent = _model.AnimationComponent;    
+    _actor = actor;
+    _model = actor.Model;
   }
 
   bool _working = false;
@@ -99,7 +99,7 @@ public class WanderingState : GameObjectState
     }
 
     StopAnimation(GlobalConstants.AnimationWalkName);
-    _animationComponent.Play(GlobalConstants.AnimationIdleName);
+    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     JobManager.Instance.CreateJob(DelayRoutine());
     
@@ -110,7 +110,7 @@ public class WanderingState : GameObjectState
   IEnumerator RotateModel(float angle)
   {
     StopAnimation(GlobalConstants.AnimationWalkName);
-    _animationComponent.Play(GlobalConstants.AnimationIdleName);
+    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     _rotateDone = false;
 
@@ -166,7 +166,7 @@ public class WanderingState : GameObjectState
   IEnumerator MoveModel(Int2 newMapPos)
   {
     StopAnimation(GlobalConstants.AnimationIdleName);
-    _animationComponent.Play(GlobalConstants.AnimationWalkName);
+    _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);
           
     _moveDone = false;
     
@@ -257,8 +257,8 @@ public class WanderingState : GameObjectState
 
   void StopAnimation(string animationName)
   {
-    _animationComponent[animationName].time = 0.0f;
-    _animationComponent.Sample();
-    _animationComponent.Stop(animationName);
+    _model.AnimationComponent[animationName].time = 0.0f;
+    _model.AnimationComponent.Sample();
+    _model.AnimationComponent.Stop(animationName);
   }
 }

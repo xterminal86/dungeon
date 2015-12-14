@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class GameObjectState
 {
-  protected ModelMover _model;
+  protected ActorBase _actor;
   
   public virtual void Run()
   {

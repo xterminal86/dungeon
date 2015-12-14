@@ -239,12 +239,14 @@ public class App : MonoSingleton<App>
     if (mm != null)
     {
       SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
-
+            
+      mm.Actor = new VillagerActor(mm);
+      
       mm.ModelPos.X = pos.X;
       mm.ModelPos.Y = pos.Y;
 
-      mm.Actor = new NpcActor(new WanderingState(mm));
       mm.Actor.ActorName = mm.ActorName;
+      mm.Actor.ChangeState(new WanderingState(mm.Actor));      
     }
   }
 

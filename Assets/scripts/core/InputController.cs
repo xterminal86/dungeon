@@ -93,7 +93,7 @@ public class InputController : MonoSingleton<InputController>
           ModelMover mm = _raycastHit.collider.gameObject.GetComponent<ModelMover>();
           if (mm != null)
           {
-            Debug.Log("You see: " + mm.ActorName);
+            mm.Actor.Interact();
           }
         }
       }
