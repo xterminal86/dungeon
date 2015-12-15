@@ -252,3 +252,22 @@ public static class GlobalConstants
     { ObjectPrefabsEnum.LEVER, "lever" }
   };
 }
+
+public class VillagerInfo
+{
+  public string VillagerName = string.Empty;
+  public string VillagerJob = string.Empty;
+  public List<string> VillagerGossipLines = new List<string>();
+
+  public override string ToString()
+  {
+    string result = string.Format("[VillagerInfo] : Name \"{0}\", Job \"{1}\", Gossip lines:\n", VillagerName, VillagerJob);
+
+    foreach (var item in VillagerGossipLines)
+    {
+      result += item + "\n";
+    }
+
+    return result;
+  }
+};

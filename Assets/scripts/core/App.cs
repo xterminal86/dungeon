@@ -14,6 +14,8 @@ public class App : MonoSingleton<App>
 
   public GameObject ObjectsInstancesTransform;
 
+  public GameState CurrentGameState;
+
   int[,] _floorSoundTypeByPosition;
   public int[,] FloorSoundTypeByPosition
   {
@@ -79,6 +81,8 @@ public class App : MonoSingleton<App>
 
   void Awake()
   {
+    CurrentGameState = GameState.NORMAL;
+
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
     UnityEngine.RenderSettings.fogColor = FogColor;
@@ -138,6 +142,7 @@ public class App : MonoSingleton<App>
     }
 
     SetupCharacters();
+    LoadVillagersResponses();
 
     ScreenFader.Instance.FadeIn();
 
@@ -637,6 +642,56 @@ public class App : MonoSingleton<App>
     }
   }
 
+  Dictionary<int, VillagerInfo> _villagersInfo = new Dictionary<int, VillagerInfo>();
+  void LoadVillagersResponses()
+  {
+    XmlDocument doc = new XmlDocument();
+    doc.Load(Application.dataPath + "/text/VillagersResponses.xml");
+    foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+    {      
+      switch (node.Name)
+      {
+        case "CHARACTER":
+          VillagerInfo vi = new VillagerInfo();
+          int hash = node.Attributes["name"].InnerText.GetHashCode();
+
+          foreach (XmlNode tag in node.ChildNodes)
+          {
+            switch (tag.Name)
+            {
+              case "NAME":
+                vi.VillagerName = tag.Attributes["text"].InnerText;
+                break;
+              case "JOB":
+                vi.VillagerJob = tag.Attributes["text"].InnerText;
+                break;
+              case "GOSSIP":
+                foreach (XmlNode line in tag.ChildNodes)
+                {
+                  switch (line.Name)
+                  {
+                    case "LINE":
+                      vi.VillagerGossipLines.Add(line.Attributes["text"].InnerText);
+                      break;
+                    default:
+                      break;
+                  }
+                }
+                break;
+              default:
+                break;
+            }
+          }
+
+          _villagersInfo.Add(hash, vi);
+
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   // ********************** HELPER FUNCTIONS ********************** //
 
   public char GetMapLayoutPoint(int x, int y)
@@ -804,5 +859,11 @@ public class App : MonoSingleton<App>
     TOWN,
     DUNGEON1,
     GEN_VILLAGE
+  }
+
+  public enum GameState
+  {
+    NORMAL = 0,
+    HOLD_PLAYER
   }
 }

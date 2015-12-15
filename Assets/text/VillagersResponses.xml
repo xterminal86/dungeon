@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<MAIN>
+  <CHARACTER name="Claire">
+    <NAME text="My name is Claire." />
+    <JOB text="I'm a Soldier." />
+		<GOSSIP>
+      <LINE text="I've never seen places like this." />
+      <LINE text="This guy, Cloud - I have a strange feeling, that I know him, but at the same time I'm sure I never met him before." />
+      <LINE text="They say the Dungeon is magical - it's different every time you come to this village. Can you believe this?" />
+    </GOSSIP>	
+  </CHARACTER>
+  <CHARACTER name="Cloud">
+    <NAME text="Cloud Strife." />
+    <JOB text="I'm a Soldier, First Class." />
+    <GOSSIP>
+      <LINE text="I wish Aerith could see this place..." />
+      <LINE text="So, another one to venture into the Dungeon? Will you guys ever give up?" />
+      <LINE text="No one knows how deep the Dungeon is." />
+    </GOSSIP>	
+  </CHARACTER>
+  <CHARACTER name="Phoenix">
+    <NAME text="I'm Phoenix Wright." />
+    <JOB text="I'm attorney at law." />
+    <GOSSIP>
+      <LINE text="Line 1" />
+      <LINE text="Line 2" />
+      <LINE text="Line 3" />
+    </GOSSIP>	
+  </CHARACTER>
+</MAIN>
