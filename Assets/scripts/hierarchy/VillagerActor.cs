@@ -12,7 +12,7 @@ public class VillagerActor : ActorBase
   }
 
   public override void Interact()
-  {
-    Debug.Log("You see " + ActorName);
+  {    
+    GUIManager.Instance.ShowFormTalking(this);
   }
 }

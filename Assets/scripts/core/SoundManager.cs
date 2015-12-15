@@ -6,7 +6,7 @@ public class SoundManager : MonoSingleton<SoundManager>
   [Range(0.0f, 1.0f)]
   public float SoundVolume = 1.0f;
   [Range(0.0f, 1.0f)]
-  public float MusicVolume = 1.0f;
+  public float MusicVolume = 1.0f;  
 
   public Transform AudioSourcesHolder;
 
@@ -107,6 +107,18 @@ public class SoundManager : MonoSingleton<SoundManager>
       a.Play();
       Destroy(go, a.clip.length);
     }
+  }
+
+  public void PlaySound(AudioSource premade, float pitch)
+  {    
+    GameObject go = new GameObject("SFX-one-shot");
+    AudioSource a = go.AddComponent<AudioSource>();
+    a.playOnAwake = false;
+    a.volume = premade.volume;
+    a.clip = premade.clip;    
+    a.pitch = pitch;
+    a.Play();
+    Destroy(go, a.clip.length);    
   }
 
   int _lastPlayedSoundOfPlayer = -1;

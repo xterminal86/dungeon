@@ -19,7 +19,7 @@ public class SoundManagerInspector : Editor
     sm.AudioSourceOneShotPrefab = (AudioSource)EditorGUILayout.ObjectField("Audio Source One Shot Prefab", sm.AudioSourceOneShotPrefab, typeof(AudioSource));
 
     sm.SoundVolume = EditorGUILayout.Slider("Sound Volume", sm.SoundVolume, 0.0f, 1.0f);
-    sm.MusicVolume = EditorGUILayout.Slider("Music Volume", sm.MusicVolume, 0.0f, 1.0f);
+    sm.MusicVolume = EditorGUILayout.Slider("Music Volume", sm.MusicVolume, 0.0f, 1.0f);    
 
     string musicPath = "Assets/sounds/music";
     string soundsPath = "Assets/sounds/sfx";

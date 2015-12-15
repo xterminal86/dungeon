@@ -15,7 +15,7 @@ public class PrefabsManagerInspector : Editor
 
     if (pm == null) return;
         
-    string prefabsPath = "Assets/prefabs-release";
+    string prefabsPath = "Assets/prefabs/to-instantiate";
 
     if (GUILayout.Button("Generate Prefabs List"))
     {

@@ -255,6 +255,8 @@ public static class GlobalConstants
 
 public class VillagerInfo
 {
+  public string HailString = string.Empty;
+  public string PortraitName = string.Empty;
   public string VillagerName = string.Empty;
   public string VillagerJob = string.Empty;
   public List<string> VillagerGossipLines = new List<string>();

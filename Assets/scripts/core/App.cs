@@ -146,6 +146,8 @@ public class App : MonoSingleton<App>
 
     ScreenFader.Instance.FadeIn();
 
+    GUIManager.Instance.SetCompassVisibility(true);
+
     if (MapLoadingFinished != null)
       MapLoadingFinished();    
   }
@@ -643,6 +645,11 @@ public class App : MonoSingleton<App>
   }
 
   Dictionary<int, VillagerInfo> _villagersInfo = new Dictionary<int, VillagerInfo>();
+  public Dictionary<int, VillagerInfo> VillagersInfo
+  {
+    get { return _villagersInfo; }
+  }
+
   void LoadVillagersResponses()
   {
     XmlDocument doc = new XmlDocument();
@@ -654,6 +661,9 @@ public class App : MonoSingleton<App>
         case "CHARACTER":
           VillagerInfo vi = new VillagerInfo();
           int hash = node.Attributes["name"].InnerText.GetHashCode();
+
+          vi.HailString = node.Attributes["hailString"].InnerText;
+          vi.PortraitName = node.Attributes["portraitName"].InnerText;
 
           foreach (XmlNode tag in node.ChildNodes)
           {

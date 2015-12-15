@@ -1,26 +1,35 @@
 <?xml version="1.0"?>
 <MAIN>
-  <CHARACTER name="Claire">
+  <CHARACTER name="Claire" hailString="(you hail the woman)" portraitName="portrait-lightning">
     <NAME text="My name is Claire." />
     <JOB text="I'm a Soldier." />
 		<GOSSIP>
-      <LINE text="I've never seen places like this." />
-      <LINE text="This guy, Cloud - I have a strange feeling, that I know him, but at the same time I'm sure I never met him before." />
+      <LINE text="I took a vacation only to arrive in a place with evil lurking underground. Worst vacation ever." />
+      <LINE text="This guy, Cloud... I have a strange feeling, that I know him, but at the same time I'm sure I never met him before." />
       <LINE text="They say the Dungeon is magical - it's different every time you come to this village. Can you believe this?" />
     </GOSSIP>	
   </CHARACTER>
-  <CHARACTER name="Cloud">
+  <CHARACTER name="Cloud" hailString="(you see a man with very big and awkward looking sword)" portraitName="portrait-cloud">
     <NAME text="Cloud Strife." />
     <JOB text="I'm a Soldier, First Class." />
     <GOSSIP>
-      <LINE text="I wish Aerith could see this place..." />
-      <LINE text="So, another one to venture into the Dungeon? Will you guys ever give up?" />
-      <LINE text="No one knows how deep the Dungeon is." />
+      <LINE text="I wish Aerith could see this place... Without monsters and stuff below, of course." />
+      <LINE text="So, another one to venture into the Dungeon? Well, hope you'll be more successful than others." />
+      <LINE text="No one knows how deep the Dungeon is. Nobody ever returned to tell the tale." />
     </GOSSIP>	
   </CHARACTER>
-  <CHARACTER name="Phoenix">
+  <CHARACTER name="Phoenix" hailString="(you see a nobleman with spiky hair)" portraitName="portrait-phoenix">
     <NAME text="I'm Phoenix Wright." />
     <JOB text="I'm attorney at law." />
+    <GOSSIP>
+      <LINE text="Line 1" />
+      <LINE text="Line 2" />
+      <LINE text="Line 3" />
+    </GOSSIP>	
+  </CHARACTER>
+  <CHARACTER name="Miles" hailString="(you see a nobleman in fancy clothes)" portraitName="portrait-miles">
+    <NAME text="Miles Edgeworth, at your service." />
+    <JOB text="I'm Chief Prosecutor of this province." />
     <GOSSIP>
       <LINE text="Line 1" />
       <LINE text="Line 2" />

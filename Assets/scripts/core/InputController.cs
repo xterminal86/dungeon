@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class InputController : MonoSingleton<InputController> 
-{
-  public Image CompassImage;
-
+{  
   public Transform RaycastPoint;
 
   public Int2 PlayerMapPos = new Int2();
@@ -50,7 +48,7 @@ public class InputController : MonoSingleton<InputController>
     App.Instance.CameraPos = _cameraPos;
     App.Instance.CameraPivot.transform.position = App.Instance.CameraPos;
 
-    CompassImage.transform.eulerAngles = _compassSpriteAngles;
+    GUIManager.Instance.CompassImage.transform.eulerAngles = _compassSpriteAngles;
 	}
 
   bool _doMove = false;

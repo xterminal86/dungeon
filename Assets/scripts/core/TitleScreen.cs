@@ -28,19 +28,40 @@ public class TitleScreen : MonoBehaviour
 
   public void NewGameHandler()
   {
+    GUIManager.Instance.ButtonClickSound.Play();
+
     ScreenFader.Instance.FadeCompleteCallback += FadeCompleteHandler;
     ScreenFader.Instance.FadeOut();
   }
 
+  public void StatisticsHandler()
+  {
+    GUIManager.Instance.ButtonClickSound.Play();
+  }
+
+  public void OptionsHandler()
+  {
+    GUIManager.Instance.ButtonClickSound.Play();
+  }
+
   public void ExitGameHandler()
   {
-    Application.Quit();
+    GUIManager.Instance.ButtonClickSound.Play();
+
+    ScreenFader.Instance.FadeCompleteCallback += ExitGame;
+    ScreenFader.Instance.FadeOut();    
   }
 
   void FadeCompleteHandler()
   {
     ScreenFader.Instance.FadeCompleteCallback -= FadeCompleteHandler;
     Application.LoadLevel("main");
+  }
+
+  void ExitGame()
+  {
+    ScreenFader.Instance.FadeCompleteCallback -= ExitGame;
+    Application.Quit();
   }
 
   void SetupScene()
