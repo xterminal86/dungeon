@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <MAIN>
-  <CHARACTER name="Claire" hailString="(you hail the woman)" portraitName="portrait-lightning">
+  <CHARACTER name="Claire" hailString="(you see a woman with a strange looking sword)" portraitName="portrait-lightning">
     <NAME text="My name is Claire." />
     <JOB text="I'm a Soldier." />
 		<GOSSIP>
@@ -27,7 +27,7 @@
       <LINE text="Line 3" />
     </GOSSIP>	
   </CHARACTER>
-  <CHARACTER name="Miles" hailString="(you see a nobleman in fancy clothes)" portraitName="portrait-miles">
+  <CHARACTER name="Miles" hailString="(you see a collected nobleman in fancy clothes)" portraitName="portrait-miles">
     <NAME text="Miles Edgeworth, at your service." />
     <JOB text="I'm Chief Prosecutor of this province." />
     <GOSSIP>

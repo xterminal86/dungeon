@@ -142,7 +142,7 @@ public class App : MonoSingleton<App>
     }
 
     SetupCharacters();
-    LoadVillagersResponses();
+    SetupVillagersText();
 
     ScreenFader.Instance.FadeIn();
 
@@ -650,10 +650,10 @@ public class App : MonoSingleton<App>
     get { return _villagersInfo; }
   }
 
-  void LoadVillagersResponses()
+  void SetupVillagersText()
   {
     XmlDocument doc = new XmlDocument();
-    doc.Load(Application.dataPath + "/text/VillagersResponses.xml");
+    doc.Load(Application.dataPath + "/text/Villagers.xml");
     foreach (XmlNode node in doc.DocumentElement.ChildNodes)
     {      
       switch (node.Name)

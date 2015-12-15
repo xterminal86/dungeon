@@ -57,21 +57,43 @@ public class GUIManager : MonoSingleton<GUIManager>
   public void FormTalkingNameHandler()
   {
     ButtonClickSound.Play();
+
+    if (_coroutineDone)
+    {
+      StartCoroutine(PrintTextRoutine(_villagerInfo.VillagerName));
+    }
   }
 
   public void FormTalkingJobHandler()
   {
     ButtonClickSound.Play();
+
+    if (_coroutineDone)
+    {
+      StartCoroutine(PrintTextRoutine(_villagerInfo.VillagerJob));
+    }
   }
 
+  int _gossipListIndex = 0;
   public void FormTalkingGossipHandler()
   {
     ButtonClickSound.Play();
+
+    if (_coroutineDone)
+    {
+      // In case some villagers have more gossip lines than others,
+      // we first check for overflow
+      _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;
+            
+      StartCoroutine(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));
+
+      _gossipListIndex++;
+    }
   }
 
   public void FormTalkingByeHandler()
   {
-    _textBuf = string.Empty;
+    //StopCoroutine(PrintTextRoutine(string.Empty));
 
     ButtonClickSound.Play();
 
@@ -79,13 +101,14 @@ public class GUIManager : MonoSingleton<GUIManager>
     FormCompass.SetActive(true);
   }
 
+  int _hash = -1;
   void SetupFormTalking()
   {
-    int hash = _actorToTalk.ActorName.GetHashCode();
+    _hash = _actorToTalk.ActorName.GetHashCode();
 
-    if (App.Instance.VillagersInfo.ContainsKey(hash))
+    if (App.Instance.VillagersInfo.ContainsKey(_hash))
     {
-      _villagerInfo = App.Instance.VillagersInfo[hash];
+      _villagerInfo = App.Instance.VillagersInfo[_hash];
 
       Sprite portraitSprite = FindPortraitByName(_villagerInfo.PortraitName);
       if (portraitSprite != null)
@@ -99,11 +122,16 @@ public class GUIManager : MonoSingleton<GUIManager>
     }
   }
 
+  bool _coroutineDone = true;
   bool _skipFlag = false;
   string _textBuf = string.Empty;
   IEnumerator PrintTextRoutine(string textToPrint)
   {
     int count = 0;
+
+    _textBuf = string.Empty;
+
+    _coroutineDone = false;
 
     while (count < textToPrint.Length)
     {      
@@ -122,7 +150,9 @@ public class GUIManager : MonoSingleton<GUIManager>
 
       yield return new WaitForSeconds(0.01f);
     }
-    
+
+    _coroutineDone = true;
+
     yield return null;
   }  
 }
