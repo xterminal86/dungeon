@@ -89,7 +89,6 @@ public class GUIManager : MonoSingleton<GUIManager>
     _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));
 
     _gossipListIndex++;
-
   }
 
   public void FormTalkingByeHandler()
@@ -131,7 +130,7 @@ public class GUIManager : MonoSingleton<GUIManager>
 
       FormTalkingName.text = _actorToTalk.ActorName;
 
-      StartCoroutine(PrintTextRoutine(_villagerInfo.HailString, true));
+      _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.HailString, true));
     }
   }
 
