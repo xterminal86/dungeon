@@ -10,7 +10,8 @@ using System.Collections.Generic;
 public class ModelMover : MonoBehaviour 
 {
   public string ActorName = string.Empty;
-     
+  public bool IsFemale = false;
+
   public Transform RaycastPoint;
 
   public ActorBase Actor;

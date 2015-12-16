@@ -48,19 +48,17 @@ public class GUIManager : MonoSingleton<GUIManager>
       _actorToTalk = actorToTalk;
 
       SetupFormTalking();
-
-      FormCompass.SetActive(false);      
-      FormTalking.SetActive(true);      
     }
   }
 
+  Job _printTextJob;
   public void FormTalkingNameHandler()
   {
     ButtonClickSound.Play();
 
     if (_coroutineDone)
     {
-      StartCoroutine(PrintTextRoutine(_villagerInfo.VillagerName));
+      _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerName));
     }
   }
 
@@ -70,7 +68,7 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     if (_coroutineDone)
     {
-      StartCoroutine(PrintTextRoutine(_villagerInfo.VillagerJob));
+      _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerJob));
     }
   }
 
@@ -79,26 +77,35 @@ public class GUIManager : MonoSingleton<GUIManager>
   {
     ButtonClickSound.Play();
 
-    if (_coroutineDone)
+    if (_printTextJob != null)
     {
-      // In case some villagers have more gossip lines than others,
-      // we first check for overflow
-      _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;
-            
-      StartCoroutine(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));
-
-      _gossipListIndex++;
+      _printTextJob.KillJob();
     }
+
+    // In case some villagers have more gossip lines than others,
+    // we first check for overflow
+    _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;
+            
+    _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));
+
+    _gossipListIndex++;
+
   }
 
   public void FormTalkingByeHandler()
   {
-    //StopCoroutine(PrintTextRoutine(string.Empty));
-
     ButtonClickSound.Play();
 
-    FormTalking.SetActive(false);
-    FormCompass.SetActive(true);
+    if (_printTextJob != null)
+    {
+      _printTextJob.KillJob();
+    }
+
+    if (FormTalking.activeSelf)
+    {
+      FormTalking.SetActive(false);
+      FormCompass.SetActive(true);
+    }
   }
 
   int _hash = -1;
@@ -108,9 +115,15 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     if (App.Instance.VillagersInfo.ContainsKey(_hash))
     {
+      FormCompass.SetActive(false);
+      FormTalking.SetActive(true);      
+
       _villagerInfo = App.Instance.VillagersInfo[_hash];
 
       Sprite portraitSprite = FindPortraitByName(_villagerInfo.PortraitName);
+
+      PortraitImage.gameObject.SetActive(portraitSprite != null);
+
       if (portraitSprite != null)
       {
         PortraitImage.sprite = portraitSprite;
@@ -118,20 +131,22 @@ public class GUIManager : MonoSingleton<GUIManager>
 
       FormTalkingName.text = _actorToTalk.ActorName;
 
-      StartCoroutine(PrintTextRoutine(_villagerInfo.HailString));
+      StartCoroutine(PrintTextRoutine(_villagerInfo.HailString, true));
     }
   }
 
   bool _coroutineDone = true;
   bool _skipFlag = false;
   string _textBuf = string.Empty;
-  IEnumerator PrintTextRoutine(string textToPrint)
+  IEnumerator PrintTextRoutine(string textToPrint, bool formOpen = false)
   {
     int count = 0;
 
     _textBuf = string.Empty;
 
     _coroutineDone = false;
+
+    float speakPitch = _actorToTalk.Model.IsFemale ? 2.0f : 1.0f;
 
     while (count < textToPrint.Length)
     {      
@@ -141,9 +156,9 @@ public class GUIManager : MonoSingleton<GUIManager>
 
       FormTalkingText.text = _textBuf;
 
-      if (_skipFlag)
+      if (_skipFlag && !formOpen)
       {
-        SoundManager.Instance.PlaySound(CharacterSpeakSound, CharacterSpeakSound.pitch);
+        SoundManager.Instance.PlaySound(CharacterSpeakSound, speakPitch);
       }
 
       _skipFlag = !_skipFlag;
