@@ -14,7 +14,7 @@ public class App : MonoSingleton<App>
 
   public GameObject ObjectsInstancesTransform;
 
-  public GameState CurrentGameState;
+  public GameState PlayerMoveState;
 
   int[,] _floorSoundTypeByPosition;
   public int[,] FloorSoundTypeByPosition
@@ -81,7 +81,7 @@ public class App : MonoSingleton<App>
 
   void Awake()
   {
-    CurrentGameState = GameState.NORMAL;
+    PlayerMoveState = GameState.NORMAL;
 
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
@@ -852,6 +852,9 @@ public class App : MonoSingleton<App>
 
     InputController.Instance.PlayerMapPos.X = x;
     InputController.Instance.PlayerMapPos.Y = y;
+
+    InputController.Instance.PlayerPreviousMapPos.X = x;
+    InputController.Instance.PlayerPreviousMapPos.Y = y;
   }
 
   void OnLevelWasLoaded(int level)

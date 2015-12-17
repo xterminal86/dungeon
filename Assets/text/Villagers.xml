@@ -54,4 +54,13 @@
       <LINE text="Line 3" />
     </GOSSIP>	
   </CHARACTER>
+  <CHARACTER name="Tigra" hailString="(you see a woman in a catlike costume)" portraitName="portrait-tigriss">
+    <NAME text="I'm Tigra." />
+    <JOB text="I am just a local." />
+    <GOSSIP>
+      <LINE text="You wanted to ask me something? Mind you, I don't give advices for free - only meat pieces are accepted!" />
+      <LINE text="Line 2" />
+      <LINE text="Line 3" />
+    </GOSSIP>	
+  </CHARACTER>
 </MAIN>

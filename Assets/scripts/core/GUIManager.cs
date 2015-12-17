@@ -45,6 +45,8 @@ public class GUIManager : MonoSingleton<GUIManager>
   {
     if (!FormTalking.activeSelf)
     {
+      App.Instance.PlayerMoveState = App.GameState.HOLD_PLAYER;
+
       _actorToTalk = actorToTalk;
 
       SetupFormTalking();
@@ -105,6 +107,8 @@ public class GUIManager : MonoSingleton<GUIManager>
       FormTalking.SetActive(false);
       FormCompass.SetActive(true);
     }
+
+    App.Instance.PlayerMoveState = App.GameState.NORMAL;
   }
 
   int _hash = -1;

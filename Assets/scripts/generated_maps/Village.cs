@@ -12,6 +12,9 @@ public class Village : GeneratedMap
     
   public override void Generate()
   {
+    // Hardcoded starting point at the edge of the map with "mountain path"
+    SetStartingPos();
+
     GenerateBuildings();
     ConnectBuildings();
     GenerateTrees(80, 2);
@@ -19,7 +22,9 @@ public class Village : GeneratedMap
 
     FillUnoccupiedCells();
 
-    FindStartingPos();
+    // Set starting pos at first unoccupied cell 
+    // determined during classic for loop for 2d array
+    //FindStartingPos();
 
     _musicTrack = "amb-forest";
   }
@@ -175,6 +180,8 @@ public class Village : GeneratedMap
 
   bool IsValid(int x, int y, int minDistance)
   {
+    if (x == _cameraPos.X && y == _cameraPos.Y) return false;
+
     if (_map[x, y].CellType == GeneratedCellType.NONE)
     {
       int xStart = Mathf.Clamp(x - minDistance, 0, _mapHeight - 1);
@@ -714,5 +721,15 @@ public class Village : GeneratedMap
         }
       }
     }
+  }
+
+  void SetStartingPos()
+  {
+    int x = _mapWidth - 1;
+    int y = 0;
+
+    _cameraPos.X = x;
+    _cameraPos.Y = y;
+    _cameraPos.Facing = (int)GlobalConstants.Orientation.NORTH;
   }
 }

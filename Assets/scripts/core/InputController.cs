@@ -8,6 +8,7 @@ public class InputController : MonoSingleton<InputController>
   public Transform RaycastPoint;
 
   public Int2 PlayerMapPos = new Int2();
+  public Int2 PlayerPreviousMapPos = new Int2();
 
   Vector3 _centerOfScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0.0f);
 
@@ -36,6 +37,11 @@ public class InputController : MonoSingleton<InputController>
   float _currentMoveSpeed = 0.0f;
 	void Update () 
   {
+    if (App.Instance.PlayerMoveState == App.GameState.HOLD_PLAYER)
+    {
+      return;
+    }
+
     if (!_isProcessing)
     {
       ProcessKeyboard();
@@ -401,6 +407,9 @@ public class InputController : MonoSingleton<InputController>
     _cameraPos.y = 0.0f;  
     _cameraPos.z = newZ;
          
+    PlayerPreviousMapPos.X = PlayerMapPos.X;
+    PlayerPreviousMapPos.Y = PlayerMapPos.Y;
+
     PlayerMapPos.X += dx;
     PlayerMapPos.Y += dz;
 
