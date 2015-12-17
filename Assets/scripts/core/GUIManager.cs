@@ -49,6 +49,12 @@ public class GUIManager : MonoSingleton<GUIManager>
 
       _actorToTalk = actorToTalk;
 
+      if (_actorToTalk.ActorState is WanderingState)
+      {
+        (_actorToTalk.ActorState as WanderingState).KillAllJobs();
+        _actorToTalk.ChangeState(new IdleState(_actorToTalk));
+      }
+
       SetupFormTalking();
     }
   }
@@ -106,6 +112,11 @@ public class GUIManager : MonoSingleton<GUIManager>
     {
       FormTalking.SetActive(false);
       FormCompass.SetActive(true);
+    }
+
+    if (_actorToTalk != null)
+    {
+      _actorToTalk.ChangeState(new WanderingState(_actorToTalk));
     }
 
     App.Instance.PlayerMoveState = App.GameState.NORMAL;

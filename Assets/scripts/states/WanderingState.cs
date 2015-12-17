@@ -16,14 +16,17 @@ public class WanderingState : GameObjectState
   {
     _actor = actor;
     _model = actor.Model;
+    _working = false;
   }
+
+  Job _mainJob, _stepJob, _rotateJob, _delayJob;
 
   bool _working = false;
   public override void Run()
   {
     if (!_working)
     {      
-      JobManager.Instance.CreateJob(MoveOnPath());
+      _mainJob = JobManager.Instance.CreateJob(MoveOnPath());
       _working = true;
     }
 
@@ -76,7 +79,7 @@ public class WanderingState : GameObjectState
 
       if ((int)angleStart != (int)angleEnd)
       {
-        JobManager.Instance.CreateJob(RotateModel(angleEnd));
+        _rotateJob = JobManager.Instance.CreateJob(RotateModel(angleEnd));
 
         while (!_rotateDone)
         {
@@ -86,7 +89,7 @@ public class WanderingState : GameObjectState
         _firstStepSound = false;
       }
 
-      JobManager.Instance.CreateJob(MoveModel(_road[0].Coordinate));
+      _stepJob = JobManager.Instance.CreateJob(MoveModel(_road[0].Coordinate));
 
       while (!_moveDone)
       {
@@ -101,7 +104,7 @@ public class WanderingState : GameObjectState
     StopAnimation(GlobalConstants.AnimationWalkName);
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
-    JobManager.Instance.CreateJob(DelayRoutine());
+    _delayJob = JobManager.Instance.CreateJob(DelayRoutine());
     
     yield return null;
   }
@@ -260,5 +263,13 @@ public class WanderingState : GameObjectState
     _model.AnimationComponent[animationName].time = 0.0f;
     _model.AnimationComponent.Sample();
     _model.AnimationComponent.Stop(animationName);
+  }
+
+  public void KillAllJobs()
+  {
+    if (_mainJob != null) _mainJob.KillJob();
+    if (_stepJob != null) _stepJob.KillJob();
+    if (_rotateJob != null) _rotateJob.KillJob();
+    if (_delayJob != null) _delayJob.KillJob();
   }
 }
