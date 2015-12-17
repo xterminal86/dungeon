@@ -8,7 +8,8 @@ using System.Collections.Generic;
 public abstract class GameObjectState
 {
   protected ActorBase _actor;
-  
+  protected string _currentAnimationName = string.Empty;
+
   public virtual void Run()
   {
   }

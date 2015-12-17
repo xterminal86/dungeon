@@ -104,6 +104,8 @@ public class WanderingState : GameObjectState
     StopAnimation(GlobalConstants.AnimationWalkName);
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
+    _currentAnimationName = GlobalConstants.AnimationIdleName;
+
     _delayJob = JobManager.Instance.CreateJob(DelayRoutine());
     
     yield return null;
@@ -114,6 +116,8 @@ public class WanderingState : GameObjectState
   {
     StopAnimation(GlobalConstants.AnimationWalkName);
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+
+    _currentAnimationName = GlobalConstants.AnimationIdleName;
 
     _rotateDone = false;
 
@@ -171,6 +175,8 @@ public class WanderingState : GameObjectState
     StopAnimation(GlobalConstants.AnimationIdleName);
     _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);
           
+    _currentAnimationName = GlobalConstants.AnimationWalkName;
+
     _moveDone = false;
     
     _currentMapPos.X = (int)_modelPosition.x / GlobalConstants.WallScaleFactor;
@@ -258,6 +264,8 @@ public class WanderingState : GameObjectState
     yield return null;
   }
 
+  // Helper Functions
+
   void StopAnimation(string animationName)
   {
     _model.AnimationComponent[animationName].time = 0.0f;
@@ -271,5 +279,18 @@ public class WanderingState : GameObjectState
     if (_stepJob != null) _stepJob.KillJob();
     if (_rotateJob != null) _rotateJob.KillJob();
     if (_delayJob != null) _delayJob.KillJob();
+  }
+
+  public void StopCurrentAnimation()
+  {
+    StopAnimation(_currentAnimationName);
+  }
+
+  public void AdjustModelPosition()
+  {
+    _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
+    _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
+
+    _model.transform.position = _modelPosition;
   }
 }

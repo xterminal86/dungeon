@@ -52,6 +52,9 @@ public class GUIManager : MonoSingleton<GUIManager>
       if (_actorToTalk.ActorState is WanderingState)
       {
         (_actorToTalk.ActorState as WanderingState).KillAllJobs();
+        (_actorToTalk.ActorState as WanderingState).StopCurrentAnimation();
+        (_actorToTalk.ActorState as WanderingState).AdjustModelPosition();
+
         _actorToTalk.ChangeState(new IdleState(_actorToTalk));
       }
 
@@ -66,6 +69,8 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     if (_coroutineDone)
     {
+      _actorToTalk.AnimationComponent.Play(GlobalConstants.AnimationTalkName);
+
       _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerName));
     }
   }
@@ -76,6 +81,8 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     if (_coroutineDone)
     {
+      _actorToTalk.AnimationComponent.Play(GlobalConstants.AnimationTalkName);
+
       _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerJob));
     }
   }
@@ -89,6 +96,8 @@ public class GUIManager : MonoSingleton<GUIManager>
     {
       _printTextJob.KillJob();
     }
+
+    _actorToTalk.AnimationComponent.Play(GlobalConstants.AnimationTalkName);
 
     // In case some villagers have more gossip lines than others,
     // we first check for overflow
