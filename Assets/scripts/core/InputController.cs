@@ -177,9 +177,9 @@ public class InputController : MonoSingleton<InputController>
 
   bool CanMove(int posX, int posZ, CameraMoveType moveType)
   {
-    int newX = (int)_cameraPos.x / GlobalConstants.WallScaleFactor;
-    int newZ = (int)_cameraPos.z / GlobalConstants.WallScaleFactor;
-    
+    int newX = PlayerMapPos.X;
+    int newZ = PlayerMapPos.Y;
+
     int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
     int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
     
@@ -412,7 +412,7 @@ public class InputController : MonoSingleton<InputController>
 
     PlayerMapPos.X += dx;
     PlayerMapPos.Y += dz;
-
+        
     if (App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y] != -1)
     {
       SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y]);

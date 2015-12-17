@@ -55,7 +55,7 @@ public class GUIManager : MonoSingleton<GUIManager>
         (_actorToTalk.ActorState as WanderingState).StopCurrentAnimation();
         (_actorToTalk.ActorState as WanderingState).AdjustModelPosition();
 
-        _actorToTalk.ChangeState(new IdleState(_actorToTalk));
+        _actorToTalk.ChangeState(new TalkingState(_actorToTalk));
       }
 
       SetupFormTalking();
@@ -125,6 +125,11 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     if (_actorToTalk != null)
     {
+      if (_actorToTalk.ActorState is TalkingState)
+      {
+        (_actorToTalk.ActorState as TalkingState).StopTalkingAnimation();
+      }
+
       _actorToTalk.ChangeState(new WanderingState(_actorToTalk));
     }
 
@@ -158,10 +163,9 @@ public class GUIManager : MonoSingleton<GUIManager>
     }
   }
 
-  bool _coroutineDone = true;
-  bool _skipFlag = false;
+  bool _coroutineDone = true;  
   string _textBuf = string.Empty;
-  IEnumerator PrintTextRoutine(string textToPrint, bool formOpen = false)
+  IEnumerator PrintTextRoutine(string textToPrint, bool formFirstOpen = false)
   {
     int count = 0;
 
@@ -179,12 +183,10 @@ public class GUIManager : MonoSingleton<GUIManager>
 
       FormTalkingText.text = _textBuf;
 
-      if (_skipFlag && !formOpen)
+      if ( (count % 3 == 0)  && !formFirstOpen)
       {
         SoundManager.Instance.PlaySound(CharacterSpeakSound, speakPitch);
       }
-
-      _skipFlag = !_skipFlag;
 
       yield return new WaitForSeconds(0.01f);
     }

@@ -61,6 +61,9 @@ public class WanderingState : GameObjectState
     _currentMapPos.X = _model.ModelPos.X;
     _currentMapPos.Y = _model.ModelPos.Y;
 
+    _positionForTalk.X = _currentMapPos.X;
+    _positionForTalk.Y = _currentMapPos.Y;
+
     while (_road.Count != 0)
     {
       int dx = _road[0].Coordinate.X - _currentMapPos.X;
@@ -169,6 +172,7 @@ public class WanderingState : GameObjectState
   bool _firstStepSound = false;
   bool _moveDone = false;
   Int2 _currentMapPos = new Int2();
+  Int2 _positionForTalk = new Int2();
   RaycastHit _raycastHit;
   IEnumerator MoveModel(Int2 newMapPos)
   {
@@ -179,8 +183,8 @@ public class WanderingState : GameObjectState
 
     _moveDone = false;
     
-    _currentMapPos.X = (int)_modelPosition.x / GlobalConstants.WallScaleFactor;
-    _currentMapPos.Y = (int)_modelPosition.z / GlobalConstants.WallScaleFactor;
+    _currentMapPos.X = _model.ModelPos.X;
+    _currentMapPos.Y = _model.ModelPos.Y;
 
     int dx = newMapPos.X - _currentMapPos.X;
     int dy = newMapPos.Y - _currentMapPos.Y;
@@ -288,8 +292,31 @@ public class WanderingState : GameObjectState
 
   public void AdjustModelPosition()
   {
-    _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
-    _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
+    int modelX = InputController.Instance.PlayerMapPos.X;
+    int modelZ = InputController.Instance.PlayerMapPos.Y;
+
+    if (App.Instance.CameraOrientation == (int)GlobalConstants.Orientation.EAST)
+    {
+      modelZ++;
+    }
+    else if (App.Instance.CameraOrientation == (int)GlobalConstants.Orientation.SOUTH)
+    {
+      modelX++;
+    }
+    else if (App.Instance.CameraOrientation == (int)GlobalConstants.Orientation.WEST)
+    {
+      modelZ--;
+    }
+    else if (App.Instance.CameraOrientation == (int)GlobalConstants.Orientation.NORTH)
+    {
+      modelX--;
+    }
+
+    _modelPosition.x = modelX * GlobalConstants.WallScaleFactor;
+    _modelPosition.z = modelZ * GlobalConstants.WallScaleFactor;
+
+    _model.ModelPos.X = modelX;
+    _model.ModelPos.Y = modelZ;
 
     _model.transform.position = _modelPosition;
   }
