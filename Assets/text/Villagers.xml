@@ -47,9 +47,9 @@
   </CHARACTER>
   <CHARACTER name="Garrett" hailString="(you see a hooded man with artificial eye)" portraitName="portrait-thief">
     <NAME text="Garrett." />
-    <JOB text="I relieve people of unnecessary things." />
+    <JOB text="I used to relieve people of unnecessary things." />
     <GOSSIP>
-      <LINE text="I'm not used to the daylight." />
+      <LINE text="Line 1" />
       <LINE text="Line 2" />
       <LINE text="Line 3" />
     </GOSSIP>	
@@ -68,6 +68,16 @@
     <JOB text="I am a miner." />
     <GOSSIP>
       <LINE text="They say that sometimes a ghost of a miner can suddenly appear in the Dungeon. People call him Herobrine." />
+      <LINE text="Line 2" />
+      <LINE text="Line 3" />
+    </GOSSIP>	
+  </CHARACTER>
+  <CHARACTER name="Gimley" hailString="(you see a dwarf)" portraitName="">
+    <NAME text="Gimley, son of Gloin." />
+    <JOB text="I am a Warrior." />
+    <GOSSIP>
+      <LINE text="&quot;Far over the Misty Mountains cold,
+To dungeons deep and caverns old...&quot;" />
       <LINE text="Line 2" />
       <LINE text="Line 3" />
     </GOSSIP>	
