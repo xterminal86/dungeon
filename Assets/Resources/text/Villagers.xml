@@ -9,7 +9,7 @@
       <LINE text="They say the Dungeon is magical - it's different every time you come to this village. Can you believe this?" />
     </GOSSIP>	
   </CHARACTER>
-  <CHARACTER name="Cloud" hailString="(you see a man with very big and awkward looking sword)" portraitName="portrait-cloud">
+  <CHARACTER name="Cloud" hailString="(you see a man with very big and unpractical looking sword)" portraitName="portrait-cloud">
     <NAME text="Cloud Strife." />
     <JOB text="I'm a Soldier, First Class." />
     <GOSSIP>
@@ -67,7 +67,7 @@
     <NAME text="My name's Steve." />
     <JOB text="I am a miner." />
     <GOSSIP>
-      <LINE text="They say that sometimes a ghost of a miner may suddenly appear in the Dungeon. People call him Herobrine." />
+      <LINE text="They say that sometimes a ghost of a miner may suddenly appear in the Dungeon. People say his name was Herobrine and he tragically died in the mines." />
       <LINE text="Emeralds are green, diamonds are blue." />
       <LINE text="Line 3" />
     </GOSSIP>	
@@ -76,15 +76,25 @@
     <NAME text="Gimley, son of Gloin." />
     <JOB text="I am a Warrior." />
     <GOSSIP>
-      <LINE text="&#9834; Far over the misty mountains cold &#9834;
-&#9834; To dungeons deep, and caverns old &#9834;
-&#9834; We must away, ere break of day &#9834;
+      <LINE text="&#9834; Far over the misty mountains cold   &#9834;
+&#9834; To dungeons deep, and caverns old   &#9834;
+&#9834; We must away, ere break of day      &#9834;
 &#9834; To seek the pale, enchanted gold... &#9834;" />
-      <LINE text="&#9834; Under the Mountain dark and tall &#9834;
-&#9834; The King has come unto his hall! &#9834;
+      <LINE text="&#9834; Under the Mountain dark and tall    &#9834;
+&#9834; The King has come unto his hall!    &#9834;
 &#9834; His foe is dead, the Worm of Dread, &#9834;
-&#9834; And ever so his foes shall fall... &#9834;" />
+&#9834; And ever so his foes shall fall...  &#9834;" />
       <LINE text="Line 3" />
+    </GOSSIP>	
+  </CHARACTER>
+  <CHARACTER name="???" hailString="(this man has a strange aura about him)" portraitName="portrait-xterminal86">
+    <NAME text="..." />
+    <JOB text="You can say I am an overseer." />
+    <GOSSIP>
+      <LINE text="Best of luck, player." />
+      <LINE text="Don't get discouraged if you die a few times. It's an integral part of the whole process." />
+      <LINE text="Learning through trial is essential. But don't forget about your sense of reason." />
+	  <LINE text="Never start a fight that you cannot finish." />
     </GOSSIP>	
   </CHARACTER>
 </MAIN>
