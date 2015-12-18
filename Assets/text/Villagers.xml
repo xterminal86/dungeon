@@ -42,7 +42,7 @@
     <GOSSIP>
       <LINE text="The Great Eye is watching you." />
       <LINE text="We are Anonymous, we never forget and never forgive." />
-      <LINE text="You know, for some reason this whole world feels familiar..." />
+      <LINE text="You know, for some reason this whole world feels familiar... I have an urge to go punch some tree." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER name="Garrett" hailString="(you see a hooded man with artificial eye)" portraitName="portrait-thief">
@@ -59,6 +59,15 @@
     <JOB text="I am just a local." />
     <GOSSIP>
       <LINE text="You wanted to ask me something? Mind you, I don't give advices for free - only meat pieces are accepted!" />
+      <LINE text="Line 2" />
+      <LINE text="Line 3" />
+    </GOSSIP>	
+  </CHARACTER>
+  <CHARACTER name="Steve" hailString="(you see a man carrying a pickaxe)" portraitName="portrait-steve">
+    <NAME text="My name's Steve." />
+    <JOB text="I am a miner." />
+    <GOSSIP>
+      <LINE text="They say that sometimes a ghost of a miner can suddenly appear in the Dungeon. People call him Herobrine." />
       <LINE text="Line 2" />
       <LINE text="Line 3" />
     </GOSSIP>	
