@@ -179,6 +179,9 @@ public class App : MonoSingleton<App>
     terrainPosition = new Vector3(terrainSize.x - (_terrainAddedWidth * 2 + 1), 0, -1);
     t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
 
+    terrainPosition = new Vector3(terrainSize.x - (_terrainAddedWidth + 1), 0, -terrainSize.z);
+    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+
     /*
     terrainPosition = new Vector3(-terrainSize.x - 1, 0, -terrainSize.z - 1);
     t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
