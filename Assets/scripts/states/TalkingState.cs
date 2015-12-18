@@ -10,16 +10,23 @@ public class TalkingState : GameObjectState
   {
     _actor = actor;
 
+    // Rotate actor to face the player
     Vector3 rotation = Camera.main.transform.eulerAngles;
     rotation.y = rotation.y - 180;
 
-    _actor.Model.transform.eulerAngles = rotation;    
+    _actor.Model.transform.eulerAngles = rotation;
+
+    _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
 
-  public void StopTalkingAnimation()
+  public override void Run()
   {
-    _actor.Model.AnimationComponent[GlobalConstants.AnimationTalkName].time = 0.0f;
-    _actor.Model.AnimationComponent.Sample();
-    _actor.Model.AnimationComponent.Stop(GlobalConstants.AnimationTalkName);
+    // If character is not talking, play idle animation
+
+    if (!_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationTalkName) &&
+        !_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationIdleName))
+    {
+      _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+    }
   }
 }

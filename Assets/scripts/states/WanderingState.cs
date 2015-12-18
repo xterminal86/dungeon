@@ -104,10 +104,7 @@ public class WanderingState : GameObjectState
       yield return null;
     }
 
-    StopAnimation(GlobalConstants.AnimationWalkName);
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-
-    _currentAnimationName = GlobalConstants.AnimationIdleName;
 
     _delayJob = JobManager.Instance.CreateJob(DelayRoutine());
     
@@ -117,10 +114,7 @@ public class WanderingState : GameObjectState
   bool _rotateDone = false;
   IEnumerator RotateModel(float angle)
   {
-    StopAnimation(GlobalConstants.AnimationWalkName);
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-
-    _currentAnimationName = GlobalConstants.AnimationIdleName;
 
     _rotateDone = false;
 
@@ -176,10 +170,7 @@ public class WanderingState : GameObjectState
   RaycastHit _raycastHit;
   IEnumerator MoveModel(Int2 newMapPos)
   {
-    StopAnimation(GlobalConstants.AnimationIdleName);
     _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);
-          
-    _currentAnimationName = GlobalConstants.AnimationWalkName;
 
     _moveDone = false;
     
@@ -270,7 +261,7 @@ public class WanderingState : GameObjectState
 
   // Helper Functions
 
-  void StopAnimation(string animationName)
+  void RewindAnimation(string animationName)
   {
     _model.AnimationComponent[animationName].time = 0.0f;
     _model.AnimationComponent.Sample();
@@ -283,11 +274,6 @@ public class WanderingState : GameObjectState
     if (_stepJob != null) _stepJob.KillJob();
     if (_rotateJob != null) _rotateJob.KillJob();
     if (_delayJob != null) _delayJob.KillJob();
-  }
-
-  public void StopCurrentAnimation()
-  {
-    StopAnimation(_currentAnimationName);
   }
 
   public void AdjustModelPosition()

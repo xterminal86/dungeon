@@ -41,18 +41,25 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   ActorBase _actorToTalk;
   VillagerInfo _villagerInfo;
+  int _hash = -1;
   public void ShowFormTalking(ActorBase actorToTalk)
   {
+    _actorToTalk = actorToTalk;
+
+    _hash = _actorToTalk.ActorName.GetHashCode();
+    
+    if (!App.Instance.VillagersInfo.ContainsKey(_hash))
+    {
+      return;
+    }
+
     if (!FormTalking.activeSelf)
     {
-      App.Instance.PlayerMoveState = App.GameState.HOLD_PLAYER;
-
-      _actorToTalk = actorToTalk;
-
       if (_actorToTalk.ActorState is WanderingState)
       {
+        App.Instance.PlayerMoveState = App.GameState.HOLD_PLAYER;
+
         (_actorToTalk.ActorState as WanderingState).KillAllJobs();
-        (_actorToTalk.ActorState as WanderingState).StopCurrentAnimation();
         (_actorToTalk.ActorState as WanderingState).AdjustModelPosition();
 
         _actorToTalk.ChangeState(new TalkingState(_actorToTalk));
@@ -125,42 +132,31 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     if (_actorToTalk != null)
     {
-      if (_actorToTalk.ActorState is TalkingState)
-      {
-        (_actorToTalk.ActorState as TalkingState).StopTalkingAnimation();
-      }
-
       _actorToTalk.ChangeState(new WanderingState(_actorToTalk));
     }
 
     App.Instance.PlayerMoveState = App.GameState.NORMAL;
   }
 
-  int _hash = -1;
   void SetupFormTalking()
   {
-    _hash = _actorToTalk.ActorName.GetHashCode();
+    FormCompass.SetActive(false);
+    FormTalking.SetActive(true);      
 
-    if (App.Instance.VillagersInfo.ContainsKey(_hash))
+    _villagerInfo = App.Instance.VillagersInfo[_hash];
+
+    Sprite portraitSprite = FindPortraitByName(_villagerInfo.PortraitName);
+
+    PortraitImage.gameObject.SetActive(portraitSprite != null);
+
+    if (portraitSprite != null)
     {
-      FormCompass.SetActive(false);
-      FormTalking.SetActive(true);      
-
-      _villagerInfo = App.Instance.VillagersInfo[_hash];
-
-      Sprite portraitSprite = FindPortraitByName(_villagerInfo.PortraitName);
-
-      PortraitImage.gameObject.SetActive(portraitSprite != null);
-
-      if (portraitSprite != null)
-      {
-        PortraitImage.sprite = portraitSprite;
-      }
-
-      FormTalkingName.text = _actorToTalk.ActorName;
-
-      _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.HailString, true));
+      PortraitImage.sprite = portraitSprite;
     }
+
+    FormTalkingName.text = _actorToTalk.ActorName;
+
+    _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.HailString, true));
   }
 
   bool _coroutineDone = true;  
