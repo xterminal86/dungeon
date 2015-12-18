@@ -37,7 +37,7 @@ public class InputController : MonoSingleton<InputController>
   float _currentMoveSpeed = 0.0f;
 	void Update () 
   {
-    if (App.Instance.PlayerMoveState == App.GameState.HOLD_PLAYER)
+    if (App.Instance.PlayerMoveState == App.PlayerMoveStateEnum.HOLD_PLAYER)
     {
       return;
     }
@@ -107,6 +107,11 @@ public class InputController : MonoSingleton<InputController>
           }
         }
       }
+    }
+    else if (Input.GetKeyDown(KeyCode.Escape))
+    {
+      App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.HOLD_PLAYER;
+      GUIManager.Instance.FormGameMenu.SetActive(true);
     }
 
     _currentMoveSpeed = GlobalConstants.CameraMoveSpeed;

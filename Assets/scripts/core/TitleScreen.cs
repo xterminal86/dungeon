@@ -29,7 +29,7 @@ public class TitleScreen : MonoBehaviour
   public void NewGameHandler()
   {
     GUIManager.Instance.ButtonClickSound.Play();
-
+    
     ScreenFader.Instance.FadeCompleteCallback += FadeCompleteHandler;
     ScreenFader.Instance.FadeOut();
   }

@@ -10,6 +10,7 @@ public class GUIManager : MonoSingleton<GUIManager>
   
   public GameObject FormTalking;
   public GameObject FormCompass;
+  public GameObject FormGameMenu;
 
   public Image CompassImage;
   public Image PortraitImage;
@@ -57,7 +58,7 @@ public class GUIManager : MonoSingleton<GUIManager>
     {
       if (_actorToTalk.ActorState is WanderingState)
       {
-        App.Instance.PlayerMoveState = App.GameState.HOLD_PLAYER;
+        App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.HOLD_PLAYER;
 
         (_actorToTalk.ActorState as WanderingState).KillAllJobs();
         (_actorToTalk.ActorState as WanderingState).AdjustModelPosition();
@@ -135,7 +136,48 @@ public class GUIManager : MonoSingleton<GUIManager>
       _actorToTalk.ChangeState(new WanderingState(_actorToTalk));
     }
 
-    App.Instance.PlayerMoveState = App.GameState.NORMAL;
+    App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.NORMAL;
+  }
+
+  // Form Game Menu
+
+  public void FormMenuSaveAndQuitHandler()
+  {
+    ButtonClickSound.Play();
+
+    ScreenFader.Instance.FadeCompleteCallback += SaveAndQuitHandler;
+    ScreenFader.Instance.FadeOut();
+  }
+
+  public void FormMenuReturnToMenuHandler()
+  {
+    ButtonClickSound.Play();
+
+    ScreenFader.Instance.FadeCompleteCallback += ReturnToMenuHandler;
+    ScreenFader.Instance.FadeOut();
+  }
+
+  public void FormMenuResumeHandler()
+  {
+    ButtonClickSound.Play();
+
+    FormGameMenu.SetActive(false);
+
+    App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.NORMAL;
+  }
+
+  // Private Methods
+
+  void SaveAndQuitHandler()
+  {
+    ScreenFader.Instance.FadeCompleteCallback -= SaveAndQuitHandler;
+    Application.Quit();
+  }
+
+  void ReturnToMenuHandler()
+  {
+    ScreenFader.Instance.FadeCompleteCallback -= ReturnToMenuHandler;
+    Application.LoadLevel("title");
   }
 
   void SetupFormTalking()

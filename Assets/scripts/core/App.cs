@@ -7,14 +7,15 @@ using System.Text.RegularExpressions;
 using System.Runtime.Serialization.Formatters.Binary;
 
 public class App : MonoSingleton<App>
-{
+{  
   public Terrain Mountains;
 
   public List<GameObject> Characters;
 
   public GameObject ObjectsInstancesTransform;
 
-  public GameState PlayerMoveState;
+  public PlayerMoveStateEnum PlayerMoveState;
+  public GameState CurrentGameState;
 
   int[,] _floorSoundTypeByPosition;
   public int[,] FloorSoundTypeByPosition
@@ -81,7 +82,7 @@ public class App : MonoSingleton<App>
 
   void Awake()
   {
-    PlayerMoveState = GameState.NORMAL;
+    PlayerMoveState = PlayerMoveStateEnum.NORMAL;
 
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
@@ -652,8 +653,10 @@ public class App : MonoSingleton<App>
 
   void SetupVillagersText()
   {
+    TextAsset ta = Resources.Load("text/Villagers") as TextAsset;
+
     XmlDocument doc = new XmlDocument();
-    doc.Load(Application.dataPath + "/text/Villagers.xml");
+    doc.LoadXml(ta.text);
     foreach (XmlNode node in doc.DocumentElement.ChildNodes)
     {      
       switch (node.Name)
@@ -874,9 +877,15 @@ public class App : MonoSingleton<App>
     GEN_VILLAGE
   }
 
-  public enum GameState
+  public enum PlayerMoveStateEnum
   {
     NORMAL = 0,
     HOLD_PLAYER
+  }
+
+  public enum GameState
+  {
+    TITLE = 0,
+    MAIN
   }
 }

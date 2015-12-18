@@ -22,7 +22,8 @@ public class GUIManagerInspector : Editor
     
     m.FormTalking = (GameObject)EditorGUILayout.ObjectField("Form-Talking", m.FormTalking, typeof(GameObject));
     m.FormCompass = (GameObject)EditorGUILayout.ObjectField("Form-Compass", m.FormCompass, typeof(GameObject));
-    
+    m.FormGameMenu = (GameObject)EditorGUILayout.ObjectField("Form-Game Menu", m.FormGameMenu, typeof(GameObject));
+
     m.CompassImage = (Image)EditorGUILayout.ObjectField("Form-Talking Compass Image", m.CompassImage, typeof(Image));
     m.PortraitImage = (Image)EditorGUILayout.ObjectField("Form-Talking Portrait Image", m.PortraitImage, typeof(Image));
 
