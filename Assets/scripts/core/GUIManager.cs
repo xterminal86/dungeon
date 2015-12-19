@@ -76,9 +76,7 @@ public class GUIManager : MonoSingleton<GUIManager>
     ButtonClickSound.Play();
 
     if (_coroutineDone)
-    {
-      _actorToTalk.AnimationComponent.Play(GlobalConstants.AnimationTalkName);
-
+    {      
       _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerName));
     }
   }
@@ -88,9 +86,7 @@ public class GUIManager : MonoSingleton<GUIManager>
     ButtonClickSound.Play();
 
     if (_coroutineDone)
-    {
-      _actorToTalk.AnimationComponent.Play(GlobalConstants.AnimationTalkName);
-
+    {     
       _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerJob));
     }
   }
@@ -104,9 +100,7 @@ public class GUIManager : MonoSingleton<GUIManager>
     {
       _printTextJob.KillJob();
     }
-
-    _actorToTalk.AnimationComponent.Play(GlobalConstants.AnimationTalkName);
-
+        
     // In case some villagers have more gossip lines than others,
     // we first check for overflow
     _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;
@@ -205,6 +199,11 @@ public class GUIManager : MonoSingleton<GUIManager>
   string _textBuf = string.Empty;
   IEnumerator PrintTextRoutine(string textToPrint, bool formFirstOpen = false)
   {
+    if (textToPrint != "..." && !formFirstOpen)
+    {
+      _actorToTalk.AnimationComponent.Play(GlobalConstants.AnimationTalkName);
+    }
+
     int count = 0;
 
     _textBuf = string.Empty;

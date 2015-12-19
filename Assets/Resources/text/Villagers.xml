@@ -42,7 +42,7 @@
     <GOSSIP>
       <LINE text="The Great Eye is watching you." />
       <LINE text="We are Anonymous, we never forget and never forgive." />
-      <LINE text="You know, for some reason this whole world feels familiar... I have an urge to go punch some tree." />
+      <LINE text="You know, for some reason this whole world feels familiar... I feel an urge to go punch some tree." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER name="Garrett" hailString="(you see a hooded man with artificial eye)" portraitName="portrait-thief">
@@ -76,14 +76,14 @@
     <NAME text="Gimley, son of Gloin." />
     <JOB text="I am a Warrior." />
     <GOSSIP>
-      <LINE text="&#9834; Far over the misty mountains cold   &#9834;
-&#9834; To dungeons deep, and caverns old   &#9834;
-&#9834; We must away, ere break of day      &#9834;
+      <LINE text="&#9834; Far over the misty mountains cold &#9834;
+&#9834; To dungeons deep, and caverns old &#9834;
+&#9834; We must away, ere break of day &#9834;
 &#9834; To seek the pale, enchanted gold... &#9834;" />
-      <LINE text="&#9834; Under the Mountain dark and tall    &#9834;
-&#9834; The King has come unto his hall!    &#9834;
+      <LINE text="&#9834; Under the Mountain dark and tall &#9834;
+&#9834; The King has come unto his hall! &#9834;
 &#9834; His foe is dead, the Worm of Dread, &#9834;
-&#9834; And ever so his foes shall fall...  &#9834;" />
+&#9834; And ever so his foes shall fall... &#9834;" />
       <LINE text="Line 3" />
     </GOSSIP>	
   </CHARACTER>
