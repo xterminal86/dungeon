@@ -40,100 +40,46 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   // FormTalking
 
-  ActorBase _actorToTalk;
-  VillagerInfo _villagerInfo;
-  int _hash = -1;
-  public void ShowFormTalking(ActorBase actorToTalk)
-  {
-    _actorToTalk = actorToTalk;
+  public Callback ButtonNameCallback;
+  public Callback ButtonJobCallback;
+  public Callback ButtonGossipCallback;
+  public Callback ButtonByeCallback;
+  
+  // Buttons handlers
 
-    _hash = _actorToTalk.ActorName.GetHashCode();
-    
-    if (!App.Instance.VillagersInfo.ContainsKey(_hash))
-    {
-      return;
-    }
-
-    if (!FormTalking.activeSelf)
-    {
-      if (_actorToTalk.ActorState is WanderingState)
-      {
-        App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.HOLD_PLAYER;
-
-        (_actorToTalk.ActorState as WanderingState).KillAllJobs();
-        (_actorToTalk.ActorState as WanderingState).AdjustModelPosition();
-
-        _actorToTalk.ChangeState(new TalkingState(_actorToTalk));
-      }
-
-      SetupFormTalking();
-    }
-  }
-
-  Job _printTextJob;
   public void FormTalkingNameHandler()
   {
     ButtonClickSound.Play();
 
-    if (_coroutineDone)
-    {      
-      _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerName));
-    }
+    if (ButtonNameCallback != null)
+      ButtonNameCallback();  
   }
 
   public void FormTalkingJobHandler()
   {
     ButtonClickSound.Play();
 
-    if (_coroutineDone)
-    {     
-      _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerJob));
-    }
+    if (ButtonJobCallback != null)
+      ButtonJobCallback();    
   }
 
-  int _gossipListIndex = 0;
   public void FormTalkingGossipHandler()
   {
     ButtonClickSound.Play();
 
-    if (_printTextJob != null)
-    {
-      _printTextJob.KillJob();
-    }
-        
-    // In case some villagers have more gossip lines than others,
-    // we first check for overflow
-    _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;
-            
-    _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));
-
-    _gossipListIndex++;
+    if (ButtonGossipCallback != null)
+      ButtonGossipCallback();    
   }
 
   public void FormTalkingByeHandler()
   {
     ButtonClickSound.Play();
 
-    if (_printTextJob != null)
-    {
-      _printTextJob.KillJob();
-    }
-
-    if (FormTalking.activeSelf)
-    {
-      FormTalking.SetActive(false);
-      FormCompass.SetActive(true);
-    }
-
-    if (_actorToTalk != null)
-    {
-      _actorToTalk.ChangeState(new WanderingState(_actorToTalk));
-    }
-
-    App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.NORMAL;
+    if (ButtonByeCallback != null)
+      ButtonByeCallback();    
   }
 
-  // Form Game Menu
+  // Form Game Menu (stubs)
 
   public void FormMenuSaveAndQuitHandler()
   {
@@ -171,65 +117,6 @@ public class GUIManager : MonoSingleton<GUIManager>
   void ReturnToMenuHandler()
   {
     ScreenFader.Instance.FadeCompleteCallback -= ReturnToMenuHandler;
-    Application.LoadLevel("title");
-  }
-
-  void SetupFormTalking()
-  {
-    FormCompass.SetActive(false);
-    FormTalking.SetActive(true);      
-
-    _villagerInfo = App.Instance.VillagersInfo[_hash];
-
-    Sprite portraitSprite = FindPortraitByName(_villagerInfo.PortraitName);
-
-    PortraitImage.gameObject.SetActive(portraitSprite != null);
-
-    if (portraitSprite != null)
-    {
-      PortraitImage.sprite = portraitSprite;
-    }
-
-    FormTalkingName.text = _actorToTalk.ActorName;
-
-    _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.HailString, true));
-  }
-
-  bool _coroutineDone = true;  
-  string _textBuf = string.Empty;
-  IEnumerator PrintTextRoutine(string textToPrint, bool formFirstOpen = false)
-  {
-    if (textToPrint != "..." && !formFirstOpen)
-    {
-      _actorToTalk.AnimationComponent.Play(GlobalConstants.AnimationTalkName);
-    }
-
-    int count = 0;
-
-    _textBuf = string.Empty;
-
-    _coroutineDone = false;
-
-    float speakPitch = _actorToTalk.Model.IsFemale ? 2.0f : 1.0f;
-
-    while (count < textToPrint.Length)
-    {      
-      _textBuf += textToPrint[count];
-
-      count++;
-
-      FormTalkingText.text = _textBuf;
-
-      if ( (count % 3 == 0)  && !formFirstOpen)
-      {
-        SoundManager.Instance.PlaySound(CharacterSpeakSound, speakPitch);
-      }
-
-      yield return new WaitForSeconds(0.01f);
-    }
-
-    _coroutineDone = true;
-
-    yield return null;
+    //Application.LoadLevel("title"); // FIXME
   }  
 }
