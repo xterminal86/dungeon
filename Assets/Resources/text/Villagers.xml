@@ -3,17 +3,19 @@
   <CHARACTER name="Claire" hailString="(you see a woman with a strange looking sword)" portraitName="portrait-lightning">
     <NAME text="My name is Claire." />
     <JOB text="I'm a Soldier." />
-		<GOSSIP>
+	<GOSSIP>
       <LINE text="I took a vacation only to arrive in a place with evil lurking underground. Worst vacation ever." />
       <LINE text="This guy, Cloud... I have a strange feeling, that I know him, but at the same time I'm sure I never met him before." />
       <LINE text="They say the Dungeon is magical - it's different every time you come to this village. Can you believe this?" />
+	  <LINE text="Lightning? What about it?" />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER name="Cloud" hailString="(you see a man with very big and unpractical looking sword)" portraitName="portrait-cloud">
     <NAME text="Cloud Strife." />
     <JOB text="I'm a Soldier, First Class." />
     <GOSSIP>
-      <LINE text="I wish Aerith could see this place... Without monsters and stuff below, of course." />
+      <LINE text="I wish Aerith could see this place... Without monsters and stuff below, of course.
+(sighs)" />
       <LINE text="So, another one to venture into the Dungeon? Well, hope you'll be more successful than others." />
       <LINE text="No one knows how deep the Dungeon is. Nobody ever returned to tell the tale." />
     </GOSSIP>	
@@ -22,18 +24,19 @@
     <NAME text="I'm Phoenix Wright." />
     <JOB text="I'm attorney at law." />
     <GOSSIP>
-      <LINE text="Line 1" />
-      <LINE text="Line 2" />
-      <LINE text="Line 3" />
+      <LINE text="Miles may act as if he doesn't know me, but we actually studied law together at Royal Academy. Believe it or not, but he wanted to be a defense attorney." />
+      <LINE text="I've been to the village before. But never to the classic one." />
+      <LINE text="Look, it's my attorney's badge!" />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER name="Miles" hailString="(you see a collected nobleman in fancy clothes)" portraitName="portrait-miles">
     <NAME text="Miles Edgeworth, at your service." />
-    <JOB text="I'm Chief Prosecutor of this province." />
+    <JOB text="I'm the Chief Prosecutor of this province." />
     <GOSSIP>
-      <LINE text="Line 1" />
-      <LINE text="Line 2" />
-      <LINE text="Line 3" />
+      <LINE text="They sent me here to maintain order and, as ill luck would have it, this excuse for a lawyer, Phoenix, arrives as well." />
+      <LINE text="If you want something done, hire a bounty hunter.
+Oh, wait, that's not my line... And not from here either!" />
+      <LINE text="To be or not to be? What kind of strange question is that?" />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER name="Ian" hailString="(you see a man wearing a mask)" portraitName="portrait-iarspider">
@@ -49,14 +52,17 @@
     <NAME text="Garrett." />
     <JOB text="I used to relieve people of unnecessary things." />
     <GOSSIP>
-      <LINE text="Line 1" />
-      <LINE text="Line 2" />
+      <LINE text="&quot;What is locked... can be opened...
+What is hidden... can be found...
+What is yours... ...can be mine.&quot;
+Yeah, I used to say that. :-)" />
+      <LINE text="It seems I'll never get accustomed to daylight." />
       <LINE text="Line 3" />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER name="Tigra" hailString="(you see a girl in a catlike costume)" portraitName="portrait-tigriss">
-    <NAME text="I'm Tigra." />
-    <JOB text="I am just a local." />
+    <NAME text="I'm Tigra, nice to meet you." />
+    <JOB text="Oh, I'm just a local." />
     <GOSSIP>
       <LINE text="You wanted to ask me something? Mind you, I don't give advices for free - only meat pieces are accepted!" />
       <LINE text="Line 2" />
@@ -65,11 +71,12 @@
   </CHARACTER>
   <CHARACTER name="Steve" hailString="(you see a blocky man carrying a pickaxe)" portraitName="portrait-steve">
     <NAME text="My name's Steve." />
-    <JOB text="I am a miner." />
+    <JOB text="I'm a miner." />
     <GOSSIP>
       <LINE text="They say that sometimes a ghost of a miner may suddenly appear in the Dungeon. People say his name was Herobrine and he tragically died in the mines." />
-      <LINE text="Emeralds are green, diamonds are blue." />
-      <LINE text="Line 3" />
+      <LINE text="Emeralds are green, diamonds are blue,
+Redstone is red and this is all true!" />
+      <LINE text="What do you mean, I am blocky? Look who's talking!" />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER name="Gimley" hailString="(you see a dwarf)" portraitName="portrait-dwarf">

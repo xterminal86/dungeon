@@ -1,10 +1,12 @@
-+ 1) Compass
-2) Dialogues with NPCs (3 buttons, like, "Name", "Job", "Gossip", "Bye")
-3) Merchants
-4) Decor objects (fountains, flowers, tables, road borders, etc.)
-5) Weather and day/night change
-6) Map
-+ 7) Make footsteps uniformly random for all characters (right now nonrepeatability is controlled by one variable for all sounds)
++ Compass
++ Dialogues with NPCs (3 buttons, like, "Name", "Job", "Gossip", "Bye")
+Merchants
+Decor objects (fountains, flowers, tables, road borders, etc.)
+Weather and day/night change
+Map
++ Make footsteps uniformly random for all characters (right now nonrepeatability is controlled by one variable for all sounds)
+Special rooms, buildings (chapel, shop etc.)
+Player and monsters stats, game mechanic
 
 Credits:
 

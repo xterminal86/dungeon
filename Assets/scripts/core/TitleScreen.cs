@@ -6,6 +6,7 @@ using System.Xml;
 
 public class TitleScreen : MonoBehaviour 
 {
+  public AudioSource TorchSound;
   public Transform SceneHolder;
 
   public GameObject Wall;
@@ -22,8 +23,10 @@ public class TitleScreen : MonoBehaviour
     RenderSettings.fogEndDistance = 18;
 
     SetupScene();
-
+        
     ScreenFader.Instance.FadeIn();
+
+    TorchSound.Play();
   }
 
   public void NewGameHandler()
@@ -51,7 +54,7 @@ public class TitleScreen : MonoBehaviour
     ScreenFader.Instance.FadeCompleteCallback += ExitGame;
     ScreenFader.Instance.FadeOut();    
   }
-
+    
   void FadeCompleteHandler()
   {
     ScreenFader.Instance.FadeCompleteCallback -= FadeCompleteHandler;
