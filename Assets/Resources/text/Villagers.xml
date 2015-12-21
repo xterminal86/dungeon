@@ -7,7 +7,7 @@
       <LINE text="I took a vacation only to arrive in a place with evil lurking underground.
 Worst vacation ever." />
       <LINE text="This guy, Cloud... I have a strange feeling, that I know him, but at the same time I'm sure I never met him before." />
-      <LINE text="They say the Dungeon is magical - it's different every time you come to this village. Can you believe this?" />
+      <LINE text="They say the Dungeon is magical - it's different every time you arrive in this village. Can you believe this?" />
 	  <LINE text="Lightning?
 What about it?" />
     </GOSSIP>	
@@ -20,15 +20,19 @@ What about it?" />
 (sighs)" />
       <LINE text="So, another one to venture into the Dungeon? Well, hope you'll be more successful than others." />
       <LINE text="No one knows how deep the Dungeon is. Nobody ever returned to tell the tale." />
+	  <LINE text="I try no to use my sword.
+Use brings about wear, tear, and rust — and that's a real waste." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-phoenix" class="villager" name="Phoenix" hailString="(you see a nobleman with spiky hair)" portraitName="portrait-phoenix">
     <NAME text="I'm Phoenix Wright." />
     <JOB text="I'm attorney at law." />
     <GOSSIP>
-      <LINE text="Miles may act as if he doesn't know me, but we actually studied law together at Royal Academy. Believe it or not, but he wanted to be a defense attorney." />
+      <LINE text="Miles may act as if he doesn't know me, but we actually studied law together at Royal Academy. Believe it or not, but he wanted to be a defense attorney.
+I wonder what changed him..." />
       <LINE text="I've been to the village before. But never to the classic one." />
       <LINE text="Look, it's my attorney's badge!
+
 (shows you round shaped gold plated badge with scales of justice engraved on it)" />
     </GOSSIP>	
   </CHARACTER>
@@ -36,7 +40,7 @@ What about it?" />
     <NAME text="Miles Edgeworth, at your service." />
     <JOB text="I'm the Chief Prosecutor of this province." />
     <GOSSIP>
-      <LINE text="They sent me here to maintain order and, as ill luck would have it, this excuse for a lawyer, Phoenix, arrives as well." />
+      <LINE text="They sent me here to maintain order and, as ill luck would have it, this excuse for a lawyer, Phoenix, arrives as well! As if we don't have enough problems already." />
       <LINE text="If you want something done, hire a bounty hunter.
 Oh, wait, that's not my line...
 And not from here either!" />
@@ -44,13 +48,13 @@ And not from here either!" />
 What kind of strange question is that?" />
     </GOSSIP>	
   </CHARACTER>
-  <CHARACTER prefab="char-ian" class="villager" name="Ian" hailString="(you see a man wearing a mask)" portraitName="portrait-iarspider">
+  <CHARACTER prefab="char-iarspider" class="villager" name="Ian" hailString="(you see a man wearing a mask)" portraitName="portrait-iarspider">
     <NAME text="We are Legion." />
     <JOB text="I fight the System." />
     <GOSSIP>
       <LINE text="The Great Eye is watching you." />
       <LINE text="We are Anonymous, we never forget and never forgive." />
-      <LINE text="You know, for some reason this whole world feels familiar... I feel an urge to go punch some tree." />
+      <LINE text="You know, for some reason this whole world seems familiar... I feel an URGE to go punch some tree." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-thief" class="villager" name="Garrett" hailString="(you see a hooded man with artificial eye)" portraitName="portrait-thief">
@@ -69,9 +73,13 @@ Yeah, I used to say that. :-)" />
     <NAME text="I'm Tigra, nice to meet you!" />
     <JOB text="Oh, I'm just a local." />
     <GOSSIP>
-      <LINE text="You wanted to ask me something? Mind you, I don't give advices for free - only meat pieces are accepted!" />
-      <LINE text="Line 2" />
-      <LINE text="Line 3" />
+      <LINE text="You wanted to ask me something? Mind you, I don't give advices for free - only meat pieces are accepted! ;-)" />
+      <LINE text="Welcome to our village!
+Wish you could see it at better times, though..." />
+      <LINE text="The Dungeon? Oh, it used to be a mine, actually, but then it became too dangerous and deadly, so people started to call it - 
+&quot;The Dungeon&quot;." />
+	  <LINE text="No one knows why evil appeared in the Dungeon. People say that there's been some iniquity down there, a miner was killed... And now he is seeking revenge on us for abandoning him. Scary!" />
+	  <LINE text="My parents are... not around anymore. Our priest was kind enough to adopt me, so I'm staying at the chapel now." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-steve" class="villager" name="Steve" hailString="(you see a blocky man carrying a pickaxe)" portraitName="portrait-steve">
@@ -83,6 +91,7 @@ Yeah, I used to say that. :-)" />
 Redstone is red and this is all true!" />
       <LINE text="What do you mean, I am blocky?
 Look who's talking!" />
+	  <LINE text="Business has been pretty much frozen since these events started. I'm thinking of going to the City for earnings. I wonder why they never bothered to send some guards or soldiers or someone here to look into our situation. I guess city folks ARE damn snobs after all..." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-dwarf" class="villager" name="Gimley" hailString="(you see a dwarf)" portraitName="portrait-dwarf">
@@ -97,7 +106,15 @@ Look who's talking!" />
 &#9834; The King has come unto his hall! &#9834;
 &#9834; His foe is dead, the Worm of Dread, &#9834;
 &#9834; And ever so his foes shall fall... &#9834;" />
-      <LINE text="Line 3" />
+      <LINE text="&#9834; From the red sky of the East &#9834;
+&#9834; To the sunset in the West &#9834;
+&#9834; We have cheated Death &#9834;
+&#9834; And he has cheated us... &#9834;
+" />
+	  <LINE text="&#9834; The forest raised a Christmas tree, &#9834;
+&#9834; 'Twas silent and serene. &#9834;
+&#9834; In winter and in summer it was &#9834;
+&#9834; Slender and so green... &#9834;" />	
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-xterminal86" class="villager" name="???" hailString="(this man has a strange aura about him)" portraitName="portrait-xterminal86">
