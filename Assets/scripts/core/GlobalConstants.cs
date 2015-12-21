@@ -28,6 +28,10 @@ public static class GlobalConstants
   public static string AnimationAttackName = "Attack";
   public static string AnimationTalkName = "Talk";
 
+  // Actor classes
+
+  public const string ActorVillagerClass = "villager";
+
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
   {
     { MapAttributes.Floor, "floor" }, { MapAttributes.Wall, "wall" }, { MapAttributes.Ceiling, "ceiling" },

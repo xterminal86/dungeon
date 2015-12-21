@@ -10,6 +10,7 @@ public class App : MonoSingleton<App>
 {  
   public Terrain Mountains;
 
+  [HideInInspector]
   public List<GameObject> Characters;
 
   public GameObject ObjectsInstancesTransform;
@@ -142,8 +143,7 @@ public class App : MonoSingleton<App>
       BuildMap();
     }
 
-    SetupCharacters();
-    SetupVillagersText();
+    SetupVillagers();
 
     ScreenFader.Instance.FadeIn();
 
@@ -218,32 +218,44 @@ public class App : MonoSingleton<App>
     SoundManager.Instance.PlayMusicTrack(_generatedMap.MusicTrack);
   }
 
-  void SetupCharacters()
+  GameObject FindCharacterPrefabByName(string name)
   {
     foreach (var item in Characters)
     {
-      Int2 pos = _generatedMap.GetRandomUnoccupiedCell();
-      SpawnCharacter(item, pos);
+      if (item.name == name)
+      {
+        return item;
+      }
     }
+
+    return null;
   }
 
-  void SpawnCharacter(GameObject model, Int2 pos)
+  void SpawnCharacter(GameObject model, Int2 pos, string actorClass)
   {
     GameObject go = (GameObject)Instantiate(model, 
-                                            new Vector3(pos.X * GlobalConstants.WallScaleFactor, 0, 
-                pos.Y * GlobalConstants.WallScaleFactor), Quaternion.identity);
-    var mm = go.GetComponent<ModelMover>();
-    if (mm != null)
+                                            new Vector3(pos.X * GlobalConstants.WallScaleFactor, 0, pos.Y * GlobalConstants.WallScaleFactor), 
+                                            Quaternion.identity);
+    switch (actorClass)
     {
-      SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
-            
-      mm.Actor = new VillagerActor(mm);
-      
-      mm.ModelPos.X = pos.X;
-      mm.ModelPos.Y = pos.Y;
+      case GlobalConstants.ActorVillagerClass:
+        var mm = go.GetComponent<ModelMover>();
+        if (mm != null)
+        {
+          SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+          
+          mm.Actor = new VillagerActor(mm);
+          
+          mm.ModelPos.X = pos.X;
+          mm.ModelPos.Y = pos.Y;
+          
+          mm.Actor.ActorName = mm.ActorName;
+          mm.Actor.ChangeState(new WanderingState(mm.Actor));      
+        }
+        break;
 
-      mm.Actor.ActorName = mm.ActorName;
-      mm.Actor.ChangeState(new WanderingState(mm.Actor));      
+      default:
+        break;
     }
   }
 
@@ -640,7 +652,7 @@ public class App : MonoSingleton<App>
     get { return _villagersInfo; }
   }
 
-  void SetupVillagersText()
+  void SetupVillagers()
   {
     TextAsset ta = Resources.Load("text/Villagers") as TextAsset;
 
@@ -651,8 +663,23 @@ public class App : MonoSingleton<App>
       switch (node.Name)
       {
         case "CHARACTER":
+          if (node.Attributes.GetNamedItem("prefab") == null)
+          {
+            continue;
+          }
+
           VillagerInfo vi = new VillagerInfo();
           int hash = node.Attributes["name"].InnerText.GetHashCode();
+
+          string prefabName = node.Attributes["prefab"].InnerText;
+          string actorClass = node.Attributes["class"].InnerText;
+
+          var prefab = FindCharacterPrefabByName(prefabName);
+          if (prefab != null)
+          {
+            Int2 pos = _generatedMap.GetRandomUnoccupiedCell();
+            SpawnCharacter(prefab, pos, actorClass);
+          }
 
           vi.HailString = node.Attributes["hailString"].InnerText;
           vi.PortraitName = node.Attributes["portraitName"].InnerText;

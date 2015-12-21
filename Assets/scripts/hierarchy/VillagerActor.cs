@@ -75,6 +75,11 @@ public class VillagerActor : ActorBase
   {
     if (textToPrint != "..." && !formFirstOpen)
     {
+      if (AnimationComponent.IsPlaying(GlobalConstants.AnimationTalkName))
+      {
+        AnimationComponent.Stop(GlobalConstants.AnimationTalkName);
+      }
+
       AnimationComponent.Play(GlobalConstants.AnimationTalkName);
     }
 
