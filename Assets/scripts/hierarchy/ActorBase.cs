@@ -3,15 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Base class for actors (models)
+/// Base class for actors (models) logic
 /// </summary>
 public abstract class ActorBase
 {
   public string ActorName = string.Empty;
 
+  // Current state of this actor
   public GameObjectState ActorState;
 
+  // Reference to the respective MonoBehaviour script for this actor
   public ModelMover Model;
+
+  // Cached component
   public Animation AnimationComponent;
 
   public ActorBase(ModelMover model)

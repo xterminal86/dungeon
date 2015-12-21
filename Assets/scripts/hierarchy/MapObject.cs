@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Logic class of a scene interactable object
+/// </summary>
 public abstract class MapObject
 {
   public string ClassName = string.Empty;
@@ -20,6 +23,7 @@ public abstract class MapObject
   public CallbackO ControlCallback;
   public CallbackO ControlCompleteCallback;
 
+  // MonoBehaviour script reference to the respective interactable object
   public BehaviourMapObject BMO;
 
   public MapObject()
@@ -28,6 +32,10 @@ public abstract class MapObject
     PrefabName = "None";
     ObjectId = "n/a";
   }
+
+  // These sould be overriden for respective interaction special handling.
+  // Subscription should be done during instantiation of a specific derived class object
+  // and routed on these methods accordingly.
 
   public virtual void ActionHandler(object sender) { }
   public virtual void ActionCompleteHandler(object sender) { }

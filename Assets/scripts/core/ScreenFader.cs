@@ -15,6 +15,7 @@ public class ScreenFader : MonoSingleton<ScreenFader>
   {
     FaderImage.gameObject.SetActive(true);
     FaderImage.color = _faderColor;
+    _alpha = 0.0f;
   }
 
   public void FadeOut()

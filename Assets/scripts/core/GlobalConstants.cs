@@ -6,16 +6,24 @@ public delegate void CallbackO(object sender);
 
 public static class GlobalConstants 
 {
+  // How much one unit actually is in the world
   public static int WallScaleFactor = 2;
+
   public static int CameraTurnSpeed = 350;
   public static int CameraMoveSpeed = 4;
   public static int CameraCannotMoveSpeed = 2;
+
+  // Delay limits, that are randomly chosen, which determine
+  // when VillagerActor starts to walk the random path again
   public static int WanderingMinDelaySeconds = 5;
   public static int WanderingMaxDelaySeconds = 15;
 
-  public static float DoorOpenSpeed = 1.0f;
   public static float CameraBobSpeed = 0.5f;
+
+  // ScreenFader speed
   public static float FadeSpeed = 1.0f;
+
+  // VillagerActor rotation and animation speeds
   public static float CharacterRotationSpeed = 150.0f;
   public static float CharacterAnimationTalkSpeed = 2.0f;
 

@@ -139,7 +139,7 @@ public class VillagerActor : ActorBase
     }
 
     // In case some villagers have more gossip lines than others,
-    // we first check for overflow
+    // we first check for overflow.
     _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;
 
     _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));

@@ -2,8 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Generation of "Village" map
+/// </summary>
 public class Village : GeneratedMap
 {
+  // List holding room bounds (start and end points of a rectangle) for room related generation and testing stuff
   List<RoomBounds> _roomsBounds = new List<RoomBounds>();
 
   public Village(int width, int height) : base(width, height)
@@ -83,11 +87,17 @@ public class Village : GeneratedMap
     } // end while
   }
 
+  /// <summary>
+  /// Make roads between buildings by taking pairs from list of buildings from first to the last.
+  /// </summary>
   void ConnectBuildings()
   {    
+    // If we have more than 1 building
     if (_roadMarks.Count > 1)
     {
       RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
+
+      // Place floor on starting point of the first item
 
       SerializableBlock b = CreateBlock(_roadMarks[0].X, _roadMarks[0].Y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS);
       b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.STONE;
@@ -95,6 +105,7 @@ public class Village : GeneratedMap
       _map[_roadMarks[0].X, _roadMarks[0].Y].Blocks.Add(b);
       _map[_roadMarks[0].X, _roadMarks[0].Y].CellType = GeneratedCellType.ROAD;          
 
+      // Make roads between every pair of points (that is floors near doors)
       for (int i = 0; i < _roadMarks.Count - 1; i++)
       {
         var road = rb.BuildRoad(_roadMarks[i], _roadMarks[i + 1]);
@@ -144,6 +155,11 @@ public class Village : GeneratedMap
     }
   }
 
+  /// <summary>
+  /// Tries to generate given number of trees.
+  /// </summary>
+  /// <param name="number">Trees to generate</param>
+  /// <param name="minDistance">Minimum distance between trees</param>
   void GenerateTrees(int number, int minDistance)
   {
     int counter = 0, idleCounter = 0;

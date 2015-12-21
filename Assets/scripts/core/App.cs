@@ -143,7 +143,7 @@ public class App : MonoSingleton<App>
       BuildMap();
     }
 
-    SetupVillagers();
+    SetupCharacters();
 
     ScreenFader.Instance.FadeIn();
 
@@ -652,9 +652,13 @@ public class App : MonoSingleton<App>
     get { return _villagersInfo; }
   }
 
-  void SetupVillagers()
+  void SetupCharacters()
   {
-    TextAsset ta = Resources.Load("text/Villagers") as TextAsset;
+    var resource = Resources.Load("text/Villagers");
+
+    if (resource == null) return;
+
+    TextAsset ta = resource as TextAsset;
 
     XmlDocument doc = new XmlDocument();
     doc.LoadXml(ta.text);
