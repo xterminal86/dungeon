@@ -140,6 +140,19 @@ public class GeneratedMap
 
     return null;
   }
+
+  public GeneratedMapCell GetMapCellByPosition(int x, int y)
+  {
+    int clampedX = Mathf.Clamp(x, 0, _mapHeight - 1);
+    int clampedY = Mathf.Clamp(y, 0, _mapWidth - 1);
+
+    return _map[clampedX, clampedY];
+  }
+
+  public GeneratedMapCell GetMapCellByPosition(Int2 mapPos)
+  {
+    return GetMapCellByPosition(mapPos.X, mapPos.Y);
+  }
 }
 
 public class GeneratedMapCell

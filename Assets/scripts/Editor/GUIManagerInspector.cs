@@ -16,19 +16,8 @@ public class GUIManagerInspector : Editor
     GUIManager m = target as GUIManager;
 
     if (m == null) return;
-        
-    m.ButtonClickSound = (AudioSource)EditorGUILayout.ObjectField("Button Click Sound", m.ButtonClickSound, typeof(AudioSource));
-    m.CharacterSpeakSound = (AudioSource)EditorGUILayout.ObjectField("Character Speak Sound", m.CharacterSpeakSound, typeof(AudioSource));
-    
-    m.FormTalking = (GameObject)EditorGUILayout.ObjectField("Form-Talking", m.FormTalking, typeof(GameObject));
-    m.FormCompass = (GameObject)EditorGUILayout.ObjectField("Form-Compass", m.FormCompass, typeof(GameObject));
-    m.FormGameMenu = (GameObject)EditorGUILayout.ObjectField("Form-Game Menu", m.FormGameMenu, typeof(GameObject));
 
-    m.CompassImage = (Image)EditorGUILayout.ObjectField("Form-Talking Compass Image", m.CompassImage, typeof(Image));
-    m.PortraitImage = (Image)EditorGUILayout.ObjectField("Form-Talking Portrait Image", m.PortraitImage, typeof(Image));
-
-    m.FormTalkingName = (Text)EditorGUILayout.ObjectField("Form-Talking Name", m.FormTalkingName, typeof(Text));
-    m.FormTalkingText = (Text)EditorGUILayout.ObjectField("Form-Talking Text", m.FormTalkingText, typeof(Text));    
+    DrawDefaultInspector();
 
     if (GUILayout.Button("Generate Portraits List"))
     {

@@ -3,12 +3,12 @@
   <CHARACTER prefab="char-lightning" class="villager" name="Claire" hailString="(you see a woman with a strange looking sword)" portraitName="portrait-lightning">
     <NAME text="My name is Claire." />
     <JOB text="I'm a Soldier." />
-	<GOSSIP>
+    <GOSSIP>
       <LINE text="I took a vacation only to arrive in a place with evil lurking underground.
 Worst vacation ever." />
       <LINE text="This guy, Cloud... I have a strange feeling, that I know him, but at the same time I'm sure I never met him before." />
       <LINE text="They say the Dungeon is magical - it's different every time you arrive in this village. Can you believe this?" />
-	  <LINE text="Lightning?
+	    <LINE text="Lightning?
 What about it?" />
     </GOSSIP>	
   </CHARACTER>
@@ -20,8 +20,10 @@ What about it?" />
 (sighs)" />
       <LINE text="So, another one to venture into the Dungeon? Well, hope you'll be more successful than others." />
       <LINE text="No one knows how deep the Dungeon is. Nobody ever returned to tell the tale." />
-	  <LINE text="I try no to use my sword.
+	    <LINE text="I try no to use my sword.
 Use brings about wear, tear, and rust — and that's a real waste." />
+      <LINE text="Why I never went to the Dungeon myself? I have my own damn problems in the City, where we have drugs, organized crime and much more other stuff, and are paid peanuts to enjoy it all." />
+      <LINE text="No, I don't know Claire. I was surprised myself, when I learned that she is a Soldier as well. And on a vacation too! What a silly coincedence..." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-phoenix" class="villager" name="Phoenix" hailString="(you see a nobleman with spiky hair)" portraitName="portrait-phoenix">
@@ -66,7 +68,7 @@ What is hidden... can be found...
 What is yours... ...can be mine.&quot;
 Yeah, I used to say that. :-)" />
       <LINE text="It seems I'll never get accustomed to daylight." />
-      <LINE text="Line 3" />
+      <LINE text="I wanted to settle down at last, so I thought this would be the perfect place, but..." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-tigra" class="villager" name="Tigra" hailString="(you see a girl in a catlike costume)" portraitName="portrait-tigriss">
@@ -78,8 +80,8 @@ Yeah, I used to say that. :-)" />
 Wish you could see it at better times, though..." />
       <LINE text="The Dungeon? Oh, it used to be a mine, actually, but then it became too dangerous and deadly, so people started to call it - 
 &quot;The Dungeon&quot;." />
-	  <LINE text="No one knows why evil appeared in the Dungeon. People say that there's been some iniquity down there, a miner was killed... And now he is seeking revenge on us for abandoning him. Scary!" />
-	  <LINE text="My parents are... not around anymore. Our priest was kind enough to adopt me, so I'm staying at the chapel now." />
+	    <LINE text="No one knows why evil appeared in the Dungeon. People say that there's been some iniquity down there, a miner was killed... And now he is seeking revenge on us for abandoning him. Scary!" />
+	    <LINE text="My parents are... not around anymore. Our priest was kind enough to adopt me, so I'm staying at the chapel now." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-steve" class="villager" name="Steve" hailString="(you see a blocky man carrying a pickaxe)" portraitName="portrait-steve">
@@ -91,7 +93,9 @@ Wish you could see it at better times, though..." />
 Redstone is red and this is all true!" />
       <LINE text="What do you mean, I am blocky?
 Look who's talking!" />
-	  <LINE text="Business has been pretty much frozen since these events started. I'm thinking of going to the City for earnings. I wonder why they never bothered to send some guards or soldiers or someone here to look into our situation. I guess city folks ARE damn snobs after all..." />
+	    <LINE text="Business has been pretty much frozen since these events started. I'm thinking of going to the City for earnings. I wonder why they never bothered to send some guards or soldiers or someone here to look into our situation." />
+      <LINE text="Have you seen this guy with a sword?
+I mean, isn't it a bit, like, overkill?..." />
     </GOSSIP>	
   </CHARACTER>
   <CHARACTER prefab="char-dwarf" class="villager" name="Gimley" hailString="(you see a dwarf)" portraitName="portrait-dwarf">
@@ -111,7 +115,7 @@ Look who's talking!" />
 &#9834; We have cheated Death &#9834;
 &#9834; And he has cheated us... &#9834;
 " />
-	  <LINE text="&#9834; The forest raised a Christmas tree, &#9834;
+	    <LINE text="&#9834; The forest raised a Christmas tree, &#9834;
 &#9834; 'Twas silent and serene. &#9834;
 &#9834; In winter and in summer it was &#9834;
 &#9834; Slender and so green... &#9834;" />	
@@ -124,7 +128,7 @@ Look who's talking!" />
       <LINE text="Best of luck, player." />
       <LINE text="Don't get discouraged if you die a few times. It's an integral part of the whole process." />
       <LINE text="Learning through trial is essential. But don't forget about your sense of reason." />
-	  <LINE text="Never start a fight that you cannot finish." />
+	    <LINE text="Never start a fight that you cannot finish." />
     </GOSSIP>	
   </CHARACTER>
 </MAIN>

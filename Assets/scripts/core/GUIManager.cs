@@ -18,6 +18,7 @@ public class GUIManager : MonoSingleton<GUIManager>
   public Text FormTalkingName;
   public Text FormTalkingText;
 
+  [HideInInspector]
   public List<Sprite> Portraits = new List<Sprite>();
 
   public Sprite FindPortraitByName(string name)

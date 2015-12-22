@@ -8,7 +8,8 @@ using System.Collections.Generic;
 public class VillagerActor : ActorBase 
 {
   public VillagerActor(ModelMover model) : base(model)
-  {    
+  {
+    ChangeState(new WanderingState(this));
   }
 
   public override void Interact()

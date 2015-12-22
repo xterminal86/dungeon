@@ -10,6 +10,8 @@ public class App : MonoSingleton<App>
 {  
   public Terrain Mountains;
 
+  public GameObject TestMob;
+
   [HideInInspector]
   public List<GameObject> Characters;
 
@@ -144,6 +146,7 @@ public class App : MonoSingleton<App>
     }
 
     SetupCharacters();
+    SetupMobs();
 
     ScreenFader.Instance.FadeIn();
 
@@ -158,7 +161,19 @@ public class App : MonoSingleton<App>
     base.Init();
   }
 
-  int _terrainAddedWidth = 10;
+  void SetupMobs()
+  {
+    var go = (GameObject)Instantiate(TestMob, Vector3.zero, Quaternion.identity);
+    var mm = go.GetComponent<ModelMover>();
+    if (mm != null)
+    {
+      SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+      
+      mm.Actor = new EnemyActor(mm);
+    }
+  }
+    
+    int _terrainAddedWidth = 10;
   void MakeMountains()
   {    
     Vector3 terrainSize = new Vector3((_generatedMapWidth + _terrainAddedWidth) * GlobalConstants.WallScaleFactor, 
@@ -243,14 +258,12 @@ public class App : MonoSingleton<App>
         if (mm != null)
         {
           SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
-          
-          mm.Actor = new VillagerActor(mm);
-          
+
           mm.ModelPos.X = pos.X;
           mm.ModelPos.Y = pos.Y;
-          
+
+          mm.Actor = new VillagerActor(mm);
           mm.Actor.ActorName = mm.ActorName;
-          mm.Actor.ChangeState(new WanderingState(mm.Actor));      
         }
         break;
 

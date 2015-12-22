@@ -18,6 +18,10 @@ public static class GlobalConstants
   public static int WanderingMinDelaySeconds = 5;
   public static int WanderingMaxDelaySeconds = 15;
 
+  // How often enemy tries to perform search for player routine (in seconds)
+  public static float SearchingForPlayerRate = 1.0f;
+
+  // Speed of camera bobbing
   public static float CameraBobSpeed = 0.5f;
 
   // ScreenFader speed

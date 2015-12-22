@@ -182,6 +182,8 @@ public class InputController : MonoSingleton<InputController>
 
   bool CanMove(int posX, int posZ, CameraMoveType moveType)
   {
+    // We might want to look into map array, so we use map coordinates (i.e. row and column)
+
     int newX = PlayerMapPos.X;
     int newZ = PlayerMapPos.Y;
 
@@ -319,6 +321,8 @@ public class InputController : MonoSingleton<InputController>
     if (ca == null) yield return null;
    
     _isProcessing = true;
+
+    // We move camera game object, so we work in world space here
 
     int newX = (int)_cameraPos.x;
     int newZ = (int)_cameraPos.z;
