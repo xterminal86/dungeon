@@ -20,6 +20,8 @@ public class WanderingState : GameObjectState
     _working = false;
 
     _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+
+    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
 
   Job _mainJob, _stepJob, _rotateJob, _delayJob;
@@ -47,9 +49,14 @@ public class WanderingState : GameObjectState
 
     Int2 destination = App.Instance.GeneratedMap.GetRandomUnoccupiedCell();
 
-    //Debug.Log(name + ": going from " + ModelPos + " to " + destination);
+    //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
 
-    _road = _roadBuilder.BuildRoad(_model.ModelPos, destination, true);
+    _roadBuilder.BuildRoadAsync(_model.ModelPos, destination, true);
+
+    while ((_road = _roadBuilder.GetResult()) == null)
+    {
+      yield return null;
+    }
 
     _currentMapPos.X = _model.ModelPos.X;
     _currentMapPos.Y = _model.ModelPos.Y;
@@ -263,10 +270,11 @@ public class WanderingState : GameObjectState
 
   public void KillAllJobs()
   {
-    if (_mainJob != null) _mainJob.KillJob();
-    if (_stepJob != null) _stepJob.KillJob();
-    if (_rotateJob != null) _rotateJob.KillJob();
+    if (_roadBuilder.ProcessRoutine != null) _roadBuilder.ProcessRoutine.KillJob();
     if (_delayJob != null) _delayJob.KillJob();
+    if (_rotateJob != null) _rotateJob.KillJob();
+    if (_stepJob != null) _stepJob.KillJob();
+    if (_mainJob != null) _mainJob.KillJob();    
   }
 
   public void AdjustModelPosition()

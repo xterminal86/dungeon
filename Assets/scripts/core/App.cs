@@ -667,8 +667,10 @@ public class App : MonoSingleton<App>
 
   void SetupCharacters()
   {
+    //var resource = Resources.Load("text/OneVillager");
+    //var resource = Resources.Load("text/NoVillagers");
     var resource = Resources.Load("text/Villagers");
-
+    
     if (resource == null) return;
 
     TextAsset ta = resource as TextAsset;

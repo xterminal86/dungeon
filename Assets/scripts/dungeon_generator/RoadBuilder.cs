@@ -8,6 +8,12 @@ using System.Text;
 /// </summary>
 public class RoadBuilder
 {
+  Job _processRoutine;
+  public Job ProcessRoutine
+  {
+    get { return _processRoutine; }
+  }
+
   Int2 _start = new Int2();
   Int2 _end = new Int2();
     
@@ -28,6 +34,8 @@ public class RoadBuilder
 
     _mapWidth = width;
     _mapHeight = height;
+
+    _resultReady = false;
 
     //PrintMap();
   }
@@ -198,6 +206,8 @@ public class RoadBuilder
     return (_openList.Count == 0 || IsNodePresent(_end, _closedList));    
   }
 
+  bool _isProcessing = false;
+
   /// <summary>
   /// Method tries to build a path by A* algorithm and returns it as list of nodes
   /// to traverse from start to end
@@ -226,7 +236,7 @@ public class RoadBuilder
     node.CostF = node.CostG + node.CostH;
 
     _openList.Add(node);
-
+        
     bool exit = false;
     while (!exit)
     {
@@ -237,15 +247,86 @@ public class RoadBuilder
 
       _openList.RemoveAt(index);
 
-      //LookAround9(closedNode);
       LookAround4(closedNode, avoidObstacles);
 
       exit = ExitCondition();
     }
-
-    ConstructPath();
     
+    ConstructPath();
+
     return _path;
+  }
+
+  // Async version of above
+  public void BuildRoadAsync(Int2 start, Int2 end, bool avoidObstacles = false)
+  {    
+    _start = start;
+    _end = end;
+
+    if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
+    {
+      Debug.Log(end + " - Goal is on the obstacle! : " + _map[_end.X, _end.Y].CellType + " (this is not an error)");
+    }
+
+    _path.Clear();
+    _openList.Clear();
+    _closedList.Clear();
+
+    // A* starts here
+
+    PathNode node = new PathNode(start);
+    node.CostH = ManhattanDistance(start, end);
+    node.CostF = node.CostG + node.CostH;
+
+    _openList.Add(node);
+
+    _resultReady = false;
+
+    _processRoutine = JobManager.Instance.CreateJob(BuildRoadRoutine(avoidObstacles));
+  }
+
+  // Constantly check the result via this property in a coroutine  
+  public List<PathNode> GetResult()
+  {
+    if (_resultReady)
+    {
+      ConstructPath();
+
+      return _path;
+    }
+    
+    return null;
+  }
+
+  bool _resultReady = false;
+  IEnumerator BuildRoadRoutine(bool avoidObstacles)
+  {    
+    bool exit = false;
+    while (!exit)
+    {
+      //Debug.Log("building road... ");
+
+      int index = FindCheapestElement(_openList);
+
+      var closedNode = _openList[index];
+      _closedList.Add(closedNode);
+
+      _openList.RemoveAt(index);
+
+      //Debug.Log(_openList.Count);
+
+      LookAround4(closedNode, avoidObstacles);
+
+      exit = ExitCondition();
+      
+      yield return null;
+    }
+
+    //Debug.Log("building road done!");
+
+    _resultReady = true;
+
+    yield return null;
   }
 
   void ConstructPath(bool printPath = false)

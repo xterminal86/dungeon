@@ -13,10 +13,10 @@ public static class GlobalConstants
   public static int CameraMoveSpeed = 4;
   public static int CameraCannotMoveSpeed = 2;
 
-  // Delay limits, that are randomly chosen, which determine
-  // when VillagerActor starts to walk the random path again
-  public static int WanderingMinDelaySeconds = 5;
-  public static int WanderingMaxDelaySeconds = 15;
+  // Delay limits, which determine pause after which VillagerActor starts to walk the random path again.
+  // (note, that path building is done via coroutines, so real pause time is longer)
+  public static int WanderingMinDelaySeconds = 1;
+  public static int WanderingMaxDelaySeconds = 3;
 
   // How often enemy tries to perform search for player routine (in seconds)
   public static float SearchingForPlayerRate = 1.0f;

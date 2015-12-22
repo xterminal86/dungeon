@@ -23,18 +23,17 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
+
+    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
+
+  Int2 _oldPlayerPos = new Int2();
 
   bool _running = false, _firstStepSound = false, _moveDone = false;
   float _time = 0.0f;
   GeneratedMapCell _playerCell;
   public override void Run()
-  {
-    if (!_model.AnimationComponent.IsPlaying(GlobalConstants.AnimationIdleName) && (!_running || !_rotateDone))
-    {
-      _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-    }
-
+  {    
     _time += Time.smoothDeltaTime;
 
     if (_time > GlobalConstants.SearchingForPlayerRate)
@@ -52,6 +51,9 @@ public class SearchingForPlayerState : GameObjectState
         {
           //Debug.Log("Player Found!");
 
+          _oldPlayerPos.X = InputController.Instance.PlayerMapPos.X;
+          _oldPlayerPos.Y = InputController.Instance.PlayerMapPos.Y;
+
           _running = true;
           _moveJob = JobManager.Instance.CreateJob(ApproachPlayerRoutine());
         }
@@ -68,15 +70,21 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
-    _road = _roadBuilder.BuildRoad(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
+    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
+    
+    while ((_road = _roadBuilder.GetResult()) == null)
+    {
+      //Debug.Log("Waiting for result");
+      yield return null;
+    }    
 
     _currentMapPos.X = _model.ModelPos.X;
     _currentMapPos.Y = _model.ModelPos.Y;
-
-    //Debug.Log("Approaching player");
-
+        
     while (_road.Count > 1)
     {
+      //Debug.Log("Approaching player");
+
       int dx = _road[0].Coordinate.X - _currentMapPos.X;
       int dy = _road[0].Coordinate.Y - _currentMapPos.Y;
       
@@ -113,13 +121,22 @@ public class SearchingForPlayerState : GameObjectState
       _road.RemoveAt(0);
 
       int d = BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos);
-      if (_playerCell.CellType != GeneratedCellType.ROOM && d <= (_actor as EnemyActor).AgroRange)
-      {
-        _road = _roadBuilder.BuildRoad(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
-      }
+      if (IsPlayerPositionChanged() && _playerCell.CellType != GeneratedCellType.ROOM && d <= (_actor as EnemyActor).AgroRange)
+      {        
+        _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
+        _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
+
+        while ((_road = _roadBuilder.GetResult()) == null)
+        {          
+          yield return null;
+        }        
+      }
+      
       yield return null;
     }
+
+    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     //Debug.Log("Approached player");
 
@@ -222,5 +239,18 @@ public class SearchingForPlayerState : GameObjectState
     _blockDistance = ( Mathf.Abs(point2.Y - point1.Y) + Mathf.Abs(point2.X - point1.X) ) * GlobalConstants.WallScaleFactor;
 
     return _blockDistance;
+  }
+
+  bool IsPlayerPositionChanged()
+  {
+    if (InputController.Instance.PlayerMapPos.X != _oldPlayerPos.X || InputController.Instance.PlayerMapPos.Y != _oldPlayerPos.Y)
+    {
+      _oldPlayerPos.X = InputController.Instance.PlayerMapPos.X;
+      _oldPlayerPos.Y = InputController.Instance.PlayerMapPos.Y;
+
+      return true;
+    }
+
+    return false;
   }
 }
