@@ -26,6 +26,8 @@ public abstract class ActorBase
 
   public virtual void ChangeState(GameObjectState newState)
   {
+    //Debug.Log("[" + this + "]: changing state: " + ActorState + " -> " + newState);
+
     ActorState = newState;
   }
 

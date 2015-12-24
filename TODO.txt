@@ -3,9 +3,10 @@ MAJOR
 =====
 + Dialogues with NPCs (3 buttons, like, "Name", "Job", "Gossip", "Bye")
 Merchants (dialogue window by pressing "Job" on form talking, common interaction mechanic, i.e. merchant and priest services etc.)
-+ Make footsteps uniformly random for all characters (right now nonrepeatability is controlled by one variable for all sounds)
-Special rooms, buildings (chapel, shop etc.)
+Special rooms and buildings generation (chapel, shop etc.)
 Player and monsters stats, game mechanic
+Improve approach to player algorithm, so that it takes into account dynamically generated obstacles (doors, pits etc.)
+Stairs down and up (camera moving and actual level loading)
 
 
 
@@ -16,10 +17,11 @@ MINOR
 
 Map
 + Compass
-Stairs down and up (camera moving and actual level loading)
 Decor objects (fountains, flowers, tables, road borders, etc.)
 Weather and day/night change
 In-game GUI (player stats, hunger, clock showing time etc.)
++ Make footsteps uniformly random for all characters (right now nonrepeatability is controlled by one variable for all sounds)
+
 
 
 

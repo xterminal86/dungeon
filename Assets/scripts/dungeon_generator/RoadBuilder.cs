@@ -206,8 +206,6 @@ public class RoadBuilder
     return (_openList.Count == 0 || IsNodePresent(_end, _closedList));    
   }
 
-  bool _isProcessing = false;
-
   /// <summary>
   /// Method tries to build a path by A* algorithm and returns it as list of nodes
   /// to traverse from start to end
