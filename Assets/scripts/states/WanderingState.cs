@@ -189,33 +189,6 @@ public class WanderingState : GameObjectState
     int dx = newMapPos.X - _currentMapPos.X;
     int dy = newMapPos.Y - _currentMapPos.Y;
 
-    /*
-    if (_model.RaycastPoint != null)
-    {
-      int dirX = (int)Mathf.Sin(_model.transform.eulerAngles.y * Mathf.Deg2Rad);
-      int dirZ = (int)Mathf.Cos(_model.transform.eulerAngles.y * Mathf.Deg2Rad);
-
-      Vector3 raycastDir = new Vector3(_model.RaycastPoint.position.x + dirX, 
-                                _model.RaycastPoint.position.y, 
-                                _model.RaycastPoint.position.z + dirZ);
-
-      Ray r = new Ray(_model.RaycastPoint.position, raycastDir);
-      if (Physics.Raycast(r.origin, r.direction, out _raycastHit))
-      {
-        if (_raycastHit.collider != null)
-        {
-          ModelMover mm = _raycastHit.collider.gameObject.GetComponent<ModelMover>();
-          if (mm != null)
-          {
-            _road.Clear();
-            _moveDone = true;
-            yield break;
-          }
-        }
-      }
-    }
-    */
-
     if (!_firstStepSound)
     {
       PlayFootstepSound3D(_model.ModelPos, _modelPosition);
