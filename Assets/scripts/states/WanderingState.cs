@@ -64,18 +64,12 @@ public class WanderingState : GameObjectState
     _positionForTalk.X = _currentMapPos.X;
     _positionForTalk.Y = _currentMapPos.Y;
 
+    float angleStart = 0.0f, angleEnd = 0.0f;
+
     while (_road.Count != 0)
     {
-      int dx = _road[0].Coordinate.X - _currentMapPos.X;
-      int dy = _road[0].Coordinate.Y - _currentMapPos.Y;
-
-      float angleStart = _model.transform.rotation.eulerAngles.y;
-      float angleEnd = 0.0f;
-
-      if (dy == 1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.EAST];
-      else if (dy == -1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.WEST];
-      else if (dx == 1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.SOUTH];
-      else if (dx == -1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
+      angleStart = _model.transform.rotation.eulerAngles.y;
+      angleEnd = GetAngleToRotate(_road[0].Coordinate);
 
       //Debug.Log("dx, dy " + dx + " " + dy + " " + road[0].Coordinate);
       //Debug.Log("Rotating from " + angleStart + " to " + angleEnd);
@@ -109,6 +103,22 @@ public class WanderingState : GameObjectState
     _delayJob = JobManager.Instance.CreateJob(DelayRoutine());
     
     yield return null;
+  }
+
+  float GetAngleToRotate(Int2 cellToLook)
+  {
+    int dx = cellToLook.X - _currentMapPos.X;
+    int dy = cellToLook.Y - _currentMapPos.Y;
+    
+    float angleStart = _model.transform.rotation.eulerAngles.y;
+    float angleEnd = 0.0f;
+    
+    if (dy == 1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.EAST];
+    else if (dy == -1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.WEST];
+    else if (dx == 1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.SOUTH];
+    else if (dx == -1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
+    
+    return angleEnd;
   }
 
   bool _rotateDone = false;

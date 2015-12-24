@@ -7,38 +7,38 @@ public delegate void CallbackO(object sender);
 public static class GlobalConstants 
 {
   // How much one unit actually is in the world
-  public static int WallScaleFactor = 2;
+  public const int WallScaleFactor = 2;
 
-  public static int CameraTurnSpeed = 350;
-  public static int CameraMoveSpeed = 4;
-  public static int CameraCannotMoveSpeed = 2;
+  public const int CameraTurnSpeed = 350;
+  public const int CameraMoveSpeed = 4;
+  public const int CameraCannotMoveSpeed = 2;
 
   // Delay limits, which determine pause after which VillagerActor starts to walk the random path again.
   // (note, that path building is done via coroutines, so real pause time is longer)
-  public static int WanderingMinDelaySeconds = 1;
-  public static int WanderingMaxDelaySeconds = 3;
+  public const int WanderingMinDelaySeconds = 1;
+  public const int WanderingMaxDelaySeconds = 3;
 
   // How often enemy tries to perform search for player routine (in seconds)
-  public static float SearchingForPlayerRate = 1.0f;
+  public const float SearchingForPlayerRate = 0.1f;
 
   // Speed of camera bobbing
-  public static float CameraBobSpeed = 0.5f;
+  public const float CameraBobSpeed = 0.5f;
 
   // ScreenFader speed
-  public static float FadeSpeed = 1.0f;
+  public const float FadeSpeed = 1.0f;
 
   // VillagerActor rotation and animation speeds
-  public static float CharacterRotationSpeed = 150.0f;
-  public static float CharacterAnimationTalkSpeed = 2.0f;
+  public const float CharacterRotationSpeed = 150.0f;
+  public const float CharacterAnimationTalkSpeed = 2.0f;
 
   public static Vector3 DefaultVillageMountainsSize = new Vector3(25, 30, 25);
 
   // Model Animation Names
 
-  public static string AnimationIdleName = "Idle";
-  public static string AnimationWalkName = "Walk";
-  public static string AnimationAttackName = "Attack";
-  public static string AnimationTalkName = "Talk";
+  public const string AnimationIdleName = "Idle";
+  public const string AnimationWalkName = "Walk";
+  public const string AnimationAttackName = "Attack";
+  public const string AnimationTalkName = "Talk";
 
   // Actor classes
 

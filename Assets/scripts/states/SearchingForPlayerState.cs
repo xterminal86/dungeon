@@ -43,11 +43,11 @@ public class SearchingForPlayerState : GameObjectState
       _playerCell = App.Instance.GeneratedMap.GetMapCellByPosition(InputController.Instance.PlayerMapPos);
       if (_playerCell.CellType != GeneratedCellType.ROOM)
       {
-        int d = BlockDistance(_model.ModelPos, InputController.Instance.PlayerMapPos);
+        bool playerInRange = IsPlayerInRange();
 
         //Debug.Log(string.Format("Searching for player {0} {1} - distance {2}", _model.ModelPos, InputController.Instance.PlayerMapPos, d));
 
-        if (!_running && d <= (_actor as EnemyActor).AgroRange)
+        if (!_running && playerInRange)
         {
           //Debug.Log("Player Found!");
 
@@ -61,6 +61,24 @@ public class SearchingForPlayerState : GameObjectState
     }
 
     _model.transform.position = _modelPosition;
+  }
+
+  bool IsPlayerInRange()
+  {
+    Int2 pos = _model.ModelPos;
+
+    int lx = Mathf.Clamp(pos.X - (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapHeight - 1);
+    int ly = Mathf.Clamp(pos.Y - (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapWidth - 1);
+    int hx = Mathf.Clamp(pos.X + (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapHeight - 1);
+    int hy = Mathf.Clamp(pos.Y + (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapWidth - 1);
+
+    if (InputController.Instance.PlayerMapPos.X <= hx && InputController.Instance.PlayerMapPos.X >= lx 
+     && InputController.Instance.PlayerMapPos.Y <= hy && InputController.Instance.PlayerMapPos.Y >= ly)
+    {
+      return true;
+    }
+
+    return false;
   }
 
   List<RoadBuilder.PathNode> _road;
@@ -80,22 +98,16 @@ public class SearchingForPlayerState : GameObjectState
 
     _currentMapPos.X = _model.ModelPos.X;
     _currentMapPos.Y = _model.ModelPos.Y;
-        
+
+    float angleStart = 0.0f, angleEnd = 0.0f;
+
     while (_road.Count > 1)
     {
       //Debug.Log("Approaching player");
 
-      int dx = _road[0].Coordinate.X - _currentMapPos.X;
-      int dy = _road[0].Coordinate.Y - _currentMapPos.Y;
-      
-      float angleStart = _model.transform.rotation.eulerAngles.y;
-      float angleEnd = 0.0f;
-      
-      if (dy == 1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.EAST];
-      else if (dy == -1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.WEST];
-      else if (dx == 1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.SOUTH];
-      else if (dx == -1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
-      
+      angleStart = _model.transform.rotation.eulerAngles.y;
+      angleEnd = GetAngleToRotate(_road[0].Coordinate);
+
       //Debug.Log("dx, dy " + dx + " " + dy + " " + road[0].Coordinate);
       //Debug.Log("Rotating from " + angleStart + " to " + angleEnd);
       
@@ -120,29 +132,54 @@ public class SearchingForPlayerState : GameObjectState
       
       _road.RemoveAt(0);
 
-      int d = BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos);
-      if (IsPlayerPositionChanged() && _playerCell.CellType != GeneratedCellType.ROOM && d <= (_actor as EnemyActor).AgroRange)
-      {        
-        _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-
-        _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
-
-        while ((_road = _roadBuilder.GetResult()) == null)
-        {          
-          yield return null;
-        }        
+      bool playerInRange = IsPlayerInRange();
+      if (IsPlayerPositionChanged() && _playerCell.CellType != GeneratedCellType.ROOM && playerInRange)
+      { 
+        break;
       }
-      
+
       yield return null;
     }
 
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+
+    if (BlockDistance(_model.ModelPos, InputController.Instance.PlayerMapPos) == 1)
+    {
+      angleStart = _model.transform.rotation.eulerAngles.y;
+      angleEnd = GetAngleToRotate(InputController.Instance.PlayerMapPos);
+
+      if ((int)angleStart != (int)angleEnd)
+      {
+        _rotateJob = JobManager.Instance.CreateJob(RotateModel(angleEnd));
+        
+        while (!_rotateDone)
+        {
+          yield return null;
+        }
+      }
+    }
 
     //Debug.Log("Approached player");
 
     _running = false;
 
     yield return null;
+  }
+
+  float GetAngleToRotate(Int2 cellToLook)
+  {
+    int dx = cellToLook.X - _currentMapPos.X;
+    int dy = cellToLook.Y - _currentMapPos.Y;
+    
+    float angleStart = _model.transform.rotation.eulerAngles.y;
+    float angleEnd = 0.0f;
+    
+    if (dy == 1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.EAST];
+    else if (dy == -1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.WEST];
+    else if (dx == 1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.SOUTH];
+    else if (dx == -1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
+
+    return angleEnd;
   }
 
   bool _rotateDone = false;
@@ -233,12 +270,9 @@ public class SearchingForPlayerState : GameObjectState
     yield return null;
   }
 
-  int _blockDistance = -1;
-  int BlockDistance(Int2 point1, Int2 point2)
+  int BlockDistance(Int2 from, Int2 to)
   {
-    _blockDistance = ( Mathf.Abs(point2.Y - point1.Y) + Mathf.Abs(point2.X - point1.X) ) * GlobalConstants.WallScaleFactor;
-
-    return _blockDistance;
+    return Mathf.Abs(to.Y - from.Y) + Mathf.Abs(to.X - from.X);
   }
 
   bool IsPlayerPositionChanged()
