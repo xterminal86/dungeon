@@ -9,6 +9,7 @@ Improve approach to player algorithm, so that it takes into account dynamically 
 Improve NPC movement algorithm, so that it constantly checks next cell along its path during movement,
         and if it's occupied, breaks moving routine and recalculates path.
 Stairs down and up (camera moving and actual level loading)
+Move BuildRoad() method to Thread instead of Coroutine
 
 
 
