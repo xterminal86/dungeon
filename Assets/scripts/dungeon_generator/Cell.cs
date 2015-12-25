@@ -25,7 +25,8 @@ public class Cell
     { CellType.EMPTY, ' ' },
     { CellType.FLOOR, '.' },
     { CellType.WALL, '#' },
-    { CellType.BOUNDARY, '!' }
+    { CellType.BOUNDARY, '!' },
+    { CellType.TEST_MARK, 'x' }
   };
 
   public char VisualRepresentation
@@ -92,7 +93,8 @@ public enum CellType
   EMPTY = 0,
   FLOOR,
   WALL,
-  BOUNDARY
+  BOUNDARY,
+  TEST_MARK
 }
 
 public enum CellStatus

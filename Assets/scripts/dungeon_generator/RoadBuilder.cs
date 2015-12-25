@@ -39,7 +39,7 @@ public class RoadBuilder
 
     //PrintMap();
   }
-    
+      
   /// <summary>
   /// Returns traversal cost between two points
   /// </summary>
@@ -235,6 +235,8 @@ public class RoadBuilder
 
     _openList.Add(node);
         
+    //string debugPrint = string.Empty;
+
     bool exit = false;
     while (!exit)
     {
@@ -242,6 +244,8 @@ public class RoadBuilder
 
       var closedNode = _openList[index];
       _closedList.Add(closedNode);
+
+      //debugPrint += string.Format("{0} ", closedNode.Coordinate);
 
       _openList.RemoveAt(index);
 
@@ -252,14 +256,20 @@ public class RoadBuilder
     
     ConstructPath();
 
+    //Debug.Log("Total closed nodes:\n" + debugPrint);
+
     return _path;
   }
 
   // Async version of above
   public void BuildRoadAsync(Int2 start, Int2 end, bool avoidObstacles = false)
   {    
-    _start = start;
-    _end = end;
+    // When we build road to player in async mode if we are just caching variables,
+    // we make references, so if in the process of building road player position changes,
+    // it fucks up algorithm working, because we change _end during pathfinding loop.
+    // So, to prevent this, we copy by value.
+    _start = new Int2(start.X, start.Y);
+    _end = new Int2(end.X, end.Y);
 
     if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
     {
@@ -296,7 +306,18 @@ public class RoadBuilder
     return null;
   }
 
+  PathNode _currentNode;
+  public PathNode CurrentNode
+  {
+    get { return _currentNode; }
+  }
+
   bool _resultReady = false;
+  public bool ResultReady
+  {
+    get { return _resultReady; }
+  }
+
   IEnumerator BuildRoadRoutine(bool avoidObstacles)
   {    
     bool exit = false;
@@ -309,9 +330,11 @@ public class RoadBuilder
       var closedNode = _openList[index];
       _closedList.Add(closedNode);
 
-      _openList.RemoveAt(index);
+      _currentNode = closedNode;
 
-      //Debug.Log(_openList.Count);
+      //Debug.Log(closedNode);
+
+      _openList.RemoveAt(index);
 
       LookAround4(closedNode, avoidObstacles);
 
@@ -336,7 +359,7 @@ public class RoadBuilder
       _path.Add(node);
       node = node.ParentNode;
     }
-
+      
     if (_path.Count != 0)
     {
       _path.Reverse();

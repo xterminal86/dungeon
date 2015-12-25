@@ -20,6 +20,8 @@ public class App : MonoSingleton<App>
   public PlayerMoveStateEnum PlayerMoveState;
   public GameState CurrentGameState;
 
+  public GeneratedMapCell[,] ObstaclesByPosition;
+
   int[,] _floorSoundTypeByPosition;
   public int[,] FloorSoundTypeByPosition
   {
@@ -206,6 +208,7 @@ public class App : MonoSingleton<App>
     //_mapLayout = new char[_generatedMapWidth, _generatedMapHeight];
 
     _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
+    ObstaclesByPosition = new GeneratedMapCell[_mapRows, _mapColumns];
 
     for (int x = 0; x < _generatedMapHeight; x++)
     {
@@ -668,8 +671,8 @@ public class App : MonoSingleton<App>
   void SetupCharacters()
   {
     //var resource = Resources.Load("text/OneVillager");
-    //var resource = Resources.Load("text/NoVillagers");
-    var resource = Resources.Load("text/Villagers");
+    var resource = Resources.Load("text/NoVillagers");
+    //var resource = Resources.Load("text/Villagers");
     
     if (resource == null) return;
 

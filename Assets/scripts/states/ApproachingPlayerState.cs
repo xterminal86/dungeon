@@ -14,7 +14,7 @@ public class ApproachingPlayerState : GameObjectState
 
   Int2 _currentMapPos = new Int2();
 
-  public ApproachingPlayerState(ActorBase actor)
+  public ApproachingPlayerState(ActorBase actor) : base()
   {
     _actor = actor;
     _model = actor.Model;
@@ -29,41 +29,16 @@ public class ApproachingPlayerState : GameObjectState
     _running = false;
   }
 
-  Int2 _oldPlayerPos = new Int2();
-
   bool _running = false, _firstStepSound = false, _moveDone = false;
   public override void Run()
   {   
     if (!_running)
     {
-      //Debug.Log("Player Found!");
-
-      _oldPlayerPos.X = InputController.Instance.PlayerMapPos.X;
-      _oldPlayerPos.Y = InputController.Instance.PlayerMapPos.Y;
-
       _running = true;
       _moveJob = JobManager.Instance.CreateJob(ApproachPlayerRoutine());
     }
 
     _model.transform.position = _modelPosition;
-  }
-
-  bool IsPlayerInRange()
-  {
-    Int2 pos = _model.ModelPos;
-
-    int lx = Mathf.Clamp(pos.X - (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapHeight - 1);
-    int ly = Mathf.Clamp(pos.Y - (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapWidth - 1);
-    int hx = Mathf.Clamp(pos.X + (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapHeight - 1);
-    int hy = Mathf.Clamp(pos.Y + (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapWidth - 1);
-
-    if (InputController.Instance.PlayerMapPos.X <= hx && InputController.Instance.PlayerMapPos.X >= lx 
-     && InputController.Instance.PlayerMapPos.Y <= hy && InputController.Instance.PlayerMapPos.Y >= ly)
-    {
-      return true;
-    }
-
-    return false;
   }
 
   List<RoadBuilder.PathNode> _road;
@@ -74,12 +49,38 @@ public class ApproachingPlayerState : GameObjectState
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
     _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
-    
+
     while ((_road = _roadBuilder.GetResult()) == null)
     {
-      //Debug.Log("Waiting for result");
+      bool playerInRange = IsPlayerInRange();
+
+      // If we cannot find a path to the player, we get stuck in a pathfinding loop for a long time.
+      // If during impossible pathfinding loop (e.g. standing before closed door) player moved outside
+      // agro range, we stop all activity and change the state to SearchingForPlayerState.
+      //
+      // Interestingly enough, if we set "!playerInRange", actor will always go to the last detected
+      // player position and will change its state only if player is found again during traversal.
+      // If we set "playerInRange" we will always change the state, if player position has changed during pathbuilding,
+      // which is very unlikely to happen in short ranges, while if we are standing before a closed door,
+      // changing the state is meaningless, because we will still be unable to find path.
+      if (IsPlayerPositionChanged() && playerInRange)
+      {
+        _roadBuilder.ProcessRoutine.KillJob();
+        _actor.ChangeState(new SearchingForPlayerState(_actor));
+        yield break;
+      }
+
       yield return null;
-    }    
+    }
+
+    // If we could not find path to the player, we stop the coroutine and mark appropriate flag
+    // to change state in the next Run() call
+    if (_roadBuilder.ResultReady && _road.Count == 0)
+    { 
+      //Debug.Log("Path not found!");
+      _actor.ChangeState(new SearchingForPlayerState(_actor));
+      yield break;
+    }
 
     _currentMapPos.X = _model.ModelPos.X;
     _currentMapPos.Y = _model.ModelPos.Y;
@@ -118,8 +119,7 @@ public class ApproachingPlayerState : GameObjectState
       _road.RemoveAt(0);
 
       bool playerInRange = IsPlayerInRange();
-      var _playerCell = App.Instance.GeneratedMap.GetMapCellByPosition(InputController.Instance.PlayerMapPos);
-      if (IsPlayerPositionChanged() && _playerCell.CellType != GeneratedCellType.ROOM && playerInRange)
+      if (IsPlayerPositionChanged() && playerInRange)
       { 
         break;
       }
@@ -256,26 +256,5 @@ public class ApproachingPlayerState : GameObjectState
     PlayFootstepSound3D(_model.ModelPos, _modelPosition);
     
     yield return null;
-  }
-
-  bool IsPlayerPositionChanged()
-  {
-    if (InputController.Instance.PlayerMapPos.X != _oldPlayerPos.X || InputController.Instance.PlayerMapPos.Y != _oldPlayerPos.Y)
-    {
-      _oldPlayerPos.X = InputController.Instance.PlayerMapPos.X;
-      _oldPlayerPos.Y = InputController.Instance.PlayerMapPos.Y;
-
-      return true;
-    }
-
-    return false;
-  }
-
-  public void KillAllJobs()
-  {
-    if (_roadBuilder.ProcessRoutine != null) _roadBuilder.ProcessRoutine.KillJob();
-    if (_rotateJob != null) _rotateJob.KillJob();
-    if (_stepJob != null) _stepJob.KillJob();
-    if (_moveJob != null) _moveJob.KillJob();
   }
 }

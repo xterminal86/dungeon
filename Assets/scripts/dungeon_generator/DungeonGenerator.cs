@@ -75,11 +75,14 @@ public class DungeonGenerator : MonoBehaviour
         alg = new GrowingTree(PassageType, RemoveDeadEnds, DeadEndsToRemove);
         alg.Do(_map);
         break;
+      case (int)GenerationMethods.ROAD_BUILDER_TEST:
+        BuildRoad();
+        break;
       default:
         break;
     }
 
-    if (DoCleanup)
+    if (alg != null && DoCleanup)
     {
       alg.Cleanup(_map);
     }
@@ -105,11 +108,117 @@ public class DungeonGenerator : MonoBehaviour
     return _result.ToString();
   }
 
+  GeneratedMapCell[,] _testMap;
+  void BuildRoad()
+  {
+    _testMap = new GeneratedMapCell[MapHeight, MapWidth];
+
+    for (int x = 0; x < MapHeight; x++)
+    {
+      for (int y = 0; y < MapWidth; y++)
+      {
+        _map.Map[x, y].CellType = CellType.FLOOR;
+
+        _testMap[x, y] = new GeneratedMapCell();
+        _testMap[x, y].CellType = GeneratedCellType.NONE;
+      }
+    }
+
+    Int2 tl = new Int2(10, 10);
+    Int2 br = new Int2(20, 20);
+
+    BuildRoom(tl, br);
+
+    for (int x = 0; x < MapHeight; x++)
+    {
+      for (int y = 0; y < MapWidth; y++)
+      {
+        if (_testMap[x, y].CellType == GeneratedCellType.OBSTACLE)
+        {
+          _map.Map[x, y].CellType = CellType.WALL;
+        }
+        else
+        {
+          _map.Map[x, y].CellType = CellType.FLOOR;
+        }
+      }
+    }
+
+    Int2 start = new Int2(20, 20);
+    Int2 end = new Int2(15, 15);
+
+    var rb = new RoadBuilder(_testMap, MapWidth, MapHeight);
+
+    rb.BuildRoadAsync(start, end, true);
+
+    Job j = new Job(BuildPathRoutine(rb));
+  }
+
+  IEnumerator BuildPathRoutine(RoadBuilder rb)
+  {
+    List<RoadBuilder.PathNode> road;
+
+    while ((road = rb.GetResult()) == null)
+    {
+      int x = rb.CurrentNode.Coordinate.X;
+      int y = rb.CurrentNode.Coordinate.Y;
+      
+      _map.Map[x, y].CellType = CellType.TEST_MARK;
+
+      TextArea.text = GetOutput();
+
+      yield return null;
+    }
+
+    if (road.Count == 0)
+    {
+      Debug.Log("Could not find path!");
+    }
+    else
+    {
+      foreach (var item in road)
+      {
+        int x = item.Coordinate.X;
+        int y = item.Coordinate.Y;
+        
+        _map.Map[x, y].CellType = CellType.TEST_MARK;
+      }
+    }
+
+    TextArea.text = GetOutput();   
+
+    yield return null;
+  }
+
+  void BuildRoom(Int2 tl, Int2 br)
+  {
+    for (int x = tl.X; x < br.X; x++)
+    {
+      for (int y = tl.Y; y < br.Y; y++)
+      {
+        //_map.Map[x, y].CellType = CellType.WALL;
+        _testMap[x, y].CellType = GeneratedCellType.OBSTACLE;
+      }
+    }
+
+    for (int x = tl.X + 1; x < br.X - 1; x++)
+    {
+      for (int y = tl.Y + 1; y < br.Y - 1; y++)
+      {
+        //_map.Map[x, y].CellType = CellType.FLOOR;
+        _testMap[x, y].CellType = GeneratedCellType.ROAD;
+      }
+    }
+
+    //_testMap[tl.X + 1, tl.Y].CellType = GeneratedCellType.ROAD;
+  }
+
   public enum GenerationMethods
   {
     BINARY_TREE = 0,
     SIDEWINDER,
     ROOMS,
-    GROWING_TREE
+    GROWING_TREE,
+    ROAD_BUILDER_TEST
   }
 }

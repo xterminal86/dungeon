@@ -5,7 +5,7 @@ using System.Collections;
 [CustomEditor(typeof(DungeonGenerator))]
 public class DungeonGeneratorInspector : Editor 
 {
-  string[] _options = { "Binary Tree", "Sidewinder", "Rooms", "Growing Tree" };
+  string[] _options = { "Binary Tree", "Sidewinder", "Rooms", "Growing Tree", "Road Builder test" };
 
   public override void OnInspectorGUI()
   {
@@ -43,6 +43,9 @@ public class DungeonGeneratorInspector : Editor
         dg.DeadEndsToRemove = EditorGUILayout.IntSlider("Dead Ends to Remove", dg.DeadEndsToRemove, 1, dg.MapWidth * dg.MapHeight);
       }
     }
+    else if (dg.MazeGenerationMethod == (int)GenerationMethods.ROAD_BUILDER_TEST)
+    {
+    }
 
     dg.DoCleanup = EditorGUILayout.Toggle("Cleanup Walls", dg.DoCleanup);
   }
@@ -52,6 +55,7 @@ public class DungeonGeneratorInspector : Editor
     BINARY_TREE = 0,
     SIDEWINDER,
     ROOMS,
-    GROWING_TREE
+    GROWING_TREE,
+    ROAD_BUILDER_TEST
   }
 }

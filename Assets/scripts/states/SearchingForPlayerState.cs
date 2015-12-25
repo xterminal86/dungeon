@@ -4,17 +4,15 @@ using System.Collections.Generic;
 
 public class SearchingForPlayerState : GameObjectState 
 {
-  float _time = 0.0f;
   bool _working = false;
   Vector3 _modelPosition = Vector3.zero;
 
   RoadBuilder _roadBuilder;
   ModelMover _model;
-  public SearchingForPlayerState(ActorBase actor)
+  public SearchingForPlayerState(ActorBase actor) : base()
   {
     _actor = actor;
     _model = _actor.Model;
-    _time = 0.0f;
     _working = false;
 
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
@@ -30,25 +28,6 @@ public class SearchingForPlayerState : GameObjectState
   GeneratedMapCell _playerCell;
   public override void Run()
   {
-    _time += Time.smoothDeltaTime;
-    
-    if (_time > GlobalConstants.SearchingForPlayerRate)
-    {
-      _time = 0.0f;
-      
-      bool playerInRange = IsPlayerInRange();        
-      
-      // FIXME: improve algorithm to handle dynamic obstacles
-      _playerCell = App.Instance.GeneratedMap.GetMapCellByPosition(InputController.Instance.PlayerMapPos);
-      if (_playerCell.CellType != GeneratedCellType.ROOM 
-       && playerInRange 
-       && Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) > 1)
-      {
-        KillAllJobs();
-        _actor.ChangeState(new ApproachingPlayerState(_actor));
-      }
-    }
-
     if (!_working)
     {
       _working = true;
@@ -79,8 +58,8 @@ public class SearchingForPlayerState : GameObjectState
       // we stop all activity and exit coroutine
       if (IsPlayerInRange())
       {
-        _working = false;
         _roadBuilder.ProcessRoutine.KillJob();
+        _actor.ChangeState(new ApproachingPlayerState(_actor));
         yield break;
       }
 
@@ -127,7 +106,8 @@ public class SearchingForPlayerState : GameObjectState
       // If player comes into range after actor made a step, we exit the coroutine
       if (IsPlayerInRange())
       {
-        break;
+        _actor.ChangeState(new ApproachingPlayerState(_actor));
+        yield break;
       }
 
       yield return null;
@@ -242,24 +222,6 @@ public class SearchingForPlayerState : GameObjectState
     yield return null;
   }
 
-  bool IsPlayerInRange()
-  {
-    Int2 pos = _actor.Model.ModelPos;
-    
-    int lx = Mathf.Clamp(pos.X - (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapHeight - 1);
-    int ly = Mathf.Clamp(pos.Y - (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapWidth - 1);
-    int hx = Mathf.Clamp(pos.X + (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapHeight - 1);
-    int hy = Mathf.Clamp(pos.Y + (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapWidth - 1);
-    
-    if (InputController.Instance.PlayerMapPos.X < hx && InputController.Instance.PlayerMapPos.X > lx 
-        && InputController.Instance.PlayerMapPos.Y < hy && InputController.Instance.PlayerMapPos.Y > ly)
-    {
-      return true;
-    }
-    
-    return false;
-  }
-
   float GetAngleToRotate(Int2 cellToLook)
   {
     int dx = cellToLook.X - _currentMapPos.X;
@@ -273,13 +235,5 @@ public class SearchingForPlayerState : GameObjectState
     else if (dx == -1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
     
     return angleEnd;
-  }
-
-  public void KillAllJobs()
-  {
-    if (_roadBuilder.ProcessRoutine != null) _roadBuilder.ProcessRoutine.KillJob();
-    if (_rotateJob != null) _rotateJob.KillJob();
-    if (_stepJob != null) _stepJob.KillJob();
-    if (_mainJob != null) _mainJob.KillJob();    
   }
 }
