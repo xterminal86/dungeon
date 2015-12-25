@@ -20,6 +20,7 @@ public class App : MonoSingleton<App>
   public PlayerMoveStateEnum PlayerMoveState;
   public GameState CurrentGameState;
 
+  // For dynamic obstacles pathfinding
   public GeneratedMapCell[,] ObstaclesByPosition;
 
   int[,] _floorSoundTypeByPosition;
