@@ -116,19 +116,23 @@ public class VillagerActor : ActorBase
   // Callback handlers
 
   void ButtonNameHandler()
-  {    
-    if (_coroutineDone)
+  {
+    if (_printTextJob != null)
     {
-      _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerName));
+      _printTextJob.KillJob();
     }
+    
+    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerName));    
   }
 
   void ButtonJobHandler()
-  {    
-    if (_coroutineDone)
+  {
+    if (_printTextJob != null)
     {
-      _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerJob));
+      _printTextJob.KillJob();
     }
+
+    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerJob));    
   }
 
   int _gossipListIndex = 0;

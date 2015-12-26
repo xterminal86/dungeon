@@ -5,12 +5,15 @@ MAJOR
 Merchants (dialogue window by pressing "Job" on form talking, common interaction mechanic, i.e. merchant and priest services etc.)
 Special rooms and buildings generation (chapel, shop etc.)
 Player and monsters stats, game mechanic
-Improve approach to player algorithm, so that it takes into account dynamically generated obstacles (doors, pits etc.)
-Improve NPC movement algorithm, so that it constantly checks next cell along its path during movement,
-        and if it's occupied, breaks moving routine and recalculates path.
+Improve approach to player algorithm, so that it takes into account dynamically generated obstacles (doors, pits etc.):
+  Improve NPC movement algorithm, so that it constantly checks next cell along its path during movement,
+          and if it's occupied, breaks moving routine and recalculates path.
 Stairs down and up (camera moving and actual level loading)
-Move BuildRoad() method to Thread instead of Coroutine
-
++ Move BuildRoad() method to Thread instead of Coroutine
+Think about scenes loading design: 
+    Right now if we load main scene from title screen, going back to menu via "Save & Quit" button leads
+    to exceptions due to basically setting the scene as it is looks like in editor - i.e. with all objects in the hierarchy window.
+    Because we have singletons it fucks up everything (most obvious thing is complaint about two audio listeners)
 
 
 
@@ -24,6 +27,7 @@ Decor objects (fountains, flowers, tables, road borders, etc.)
 Weather and day/night change
 In-game GUI (player stats, hunger, clock showing time etc.)
 + Make footsteps uniformly random for all characters (right now nonrepeatability is controlled by one variable for all sounds)
+Tie footsteps sounds to animation speed (e.g. Tigra is a small girl, so she has faster walk animation, but normal footsteps sounds)
 
 
 
