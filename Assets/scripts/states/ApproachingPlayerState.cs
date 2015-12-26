@@ -35,7 +35,7 @@ public class ApproachingPlayerState : GameObjectState
     if (!_running)
     {
       _running = true;
-      _moveJob = JobManager.Instance.CreateJob(ApproachPlayerRoutine());
+      _moveJob = JobManager.Instance.CreateCoroutine(ApproachPlayerRoutine());
     }
 
     _model.transform.position = _modelPosition;
@@ -65,7 +65,8 @@ public class ApproachingPlayerState : GameObjectState
       // changing the state is meaningless, because we will still be unable to find path.
       if (IsPlayerPositionChanged() && playerInRange)
       {
-        _roadBuilder.ProcessRoutine.KillJob();
+        //_roadBuilder.ProcessRoutine.KillJob();
+        _roadBuilder.AbortThread();
         _actor.ChangeState(new SearchingForPlayerState(_actor));
         yield break;
       }
@@ -99,7 +100,7 @@ public class ApproachingPlayerState : GameObjectState
       
       if ((int)angleStart != (int)angleEnd)
       {
-        _rotateJob = JobManager.Instance.CreateJob(RotateModel(angleEnd));
+        _rotateJob = JobManager.Instance.CreateCoroutine(RotateModel(angleEnd));
         
         while (!_rotateDone)
         {
@@ -109,7 +110,7 @@ public class ApproachingPlayerState : GameObjectState
         _firstStepSound = false;
       }
       
-      _stepJob = JobManager.Instance.CreateJob(MoveModel(_road[0].Coordinate));
+      _stepJob = JobManager.Instance.CreateCoroutine(MoveModel(_road[0].Coordinate));
       
       while (!_moveDone)
       {
@@ -137,7 +138,7 @@ public class ApproachingPlayerState : GameObjectState
 
       if ((int)angleStart != (int)angleEnd)
       {
-        _rotateJob = JobManager.Instance.CreateJob(RotateModel(angleEnd));
+        _rotateJob = JobManager.Instance.CreateCoroutine(RotateModel(angleEnd));
         
         while (!_rotateDone)
         {

@@ -67,7 +67,7 @@ public class VillagerActor : ActorBase
 
     GUIManager.Instance.FormTalkingName.text = ActorName;
 
-    _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.HailString, true));
+    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.HailString, true));
   }
 
   bool _coroutineDone = true;
@@ -119,7 +119,7 @@ public class VillagerActor : ActorBase
   {    
     if (_coroutineDone)
     {
-      _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerName));
+      _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerName));
     }
   }
 
@@ -127,7 +127,7 @@ public class VillagerActor : ActorBase
   {    
     if (_coroutineDone)
     {
-      _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerJob));
+      _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerJob));
     }
   }
 
@@ -143,7 +143,7 @@ public class VillagerActor : ActorBase
     // we first check for overflow.
     _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;
 
-    _printTextJob = JobManager.Instance.CreateJob(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));
+    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));
 
     _gossipListIndex++;
   }

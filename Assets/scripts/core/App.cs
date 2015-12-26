@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml;
 using System.Text.RegularExpressions;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 
 public class App : MonoSingleton<App>
 {  
@@ -234,8 +235,8 @@ public class App : MonoSingleton<App>
     
     SetupCamera(_generatedMap.CameraPos.X, _generatedMap.CameraPos.Y, _generatedMap.CameraPos.Facing);
 
-    SoundManager.Instance.PlayMusicTrack(_generatedMap.MusicTrack);
-  }
+    SoundManager.Instance.PlayMusicTrack(_generatedMap.MusicTrack);    
+  }   
 
   GameObject FindCharacterPrefabByName(string name)
   {
@@ -672,8 +673,8 @@ public class App : MonoSingleton<App>
   void SetupCharacters()
   {
     //var resource = Resources.Load("text/OneVillager");
-    var resource = Resources.Load("text/NoVillagers");
-    //var resource = Resources.Load("text/Villagers");
+    //var resource = Resources.Load("text/NoVillagers");
+    var resource = Resources.Load("text/Villagers");
     
     if (resource == null) return;
 

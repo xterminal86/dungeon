@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public delegate void Callback();
 public delegate void CallbackO(object sender);
+public delegate void CallbackB(bool arg);
 
 public static class GlobalConstants 
 {
@@ -15,8 +16,8 @@ public static class GlobalConstants
 
   // Delay limits, which determine pause after which VillagerActor starts to walk the random path again.
   // (note, that path building is done via coroutines, so real pause time is longer)
-  public const int WanderingMinDelaySeconds = 1;
-  public const int WanderingMaxDelaySeconds = 3;
+  public const int WanderingMinDelaySeconds = 5;
+  public const int WanderingMaxDelaySeconds = 10;
 
   // How often enemy tries to perform search for player routine (in seconds)
   public const float SearchingForPlayerRate = 0.1f;

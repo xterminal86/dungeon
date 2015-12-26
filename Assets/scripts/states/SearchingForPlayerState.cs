@@ -23,7 +23,7 @@ public class SearchingForPlayerState : GameObjectState
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
 
-  Job _mainJob, _stepJob, _rotateJob; 
+  Job _mainJob, _stepJob, _rotateJob, _delayJob; 
 
   GeneratedMapCell _playerCell;
   public override void Run()
@@ -31,7 +31,7 @@ public class SearchingForPlayerState : GameObjectState
     if (!_working)
     {
       _working = true;
-      _mainJob = JobManager.Instance.CreateJob(MoveOnPath());
+      _mainJob = JobManager.Instance.CreateCoroutine(MoveOnPath());
     }
 
     _model.transform.position = _modelPosition;
@@ -56,9 +56,13 @@ public class SearchingForPlayerState : GameObjectState
     {
       // If player comes into range, while actor is still building his path,
       // we stop all activity and exit coroutine
+      //
+      // N.B. Very unlikely scenario now, due to moving all of the pathfinding code to separate thread
+
       if (IsPlayerInRange())
       {
-        _roadBuilder.ProcessRoutine.KillJob();
+        //_roadBuilder.ProcessRoutine.KillJob();
+        _roadBuilder.AbortThread();
         _actor.ChangeState(new ApproachingPlayerState(_actor));
         yield break;
       }
@@ -84,7 +88,7 @@ public class SearchingForPlayerState : GameObjectState
       
       if ((int)angleStart != (int)angleEnd)
       {
-        _rotateJob = JobManager.Instance.CreateJob(RotateModel(angleEnd));
+        _rotateJob = JobManager.Instance.CreateCoroutine(RotateModel(angleEnd));
         
         while (!_rotateDone)
         {
@@ -94,7 +98,7 @@ public class SearchingForPlayerState : GameObjectState
         _firstStepSound = false;
       }
       
-      _stepJob = JobManager.Instance.CreateJob(MoveModel(_road[0].Coordinate));
+      _stepJob = JobManager.Instance.CreateCoroutine(MoveModel(_road[0].Coordinate));
       
       while (!_moveDone)
       {
@@ -115,7 +119,7 @@ public class SearchingForPlayerState : GameObjectState
     
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
-    _working = false;
+    _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine());
 
     yield return null;
   }
@@ -218,7 +222,32 @@ public class SearchingForPlayerState : GameObjectState
     _moveDone = true;
     
     PlayFootstepSound3D(_model.ModelPos, _modelPosition);
-    
+        
+    yield return null;
+  }
+
+  float _delay = 0.0f;
+  IEnumerator DelayRoutine()
+  {
+    _delay = Random.Range(GlobalConstants.WanderingMinDelaySeconds + 1, GlobalConstants.WanderingMaxDelaySeconds + 1);
+
+    float time = 0.0f;
+
+    while (time < _delay)
+    {
+      time += Time.smoothDeltaTime;
+
+      if (IsPlayerInRange())
+      {
+        _actor.ChangeState(new ApproachingPlayerState(_actor));
+        yield break;
+      }
+
+      yield return null;
+    }
+
+    _working = false;
+
     yield return null;
   }
 

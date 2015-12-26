@@ -4,7 +4,7 @@ using System.Collections;
 public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
 {
   static T _instance = null;
-
+  
   static string _resourcePath = "";
 
 	static bool applicationIsQuitting = false;

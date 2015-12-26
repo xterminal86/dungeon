@@ -32,7 +32,7 @@ public class WanderingState : GameObjectState
     if (!_working)
     {      
       _working = true;
-      _mainJob = JobManager.Instance.CreateJob(MoveOnPath());
+      _mainJob = JobManager.Instance.CreateCoroutine(MoveOnPath());
     }
 
     _model.transform.position = _modelPosition;
@@ -76,7 +76,7 @@ public class WanderingState : GameObjectState
 
       if ((int)angleStart != (int)angleEnd)
       {
-        _rotateJob = JobManager.Instance.CreateJob(RotateModel(angleEnd));
+        _rotateJob = JobManager.Instance.CreateCoroutine(RotateModel(angleEnd));
 
         while (!_rotateDone)
         {
@@ -86,7 +86,7 @@ public class WanderingState : GameObjectState
         _firstStepSound = false;
       }
 
-      _stepJob = JobManager.Instance.CreateJob(MoveModel(_road[0].Coordinate));
+      _stepJob = JobManager.Instance.CreateCoroutine(MoveModel(_road[0].Coordinate));
 
       while (!_moveDone)
       {
@@ -100,7 +100,7 @@ public class WanderingState : GameObjectState
 
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
-    _delayJob = JobManager.Instance.CreateJob(DelayRoutine());
+    _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine());
     
     yield return null;
   }
@@ -251,8 +251,7 @@ public class WanderingState : GameObjectState
   }
 
   public void KillAllJobs()
-  {
-    if (_roadBuilder.ProcessRoutine != null) _roadBuilder.ProcessRoutine.KillJob();
+  {    
     if (_delayJob != null) _delayJob.KillJob();
     if (_rotateJob != null) _rotateJob.KillJob();
     if (_stepJob != null) _stepJob.KillJob();

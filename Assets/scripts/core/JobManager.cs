@@ -1,11 +1,46 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
 
 public class JobManager : MonoSingleton<JobManager>
-{
-  public Job CreateJob(IEnumerator coroutineMethod)
+{  
+  public Job CreateCoroutine(IEnumerator coroutineMethod)
   {
     return new Job(coroutineMethod);
+  }
+  
+  /// <summary>
+  /// Always check for ThreadWatcher.Instance.StopAllThreads in a thread method loop
+  /// to avoid possible hanging threads in Unity Editor after stopping the game.
+  /// </summary>
+  /// <param name="threadMethod">Reference to a thread function</param>
+  public void CreateThread(Callback threadMethod)
+  {
+    if (threadMethod == null) return;
+
+    Thread t = new Thread(new ThreadStart(threadMethod));
+    t.IsBackground = true;
+    t.Start();    
+  }
+
+  public void CreateThreadB(CallbackO threadMethod, bool arg)
+  {
+    if (threadMethod == null) return;
+
+    Thread t = new Thread(new ParameterizedThreadStart(threadMethod));
+    t.IsBackground = true;
+    t.Start(arg);    
+  }
+
+  void OnDestroy()
+  {
+    base.OnDestroy();
+
+    if (ThreadWatcher.isInstantinated)
+    {
+      ThreadWatcher.Instance.StopAllThreads = true;
+    }
   }
 }
 

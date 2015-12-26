@@ -36,6 +36,7 @@ public class RoadBuilder
     _mapHeight = height;
 
     _resultReady = false;
+    _abortThread = false;
 
     //PrintMap();
   }
@@ -290,7 +291,51 @@ public class RoadBuilder
 
     _resultReady = false;
 
-    _processRoutine = JobManager.Instance.CreateJob(BuildRoadRoutine(avoidObstacles));
+    //_processRoutine = JobManager.Instance.CreateCoroutine(BuildRoadRoutine(avoidObstacles));
+    JobManager.Instance.CreateThreadB(BuildRoadThreadFunction, avoidObstacles);
+  }
+
+  volatile bool _abortThread = false;
+  void BuildRoadThreadFunction(object arg)
+  {
+    bool avoidObstacles = (bool)arg;
+
+    _abortThread = false;
+
+    bool exit = false;
+    while (!exit)
+    {
+      if (ThreadWatcher.Instance.StopAllThreads || _abortThread)
+      {
+        return;
+      }
+
+      //Debug.Log("building road... ");
+
+      int index = FindCheapestElement(_openList);
+
+      var closedNode = _openList[index];
+      _closedList.Add(closedNode);
+
+      _currentNode = closedNode;
+
+      //Debug.Log(closedNode);
+
+      _openList.RemoveAt(index);
+
+      LookAround4(closedNode, avoidObstacles);
+
+      exit = ExitCondition();      
+    }
+
+    //Debug.Log("building road done!");
+
+    _resultReady = true;    
+  }
+
+  public void AbortThread()
+  {
+    _abortThread = true;
   }
 
   // Constantly check the result via this property in a coroutine  
