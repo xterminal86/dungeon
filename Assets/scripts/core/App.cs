@@ -595,44 +595,41 @@ public class App : MonoSingleton<App>
       _mapObjectsHashTable.Add(id.GetHashCode(), sceneObject);
     }
 
-    CreateMapObject(sceneObject, facing, moClass, prefabName, objectToControlId, doorSoundType, animationSpeeds);
+    SerializableObject so = new SerializableObject();
+
+    so.X = x;
+    so.Y = y;
+    so.Layer = layer;
+    so.ObjectClassName = moClass;
+    so.PrefabName = prefabName;
+    so.Facing = facing;
+    so.ObjectId = id;
+    so.ObjectToControlId = objectToControlId;
+    so.DoorSoundType = doorSoundType;
+    so.AnimationOpenSpeed = animationOpenSpeed;
+    so.AnimationCloseSpeed = animationCloseSpeed;
+
+    CreateMapObject(sceneObject, so);
   }
 
   void SpawnObject(SerializableObject so)
   {
-    int x = so.X;
-    int y = so.Y;
-    int layer = so.Layer;
-    int facing = so.Facing;
-    string moClass = so.ObjectClassName;
-    string prefabName = so.PrefabName;    
-    string id = so.ObjectId;
-    string objectToControlId = so.ObjectToControlId;
-    string doorSoundType = so.DoorSoundType;
-    
-    float animationOpenSpeed = so.AnimationOpenSpeed;
-    float animationCloseSpeed = so.AnimationCloseSpeed;
-    
-    Vector2 animationSpeeds = Vector2.one;
-
-    animationSpeeds.Set(animationOpenSpeed, animationCloseSpeed);
-    
-    GameObject go = PrefabsManager.Instance.FindPrefabByName(prefabName);
+    GameObject go = PrefabsManager.Instance.FindPrefabByName(so.PrefabName);
     
     if (go == null)
     {
-      Debug.LogWarning("Couldn't find prefab: " + prefabName);
+      Debug.LogWarning("Couldn't find prefab: " + so.PrefabName);
       return;
     }
 
-    GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
+    GameObject sceneObject = InstantiatePrefab(so.X, so.Layer, so.Y, go, so.Facing);
     
-    if (id != string.Empty)
+    if (so.ObjectId != string.Empty)
     {
-      _mapObjectsHashTable.Add(id.GetHashCode(), sceneObject);
+      _mapObjectsHashTable.Add(so.ObjectId.GetHashCode(), sceneObject);
     }
-    
-    CreateMapObject(sceneObject, facing, moClass, prefabName, objectToControlId, doorSoundType, animationSpeeds);
+
+    CreateMapObject(sceneObject, so);
   }
 
   void SpawnObjects(XmlNode node)
@@ -659,7 +656,17 @@ public class App : MonoSingleton<App>
       for (int y = yStart; y <= yEnd; y++)
       {
         GameObject sceneObject = InstantiatePrefab(x, layer, y, go, facing);
-        CreateMapObject(sceneObject, facing, moClass, prefabName, string.Empty, string.Empty, Vector2.one);
+
+        SerializableObject so = new SerializableObject();
+        
+        so.X = x;
+        so.Y = y;
+        so.Layer = layer;
+        so.ObjectClassName = moClass;
+        so.PrefabName = prefabName;
+        so.Facing = facing;
+
+        CreateMapObject(sceneObject, so);
       }
     }
   }
@@ -808,7 +815,8 @@ public class App : MonoSingleton<App>
     return _searchResult;
   }
 
-  void CreateMapObject(GameObject go, int facing, string moClass, string prefabName, string objectToControlId, string doorSoundType, Vector2 animationSpeeds)
+  //void CreateMapObject(GameObject go, int facing, string moClass, string prefabName, string objectToControlId, string doorSoundType, Vector2 animationSpeeds)
+  void CreateMapObject(GameObject go, SerializableObject so)
   {
     BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
     if (bmo == null)
@@ -817,42 +825,42 @@ public class App : MonoSingleton<App>
       return;
     }
 
-    switch (moClass)
+    switch (so.ObjectClassName)
     {
       case "wall":
-        bmo.MapObjectInstance = new WallMapObject(moClass, prefabName, bmo);
+        bmo.MapObjectInstance = new WallMapObject(so.ObjectClassName, so.PrefabName, bmo);
         (bmo.MapObjectInstance as WallMapObject).ActionCallback += (bmo.MapObjectInstance as WallMapObject).ActionHandler;
         break;
 
       case "door-openable":
-        bmo.MapObjectInstance = new DoorMapObject(moClass, prefabName, bmo);
-        if (doorSoundType != string.Empty)
+        bmo.MapObjectInstance = new DoorMapObject(so.ObjectClassName, so.PrefabName, bmo);
+        if (so.DoorSoundType != string.Empty)
         {
-          (bmo.MapObjectInstance as DoorMapObject).DoorSoundType = doorSoundType;
+          (bmo.MapObjectInstance as DoorMapObject).DoorSoundType = so.DoorSoundType;
         }
-        (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = animationSpeeds.x;
-        (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = animationSpeeds.y;
+        (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
+        (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
         (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
         break;
 
       case "door-controllable":
-        bmo.MapObjectInstance = new DoorMapObject(moClass, prefabName, bmo);
-        if (doorSoundType != string.Empty)
+        bmo.MapObjectInstance = new DoorMapObject(so.ObjectClassName, so.PrefabName, bmo);
+        if (so.DoorSoundType != string.Empty)
         {
-          (bmo.MapObjectInstance as DoorMapObject).DoorSoundType = doorSoundType;
+          (bmo.MapObjectInstance as DoorMapObject).DoorSoundType = so.DoorSoundType;
         }
-        (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = animationSpeeds.x;
-        (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = animationSpeeds.y;
+        (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
+        (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
         (bmo.MapObjectInstance as DoorMapObject).ControlCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
         break;
 
       case "lever":
-        bmo.MapObjectInstance = new LeverMapObject(moClass, prefabName, bmo);
+        bmo.MapObjectInstance = new LeverMapObject(so.ObjectClassName, so.PrefabName, bmo);
         (bmo.MapObjectInstance as LeverMapObject).ActionCallback += (bmo.MapObjectInstance as LeverMapObject).ActionHandler;
           
-        if (objectToControlId != string.Empty)
+        if (so.ObjectToControlId != string.Empty)
         {
-          MapObject mo = GetMapObjectById(objectToControlId);
+          MapObject mo = GetMapObjectById(so.ObjectToControlId);
           if (mo != null)
           {
             (bmo.MapObjectInstance as LeverMapObject).ControlledObject = mo;
@@ -862,12 +870,12 @@ public class App : MonoSingleton<App>
         break;
       
       case "button":
-        bmo.MapObjectInstance = new ButtonMapObject(moClass, prefabName, bmo);
+        bmo.MapObjectInstance = new ButtonMapObject(so.ObjectClassName, so.PrefabName, bmo);
         (bmo.MapObjectInstance as ButtonMapObject).ActionCallback += (bmo.MapObjectInstance as ButtonMapObject).ActionHandler;
 
-        if (objectToControlId != string.Empty)
+        if (so.ObjectToControlId != string.Empty)
         {
-          MapObject mo = GetMapObjectById(objectToControlId);
+          MapObject mo = GetMapObjectById(so.ObjectToControlId);
           if (mo != null)
           {
             (bmo.MapObjectInstance as ButtonMapObject).ControlledObject = mo;
@@ -876,11 +884,15 @@ public class App : MonoSingleton<App>
 
         break;
 
+      case "sign":
+        bmo.MapObjectInstance = new SignMapObject(so.ObjectClassName, so.PrefabName, bmo, so.TextField);
+        break;
+
       default:
         break;
     }
 
-    bmo.MapObjectInstance.Facing = facing;
+    bmo.MapObjectInstance.Facing = so.Facing;
   }
 
   void SetupCamera(int x, int y, int facing)

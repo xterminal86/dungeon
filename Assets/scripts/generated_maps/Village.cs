@@ -19,6 +19,9 @@ public class Village : GeneratedMap
     // Hardcoded starting point at the edge of the map with "mountain path"
     SetStartingPos();
 
+    // Village sign positioned near player
+    PlaceVillageSign();
+
     GenerateBuildings();
     ConnectBuildings();
     GenerateTrees(80, 2);
@@ -747,5 +750,17 @@ public class Village : GeneratedMap
     _cameraPos.X = x;
     _cameraPos.Y = y;
     _cameraPos.Facing = (int)GlobalConstants.Orientation.NORTH;
+  }
+
+  void PlaceVillageSign()
+  {
+    int x = _mapWidth - 2;
+    int y = 0;
+    
+    SerializableObject obj = CreateObject(x, y, 0, GlobalConstants.ObjectPrefabsEnum.VILLAGE_SIGN, (int)GlobalConstants.Orientation.EAST, "sign");
+    obj.TextField = "Darwin";
+
+    _map[x, y].CellType = GeneratedCellType.OBSTACLE;
+    _map[x, y].Objects.Add(obj);
   }
 }

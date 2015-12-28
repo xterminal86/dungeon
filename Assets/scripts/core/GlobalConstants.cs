@@ -256,7 +256,8 @@ public static class GlobalConstants
     DOOR_STONE,
     DOOR_WOODEN,
     BUTTON,
-    LEVER
+    LEVER,
+    VILLAGE_SIGN
   }
 
   public static Dictionary<ObjectPrefabsEnum, string> ObjectPrefabsNamesById = new Dictionary<ObjectPrefabsEnum, string>()
@@ -266,7 +267,8 @@ public static class GlobalConstants
     { ObjectPrefabsEnum.DOOR_STONE, "door-stone" },
     { ObjectPrefabsEnum.DOOR_WOODEN, "door-wooden" },
     { ObjectPrefabsEnum.BUTTON, "button" },
-    { ObjectPrefabsEnum.LEVER, "lever" }
+    { ObjectPrefabsEnum.LEVER, "lever" },
+    { ObjectPrefabsEnum.VILLAGE_SIGN, "sign-village" }
   };
 }
 

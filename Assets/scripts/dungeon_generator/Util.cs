@@ -133,6 +133,7 @@ public class SerializableObject
   public float AnimationCloseSpeed = 1.0f;
   public string ObjectId = string.Empty;
   public string ObjectToControlId = string.Empty;
+  public string TextField = string.Empty;
 
   public override string ToString()
   {
