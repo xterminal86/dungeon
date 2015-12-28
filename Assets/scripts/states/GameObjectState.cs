@@ -58,4 +58,16 @@ public abstract class GameObjectState
     
     return false;
   }
+
+  // Sometimes when change of animation happens, it gets stuck in previous state
+  // regardless of wrap mode and stuff, so we manually rewind it
+  public void RewindAnimation(string animationName)
+  {
+    if (_actor.Model.AnimationComponent.GetClip(animationName) != null)
+    {
+      _actor.Model.AnimationComponent[animationName].time = 0.0f;
+      _actor.Model.AnimationComponent.Sample();
+      _actor.Model.AnimationComponent.Stop(animationName);
+    }
+  }
 }

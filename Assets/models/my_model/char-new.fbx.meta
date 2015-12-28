@@ -4,55 +4,43 @@ ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
     100000: Arm.L
-    100002: Arm.L.H
-    100004: Arm.L.H_end
-    100006: Arm.L.S
-    100008: Arm.R
-    100010: Arm.R.H
-    100012: Arm.R.H_end
-    100014: Arm.R.S
-    100016: //RootNode
-    100018: Head
-    100020: Head 1
-    100022: Head_end
-    100024: Leg.L
-    100026: Leg.L.D
-    100028: Leg.L.D_end
-    100030: Leg.L.U
-    100032: Leg.R
-    100034: Leg.R.D
-    100036: Leg.R.D_end
-    100038: Leg.R.U
-    100040: Skeleton
-    100042: Torso
-    100044: Torso.D
-    100046: Torso.U
-    100048: Torso.U_end
+    100002: Arm.R
+    100004: //RootNode
+    100006: Head
+    100008: Leg.L
+    100010: Leg.R
+    100012: Skeleton
+    100014: Skeleton|Arm.L.H
+    100016: Skeleton|Arm.L.S
+    100018: Skeleton|Arm.R.H
+    100020: Skeleton|Arm.R.S
+    100022: Skeleton|Head
+    100024: Skeleton|Leg.L.D
+    100026: Skeleton|Leg.L.U
+    100028: Skeleton|Leg.R.D
+    100030: Skeleton|Leg.R.U
+    100032: Skeleton|Torso.D
+    100034: Skeleton|Torso.U
+    100036: Torso
     400000: Arm.L
-    400002: Arm.L.H
-    400004: Arm.L.H_end
-    400006: Arm.L.S
-    400008: Arm.R
-    400010: Arm.R.H
-    400012: Arm.R.H_end
-    400014: Arm.R.S
-    400016: //RootNode
-    400018: Head
-    400020: Head 1
-    400022: Head_end
-    400024: Leg.L
-    400026: Leg.L.D
-    400028: Leg.L.D_end
-    400030: Leg.L.U
-    400032: Leg.R
-    400034: Leg.R.D
-    400036: Leg.R.D_end
-    400038: Leg.R.U
-    400040: Skeleton
-    400042: Torso
-    400044: Torso.D
-    400046: Torso.U
-    400048: Torso.U_end
+    400002: Arm.R
+    400004: //RootNode
+    400006: Head
+    400008: Leg.L
+    400010: Leg.R
+    400012: Skeleton
+    400014: Skeleton|Arm.L.H
+    400016: Skeleton|Arm.L.S
+    400018: Skeleton|Arm.R.H
+    400020: Skeleton|Arm.R.S
+    400022: Skeleton|Head
+    400024: Skeleton|Leg.L.D
+    400026: Skeleton|Leg.L.U
+    400028: Skeleton|Leg.R.D
+    400030: Skeleton|Leg.R.U
+    400032: Skeleton|Torso.D
+    400034: Skeleton|Torso.U
+    400036: Torso
     4300000: Leg.L
     4300002: Arm.R
     4300004: Arm.L
@@ -94,7 +82,7 @@ ModelImporter:
       name: Walk
       takeName: Walk
       firstFrame: 0
-      lastFrame: 59
+      lastFrame: 58
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
@@ -128,39 +116,27 @@ ModelImporter:
         weight: 1
       - path: Skeleton
         weight: 1
-      - path: Skeleton/Arm.L.S
+      - path: Skeleton/Skeleton|Arm.L.S
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H
+      - path: Skeleton/Skeleton|Arm.L.S/Skeleton|Arm.L.H
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+      - path: Skeleton/Skeleton|Arm.R.S
         weight: 1
-      - path: Skeleton/Arm.R.S
+      - path: Skeleton/Skeleton|Arm.R.S/Skeleton|Arm.R.H
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H
+      - path: Skeleton/Skeleton|Head
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+      - path: Skeleton/Skeleton|Leg.L.U
         weight: 1
-      - path: Skeleton/Head 1
+      - path: Skeleton/Skeleton|Leg.L.U/Skeleton|Leg.L.D
         weight: 1
-      - path: Skeleton/Head 1/Head_end
+      - path: Skeleton/Skeleton|Leg.R.U
         weight: 1
-      - path: Skeleton/Leg.L.U
+      - path: Skeleton/Skeleton|Leg.R.U/Skeleton|Leg.R.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D
+      - path: Skeleton/Skeleton|Torso.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
-        weight: 1
-      - path: Skeleton/Leg.R.U
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
-        weight: 1
-      - path: Skeleton/Torso.D
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+      - path: Skeleton/Skeleton|Torso.D/Skeleton|Torso.U
         weight: 1
       - path: Torso
         weight: 1
@@ -170,7 +146,7 @@ ModelImporter:
       name: Idle
       takeName: Idle
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 28.0000019
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
@@ -204,39 +180,27 @@ ModelImporter:
         weight: 1
       - path: Skeleton
         weight: 1
-      - path: Skeleton/Arm.L.S
+      - path: Skeleton/Skeleton|Arm.L.S
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H
+      - path: Skeleton/Skeleton|Arm.L.S/Skeleton|Arm.L.H
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+      - path: Skeleton/Skeleton|Arm.R.S
         weight: 1
-      - path: Skeleton/Arm.R.S
+      - path: Skeleton/Skeleton|Arm.R.S/Skeleton|Arm.R.H
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H
+      - path: Skeleton/Skeleton|Head
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+      - path: Skeleton/Skeleton|Leg.L.U
         weight: 1
-      - path: Skeleton/Head 1
+      - path: Skeleton/Skeleton|Leg.L.U/Skeleton|Leg.L.D
         weight: 1
-      - path: Skeleton/Head 1/Head_end
+      - path: Skeleton/Skeleton|Leg.R.U
         weight: 1
-      - path: Skeleton/Leg.L.U
+      - path: Skeleton/Skeleton|Leg.R.U/Skeleton|Leg.R.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D
+      - path: Skeleton/Skeleton|Torso.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
-        weight: 1
-      - path: Skeleton/Leg.R.U
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
-        weight: 1
-      - path: Skeleton/Torso.D
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+      - path: Skeleton/Skeleton|Torso.D/Skeleton|Torso.U
         weight: 1
       - path: Torso
         weight: 1
@@ -246,7 +210,7 @@ ModelImporter:
       name: Talk
       takeName: Talk
       firstFrame: 0
-      lastFrame: 49
+      lastFrame: 48
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -280,39 +244,27 @@ ModelImporter:
         weight: 1
       - path: Skeleton
         weight: 1
-      - path: Skeleton/Arm.L.S
+      - path: Skeleton/Skeleton|Arm.L.S
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H
+      - path: Skeleton/Skeleton|Arm.L.S/Skeleton|Arm.L.H
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+      - path: Skeleton/Skeleton|Arm.R.S
         weight: 1
-      - path: Skeleton/Arm.R.S
+      - path: Skeleton/Skeleton|Arm.R.S/Skeleton|Arm.R.H
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H
+      - path: Skeleton/Skeleton|Head
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+      - path: Skeleton/Skeleton|Leg.L.U
         weight: 1
-      - path: Skeleton/Head 1
+      - path: Skeleton/Skeleton|Leg.L.U/Skeleton|Leg.L.D
         weight: 1
-      - path: Skeleton/Head 1/Head_end
+      - path: Skeleton/Skeleton|Leg.R.U
         weight: 1
-      - path: Skeleton/Leg.L.U
+      - path: Skeleton/Skeleton|Leg.R.U/Skeleton|Leg.R.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D
+      - path: Skeleton/Skeleton|Torso.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
-        weight: 1
-      - path: Skeleton/Leg.R.U
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
-        weight: 1
-      - path: Skeleton/Torso.D
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+      - path: Skeleton/Skeleton|Torso.D/Skeleton|Torso.U
         weight: 1
       - path: Torso
         weight: 1
@@ -322,7 +274,7 @@ ModelImporter:
       name: Thinking
       takeName: Thinking
       firstFrame: 0
-      lastFrame: 24
+      lastFrame: 23
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -356,39 +308,27 @@ ModelImporter:
         weight: 1
       - path: Skeleton
         weight: 1
-      - path: Skeleton/Arm.L.S
+      - path: Skeleton/Skeleton|Arm.L.S
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H
+      - path: Skeleton/Skeleton|Arm.L.S/Skeleton|Arm.L.H
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+      - path: Skeleton/Skeleton|Arm.R.S
         weight: 1
-      - path: Skeleton/Arm.R.S
+      - path: Skeleton/Skeleton|Arm.R.S/Skeleton|Arm.R.H
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H
+      - path: Skeleton/Skeleton|Head
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+      - path: Skeleton/Skeleton|Leg.L.U
         weight: 1
-      - path: Skeleton/Head 1
+      - path: Skeleton/Skeleton|Leg.L.U/Skeleton|Leg.L.D
         weight: 1
-      - path: Skeleton/Head 1/Head_end
+      - path: Skeleton/Skeleton|Leg.R.U
         weight: 1
-      - path: Skeleton/Leg.L.U
+      - path: Skeleton/Skeleton|Leg.R.U/Skeleton|Leg.R.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D
+      - path: Skeleton/Skeleton|Torso.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
-        weight: 1
-      - path: Skeleton/Leg.R.U
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
-        weight: 1
-      - path: Skeleton/Torso.D
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+      - path: Skeleton/Skeleton|Torso.D/Skeleton|Torso.U
         weight: 1
       - path: Torso
         weight: 1
@@ -398,7 +338,7 @@ ModelImporter:
       name: Attack
       takeName: Attack
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 28.0000019
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -432,39 +372,27 @@ ModelImporter:
         weight: 1
       - path: Skeleton
         weight: 1
-      - path: Skeleton/Arm.L.S
+      - path: Skeleton/Skeleton|Arm.L.S
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H
+      - path: Skeleton/Skeleton|Arm.L.S/Skeleton|Arm.L.H
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+      - path: Skeleton/Skeleton|Arm.R.S
         weight: 1
-      - path: Skeleton/Arm.R.S
+      - path: Skeleton/Skeleton|Arm.R.S/Skeleton|Arm.R.H
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H
+      - path: Skeleton/Skeleton|Head
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+      - path: Skeleton/Skeleton|Leg.L.U
         weight: 1
-      - path: Skeleton/Head 1
+      - path: Skeleton/Skeleton|Leg.L.U/Skeleton|Leg.L.D
         weight: 1
-      - path: Skeleton/Head 1/Head_end
+      - path: Skeleton/Skeleton|Leg.R.U
         weight: 1
-      - path: Skeleton/Leg.L.U
+      - path: Skeleton/Skeleton|Leg.R.U/Skeleton|Leg.R.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D
+      - path: Skeleton/Skeleton|Torso.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
-        weight: 1
-      - path: Skeleton/Leg.R.U
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
-        weight: 1
-      - path: Skeleton/Torso.D
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+      - path: Skeleton/Skeleton|Torso.D/Skeleton|Torso.U
         weight: 1
       - path: Torso
         weight: 1
@@ -474,7 +402,7 @@ ModelImporter:
       name: Hit
       takeName: Hit
       firstFrame: 0
-      lastFrame: 29
+      lastFrame: 28.0000019
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -508,39 +436,27 @@ ModelImporter:
         weight: 1
       - path: Skeleton
         weight: 1
-      - path: Skeleton/Arm.L.S
+      - path: Skeleton/Skeleton|Arm.L.S
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H
+      - path: Skeleton/Skeleton|Arm.L.S/Skeleton|Arm.L.H
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+      - path: Skeleton/Skeleton|Arm.R.S
         weight: 1
-      - path: Skeleton/Arm.R.S
+      - path: Skeleton/Skeleton|Arm.R.S/Skeleton|Arm.R.H
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H
+      - path: Skeleton/Skeleton|Head
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+      - path: Skeleton/Skeleton|Leg.L.U
         weight: 1
-      - path: Skeleton/Head 1
+      - path: Skeleton/Skeleton|Leg.L.U/Skeleton|Leg.L.D
         weight: 1
-      - path: Skeleton/Head 1/Head_end
+      - path: Skeleton/Skeleton|Leg.R.U
         weight: 1
-      - path: Skeleton/Leg.L.U
+      - path: Skeleton/Skeleton|Leg.R.U/Skeleton|Leg.R.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D
+      - path: Skeleton/Skeleton|Torso.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
-        weight: 1
-      - path: Skeleton/Leg.R.U
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
-        weight: 1
-      - path: Skeleton/Torso.D
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+      - path: Skeleton/Skeleton|Torso.D/Skeleton|Torso.U
         weight: 1
       - path: Torso
         weight: 1
@@ -550,7 +466,7 @@ ModelImporter:
       name: Clueless
       takeName: Clueless
       firstFrame: 0
-      lastFrame: 34
+      lastFrame: 33
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -584,39 +500,27 @@ ModelImporter:
         weight: 1
       - path: Skeleton
         weight: 1
-      - path: Skeleton/Arm.L.S
+      - path: Skeleton/Skeleton|Arm.L.S
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H
+      - path: Skeleton/Skeleton|Arm.L.S/Skeleton|Arm.L.H
         weight: 1
-      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+      - path: Skeleton/Skeleton|Arm.R.S
         weight: 1
-      - path: Skeleton/Arm.R.S
+      - path: Skeleton/Skeleton|Arm.R.S/Skeleton|Arm.R.H
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H
+      - path: Skeleton/Skeleton|Head
         weight: 1
-      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+      - path: Skeleton/Skeleton|Leg.L.U
         weight: 1
-      - path: Skeleton/Head 1
+      - path: Skeleton/Skeleton|Leg.L.U/Skeleton|Leg.L.D
         weight: 1
-      - path: Skeleton/Head 1/Head_end
+      - path: Skeleton/Skeleton|Leg.R.U
         weight: 1
-      - path: Skeleton/Leg.L.U
+      - path: Skeleton/Skeleton|Leg.R.U/Skeleton|Leg.R.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D
+      - path: Skeleton/Skeleton|Torso.D
         weight: 1
-      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
-        weight: 1
-      - path: Skeleton/Leg.R.U
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D
-        weight: 1
-      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
-        weight: 1
-      - path: Skeleton/Torso.D
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U
-        weight: 1
-      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+      - path: Skeleton/Skeleton|Torso.D/Skeleton|Torso.U
         weight: 1
       - path: Torso
         weight: 1

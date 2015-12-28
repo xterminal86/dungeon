@@ -36,7 +36,7 @@ public class ModelMover : MonoBehaviour
     if (_animationComponent != null)
     {
       _animationComponent[GlobalConstants.AnimationIdleName].speed = 0.5f;
-
+            
       _animationComponent.Play(GlobalConstants.AnimationIdleName);
 
       float speed = _animationComponent[GlobalConstants.AnimationWalkName].speed;

@@ -16,6 +16,8 @@ public class TalkingState : GameObjectState
 
     _actor.Model.transform.eulerAngles = rotation;
 
+    RewindAnimation(GlobalConstants.AnimationWalkName);
+
     _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
 
@@ -25,7 +27,7 @@ public class TalkingState : GameObjectState
 
     if (!_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationTalkName) &&
         !_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationIdleName))
-    {
+    {      
       _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
     }
   }
