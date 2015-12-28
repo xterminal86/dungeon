@@ -8,6 +8,9 @@ Player and monsters stats, game mechanic
 Improve approach to player algorithm, so that it takes into account dynamically generated obstacles (doors, pits etc.):
   Improve NPC movement algorithm, so that it constantly checks next cell along its path during movement,
           and if it's occupied, breaks moving routine and recalculates path.
+          Right now enemy changes its state as soon as player was detected in certain range,
+          and then switches back and forth betwee "search" and "approach", even if player is unreachable.
+          So, search state should check player reachability first and then switch to approach state.
 Stairs down and up (camera moving and actual level loading)
 + Move BuildRoad() method to Thread instead of Coroutine
 Think about scenes loading design: 

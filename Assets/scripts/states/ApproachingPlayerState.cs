@@ -63,6 +63,9 @@ public class ApproachingPlayerState : GameObjectState
       // If we set "playerInRange" we will always change the state, if player position has changed during pathbuilding,
       // which is very unlikely to happen in short ranges, while if we are standing before a closed door,
       // changing the state is meaningless, because we will still be unable to find path.
+      //
+      // N.B. Very unlikely scenario now, due to all of the pathfinding calculation code moved to separate thread
+
       if (IsPlayerPositionChanged() && playerInRange)
       {
         //_roadBuilder.ProcessRoutine.KillJob();
@@ -74,8 +77,7 @@ public class ApproachingPlayerState : GameObjectState
       yield return null;
     }
 
-    // If we could not find path to the player, we stop the coroutine and mark appropriate flag
-    // to change state in the next Run() call
+    // If we could not find path to the player, path list will be empty
     if (_roadBuilder.ResultReady && _road.Count == 0)
     { 
       //Debug.Log("Path not found!");
@@ -95,7 +97,7 @@ public class ApproachingPlayerState : GameObjectState
       angleStart = _model.transform.rotation.eulerAngles.y;
       angleEnd = GetAngleToRotate(_road[0].Coordinate);
 
-      //Debug.Log("dx, dy " + dx + " " + dy + " " + road[0].Coordinate);
+      //Debug.Log(_road[0].Coordinate);
       //Debug.Log("Rotating from " + angleStart + " to " + angleEnd);
       
       if ((int)angleStart != (int)angleEnd)
@@ -119,10 +121,14 @@ public class ApproachingPlayerState : GameObjectState
       
       _road.RemoveAt(0);
 
+      // If player position changed after actor made a step,
+      // go to the search mode again.
+
       bool playerInRange = IsPlayerInRange();
       if (IsPlayerPositionChanged() && playerInRange)
       { 
-        break;
+        _actor.ChangeState(new SearchingForPlayerState(_actor));
+        yield break;
       }
 
       yield return null;
@@ -130,7 +136,7 @@ public class ApproachingPlayerState : GameObjectState
 
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
-    // Rotate to face player on last step
+    // Rotate to face player on last step...
     if (Utils.BlockDistance(_model.ModelPos, InputController.Instance.PlayerMapPos) == 1)
     {
       angleStart = _model.transform.rotation.eulerAngles.y;
@@ -145,13 +151,23 @@ public class ApproachingPlayerState : GameObjectState
           yield return null;
         }
       }
+
+      // ...and switch to attack mode
+      _actor.ChangeState(new AttackState(_actor));
+      yield break;
+    }
+    else
+    {
+      // If we got to the following line of code, it means we moved to the last
+      // detected player position and could not get close in order to switch to attack state.
+      // So we go to the searching mode again.
+
+      _actor.ChangeState(new SearchingForPlayerState(_actor));
     }
 
     //Debug.Log("Approached player");
 
     _running = false;
-
-    _actor.ChangeState(new SearchingForPlayerState(_actor));
 
     yield return null;
   }

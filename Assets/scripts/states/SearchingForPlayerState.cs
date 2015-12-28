@@ -57,7 +57,7 @@ public class SearchingForPlayerState : GameObjectState
       // If player comes into range, while actor is still building his path,
       // we stop all activity and exit coroutine
       //
-      // N.B. Very unlikely scenario now, due to moving all of the pathfinding code to separate thread
+      // N.B. Very unlikely scenario now, due to all of the pathfinding calculation code moved to separate thread
 
       if (IsPlayerInRange())
       {
@@ -83,7 +83,7 @@ public class SearchingForPlayerState : GameObjectState
       angleStart = _model.transform.rotation.eulerAngles.y;
       angleEnd = GetAngleToRotate(_road[0].Coordinate);
       
-      //Debug.Log("dx, dy " + dx + " " + dy + " " + road[0].Coordinate);
+      //Debug.Log(_road[0].Coordinate);
       //Debug.Log("Rotating from " + angleStart + " to " + angleEnd);
       
       if ((int)angleStart != (int)angleEnd)
@@ -107,7 +107,8 @@ public class SearchingForPlayerState : GameObjectState
       
       _road.RemoveAt(0);
               
-      // If player comes into range after actor made a step, we exit the coroutine
+      // If player comes into range after actor made a step, 
+      // we go to the "approach" mode
       if (IsPlayerInRange())
       {
         _actor.ChangeState(new ApproachingPlayerState(_actor));
