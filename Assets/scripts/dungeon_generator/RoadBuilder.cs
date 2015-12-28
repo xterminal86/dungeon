@@ -8,12 +8,6 @@ using System.Text;
 /// </summary>
 public class RoadBuilder
 {
-  Job _processRoutine;
-  public Job ProcessRoutine
-  {
-    get { return _processRoutine; }
-  }
-
   Int2 _start = new Int2();
   Int2 _end = new Int2();
     
@@ -291,7 +285,6 @@ public class RoadBuilder
 
     _resultReady = false;
 
-    //_processRoutine = JobManager.Instance.CreateCoroutine(BuildRoadRoutine(avoidObstacles));
     JobManager.Instance.CreateThreadB(BuildRoadThreadFunction, avoidObstacles);
   }
 
@@ -361,38 +354,6 @@ public class RoadBuilder
   public bool ResultReady
   {
     get { return _resultReady; }
-  }
-
-  IEnumerator BuildRoadRoutine(bool avoidObstacles)
-  {    
-    bool exit = false;
-    while (!exit)
-    {
-      //Debug.Log("building road... ");
-
-      int index = FindCheapestElement(_openList);
-
-      var closedNode = _openList[index];
-      _closedList.Add(closedNode);
-
-      _currentNode = closedNode;
-
-      //Debug.Log(closedNode);
-
-      _openList.RemoveAt(index);
-
-      LookAround4(closedNode, avoidObstacles);
-
-      exit = ExitCondition();
-      
-      yield return null;
-    }
-
-    //Debug.Log("building road done!");
-
-    _resultReady = true;
-
-    yield return null;
   }
 
   void ConstructPath(bool printPath = false)

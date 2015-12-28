@@ -21,6 +21,7 @@ public static class GlobalConstants
 
   // How often enemy tries to perform search for player routine (in seconds)
   public const float SearchingForPlayerRate = 0.1f;
+  public const float AttackCooldown = 1.0f;
 
   // Speed of camera bobbing
   public const float CameraBobSpeed = 0.5f;

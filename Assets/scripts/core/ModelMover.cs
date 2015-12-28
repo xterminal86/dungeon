@@ -50,6 +50,12 @@ public class ModelMover : MonoBehaviour
       //_animationComponent[GlobalConstants.AnimationWalkName].speed = GlobalConstants.WallScaleFactor * 2;
 
       _animationComponent[GlobalConstants.AnimationTalkName].speed = GlobalConstants.CharacterAnimationTalkSpeed;
+
+      // FIXME: Hardcode
+      if (_animationComponent.GetClip(GlobalConstants.AnimationAttackName) != null)
+      {
+        _animationComponent[GlobalConstants.AnimationAttackName].speed = 2.0f;
+      }
     }
 	}
   

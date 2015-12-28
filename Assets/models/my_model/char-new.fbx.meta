@@ -1,0 +1,662 @@
+fileFormatVersion: 2
+guid: c1e483a58c7c643478c81258fa8c3a3c
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: Arm.L
+    100002: Arm.L.H
+    100004: Arm.L.H_end
+    100006: Arm.L.S
+    100008: Arm.R
+    100010: Arm.R.H
+    100012: Arm.R.H_end
+    100014: Arm.R.S
+    100016: //RootNode
+    100018: Head
+    100020: Head 1
+    100022: Head_end
+    100024: Leg.L
+    100026: Leg.L.D
+    100028: Leg.L.D_end
+    100030: Leg.L.U
+    100032: Leg.R
+    100034: Leg.R.D
+    100036: Leg.R.D_end
+    100038: Leg.R.U
+    100040: Skeleton
+    100042: Torso
+    100044: Torso.D
+    100046: Torso.U
+    100048: Torso.U_end
+    400000: Arm.L
+    400002: Arm.L.H
+    400004: Arm.L.H_end
+    400006: Arm.L.S
+    400008: Arm.R
+    400010: Arm.R.H
+    400012: Arm.R.H_end
+    400014: Arm.R.S
+    400016: //RootNode
+    400018: Head
+    400020: Head 1
+    400022: Head_end
+    400024: Leg.L
+    400026: Leg.L.D
+    400028: Leg.L.D_end
+    400030: Leg.L.U
+    400032: Leg.R
+    400034: Leg.R.D
+    400036: Leg.R.D_end
+    400038: Leg.R.U
+    400040: Skeleton
+    400042: Torso
+    400044: Torso.D
+    400046: Torso.U
+    400048: Torso.U_end
+    4300000: Leg.L
+    4300002: Arm.R
+    4300004: Arm.L
+    4300006: Torso
+    4300008: Head
+    4300010: Leg.R
+    7400000: Walk
+    7400002: Idle
+    7400004: Talk
+    7400006: Thinking
+    7400008: Attack
+    7400010: Hit
+    7400012: Clueless
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Arm.L
+    13700002: Arm.R
+    13700004: Head
+    13700006: Leg.L
+    13700008: Leg.R
+    13700010: Torso
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 1
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Walk
+      takeName: Walk
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Arm.L
+        weight: 1
+      - path: Arm.R
+        weight: 1
+      - path: Head
+        weight: 1
+      - path: Leg.L
+        weight: 1
+      - path: Leg.R
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L.S
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+        weight: 1
+      - path: Skeleton/Arm.R.S
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+        weight: 1
+      - path: Skeleton/Head 1
+        weight: 1
+      - path: Skeleton/Head 1/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L.U
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
+        weight: 1
+      - path: Skeleton/Leg.R.U
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
+        weight: 1
+      - path: Skeleton/Torso.D
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Idle
+      takeName: Idle
+      firstFrame: 0
+      lastFrame: 29
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Arm.L
+        weight: 1
+      - path: Arm.R
+        weight: 1
+      - path: Head
+        weight: 1
+      - path: Leg.L
+        weight: 1
+      - path: Leg.R
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L.S
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+        weight: 1
+      - path: Skeleton/Arm.R.S
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+        weight: 1
+      - path: Skeleton/Head 1
+        weight: 1
+      - path: Skeleton/Head 1/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L.U
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
+        weight: 1
+      - path: Skeleton/Leg.R.U
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
+        weight: 1
+      - path: Skeleton/Torso.D
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Talk
+      takeName: Talk
+      firstFrame: 0
+      lastFrame: 49
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Arm.L
+        weight: 1
+      - path: Arm.R
+        weight: 1
+      - path: Head
+        weight: 1
+      - path: Leg.L
+        weight: 1
+      - path: Leg.R
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L.S
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+        weight: 1
+      - path: Skeleton/Arm.R.S
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+        weight: 1
+      - path: Skeleton/Head 1
+        weight: 1
+      - path: Skeleton/Head 1/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L.U
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
+        weight: 1
+      - path: Skeleton/Leg.R.U
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
+        weight: 1
+      - path: Skeleton/Torso.D
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Thinking
+      takeName: Thinking
+      firstFrame: 0
+      lastFrame: 24
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Arm.L
+        weight: 1
+      - path: Arm.R
+        weight: 1
+      - path: Head
+        weight: 1
+      - path: Leg.L
+        weight: 1
+      - path: Leg.R
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L.S
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+        weight: 1
+      - path: Skeleton/Arm.R.S
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+        weight: 1
+      - path: Skeleton/Head 1
+        weight: 1
+      - path: Skeleton/Head 1/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L.U
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
+        weight: 1
+      - path: Skeleton/Leg.R.U
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
+        weight: 1
+      - path: Skeleton/Torso.D
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Attack
+      takeName: Attack
+      firstFrame: 0
+      lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Arm.L
+        weight: 1
+      - path: Arm.R
+        weight: 1
+      - path: Head
+        weight: 1
+      - path: Leg.L
+        weight: 1
+      - path: Leg.R
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L.S
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+        weight: 1
+      - path: Skeleton/Arm.R.S
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+        weight: 1
+      - path: Skeleton/Head 1
+        weight: 1
+      - path: Skeleton/Head 1/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L.U
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
+        weight: 1
+      - path: Skeleton/Leg.R.U
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
+        weight: 1
+      - path: Skeleton/Torso.D
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Hit
+      takeName: Hit
+      firstFrame: 0
+      lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Arm.L
+        weight: 1
+      - path: Arm.R
+        weight: 1
+      - path: Head
+        weight: 1
+      - path: Leg.L
+        weight: 1
+      - path: Leg.R
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L.S
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+        weight: 1
+      - path: Skeleton/Arm.R.S
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+        weight: 1
+      - path: Skeleton/Head 1
+        weight: 1
+      - path: Skeleton/Head 1/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L.U
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
+        weight: 1
+      - path: Skeleton/Leg.R.U
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
+        weight: 1
+      - path: Skeleton/Torso.D
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Clueless
+      takeName: Clueless
+      firstFrame: 0
+      lastFrame: 34
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Arm.L
+        weight: 1
+      - path: Arm.R
+        weight: 1
+      - path: Head
+        weight: 1
+      - path: Leg.L
+        weight: 1
+      - path: Leg.R
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arm.L.S
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H
+        weight: 1
+      - path: Skeleton/Arm.L.S/Arm.L.H/Arm.L.H_end
+        weight: 1
+      - path: Skeleton/Arm.R.S
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H
+        weight: 1
+      - path: Skeleton/Arm.R.S/Arm.R.H/Arm.R.H_end
+        weight: 1
+      - path: Skeleton/Head 1
+        weight: 1
+      - path: Skeleton/Head 1/Head_end
+        weight: 1
+      - path: Skeleton/Leg.L.U
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D
+        weight: 1
+      - path: Skeleton/Leg.L.U/Leg.L.D/Leg.L.D_end
+        weight: 1
+      - path: Skeleton/Leg.R.U
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D
+        weight: 1
+      - path: Skeleton/Leg.R.U/Leg.R.D/Leg.R.D_end
+        weight: 1
+      - path: Skeleton/Torso.D
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U
+        weight: 1
+      - path: Skeleton/Torso.D/Torso.U/Torso.U_end
+        weight: 1
+      - path: Torso
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .349999994
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 
