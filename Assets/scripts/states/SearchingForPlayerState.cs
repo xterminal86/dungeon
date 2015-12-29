@@ -118,8 +118,6 @@ public class SearchingForPlayerState : GameObjectState
       yield return null;
     }
 
-    RewindAnimation(GlobalConstants.AnimationWalkName);
-
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine());
@@ -130,8 +128,6 @@ public class SearchingForPlayerState : GameObjectState
   bool _rotateDone = false;
   IEnumerator RotateModel(float angle)
   {
-    RewindAnimation(GlobalConstants.AnimationWalkName);
-
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
     
     _rotateDone = false;
@@ -188,8 +184,6 @@ public class SearchingForPlayerState : GameObjectState
   RaycastHit _raycastHit;
   IEnumerator MoveModel(Int2 newMapPos)
   {
-    RewindAnimation(GlobalConstants.AnimationIdleName);
-
     if (!_model.AnimationComponent.IsPlaying(GlobalConstants.AnimationWalkName))
     {
       _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);

@@ -127,16 +127,12 @@ public class ApproachingPlayerState : GameObjectState
       bool playerInRange = IsPlayerInRange();
       if (IsPlayerPositionChanged() && playerInRange)
       {
-        RewindAnimation(GlobalConstants.AnimationWalkName);
-
         _actor.ChangeState(new SearchingForPlayerState(_actor));
         yield break;
       }
 
       yield return null;
     }
-
-    RewindAnimation(GlobalConstants.AnimationWalkName);
 
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
@@ -194,8 +190,6 @@ public class ApproachingPlayerState : GameObjectState
   bool _rotateDone = false;
   IEnumerator RotateModel(float angle)
   {
-    RewindAnimation(GlobalConstants.AnimationWalkName);
-
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
     
     _rotateDone = false;
@@ -238,8 +232,6 @@ public class ApproachingPlayerState : GameObjectState
 
   IEnumerator MoveModel(Int2 newMapPos)
   {
-    RewindAnimation(GlobalConstants.AnimationIdleName);
-
     if (!_model.AnimationComponent.IsPlaying(GlobalConstants.AnimationWalkName))
     {
       _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);

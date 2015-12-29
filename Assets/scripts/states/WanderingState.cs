@@ -98,8 +98,6 @@ public class WanderingState : GameObjectState
       yield return null;
     }
 
-    RewindAnimation(GlobalConstants.AnimationWalkName);
-    
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine());
@@ -125,8 +123,8 @@ public class WanderingState : GameObjectState
   bool _rotateDone = false;
   IEnumerator RotateModel(float angle)
   {
-    RewindAnimation(GlobalConstants.AnimationWalkName);
-        
+    //RewindAnimation(GlobalConstants.AnimationWalkName);
+
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     _rotateDone = false;
@@ -183,8 +181,8 @@ public class WanderingState : GameObjectState
   RaycastHit _raycastHit;
   IEnumerator MoveModel(Int2 newMapPos)
   {
-    RewindAnimation(GlobalConstants.AnimationIdleName);
-    
+    //RewindAnimation(GlobalConstants.AnimationIdleName);
+
     if (!_model.AnimationComponent.IsPlaying(GlobalConstants.AnimationWalkName))
     {
       _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);

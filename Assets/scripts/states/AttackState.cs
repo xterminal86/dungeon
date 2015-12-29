@@ -10,8 +10,6 @@ public class AttackState : GameObjectState
 
     if (Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) == 1)
     {
-      RewindAnimation(GlobalConstants.AnimationIdleName);
-
       _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationAttackName);
     }
   }
@@ -27,8 +25,6 @@ public class AttackState : GameObjectState
 
       if (Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) == 1)
       {
-        RewindAnimation(GlobalConstants.AnimationWalkName);
-
         _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationAttackName);
       }
     }

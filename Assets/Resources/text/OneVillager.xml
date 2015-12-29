@@ -1,15 +1,13 @@
 <?xml version="1.0"?>
 <MAIN>
-  <CHARACTER prefab="char-lightning" class="villager" name="Claire" hailString="(you see a woman with a strange looking sword)" portraitName="portrait-lightning">
-    <NAME text="My name is Claire." />
-    <JOB text="I'm a Soldier." />
+  <CHARACTER prefab="char-phoenix" class="villager" name="Phoenix" hailString="(test)" portraitName="portrait-phoenix">
+    <NAME text="Name" />
+    <JOB text="Job" />
     <GOSSIP>
-      <LINE text="I took a vacation only to arrive in a place with evil lurking underground.
-Worst vacation ever." />
-      <LINE text="This guy, Cloud... I have a strange feeling, that I know him, but at the same time I'm sure I never met him before." />
-      <LINE text="They say the Dungeon is magical - it's different every time you arrive in this village. Can you believe this?" />
-      <LINE text="Lightning?
-What about it?" />
+      <LINE text="Line 1" />
+      <LINE text="Line 2" />
+      <LINE text="Line 3" />
+      <LINE text="Line 4" />
     </GOSSIP>	
   </CHARACTER>
 </MAIN>

@@ -76,7 +76,10 @@ public class VillagerActor : ActorBase
   {
     if (textToPrint != "..." && !formFirstOpen)
     {
-      ActorState.RewindAnimation(GlobalConstants.AnimationIdleName);
+      if (AnimationComponent.IsPlaying(GlobalConstants.AnimationTalkName))
+      {
+        AnimationComponent.Stop(GlobalConstants.AnimationTalkName);
+      }
 
       AnimationComponent.Play(GlobalConstants.AnimationTalkName);
     }
@@ -166,7 +169,7 @@ public class VillagerActor : ActorBase
     GUIManager.Instance.FormTalking.SetActive(false);
     GUIManager.Instance.FormCompass.SetActive(true);
 
-    ActorState.RewindAnimation(GlobalConstants.AnimationTalkName);
+    //ActorState.RewindAnimation(GlobalConstants.AnimationTalkName);
 
     ChangeState(new WanderingState(this));
     
