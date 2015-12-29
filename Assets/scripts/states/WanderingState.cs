@@ -42,6 +42,7 @@ public class WanderingState : GameObjectState
   IEnumerator MoveOnPath()
   {
     _firstStepSound = false;
+    _firstStepOfPath = false;
 
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
@@ -98,8 +99,15 @@ public class WanderingState : GameObjectState
       yield return null;
     }
 
-    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-
+    if (Random.Range(0, 2) == 0 && _model.IsFemale)
+    {
+      _model.AnimationComponent.Play(GlobalConstants.AnimationThinkingName);
+    }
+    else
+    {
+      _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+    }
+        
     _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine());
     
     yield return null;
@@ -122,10 +130,8 @@ public class WanderingState : GameObjectState
 
   bool _rotateDone = false;
   IEnumerator RotateModel(float angle)
-  {
-    //RewindAnimation(GlobalConstants.AnimationWalkName);
-
-    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+  {    
+    _model.AnimationComponent.CrossFade(GlobalConstants.AnimationIdleName);
 
     _rotateDone = false;
 
@@ -174,18 +180,20 @@ public class WanderingState : GameObjectState
     yield return null;
   }
 
-  bool _firstStepSound = false;
+  bool _firstStepSound = false, _firstStepOfPath = false;
   bool _moveDone = false;
   Int2 _currentMapPos = new Int2();
   Int2 _positionForTalk = new Int2();
   RaycastHit _raycastHit;
   IEnumerator MoveModel(Int2 newMapPos)
   {
-    //RewindAnimation(GlobalConstants.AnimationIdleName);
-
-    if (!_model.AnimationComponent.IsPlaying(GlobalConstants.AnimationWalkName))
+    if (_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationThinkingName))
     {
-      _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);
+      _model.AnimationComponent.CrossFade(GlobalConstants.AnimationWalkName);
+    }
+    else
+    {
+      _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);      
     }
 
     _moveDone = false;
@@ -199,7 +207,7 @@ public class WanderingState : GameObjectState
     if (!_firstStepSound)
     {
       PlayFootstepSound3D(_model.ModelPos, _modelPosition);
-      _firstStepSound = true;
+      _firstStepSound = true;      
     }
   
     while (dx != 0 || dy != 0)

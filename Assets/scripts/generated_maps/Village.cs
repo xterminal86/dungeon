@@ -18,13 +18,16 @@ public class Village : GeneratedMap
   {
     // Hardcoded starting point at the edge of the map with "mountain path"
     SetStartingPos();
+        
+    GenerateBuildings();
+    
+    ConnectBuildings();
 
-    // Village sign positioned near player
+    // Village sign positioned near player and road to the first road mark in the village
     PlaceVillageSign();
 
-    GenerateBuildings();
-    ConnectBuildings();
     GenerateTrees(80, 2);
+    
     GenerateGrass();
 
     FillUnoccupiedCells();
@@ -756,11 +759,28 @@ public class Village : GeneratedMap
   {
     int x = _mapWidth - 2;
     int y = 0;
-    
+
+    Int2 pos = new Int2(x, y);
+
     SerializableObject obj = CreateObject(x, y, 0, GlobalConstants.ObjectPrefabsEnum.VILLAGE_SIGN, (int)GlobalConstants.Orientation.EAST, "sign");
     obj.TextField = "Darwin";
 
     _map[x, y].CellType = GeneratedCellType.OBSTACLE;
     _map[x, y].Objects.Add(obj);
+
+    RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
+    var road = rb.BuildRoad(_roadMarks[0], pos);
+
+    foreach (var item in road)
+    {
+      if (!FindBlock(item.Coordinate, _map[item.Coordinate.X, item.Coordinate.Y].Blocks))
+      {
+        var b = CreateBlock(item.Coordinate.X, item.Coordinate.Y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS);
+        b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.STONE;
+
+        _map[item.Coordinate.X, item.Coordinate.Y].Blocks.Add(b);
+        _map[item.Coordinate.X, item.Coordinate.Y].CellType = GeneratedCellType.ROAD;
+      }
+    }
   }
 }

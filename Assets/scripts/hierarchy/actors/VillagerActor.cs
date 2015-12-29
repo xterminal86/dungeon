@@ -73,17 +73,21 @@ public class VillagerActor : ActorBase
   bool _coroutineDone = true;
   string _textBuf = string.Empty;
   IEnumerator PrintTextRoutine(string textToPrint, bool formFirstOpen = false)
-  {
+  {    
     if (textToPrint != "..." && !formFirstOpen)
     {
       if (AnimationComponent.IsPlaying(GlobalConstants.AnimationTalkName))
       {
         AnimationComponent.Stop(GlobalConstants.AnimationTalkName);
       }
+      else if (AnimationComponent.IsPlaying(GlobalConstants.AnimationThinkingName))
+      {
+        AnimationComponent.Stop(GlobalConstants.AnimationThinkingName);
+      }
 
       AnimationComponent.Play(GlobalConstants.AnimationTalkName);
     }
-
+ 
     int count = 0;
 
     _textBuf = string.Empty;
@@ -109,7 +113,7 @@ public class VillagerActor : ActorBase
     }
 
     _coroutineDone = true;
-
+        
     yield return null;
   }
 
@@ -121,7 +125,7 @@ public class VillagerActor : ActorBase
     {
       _printTextJob.KillJob();
     }
-    
+        
     _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerName));    
   }
 
@@ -129,9 +133,9 @@ public class VillagerActor : ActorBase
   {
     if (_printTextJob != null)
     {
-      _printTextJob.KillJob();
+      _printTextJob.KillJob();      
     }
-
+        
     _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerJob));    
   }
 
@@ -140,9 +144,9 @@ public class VillagerActor : ActorBase
   {   
     if (_printTextJob != null)
     {
-      _printTextJob.KillJob();
+      _printTextJob.KillJob();      
     }
-
+        
     // In case some villagers have more gossip lines than others,
     // we first check for overflow.
     _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;

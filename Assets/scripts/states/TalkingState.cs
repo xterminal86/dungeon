@@ -16,17 +16,15 @@ public class TalkingState : GameObjectState
 
     _actor.Model.transform.eulerAngles = rotation;
 
-    _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+    _actor.AnimationComponent.CrossFade(GlobalConstants.AnimationIdleName);
   }
 
   public override void Run()
   {
-    // If character is not talking, play idle animation
-
-    if (!_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationTalkName) &&
-        !_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationIdleName))
-    {      
+    if (!_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationIdleName)
+     && !_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationTalkName))
+    {
       _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-    }
-  }
+    } 
+  }  
 }

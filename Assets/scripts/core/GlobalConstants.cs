@@ -18,6 +18,9 @@ public static class GlobalConstants
   // (note, that path building is done via coroutines, so real pause time is longer)
   public const int WanderingMinDelaySeconds = 5;
   public const int WanderingMaxDelaySeconds = 10;
+  
+  // Seconds of inactivity after which talking citizen goes into "thinking" pose
+  public const float CharacterThinkingDelay = 3.0f;
 
   // How often enemy tries to perform search for player routine (in seconds)
   public const float SearchingForPlayerRate = 0.1f;
@@ -41,6 +44,7 @@ public static class GlobalConstants
   public const string AnimationWalkName = "Walk";
   public const string AnimationAttackName = "Attack";
   public const string AnimationTalkName = "Talk";
+  public const string AnimationThinkingName = "Thinking";
 
   // Actor classes
 

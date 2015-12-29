@@ -60,9 +60,10 @@ public abstract class GameObjectState
   }
 
   // Sometimes when change of animation happens, it gets stuck in previous state
-  // regardless of wrap mode and stuff, so we manually rewind it
+  // regardless of wrap mode and stuff, so we should manually rewind previously
+  // playing animation before playing new one, using this method.
   //
-  // Possibly because of different Blender versions: at work I have 2.75 and
+  // N.B. Possibly because of different Blender versions: at work I have 2.75 and
   // during export to FBX there are "Add Leaf Bones" and "Key All Frames" checboxes set,
   // so it must be "Key All Bones" that makes everything work without this hack-method.
   public void RewindAnimation(string animationName)
