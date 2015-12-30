@@ -150,7 +150,7 @@ public class Village : GeneratedMap
     {
       for (int y = 0; y < _mapWidth; y++)
       {
-        if (_map[x, y].CellType == GeneratedCellType.NONE || _map[x, y].CellType == GeneratedCellType.OBSTACLE)
+        if (_map[x, y].CellType == GeneratedCellType.NONE || _map[x, y].CellType == GeneratedCellType.DECOR)
         {
           SerializableBlock b = CreateBlock(x, y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_GRASS);
           b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.GRASS;
@@ -186,7 +186,7 @@ public class Village : GeneratedMap
       {
         SerializableBlock b = CreateBlock(x, y, 0, GlobalConstants.StaticPrefabsEnum.TREE_BIRCH);
 
-        _map[x, y].CellType = GeneratedCellType.OBSTACLE;
+        _map[x, y].CellType = GeneratedCellType.DECOR;
         _map[x, y].Blocks.Add(b);
 
         counter++;
@@ -763,15 +763,11 @@ public class Village : GeneratedMap
     int y = 0;
 
     Int2 pos = new Int2(x, y);
-
-    SerializableObject obj = CreateObject(x, y, 0, GlobalConstants.ObjectPrefabsEnum.VILLAGE_SIGN, (int)GlobalConstants.Orientation.EAST, "sign");
-    obj.TextField = "Darwin";
-
-    _map[x, y].CellType = GeneratedCellType.OBSTACLE;
-    _map[x, y].Objects.Add(obj);
+    
+    // Make road from "entrance" to first road mark
 
     RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
-    var road = rb.BuildRoad(_roadMarks[0], pos);
+    var road = rb.BuildRoad(_roadMarks[0], pos, true);
 
     foreach (var item in road)
     {
@@ -784,5 +780,12 @@ public class Village : GeneratedMap
         _map[item.Coordinate.X, item.Coordinate.Y].CellType = GeneratedCellType.ROAD;
       }
     }
+
+    // Place village sign near "entrance"
+
+    SerializableObject obj = CreateObject(x, y, 0, GlobalConstants.ObjectPrefabsEnum.VILLAGE_SIGN, (int)GlobalConstants.Orientation.EAST, "sign");
+    obj.TextField = "Darwin";
+        
+    _map[x, y].Objects.Add(obj);
   }
 }

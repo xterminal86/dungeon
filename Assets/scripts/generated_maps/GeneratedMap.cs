@@ -168,5 +168,6 @@ public enum GeneratedCellType
   NONE = 0,
   ROAD,
   ROOM,
-  OBSTACLE
+  OBSTACLE,
+  DECOR
 }

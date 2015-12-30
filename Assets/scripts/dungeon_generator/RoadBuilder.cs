@@ -138,8 +138,10 @@ public class RoadBuilder
                        (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM && !isInClosedList) );
       */
 
+      GeneratedCellType ct = _map[coordinate.X, coordinate.Y].CellType;
+
       bool condition = ( avoidObstacles ? 
-                         (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.OBSTACLE && !isInClosedList) :
+                         ((ct != GeneratedCellType.OBSTACLE && ct != GeneratedCellType.DECOR) && !isInClosedList) :
                          !isInClosedList );
 
       if (condition)
