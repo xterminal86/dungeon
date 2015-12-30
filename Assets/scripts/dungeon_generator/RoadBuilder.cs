@@ -256,9 +256,17 @@ public class RoadBuilder
     return _path;
   }
 
+  bool _threadIsWorking = false;
+  public bool IsThreadWorking
+  {
+    get { return _threadIsWorking; }
+  }
+
   // Async version of above
   public void BuildRoadAsync(Int2 start, Int2 end, bool avoidObstacles = false)
   {    
+    _threadIsWorking = true;
+
     // When we build road to player in async mode if we are just caching variables,
     // we make references, so if in the process of building road player position changes,
     // it fucks up algorithm working, because we change _end during pathfinding loop.
@@ -323,7 +331,9 @@ public class RoadBuilder
 
     //Debug.Log("building road done!");
 
-    _resultReady = true;    
+    _resultReady = true;
+
+    _threadIsWorking = false;
   }
 
   public void AbortThread()

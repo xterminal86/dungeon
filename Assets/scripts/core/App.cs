@@ -87,7 +87,7 @@ public class App : MonoSingleton<App>
     get { return _generatedMap; }
   }
 
-  void Awake()
+  void OnLevelWasLoaded(int level)
   {
     PlayerMoveState = PlayerMoveStateEnum.NORMAL;
 
@@ -206,8 +206,6 @@ public class App : MonoSingleton<App>
   {
     _mapColumns = _generatedMapWidth;
     _mapRows = _generatedMapHeight;
-
-    //_mapLayout = new char[_generatedMapWidth, _generatedMapHeight];
 
     _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
     ObstaclesByPosition = new GeneratedMapCell[_mapRows, _mapColumns];
@@ -680,8 +678,8 @@ public class App : MonoSingleton<App>
   void SetupCharacters()
   {
     //var resource = Resources.Load("text/OneVillager");
-    //var resource = Resources.Load("text/NoVillagers");
-    var resource = Resources.Load("text/Villagers");
+    var resource = Resources.Load("text/NoVillagers");
+    //var resource = Resources.Load("text/Villagers");
     
     if (resource == null) return;
 
@@ -815,7 +813,6 @@ public class App : MonoSingleton<App>
     return _searchResult;
   }
 
-  //void CreateMapObject(GameObject go, int facing, string moClass, string prefabName, string objectToControlId, string doorSoundType, Vector2 animationSpeeds)
   void CreateMapObject(GameObject go, SerializableObject so)
   {
     BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
@@ -910,10 +907,6 @@ public class App : MonoSingleton<App>
 
     InputController.Instance.PlayerPreviousMapPos.X = x;
     InputController.Instance.PlayerPreviousMapPos.Y = y;
-  }
-
-  void OnLevelWasLoaded(int level)
-  {
   }
 
   public enum MapFilename

@@ -7,7 +7,7 @@ public class SearchingForPlayerState : GameObjectState
   bool _working = false;
   Vector3 _modelPosition = Vector3.zero;
 
-  RoadBuilder _roadBuilder;
+  RoadBuilder _roadBuilder, _pathToPlayer;
   ModelMover _model;
   public SearchingForPlayerState(ActorBase actor) : base()
   {
@@ -20,6 +20,8 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
     _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+    _pathToPlayer = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
 
@@ -37,7 +39,7 @@ public class SearchingForPlayerState : GameObjectState
     _model.transform.position = _modelPosition;
   }
 
-  List<RoadBuilder.PathNode> _road;
+  List<RoadBuilder.PathNode> _road, _roadToPlayer;
   IEnumerator MoveOnPath()
   {
     _firstStepSound = false;
@@ -49,15 +51,16 @@ public class SearchingForPlayerState : GameObjectState
     Int2 destination = App.Instance.GeneratedMap.GetRandomUnoccupiedCell();
     
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
-    
-    _roadBuilder.BuildRoadAsync(_model.ModelPos, destination, true);
-    
+
+    if (!_roadBuilder.IsThreadWorking)
+    {
+      _roadBuilder.BuildRoadAsync(_model.ModelPos, destination, true);
+    }
+
     while ((_road = _roadBuilder.GetResult()) == null)
     {
       // If player comes into range, while actor is still building his path,
       // we stop all activity and exit coroutine
-      //
-      // N.B. Very unlikely scenario now, due to all of the pathfinding calculation code moved to separate thread
 
       if (IsPlayerInRange())
       {

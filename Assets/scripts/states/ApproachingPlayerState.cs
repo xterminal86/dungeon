@@ -19,7 +19,7 @@ public class ApproachingPlayerState : GameObjectState
     _actor = actor;
     _model = actor.Model;
     _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
-
+      
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
@@ -48,12 +48,13 @@ public class ApproachingPlayerState : GameObjectState
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
-    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
+    if (!_roadBuilder.IsThreadWorking)
+    {
+      _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
+    }
 
     while ((_road = _roadBuilder.GetResult()) == null)
     {
-      bool playerInRange = IsPlayerInRange();
-
       // If we cannot find a path to the player, we get stuck in a pathfinding loop for a long time.
       // If during impossible pathfinding loop (e.g. standing before closed door) player moved outside
       // agro range, we stop all activity and change the state to SearchingForPlayerState.
@@ -63,20 +64,21 @@ public class ApproachingPlayerState : GameObjectState
       // If we set "playerInRange" we will always change the state, if player position has changed during pathbuilding,
       // which is very unlikely to happen in short ranges, while if we are standing before a closed door,
       // changing the state is meaningless, because we will still be unable to find path.
-      //
-      // N.B. Very unlikely scenario now, due to all of the pathfinding calculation code moved to separate thread
 
-      if (IsPlayerPositionChanged() && playerInRange)
+      /*
+      if (IsPlayerPositionChanged() && IsPlayerInRange())
       {
         //_roadBuilder.ProcessRoutine.KillJob();
         _roadBuilder.AbortThread();
         _actor.ChangeState(new SearchingForPlayerState(_actor));
         yield break;
       }
+      */
 
       yield return null;
     }
 
+    /*
     // If we could not find path to the player, path list will be empty
     if (_roadBuilder.ResultReady && _road.Count == 0)
     { 
@@ -84,6 +86,7 @@ public class ApproachingPlayerState : GameObjectState
       _actor.ChangeState(new SearchingForPlayerState(_actor));
       yield break;
     }
+    */
 
     _currentMapPos.X = _model.ModelPos.X;
     _currentMapPos.Y = _model.ModelPos.Y;
@@ -122,10 +125,9 @@ public class ApproachingPlayerState : GameObjectState
       _road.RemoveAt(0);
 
       // If player position changed after actor made a step,
-      // go to the search mode again.
+      // go to the search mode again to build new path.
 
-      bool playerInRange = IsPlayerInRange();
-      if (IsPlayerPositionChanged() && playerInRange)
+      if (IsPlayerInRange() && IsPlayerPositionChanged())
       {
         _actor.ChangeState(new SearchingForPlayerState(_actor));
         yield break;
@@ -158,8 +160,9 @@ public class ApproachingPlayerState : GameObjectState
     }
     else
     {
-      // If we got to the following line of code, it means we moved to the last
-      // detected player position and could not get close in order to switch to attack state.
+      // If we got to the following line of code, it means we either moved to the last
+      // detected player position and could not get close in order to switch to attack state 
+      // (player already moved outside the range), or could not build a path to the player at all.
       // So we go to the searching mode again.
 
       _actor.ChangeState(new SearchingForPlayerState(_actor));
