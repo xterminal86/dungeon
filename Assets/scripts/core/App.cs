@@ -208,12 +208,24 @@ public class App : MonoSingleton<App>
     _mapRows = _generatedMapHeight;
 
     _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
+
     ObstaclesByPosition = new GeneratedMapCell[_mapRows, _mapColumns];
 
     for (int x = 0; x < _generatedMapHeight; x++)
     {
       for (int y = 0; y < _generatedMapWidth; y++)
       {
+        ObstaclesByPosition[x, y] = new GeneratedMapCell();
+
+        if (_generatedMap.Map[x, y].CellType == GeneratedCellType.ROOM)
+        {
+          ObstaclesByPosition[x, y].CellType = GeneratedCellType.NONE;
+        }
+        else
+        {
+          ObstaclesByPosition[x, y].CellType = _generatedMap.Map[x, y].CellType;
+        }
+
         foreach (var block in _generatedMap.Map[x, y].Blocks)
         {
           if (block.FootstepSoundType != -1)
@@ -822,6 +834,8 @@ public class App : MonoSingleton<App>
       return;
     }
 
+    bmo.CalculateMapPosition();
+
     switch (so.ObjectClassName)
     {
       case "wall":
@@ -838,6 +852,7 @@ public class App : MonoSingleton<App>
         (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
         (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
         (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
+        (bmo.MapObjectInstance as DoorMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ActionCompleteHandler;
         break;
 
       case "door-controllable":

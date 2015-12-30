@@ -131,10 +131,16 @@ public class RoadBuilder
 
       bool isInClosedList = IsNodePresent(coordinate, _closedList);
 
+      /*
       bool condition = (avoidObstacles ? 
                        (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM &&
                         _map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.OBSTACLE && !isInClosedList) :
                        (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM && !isInClosedList) );
+      */
+
+      bool condition = ( avoidObstacles ? 
+                         (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.OBSTACLE && !isInClosedList) :
+                         !isInClosedList );
 
       if (condition)
       {

@@ -19,8 +19,8 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
-    _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
-    _pathToPlayer = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+    _roadBuilder = new RoadBuilder(App.Instance.ObstaclesByPosition, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+    _pathToPlayer = new RoadBuilder(App.Instance.ObstaclesByPosition, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
 
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }

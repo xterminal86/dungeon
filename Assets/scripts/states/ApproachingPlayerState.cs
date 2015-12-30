@@ -18,7 +18,7 @@ public class ApproachingPlayerState : GameObjectState
   {
     _actor = actor;
     _model = actor.Model;
-    _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+    _roadBuilder = new RoadBuilder(App.Instance.ObstaclesByPosition, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
       
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;

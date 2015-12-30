@@ -56,6 +56,16 @@ public class DoorMapObject : MapObject
     }
   }
 
+  public override void ActionCompleteHandler(object sender)
+  {
+    int x = BMO.MapPosition.X;
+    int y = BMO.MapPosition.Y;
+
+    Debug.Log("changing map cell type: " + x + " " + y + " to " + IsOpen);
+
+    App.Instance.ObstaclesByPosition[x, y].CellType = IsOpen ? GeneratedCellType.NONE : GeneratedCellType.OBSTACLE;
+  }
+
   IEnumerator DoorToggleRoutine()
   {
     IsBeingInteracted = true;
@@ -74,6 +84,7 @@ public class DoorMapObject : MapObject
     _animation.Play(_animationName);
 
     // Set animation type in Animation component to "Always animate"
+    // to prevent animation not playing when model is not in the camera view.
 
     while (_animation.IsPlaying(_animationName))    
     {      
@@ -82,6 +93,9 @@ public class DoorMapObject : MapObject
 
     _lockInteraction = false;    
     IsOpen = !IsOpen;
+
+    if (ActionCompleteCallback != null)
+      ActionCompleteCallback(this);
 
     IsBeingInteracted = false;
 

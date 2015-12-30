@@ -114,7 +114,7 @@ public class Village : GeneratedMap
       // Make roads between every pair of points (that is floors near doors)
       for (int i = 0; i < _roadMarks.Count - 1; i++)
       {
-        var road = rb.BuildRoad(_roadMarks[i], _roadMarks[i + 1]);
+        var road = rb.BuildRoad(_roadMarks[i], _roadMarks[i + 1], true);
 
         foreach (var item in road)
         { 
@@ -296,6 +296,8 @@ public class Village : GeneratedMap
     MakeWindows(cellPos, roomWidth, roomHeight);
     PlaceFloor(cellPos, roomWidth, roomHeight);
     PlaceRoof(cellPos, roomWidth, roomHeight);
+
+    Utils.MarkRectangle(cellPos, roomWidth, roomHeight, GeneratedCellType.OBSTACLE, _map);
   }
 
   int _windowDistance = 4;

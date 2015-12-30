@@ -25,4 +25,16 @@ public class BehaviourMapObject : MonoBehaviour
       LoopingSound.Play();
     }
   }
+
+  Int2 _mapPosition = new Int2();
+  public Int2 MapPosition
+  {
+    get { return _mapPosition; }
+  }
+
+  public void CalculateMapPosition()
+  {
+    _mapPosition.X = (int)transform.position.x / GlobalConstants.WallScaleFactor;
+    _mapPosition.Y = (int)transform.position.z / GlobalConstants.WallScaleFactor;
+  }
 }
