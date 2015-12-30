@@ -14,6 +14,12 @@ public class GeneratedMap
     get { return _map; }
   }
 
+  protected PathfindingCell[,] _pathfindingMap;
+  public PathfindingCell[,] PathfindingMap
+  {
+    get { return _pathfindingMap; }
+  }
+
   protected CameraStartingPos _cameraPos = new CameraStartingPos();
   public CameraStartingPos CameraPos
   {
@@ -35,6 +41,8 @@ public class GeneratedMap
   public GeneratedMap(int width, int height)
   {
     _map = new GeneratedMapCell[width, height];
+    _pathfindingMap = new PathfindingCell[width, height];
+
     _mapWidth = width;
     _mapHeight = height;
 
@@ -43,6 +51,7 @@ public class GeneratedMap
       for (int y = 0; y < _mapWidth; y++)
       {
         _map[x, y] = new GeneratedMapCell();
+        _pathfindingMap[x, y] = new PathfindingCell();
       }
     }
   }
@@ -161,6 +170,23 @@ public class GeneratedMapCell
 
   public List<SerializableBlock> Blocks = new List<SerializableBlock>();
   public List<SerializableObject> Objects = new List<SerializableObject>();
+};
+
+public class PathfindingCell
+{
+  public bool Walkable = true;
+
+  public Dictionary<GlobalConstants.Orientation, bool> SidesWalkability = new Dictionary<GlobalConstants.Orientation, bool>();
+
+  public PathfindingCell()
+  {
+    Walkable = true;
+
+    SidesWalkability[GlobalConstants.Orientation.EAST] = true;
+    SidesWalkability[GlobalConstants.Orientation.SOUTH] = true;
+    SidesWalkability[GlobalConstants.Orientation.WEST] = true;
+    SidesWalkability[GlobalConstants.Orientation.NORTH] = true;
+  }
 };
 
 public enum GeneratedCellType

@@ -297,7 +297,7 @@ public class Village : GeneratedMap
     PlaceFloor(cellPos, roomWidth, roomHeight);
     PlaceRoof(cellPos, roomWidth, roomHeight);
 
-    Utils.MarkRectangle(cellPos, roomWidth, roomHeight, GeneratedCellType.OBSTACLE, _map);
+    //Utils.MarkRectangle(cellPos, roomWidth, roomHeight, GeneratedCellType.OBSTACLE, _map);
   }
 
   int _windowDistance = 4;
@@ -332,15 +332,21 @@ public class Village : GeneratedMap
         {
           blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_WOODEN_LOG);        
           blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_WOODEN_LOG);
+
+          _pathfindingMap[i, startY].Walkable = false;
+          _pathfindingMap[i, endY].Walkable = false;
         }
         else
         {                
           blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.WEST);
           blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.EAST);
+
+          _pathfindingMap[blockLeft.X, blockLeft.Y].SidesWalkability[GlobalConstants.Orientation.WEST] = false;
+          _pathfindingMap[blockRight.X, blockRight.Y].SidesWalkability[GlobalConstants.Orientation.EAST] = false;
         }
 
         _map[blockLeft.X, blockLeft.Y].Blocks.Add(blockLeft);
-        _map[blockRight.X, blockRight.Y].Blocks.Add(blockRight);
+        _map[blockRight.X, blockRight.Y].Blocks.Add(blockRight);        
       }
     }
 
@@ -351,6 +357,12 @@ public class Village : GeneratedMap
       { 
         SerializableBlock blockUp = CreateBlock(startX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.NORTH);
         SerializableBlock blockDown = CreateBlock(endX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.SOUTH);
+
+        if (layer == 0)
+        {
+          _pathfindingMap[startX, i].SidesWalkability[GlobalConstants.Orientation.NORTH] = false;
+          _pathfindingMap[endX, i].SidesWalkability[GlobalConstants.Orientation.SOUTH] = false;
+        }
 
         _map[blockUp.X, blockUp.Y].Blocks.Add(blockUp);
         _map[blockDown.X, blockDown.Y].Blocks.Add(blockDown);

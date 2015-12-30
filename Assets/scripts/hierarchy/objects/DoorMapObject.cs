@@ -63,7 +63,7 @@ public class DoorMapObject : MapObject
 
     Debug.Log("changing map cell type: " + x + " " + y + " to " + IsOpen);
 
-    App.Instance.ObstaclesByPosition[x, y].CellType = IsOpen ? GeneratedCellType.NONE : GeneratedCellType.OBSTACLE;
+    //App.Instance.ObstaclesByPosition[x, y].CellType = IsOpen ? GeneratedCellType.NONE : GeneratedCellType.OBSTACLE;
   }
 
   IEnumerator DoorToggleRoutine()

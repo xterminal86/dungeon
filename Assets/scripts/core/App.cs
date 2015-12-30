@@ -20,10 +20,7 @@ public class App : MonoSingleton<App>
 
   public PlayerMoveStateEnum PlayerMoveState;
   public GameState CurrentGameState;
-
-  // For dynamic obstacles pathfinding
-  public GeneratedMapCell[,] ObstaclesByPosition;
-
+    
   int[,] _floorSoundTypeByPosition;
   public int[,] FloorSoundTypeByPosition
   {
@@ -209,23 +206,11 @@ public class App : MonoSingleton<App>
 
     _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
 
-    ObstaclesByPosition = new GeneratedMapCell[_mapRows, _mapColumns];
 
     for (int x = 0; x < _generatedMapHeight; x++)
     {
       for (int y = 0; y < _generatedMapWidth; y++)
       {
-        ObstaclesByPosition[x, y] = new GeneratedMapCell();
-
-        if (_generatedMap.Map[x, y].CellType == GeneratedCellType.ROOM)
-        {
-          ObstaclesByPosition[x, y].CellType = GeneratedCellType.NONE;
-        }
-        else
-        {
-          ObstaclesByPosition[x, y].CellType = _generatedMap.Map[x, y].CellType;
-        }
-
         foreach (var block in _generatedMap.Map[x, y].Blocks)
         {
           if (block.FootstepSoundType != -1)

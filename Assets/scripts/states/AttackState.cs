@@ -29,6 +29,11 @@ public class AttackState : GameObjectState
       }
     }
 
+    if (!_actor.Model.AnimationComponent.IsPlaying(GlobalConstants.AnimationAttackName))
+    {
+      _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+    }
+
     if (!_actor.Model.AnimationComponent.IsPlaying(GlobalConstants.AnimationAttackName) 
      && Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) > 1)
     {
