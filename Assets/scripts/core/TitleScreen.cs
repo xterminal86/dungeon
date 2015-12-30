@@ -23,9 +23,11 @@ public class TitleScreen : MonoBehaviour
     RenderSettings.fogEndDistance = 18;
 
     SetupScene();
-        
-    ScreenFader.Instance.FadeIn();
+  }
 
+  void OnLevelWasLoaded(int level)
+  {
+    ScreenFader.Instance.FadeIn();
     TorchSound.Play();
   }
 

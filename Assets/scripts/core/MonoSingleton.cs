@@ -66,7 +66,10 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
 
   void Awake()
   {
-    Instance.Init();
+    if (Instance != null)
+    {
+      Instance.Init();
+    }
   }
 
   protected virtual void Init()
@@ -76,7 +79,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
 	protected void OnDestroy()
 	{
     _instantiated = false;
-		applicationIsQuitting = true;
+		//applicationIsQuitting = true;
 	}
 
   public static bool isInstantinated { get { return _instantiated; } }

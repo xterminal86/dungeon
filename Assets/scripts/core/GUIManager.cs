@@ -111,13 +111,23 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   void SaveAndQuitHandler()
   {
+    StopAllCoroutines();
+
     ScreenFader.Instance.FadeCompleteCallback -= SaveAndQuitHandler;
     Application.Quit();
   }
 
   void ReturnToMenuHandler()
   {
+    StopAllCoroutines();
+
+    var objects = FindObjectsOfType<GameObject>();
+    foreach (var item in objects)
+    {
+      Destroy(item.gameObject);
+    }
+
     ScreenFader.Instance.FadeCompleteCallback -= ReturnToMenuHandler;
-    //Application.LoadLevel("title"); // FIXME
+    Application.LoadLevel("entry");
   }  
 }
