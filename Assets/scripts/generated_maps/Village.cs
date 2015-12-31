@@ -101,7 +101,7 @@ public class Village : GeneratedMap
     // If we have more than 1 building
     if (_roadMarks.Count > 1)
     {
-      RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
+      RoadBuilder rb = new RoadBuilder(_pathfindingMap, _mapWidth, _mapHeight);
 
       // Place floor on starting point of the first item
 
@@ -188,6 +188,8 @@ public class Village : GeneratedMap
 
         _map[x, y].CellType = GeneratedCellType.DECOR;
         _map[x, y].Blocks.Add(b);
+
+        _pathfindingMap[x, y].Walkable = false;
 
         counter++;
       }
@@ -778,7 +780,7 @@ public class Village : GeneratedMap
     
     // Make road from "entrance" to first road mark
 
-    RoadBuilder rb = new RoadBuilder(_map, _mapWidth, _mapHeight);
+    RoadBuilder rb = new RoadBuilder(_pathfindingMap, _mapWidth, _mapHeight);
     var road = rb.BuildRoad(_roadMarks[0], pos, true);
 
     foreach (var item in road)

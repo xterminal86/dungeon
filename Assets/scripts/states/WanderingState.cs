@@ -19,7 +19,7 @@ public class WanderingState : GameObjectState
     _model = actor.Model;
     _working = false;
 
-    _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.Map, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+    _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.PathfindingMap, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
         
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }

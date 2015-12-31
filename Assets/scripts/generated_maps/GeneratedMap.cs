@@ -7,13 +7,15 @@ public class GeneratedMap
   protected const int _maxIdleIterations = 1000;
 
   protected int _mapWidth, _mapHeight;
-  
+
+  // For storing map objects to instantiate (walls, doors etc.)
   protected GeneratedMapCell[,] _map;
   public GeneratedMapCell[,] Map
   {
     get { return _map; }
   }
 
+  // For storing availiability for traversal
   protected PathfindingCell[,] _pathfindingMap;
   public PathfindingCell[,] PathfindingMap
   {

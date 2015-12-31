@@ -17,6 +17,7 @@ public class RoadBuilder
   List<PathNode> _closedList = new List<PathNode>();
 
   GeneratedMapCell[,] _map;
+  PathfindingCell[,] _pathfindingMap;
 
   int _hvCost = 10;
   int _diagonalCost = 20;
@@ -33,6 +34,17 @@ public class RoadBuilder
     _abortThread = false;
 
     //PrintMap();
+  }
+
+  public RoadBuilder(PathfindingCell[,] map, int width, int height)
+  {
+    _pathfindingMap = map;
+
+    _mapWidth = width;
+    _mapHeight = height;
+    
+    _resultReady = false;
+    _abortThread = false;
   }
       
   /// <summary>
@@ -120,6 +132,18 @@ public class RoadBuilder
   {
     sbyte[,] direction = new sbyte[4, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
 
+    List<GlobalConstants.Orientation> orientations = new List<GlobalConstants.Orientation>()
+    { 
+      GlobalConstants.Orientation.WEST, GlobalConstants.Orientation.SOUTH, 
+      GlobalConstants.Orientation.EAST, GlobalConstants.Orientation.NORTH 
+    };
+
+    List<GlobalConstants.Orientation> oppositeOrientations = new List<GlobalConstants.Orientation>()
+    { 
+      GlobalConstants.Orientation.EAST, GlobalConstants.Orientation.NORTH, 
+      GlobalConstants.Orientation.WEST, GlobalConstants.Orientation.SOUTH 
+    };
+
     Int2 coordinate = new Int2();
     for (int i = 0; i < 4; i++)
     {
@@ -131,6 +155,13 @@ public class RoadBuilder
 
       bool isInClosedList = IsNodePresent(coordinate, _closedList);
 
+      // Cell is valid if next cell is marked as passable and current cell does not have thin wall 
+      // along current orientation, and next cell does not have thin wall along opposite orientation.
+      bool condition = avoidObstacles ? (_pathfindingMap[coordinate.X, coordinate.Y].Walkable 
+                     && _pathfindingMap[node.Coordinate.X, node.Coordinate.Y].SidesWalkability[orientations[i]] == false
+                     && _pathfindingMap[coordinate.X, coordinate.Y].SidesWalkability[oppositeOrientations[i]] == false)
+                     : !isInClosedList;
+
       /*
       bool condition = (avoidObstacles ? 
                        (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM &&
@@ -138,11 +169,11 @@ public class RoadBuilder
                        (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM && !isInClosedList) );
       */
 
-      GeneratedCellType ct = _map[coordinate.X, coordinate.Y].CellType;
+      //GeneratedCellType ct = _map[coordinate.X, coordinate.Y].CellType;
 
-      bool condition = ( avoidObstacles ? 
-                         ((ct != GeneratedCellType.OBSTACLE && ct != GeneratedCellType.DECOR) && !isInClosedList) :
-                         !isInClosedList );
+      //bool condition = ( avoidObstacles ? 
+      //                   ((ct != GeneratedCellType.OBSTACLE && ct != GeneratedCellType.DECOR) && !isInClosedList) :
+      //                   !isInClosedList );
 
       if (condition)
       {
@@ -221,10 +252,13 @@ public class RoadBuilder
     _start = start;
     _end = end;
 
-    if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
+    /*
+    //if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
+    if (!_pathfindingMap[_end.X, _end.Y].Walkable)
     {
       Debug.Log(end + " - Goal is on the obstacle! : " + _map[_end.X, _end.Y].CellType + " (this is not an error)");
     }
+    */
 
     _path.Clear();
     _openList.Clear();
@@ -282,10 +316,13 @@ public class RoadBuilder
     _start = new Int2(start.X, start.Y);
     _end = new Int2(end.X, end.Y);
 
-    if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
+    /*
+    //if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
+    if (!_pathfindingMap[_end.X, _end.Y].Walkable)
     {
       Debug.Log(end + " - Goal is on the obstacle! : " + _map[_end.X, _end.Y].CellType + " (this is not an error)");
     }
+    */
 
     _path.Clear();
     _openList.Clear();
