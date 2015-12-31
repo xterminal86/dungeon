@@ -155,12 +155,16 @@ public class RoadBuilder
 
       bool isInClosedList = IsNodePresent(coordinate, _closedList);
 
+      Debug.Log("Current cell " + node.Coordinate + " Next cell " + coordinate);
+
       // Cell is valid if next cell is marked as passable and current cell does not have thin wall 
       // along current orientation, and next cell does not have thin wall along opposite orientation.
       bool condition = avoidObstacles ? (_pathfindingMap[coordinate.X, coordinate.Y].Walkable 
                      && _pathfindingMap[node.Coordinate.X, node.Coordinate.Y].SidesWalkability[orientations[i]] == false
                      && _pathfindingMap[coordinate.X, coordinate.Y].SidesWalkability[oppositeOrientations[i]] == false)
                      : !isInClosedList;
+
+      Debug.Log(condition);
 
       /*
       bool condition = (avoidObstacles ? 
@@ -247,7 +251,7 @@ public class RoadBuilder
   /// <param name="start">Starting point</param>
   /// <param name="end">Destination point</param>
   /// <returns>List of nodes from start to end</returns>
-  public List<PathNode> BuildRoad(Int2 start, Int2 end, bool avoidObstacles = false)
+  public List<PathNode> BuildRoad(Int2 start, Int2 end, bool avoidObstacles = false, bool printPath = false)
   {
     _start = start;
     _end = end;
@@ -291,7 +295,7 @@ public class RoadBuilder
       exit = ExitCondition();
     }
     
-    ConstructPath();
+    ConstructPath(printPath);
 
     //Debug.Log("Total closed nodes:\n" + debugPrint);
 

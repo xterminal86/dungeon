@@ -109,9 +109,11 @@ public class DungeonGenerator : MonoBehaviour
   }
 
   GeneratedMapCell[,] _testMap;
+  PathfindingCell[,] _testMap2;
   void BuildRoad()
   {
     _testMap = new GeneratedMapCell[MapHeight, MapWidth];
+    _testMap2 = new PathfindingCell[MapHeight, MapWidth];
 
     for (int x = 0; x < MapHeight; x++)
     {
@@ -121,6 +123,8 @@ public class DungeonGenerator : MonoBehaviour
 
         _testMap[x, y] = new GeneratedMapCell();
         _testMap[x, y].CellType = GeneratedCellType.NONE;
+
+        _testMap2[x, y] = new PathfindingCell();
       }
     }
 
@@ -145,13 +149,17 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     Int2 start = new Int2(20, 20);
-    Int2 end = new Int2(15, 15);
+    Int2 end = new Int2(15, 5);
 
-    var rb = new RoadBuilder(_testMap, MapWidth, MapHeight);
+    var rb = new RoadBuilder(_testMap2, MapWidth, MapHeight);
 
-    rb.BuildRoadAsync(start, end, true);
+    rb.BuildRoad(start, end, true, true);
 
-    Job j = new Job(BuildPathRoutine(rb));
+    TextArea.text = GetOutput();
+
+    //rb.BuildRoadAsync(start, end, true);
+
+    //Job j = new Job(BuildPathRoutine(rb));
   }
 
   IEnumerator BuildPathRoutine(RoadBuilder rb)
@@ -198,6 +206,7 @@ public class DungeonGenerator : MonoBehaviour
       {
         //_map.Map[x, y].CellType = CellType.WALL;
         _testMap[x, y].CellType = GeneratedCellType.OBSTACLE;
+        _testMap2[x, y].Walkable = false;
       }
     }
 
