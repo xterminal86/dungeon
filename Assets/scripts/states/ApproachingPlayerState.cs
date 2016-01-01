@@ -52,7 +52,7 @@ public class ApproachingPlayerState : GameObjectState
     {
       _roadBuilder.AbortThread();
     }
-
+    
     _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
 
     while ((_road = _roadBuilder.GetResult()) == null)

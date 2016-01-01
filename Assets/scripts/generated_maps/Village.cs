@@ -773,7 +773,7 @@ public class Village : GeneratedMap
 
   void PlaceVillageSign()
   {
-    int x = _mapWidth - 2;
+    int x = _mapWidth - 1;
     int y = 0;
 
     Int2 pos = new Int2(x, y);
@@ -797,7 +797,7 @@ public class Village : GeneratedMap
 
     // Place village sign near "entrance"
 
-    SerializableObject obj = CreateObject(x, y, 0, GlobalConstants.ObjectPrefabsEnum.VILLAGE_SIGN, (int)GlobalConstants.Orientation.EAST, "sign");
+    SerializableObject obj = CreateObject(x - 1, y, 0, GlobalConstants.ObjectPrefabsEnum.VILLAGE_SIGN, (int)GlobalConstants.Orientation.EAST, "sign");
     obj.TextField = "Darwin";
         
     _map[x, y].Objects.Add(obj);
