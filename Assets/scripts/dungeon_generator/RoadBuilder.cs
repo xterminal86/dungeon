@@ -155,29 +155,29 @@ public class RoadBuilder
 
       bool isInClosedList = IsNodePresent(coordinate, _closedList);
 
-      Debug.Log("Current cell " + node.Coordinate + " Next cell " + coordinate);
+      //Debug.Log("Current cell " + node.Coordinate + " Next cell " + coordinate);
 
       // Cell is valid if next cell is marked as passable and current cell does not have thin wall 
       // along current orientation, and next cell does not have thin wall along opposite orientation.
-      bool condition = avoidObstacles ? (_pathfindingMap[coordinate.X, coordinate.Y].Walkable 
-                     && _pathfindingMap[node.Coordinate.X, node.Coordinate.Y].SidesWalkability[orientations[i]] == false
-                     && _pathfindingMap[coordinate.X, coordinate.Y].SidesWalkability[oppositeOrientations[i]] == false)
+      bool condition = avoidObstacles ? 
+                       (_pathfindingMap[coordinate.X, coordinate.Y].Walkable 
+                     && _pathfindingMap[node.Coordinate.X, node.Coordinate.Y].SidesWalkability[orientations[i]] == true
+                     && _pathfindingMap[coordinate.X, coordinate.Y].SidesWalkability[oppositeOrientations[i]] == true 
+                     && !isInClosedList) 
                      : !isInClosedList;
-
-      Debug.Log(condition);
 
       /*
       bool condition = (avoidObstacles ? 
                        (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM &&
                         _map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.OBSTACLE && !isInClosedList) :
                        (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM && !isInClosedList) );
+      
+      GeneratedCellType ct = _map[coordinate.X, coordinate.Y].CellType;
+
+      bool condition = ( avoidObstacles ? 
+                       ((ct != GeneratedCellType.OBSTACLE && ct != GeneratedCellType.DECOR) && !isInClosedList) :
+                       !isInClosedList );
       */
-
-      //GeneratedCellType ct = _map[coordinate.X, coordinate.Y].CellType;
-
-      //bool condition = ( avoidObstacles ? 
-      //                   ((ct != GeneratedCellType.OBSTACLE && ct != GeneratedCellType.DECOR) && !isInClosedList) :
-      //                   !isInClosedList );
 
       if (condition)
       {
@@ -359,9 +359,7 @@ public class RoadBuilder
       {
         return;
       }
-
-      //Debug.Log("building road... ");
-
+            
       int index = FindCheapestElement(_openList);
 
       var closedNode = _openList[index];
@@ -391,9 +389,9 @@ public class RoadBuilder
   }
 
   // Constantly check the result via this property in a coroutine  
-  public List<PathNode> GetResult()
+  public List<PathNode> GetResult(bool ignoreAsync = false)
   {
-    if (_resultReady)
+    if (_resultReady || ignoreAsync)
     {
       ConstructPath();
 

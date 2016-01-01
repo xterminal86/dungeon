@@ -51,13 +51,10 @@ public class SearchingForPlayerState : GameObjectState
     
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
 
-    if (!_roadBuilder.IsThreadWorking)
-    {
-      _roadBuilder.BuildRoadAsync(_model.ModelPos, destination, true);
-    }
+    _roadBuilder.BuildRoadAsync(_model.ModelPos, destination, true);    
 
     while ((_road = _roadBuilder.GetResult()) == null)
-    {
+    {      
       // If player comes into range, while actor is still building his path,
       // we stop all activity and exit coroutine
 

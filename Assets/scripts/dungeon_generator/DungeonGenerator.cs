@@ -140,6 +140,7 @@ public class DungeonGenerator : MonoBehaviour
         if (_testMap[x, y].CellType == GeneratedCellType.OBSTACLE)
         {
           _map.Map[x, y].CellType = CellType.WALL;
+          _testMap2[x, y].Walkable = false;
         }
         else
         {
@@ -148,12 +149,19 @@ public class DungeonGenerator : MonoBehaviour
       }
     }
 
-    Int2 start = new Int2(20, 20);
-    Int2 end = new Int2(15, 5);
+    Int2 start = new Int2(15, 15);
+    Int2 end = new Int2(15, 20);
 
     var rb = new RoadBuilder(_testMap2, MapWidth, MapHeight);
 
     rb.BuildRoad(start, end, true, true);
+
+    var res = rb.GetResult(true);
+
+    foreach (var item in res)
+    {
+      _map.Map[item.Coordinate.X, item.Coordinate.Y].CellType = CellType.TEST_MARK;
+    }
 
     TextArea.text = GetOutput();
 
@@ -161,7 +169,7 @@ public class DungeonGenerator : MonoBehaviour
 
     //Job j = new Job(BuildPathRoutine(rb));
   }
-
+    
   IEnumerator BuildPathRoutine(RoadBuilder rb)
   {
     List<RoadBuilder.PathNode> road;

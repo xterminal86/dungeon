@@ -61,9 +61,9 @@ public class DoorMapObject : MapObject
     int x = BMO.MapPosition.X;
     int y = BMO.MapPosition.Y;
 
-    Debug.Log("changing map cell type: " + x + " " + y + " to " + IsOpen);
+    //Debug.Log("changing map cell type: " + x + " " + y + " to " + IsOpen + " facing: " + Facing + " " + (GlobalConstants.Orientation)Facing);
 
-    //App.Instance.ObstaclesByPosition[x, y].CellType = IsOpen ? GeneratedCellType.NONE : GeneratedCellType.OBSTACLE;
+    App.Instance.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)Facing] = IsOpen;    
   }
 
   IEnumerator DoorToggleRoutine()

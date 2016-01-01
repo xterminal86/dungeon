@@ -43,18 +43,20 @@ public class ApproachingPlayerState : GameObjectState
 
   List<RoadBuilder.PathNode> _road;
   IEnumerator ApproachPlayerRoutine()
-  {
+  {    
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
-    if (!_roadBuilder.IsThreadWorking)
+    if (_roadBuilder.IsThreadWorking)
     {
-      _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
+      _roadBuilder.AbortThread();
     }
 
+    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
+
     while ((_road = _roadBuilder.GetResult()) == null)
-    {
+    {      
       // If we cannot find a path to the player, we get stuck in a pathfinding loop for a long time.
       // If during impossible pathfinding loop (e.g. standing before closed door) player moved outside
       // agro range, we stop all activity and change the state to SearchingForPlayerState.
@@ -65,7 +67,6 @@ public class ApproachingPlayerState : GameObjectState
       // which is very unlikely to happen in short ranges, while if we are standing before a closed door,
       // changing the state is meaningless, because we will still be unable to find path.
 
-      /*
       if (IsPlayerPositionChanged() && IsPlayerInRange())
       {
         //_roadBuilder.ProcessRoutine.KillJob();
@@ -73,12 +74,10 @@ public class ApproachingPlayerState : GameObjectState
         _actor.ChangeState(new SearchingForPlayerState(_actor));
         yield break;
       }
-      */
-
+      
       yield return null;
     }
-
-    /*
+        
     // If we could not find path to the player, path list will be empty
     if (_roadBuilder.ResultReady && _road.Count == 0)
     { 
@@ -86,15 +85,14 @@ public class ApproachingPlayerState : GameObjectState
       _actor.ChangeState(new SearchingForPlayerState(_actor));
       yield break;
     }
-    */
-
+    
     _currentMapPos.X = _model.ModelPos.X;
     _currentMapPos.Y = _model.ModelPos.Y;
 
     float angleStart = 0.0f, angleEnd = 0.0f;
 
     while (_road.Count > 1)
-    {
+    {      
       //Debug.Log("Approaching player");
 
       angleStart = _model.transform.rotation.eulerAngles.y;
@@ -114,15 +112,23 @@ public class ApproachingPlayerState : GameObjectState
         
         _firstStepSound = false;
       }
-      
-      _stepJob = JobManager.Instance.CreateCoroutine(MoveModel(_road[0].Coordinate));
-      
-      while (!_moveDone)
-      {
-        yield return null;
+
+      if (CanMove(_road[0].Coordinate))
+      {        
+        _stepJob = JobManager.Instance.CreateCoroutine(MoveModel(_road[0].Coordinate));
+
+        while (!_moveDone)
+        {
+          yield return null;
+        }
+
+        _road.RemoveAt(0);
       }
-      
-      _road.RemoveAt(0);
+      else
+      {
+        _actor.ChangeState(new SearchingForPlayerState(_actor));
+        yield break;
+      }      
 
       // If player position changed after actor made a step,
       // go to the search mode again to build new path.
@@ -154,9 +160,18 @@ public class ApproachingPlayerState : GameObjectState
         }
       }
             
-      // ...and switch to attack mode
-      _actor.ChangeState(new AttackState(_actor));
-      yield break;
+      // ...and switch to attack mode if there is no wall before us...
+      if (CanMove(InputController.Instance.PlayerMapPos))
+      {
+        _actor.ChangeState(new AttackState(_actor));
+        yield break;
+      }
+      else
+      {
+        // ...or go to search mode otherwise
+        _actor.ChangeState(new SearchingForPlayerState(_actor));
+        yield break;
+      }
     }
     else
     {
@@ -173,6 +188,24 @@ public class ApproachingPlayerState : GameObjectState
     _running = false;
 
     yield return null;
+  }
+
+  bool CanMove(Int2 nextCellCoord)
+  {
+    int modelFacing = (int)GlobalConstants.OrientationByAngle[(int)_model.transform.eulerAngles.y];
+    int nextCellSide = (int)GlobalConstants.OppositeOrientationByAngle[(int)_model.transform.eulerAngles.y];
+
+    int x = nextCellCoord.X;
+    int y = nextCellCoord.Y;
+
+    if (!App.Instance.GeneratedMap.PathfindingMap[x, y].Walkable 
+      || App.Instance.GeneratedMap.PathfindingMap[_model.ModelPos.X, _model.ModelPos.Y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
+      || App.Instance.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
+    {
+      return false;
+    }
+
+    return true;
   }
 
   float GetAngleToRotate(Int2 cellToLook)

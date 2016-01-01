@@ -8,7 +8,7 @@ public class AttackState : GameObjectState
   {
     _actor = actor;
 
-    if (Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) == 1)
+    if (IsPlayerReachable() && !HasWall(_actor.Model.ModelPos))
     {
       _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationAttackName);
     }
@@ -23,9 +23,13 @@ public class AttackState : GameObjectState
     {
       _timer = 0.0f;
 
-      if (Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) == 1)
+      if (IsPlayerReachable() && !HasWall(_actor.Model.ModelPos))
       {
         _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationAttackName);
+      }
+      else
+      {
+        _actor.ChangeState(new SearchingForPlayerState(_actor));
       }
     }
 
@@ -34,10 +38,34 @@ public class AttackState : GameObjectState
       _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
     }
 
-    if (!_actor.Model.AnimationComponent.IsPlaying(GlobalConstants.AnimationAttackName) 
-     && Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) > 1)
+    if (!_actor.Model.AnimationComponent.IsPlaying(GlobalConstants.AnimationAttackName) && !IsPlayerReachable())
     {
       _actor.ChangeState(new SearchingForPlayerState(_actor));
     }
+  }
+
+  bool IsPlayerReachable()
+  {
+    float d = Vector3.Distance(_actor.Model.transform.position, App.Instance.CameraPos);
+
+    return (Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) == 1 && (int)d <= GlobalConstants.WallScaleFactor);    
+  }
+
+  bool HasWall(Int2 nextCellCoord)
+  {
+    int modelFacing = (int)GlobalConstants.OrientationByAngle[(int)_actor.Model.transform.eulerAngles.y];
+    int nextCellSide = (int)GlobalConstants.OppositeOrientationByAngle[(int)_actor.Model.transform.eulerAngles.y];
+        
+    int x = nextCellCoord.X;
+    int y = nextCellCoord.Y;
+
+    if (!App.Instance.GeneratedMap.PathfindingMap[x, y].Walkable
+      || App.Instance.GeneratedMap.PathfindingMap[_actor.Model.ModelPos.X, _actor.Model.ModelPos.Y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
+      || App.Instance.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
+    {
+      return true;
+    }
+
+    return false;
   }
 }

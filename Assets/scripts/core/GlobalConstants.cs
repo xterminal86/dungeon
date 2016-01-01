@@ -72,6 +72,22 @@ public static class GlobalConstants
     { Orientation.WEST, 180.0f }
   };
 
+  public static Dictionary<int, Orientation> OrientationByAngle = new Dictionary<int, Orientation>()
+  {
+    { 270, Orientation.NORTH },
+    { 0, Orientation.EAST },
+    { 90, Orientation.SOUTH },
+    { 180, Orientation.WEST }
+  };
+
+  public static Dictionary<int, Orientation> OppositeOrientationByAngle = new Dictionary<int, Orientation>()
+  {
+    { 270, Orientation.SOUTH },
+    { 0, Orientation.WEST },
+    { 90, Orientation.NORTH },
+    { 180, Orientation.EAST }
+  };
+
   public static List<int> FootstepsDummy = new List<int>()
   {
     "fs-dummy1".GetHashCode(),
