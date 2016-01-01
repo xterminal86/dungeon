@@ -87,9 +87,9 @@ Wish you could see it at better times, though..." />
   </CHARACTER>
   <CHARACTER prefab="char-steve" class="villager" name="Steve" hailString="(you see a blocky man carrying a pickaxe)" portraitName="portrait-steve">
     <NAME text="My name's Steve." />
-    <JOB text="I'm a miner." />
+    <JOB text="I'm a Miner." />
     <GOSSIP>
-      <LINE text="They say that sometimes a ghost of a miner may suddenly appear in the Dungeon. People say his name was Herobrine and he tragically died in the mines." />
+      <LINE text="They say that sometimes a ghost of a Miner may suddenly appear in the Dungeon. People say his name was Herobrine and he tragically died in the mines." />
       <LINE text="Emeralds are green, diamonds are blue,
 Redstone is red and this is all true!" />
       <LINE text="What do you mean, I am blocky?
