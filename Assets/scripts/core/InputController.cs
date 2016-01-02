@@ -244,7 +244,7 @@ public class InputController : MonoSingleton<InputController>
       if (zComponent != 0) tmp.x = ray.direction.z;
       ray.direction = tmp;
     }
-
+        
     RaycastHit hit;      
     if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
     {
@@ -253,11 +253,11 @@ public class InputController : MonoSingleton<InputController>
         obstacleAhead = (hit.collider.gameObject.GetComponent<ModelMover>() == null);
       }
     }
-
+    
     //return (emptyCell == '.' && !obstacleAhead);
-    return !obstacleAhead;
+    return !obstacleAhead;    
   }
-
+    
   void TurnCamera(int from, int to, bool turnRight)
   {    
     if (from < 0) from = GlobalConstants.OrientationsMap.Count - 1;

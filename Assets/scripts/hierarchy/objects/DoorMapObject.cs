@@ -67,7 +67,7 @@ public class DoorMapObject : MapObject
   }
 
   IEnumerator DoorToggleRoutine()
-  {
+  {    
     IsBeingInteracted = true;
 
     if (IsOpen)
@@ -81,6 +81,8 @@ public class DoorMapObject : MapObject
       _animation[_animationName].speed = AnimationOpenSpeed;
     }
 
+    IsOpen = !IsOpen;
+    
     _animation.Play(_animationName);
 
     // Set animation type in Animation component to "Always animate"
@@ -92,8 +94,7 @@ public class DoorMapObject : MapObject
     }
 
     _lockInteraction = false;    
-    IsOpen = !IsOpen;
-
+    
     if (ActionCompleteCallback != null)
       ActionCompleteCallback(this);
 
