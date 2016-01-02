@@ -71,6 +71,7 @@ public class GeneratedMap
       for (int y = 0; y < _mapWidth; y++)
       {
         if (_map[x, y].CellType == GeneratedCellType.NONE || _map[x, y].CellType == GeneratedCellType.ROAD)
+        //if (_pathfindingMap[x, y].Walkable)
         {
           _unoccupiedCells.Add(new Int2(x, y));
         }

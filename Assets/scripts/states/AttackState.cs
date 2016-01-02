@@ -51,17 +51,26 @@ public class AttackState : GameObjectState
     return (Utils.BlockDistance(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos) == 1 && (int)d <= GlobalConstants.WallScaleFactor);    
   }
 
-  bool HasWall(Int2 nextCellCoord)
+  bool HasWall(Int2 actorPos)
   {
-    int modelFacing = (int)GlobalConstants.OrientationByAngle[(int)_actor.Model.transform.eulerAngles.y];
-    int nextCellSide = (int)GlobalConstants.OppositeOrientationByAngle[(int)_actor.Model.transform.eulerAngles.y];
-        
-    int x = nextCellCoord.X;
-    int y = nextCellCoord.Y;
+    var modelFacing = GlobalConstants.OrientationByAngle[(int)_actor.Model.transform.eulerAngles.y];
+    var nextCellSide = GlobalConstants.OppositeOrientationByAngle[(int)_actor.Model.transform.eulerAngles.y];
 
-    if (!App.Instance.GeneratedMap.PathfindingMap[x, y].Walkable
-      || App.Instance.GeneratedMap.PathfindingMap[_actor.Model.ModelPos.X, _actor.Model.ModelPos.Y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
-      || App.Instance.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
+    int nextCellX = actorPos.X;
+    int nextCellY = actorPos.Y;
+
+    if (modelFacing == GlobalConstants.Orientation.NORTH) nextCellX--;
+    else if (modelFacing == GlobalConstants.Orientation.EAST) nextCellY++;
+    else if (modelFacing == GlobalConstants.Orientation.SOUTH) nextCellX++;
+    else if (modelFacing == GlobalConstants.Orientation.WEST) nextCellY--;
+
+    bool nextCellWalkability = App.Instance.GeneratedMap.PathfindingMap[nextCellX, nextCellY].Walkable;
+    bool currentCellWall = App.Instance.GeneratedMap.PathfindingMap[actorPos.X, actorPos.Y].SidesWalkability[modelFacing];
+    bool nextCellWall = App.Instance.GeneratedMap.PathfindingMap[nextCellX, nextCellY].SidesWalkability[nextCellSide];
+
+    //Debug.Log("Checking cells " + modelFacing + " " + nextCellSide + " " + nextCellX + " " + nextCellY + " " + nextCellWalkability + " " + currentCellWall + " " + nextCellWall);
+
+    if (!nextCellWalkability || !currentCellWall || !nextCellWall)
     {
       return true;
     }
