@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GUIManager : MonoSingleton<GUIManager> 
 {
   public AudioSource ButtonClickSound;
+  public AudioSource ButtonClickSoundShort;
   public AudioSource CharacterSpeakSound;
 
   public GameObject TitleScreenButtonsHolder;

@@ -63,6 +63,10 @@ public class PlayerCharacter
   public string CharacterName = string.Empty;
 
   CharacterClass _characterClass = CharacterClass.NONE;
+  public CharacterClass GetCharacterClass
+  {
+    get { return _characterClass; }
+  }
 
   int _startingHitPoints = 0;
   int _startingMagicPoints = 0;
@@ -95,7 +99,7 @@ public class PlayerCharacter
     _level = 1;
     _experience = 0;
 
-    _strength = 5;
+    _strength = 6;
     _dexterity = 3;
     _willpower = 1;
 
@@ -112,7 +116,7 @@ public class PlayerCharacter
     CalculateArmorClass();
     
     _hunger = GlobalConstants.HungerMax;    
-    _hungerDecreaseMultiplier = 1.0f;
+    _hungerDecreaseMultiplier = 1.25f;
   }
 
   public void InitThief()
@@ -122,7 +126,7 @@ public class PlayerCharacter
     _level = 1;
     _experience = 0;
 
-    _strength = 3;
+    _strength = 2;
     _dexterity = 5;
     _willpower = 2;
 
@@ -139,7 +143,7 @@ public class PlayerCharacter
     CalculateArmorClass();
         
     _hunger = GlobalConstants.HungerMax;    
-    _hungerDecreaseMultiplier = 0.5f;
+    _hungerDecreaseMultiplier = 0.8f;
   }
 
   public void InitMage()
@@ -166,7 +170,7 @@ public class PlayerCharacter
     CalculateArmorClass();
 
     _hunger = GlobalConstants.HungerMax;
-    _hungerDecreaseMultiplier = 0.8f;
+    _hungerDecreaseMultiplier = 1.0f;
   }
 
   public void ResetToDefault()

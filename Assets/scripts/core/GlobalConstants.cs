@@ -211,7 +211,7 @@ public static class GlobalConstants
     { "Thief" },
     { "Mage" }
   };
-
+    
   public static List<string> CharacterClassDescriptions = new List<string>()
   {
     { "Those from the City who feel military incline within themselves decide to become a Soldier.\nHard work and worthless pay yields tough people." },

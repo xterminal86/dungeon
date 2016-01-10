@@ -61,7 +61,7 @@ public class FormNewGame : MonoBehaviour
   int _indexer = 0;
   public void LeftArrowHandler()
   {
-    GUIManager.Instance.ButtonClickSound.Play();
+    GUIManager.Instance.ButtonClickSoundShort.Play();
 
     _indexer--;
 
@@ -75,7 +75,7 @@ public class FormNewGame : MonoBehaviour
 
   public void RightArrowHandler()
   {
-    GUIManager.Instance.ButtonClickSound.Play();
+    GUIManager.Instance.ButtonClickSoundShort.Play();
 
     _indexer++;
 
@@ -97,6 +97,8 @@ public class FormNewGame : MonoBehaviour
 
   public void SetupForm()
   {
+    _indexer = 0;
+
     PlayerData.Instance.PlayerCharacterVariable.ResetToDefault();
   }
 
