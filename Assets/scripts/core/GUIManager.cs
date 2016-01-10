@@ -7,7 +7,8 @@ public class GUIManager : MonoSingleton<GUIManager>
 {
   public AudioSource ButtonClickSound;
   public AudioSource CharacterSpeakSound;
-  
+
+  public GameObject TitleScreenButtonsHolder;
   public GameObject FormTalking;
   public GameObject FormCompass;
   public GameObject FormGameMenu;
@@ -17,6 +18,8 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public Text FormTalkingName;
   public Text FormTalkingText;
+
+  public FormNewGame NewGameForm;
 
   [HideInInspector]
   public List<Sprite> Portraits = new List<Sprite>();
@@ -105,6 +108,16 @@ public class GUIManager : MonoSingleton<GUIManager>
     FormGameMenu.SetActive(false);
 
     App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.NORMAL;
+  }
+
+  // Form New Game
+
+  public void SetupNewGameForm()
+  {
+    TitleScreenButtonsHolder.SetActive(false);
+    NewGameForm.gameObject.SetActive(true);
+
+    NewGameForm.SetupForm();
   }
 
   // Private Methods

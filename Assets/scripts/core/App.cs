@@ -909,6 +909,18 @@ public class App : MonoSingleton<App>
     InputController.Instance.PlayerPreviousMapPos.Y = y;
   }
 
+  float _hungerTimer = 0.0f;
+  void Update()
+  {
+    _hungerTimer += Time.smoothDeltaTime * PlayerData.Instance.PlayerCharacterVariable.HungerDecreaseMultiplier;
+
+    if (_hungerTimer > 1.0f)
+    {
+      _hungerTimer = 0.0f;
+      PlayerData.Instance.PlayerCharacterVariable.AddHunger(-1);
+    }
+  }
+
   public enum MapFilename
   {
     ROOMS = 0,

@@ -94,7 +94,7 @@ public class VillagerActor : ActorBase
 
     _coroutineDone = false;
 
-    float speakPitch = Model.IsFemale ? 2.0f : 1.0f;
+    float speakPitch = Model.FemaleVoice ? 2.0f : 1.0f;
 
     while (count < textToPrint.Length)
     {

@@ -4,7 +4,7 @@ MAJOR
 + Dialogues with NPCs (3 buttons, like, "Name", "Job", "Gossip", "Bye")
 Merchants (dialogue window by pressing "Job" on form talking, common interaction mechanic, i.e. merchant and priest services etc.)
 Special rooms and buildings generation (chapel, shop etc.)
-Player and monsters stats, game mechanic
+Player and monsters stats, game mechanic (formulas and stuff)
 Improve approach to player algorithm, so that it takes into account dynamically generated obstacles (doors, pits etc.):
           Improve NPC movement algorithm, so that it constantly checks next cell along its path during movement,
           and if it's occupied, breaks moving routine and recalculates path (switching state).
@@ -42,3 +42,4 @@ Credits:
 
 Capes : http://www.planetminecraft.com/blog/capes-collection/ (Avalanche_Ali)
 Skins : http://www.minecraftskins.com/
+Icons : "Designed by Freepik.com", Final Fantasy Wiki

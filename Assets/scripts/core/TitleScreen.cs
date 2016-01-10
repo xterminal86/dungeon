@@ -34,9 +34,10 @@ public class TitleScreen : MonoBehaviour
   public void NewGameHandler()
   {
     GUIManager.Instance.ButtonClickSound.Play();
-    
-    ScreenFader.Instance.FadeCompleteCallback += FadeCompleteHandler;
-    ScreenFader.Instance.FadeOut();
+
+    GUIManager.Instance.SetupNewGameForm();
+    //ScreenFader.Instance.FadeCompleteCallback += FadeCompleteHandler;
+    //ScreenFader.Instance.FadeOut();
   }
 
   public void StatisticsHandler()

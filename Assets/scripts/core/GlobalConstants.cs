@@ -26,6 +26,9 @@ public static class GlobalConstants
   public const float SearchingForPlayerRate = 0.1f;
   public const float AttackCooldown = 3.0f;
 
+  // Maximum value of hunger
+  public const int HungerMax = 100;
+
   // Speed of camera bobbing
   public const float CameraBobSpeed = 0.5f;
 
@@ -202,6 +205,20 @@ public static class GlobalConstants
     { FootstepSoundType.METAL, FootstepsDummy3d }
   };
 
+  public static List<string> CharacterClassNames = new List<string>()
+  {
+    { "Soldier" },
+    { "Thief" },
+    { "Mage" }
+  };
+
+  public static List<string> CharacterClassDescriptions = new List<string>()
+  {
+    { "Those from the City who feel military incline within themselves decide to become a Soldier.\nHard work and worthless pay yields tough people." },
+    { "There are people who want to help other people get rid of unnecessary things.\nFor some reason those other people don't like them." },
+    { "Tinkering with occult and arcane, always trying to uncover the mysteries of the world and usually not care a dime about anything else." }
+  };
+
   public enum FootstepSoundType
   {
     DUMMY = 0,
@@ -290,7 +307,7 @@ public static class GlobalConstants
     { ObjectPrefabsEnum.BUTTON, "button" },
     { ObjectPrefabsEnum.LEVER, "lever" },
     { ObjectPrefabsEnum.VILLAGE_SIGN, "sign-village" }
-  };
+  };  
 }
 
 public class VillagerInfo
@@ -313,3 +330,4 @@ public class VillagerInfo
     return result;
   }
 };
+
