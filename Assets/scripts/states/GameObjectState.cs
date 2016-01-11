@@ -63,9 +63,7 @@ public abstract class GameObjectState
   // regardless of wrap mode and stuff, so we should manually rewind previously
   // playing animation before playing new one, using this method.
   //
-  // N.B. Possibly because of different Blender versions: at work I have 2.75 and
-  // during export to FBX there are "Add Leaf Bones" and "Key All Frames" checboxes set,
-  // so it must be "Key All Bones" that makes everything work without this hack-method.
+  // N.B. Make sure "Key All Bones" is checked during FBX export in Blender (v. 2.75).
   public void RewindAnimation(string animationName)
   {
     if (_actor.Model.AnimationComponent.GetClip(animationName) != null)

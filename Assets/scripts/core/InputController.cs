@@ -37,7 +37,8 @@ public class InputController : MonoSingleton<InputController>
   float _currentMoveSpeed = 0.0f;
 	void Update () 
   {
-    if (App.Instance.PlayerMoveState == App.PlayerMoveStateEnum.HOLD_PLAYER)
+    if (App.Instance.PlayerMoveState == App.PlayerMoveStateEnum.HOLD_PLAYER
+     || App.Instance.CurrentGameState != App.GameState.RUNNING)
     {
       return;
     }

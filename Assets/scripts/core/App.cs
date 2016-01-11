@@ -154,6 +154,8 @@ public class App : MonoSingleton<App>
     GUIManager.Instance.SetCompassVisibility(true);
     GUIManager.Instance.PlayerForm.ShowForm(true);
 
+    CurrentGameState = GameState.RUNNING;
+
     if (MapLoadingFinished != null)
       MapLoadingFinished();    
   }
@@ -913,6 +915,19 @@ public class App : MonoSingleton<App>
   float _hungerTimer = 0.0f;
   void Update()
   {
+    if (CurrentGameState != GameState.RUNNING)
+    {
+      return;
+    }
+
+    if (PlayerData.Instance.PlayerCharacterVariable.HitPoints == 0)
+    {
+      CurrentGameState = GameState.PAUSED;
+
+      ScreenFader.Instance.FadeCompleteCallback += GameOverHandler;
+      ScreenFader.Instance.FadeOut();
+    }
+
     _hungerTimer += Time.smoothDeltaTime * PlayerData.Instance.PlayerCharacterVariable.HungerDecreaseMultiplier;
 
     if (_hungerTimer > PlayerData.Instance.PlayerCharacterVariable.HungerTick)
@@ -920,6 +935,18 @@ public class App : MonoSingleton<App>
       _hungerTimer = 0.0f;
       PlayerData.Instance.PlayerCharacterVariable.AddHunger(-1);
     }
+  }
+
+  void GameOverHandler()
+  {
+    var objects = FindObjectsOfType<GameObject>();
+    foreach (var item in objects)
+    {
+      Destroy(item.gameObject);
+    }
+
+    ScreenFader.Instance.FadeCompleteCallback -= GameOverHandler;
+    Application.LoadLevel("entry");
   }
 
   public enum MapFilename
@@ -943,7 +970,7 @@ public class App : MonoSingleton<App>
 
   public enum GameState
   {
-    TITLE = 0,
-    MAIN
+    RUNNING = 0,
+    PAUSED
   }
 }

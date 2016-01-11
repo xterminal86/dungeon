@@ -51,7 +51,7 @@ public class ModelMover : MonoBehaviour
 
       _animationComponent[GlobalConstants.AnimationTalkName].speed = GlobalConstants.CharacterAnimationTalkSpeed;
 
-      // FIXME: Hardcode
+      // FIXME: Attack speed is hardcoded
       if (_animationComponent.GetClip(GlobalConstants.AnimationAttackName) != null)
       {
         _animationComponent[GlobalConstants.AnimationAttackName].speed = 2.0f;
@@ -61,6 +61,17 @@ public class ModelMover : MonoBehaviour
   
   void Update () 
 	{
+    if (App.Instance.CurrentGameState != App.GameState.RUNNING)
+    {
+      if ( !(Actor.ActorState is IdleState) )
+      {
+        StopAllCoroutines();
+        Actor.ChangeState(new IdleState(Actor));
+      }
+
+      return;
+    }
+
     Actor.Perform();    
   }
 }
