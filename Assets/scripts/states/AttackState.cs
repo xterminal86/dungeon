@@ -4,23 +4,27 @@ using System.Collections.Generic;
 
 public class AttackState : GameObjectState 
 {
+  float _attackHalfway = 0.0f;
   public AttackState(ActorBase actor) : base()
   {
     _actor = actor;
 
     _timer = GlobalConstants.AttackCooldown;
-
-    /*
-    if (IsPlayerReachable() && !HasWall(_actor.Model.ModelPos))
-    {
-      _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationAttackName);
-    }
-    */
+    _attackHalfway = _actor.AnimationComponent[GlobalConstants.AnimationAttackName].length / 2.0f;
   }
 
   float _timer = 0.0f;
+  bool _trigger = false;
   public override void Run()
   {
+    if (!_trigger 
+     && _actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationAttackName) 
+     && _actor.AnimationComponent[GlobalConstants.AnimationAttackName].time > _attackHalfway)
+    {
+      _trigger = true;
+      PlayerData.Instance.PlayerCharacterVariable.AddDamage(-1);
+    }
+
     _timer += Time.smoothDeltaTime;
 
     if (_timer > GlobalConstants.AttackCooldown)
@@ -30,8 +34,7 @@ public class AttackState : GameObjectState
       if (IsPlayerReachable() && !HasWall(_actor.Model.ModelPos))
       {
         _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationAttackName);
-
-        PlayerData.Instance.PlayerCharacterVariable.AddDamage(-1);
+        _trigger = false;
       }
       else
       {
