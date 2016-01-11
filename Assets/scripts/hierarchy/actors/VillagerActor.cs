@@ -44,7 +44,6 @@ public class VillagerActor : ActorBase
   Job _printTextJob;
   void SetupFormTalking()
   {
-    GUIManager.Instance.FormCompass.SetActive(false);
     GUIManager.Instance.FormTalking.SetActive(true);
 
     //Debug.Log(this.ActorName + ": FormTalking subscription");
@@ -171,8 +170,7 @@ public class VillagerActor : ActorBase
     GUIManager.Instance.ButtonByeCallback -= ButtonByeHandler;
 
     GUIManager.Instance.FormTalking.SetActive(false);
-    GUIManager.Instance.FormCompass.SetActive(true);
-
+    
     //ActorState.RewindAnimation(GlobalConstants.AnimationTalkName);
 
     ChangeState(new WanderingState(this));

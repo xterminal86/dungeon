@@ -14,6 +14,9 @@ public class FormPlayer : MonoBehaviour
 
   public Image BarBorder;
 
+  public Image ItemLeft;
+  public Image ItemRight;
+
   void Awake()
   {
     _barMaxWidth = (int)BarBorder.rectTransform.rect.width - 6;

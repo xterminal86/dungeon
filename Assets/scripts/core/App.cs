@@ -85,9 +85,7 @@ public class App : MonoSingleton<App>
   }
 
   void OnLevelWasLoaded(int level)
-  {
-    PlayerMoveState = PlayerMoveStateEnum.NORMAL;
-
+  {    
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
     UnityEngine.RenderSettings.fogColor = FogColor;
@@ -154,6 +152,7 @@ public class App : MonoSingleton<App>
     GUIManager.Instance.SetCompassVisibility(true);
     GUIManager.Instance.PlayerForm.ShowForm(true);
 
+    PlayerMoveState = PlayerMoveStateEnum.NORMAL;    
     CurrentGameState = GameState.RUNNING;
 
     if (MapLoadingFinished != null)
@@ -922,6 +921,9 @@ public class App : MonoSingleton<App>
 
     if (PlayerData.Instance.PlayerCharacterVariable.HitPoints == 0)
     {
+      SoundManager.Instance.StopAllSounds();
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerDeath);
+
       CurrentGameState = GameState.PAUSED;
 
       ScreenFader.Instance.FadeCompleteCallback += GameOverHandler;
@@ -939,6 +941,20 @@ public class App : MonoSingleton<App>
 
   void GameOverHandler()
   {
+    JobManager.Instance.StartCoroutine(DelayRoutine());       
+  }
+
+  IEnumerator DelayRoutine()
+  {  
+    float timer = 0.0f;
+
+    while (timer < 3.0f)
+    {
+      timer += Time.smoothDeltaTime;
+
+      yield return null;
+    }
+
     var objects = FindObjectsOfType<GameObject>();
     foreach (var item in objects)
     {

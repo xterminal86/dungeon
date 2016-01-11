@@ -147,7 +147,7 @@ public class PlayerCharacter
 
     _hitPointsToAddOnNextLevel = 6;
     _magicPointsToAddOnNextLevel = 5;
-    _startingHitPoints = 15;
+    _startingHitPoints = 10;
 
     CalculateHitPoints();
     _hitPoints = _hitPointsMax;
@@ -175,7 +175,7 @@ public class PlayerCharacter
 
     _hitPointsToAddOnNextLevel = 3;
     _magicPointsToAddOnNextLevel = 10;
-    _startingHitPoints = 10;
+    _startingHitPoints = 5;
 
     CalculateHitPoints();
     _hitPoints = _hitPointsMax;

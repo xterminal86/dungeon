@@ -180,6 +180,14 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
   }
 
+  public void StopAllSounds()
+  {
+    foreach (var item in _audioSourcesByHash)
+    {
+      item.Value.Stop();
+    }
+  }
+
   public void MapLoadingFinishedHandler()
   {    
   }

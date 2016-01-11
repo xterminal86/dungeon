@@ -91,6 +91,8 @@ public class GUIManager : MonoSingleton<GUIManager>
   {
     ButtonClickSound.Play();
 
+    App.Instance.CurrentGameState = App.GameState.PAUSED;
+
     ScreenFader.Instance.FadeCompleteCallback += SaveAndQuitHandler;
     ScreenFader.Instance.FadeOut();
   }
@@ -98,6 +100,8 @@ public class GUIManager : MonoSingleton<GUIManager>
   public void FormMenuReturnToMenuHandler()
   {
     ButtonClickSound.Play();
+
+    App.Instance.CurrentGameState = App.GameState.PAUSED;
 
     ScreenFader.Instance.FadeCompleteCallback += ReturnToMenuHandler;
     ScreenFader.Instance.FadeOut();

@@ -53,6 +53,10 @@ public static class GlobalConstants
 
   public const string ActorVillagerClass = "villager";
 
+  // Sound Effects
+  public const string SFXPunch = "atk-punch";
+  public const string SFXPlayerDeath = "player-death";
+
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
   {
     { MapAttributes.Floor, "floor" }, { MapAttributes.Wall, "wall" }, { MapAttributes.Ceiling, "ceiling" },
