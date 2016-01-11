@@ -214,7 +214,7 @@ public static class GlobalConstants
     
   public static List<string> CharacterClassDescriptions = new List<string>()
   {
-    { "Those from the City who feel military incline within themselves decide to become a Soldier.\nHard work and worthless pay yields tough people." },
+    { "Those from the City who feel military incline within themselves decide to become a Soldier.\nHard work and worthless pay yield tough people." },
     { "There are people who want to help other people get rid of unnecessary things.\nFor some reason those other people don't like them." },
     { "Tinkering with occult and arcane, always trying to uncover the mysteries of the world and usually not care a dime about anything else." }
   };

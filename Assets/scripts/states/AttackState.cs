@@ -8,10 +8,14 @@ public class AttackState : GameObjectState
   {
     _actor = actor;
 
+    _timer = GlobalConstants.AttackCooldown;
+
+    /*
     if (IsPlayerReachable() && !HasWall(_actor.Model.ModelPos))
     {
       _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationAttackName);
     }
+    */
   }
 
   float _timer = 0.0f;
@@ -26,6 +30,8 @@ public class AttackState : GameObjectState
       if (IsPlayerReachable() && !HasWall(_actor.Model.ModelPos))
       {
         _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationAttackName);
+
+        PlayerData.Instance.PlayerCharacterVariable.AddDamage(-1);
       }
       else
       {

@@ -34,7 +34,11 @@ public class PlayerCharacter
   }
 
   int _hitPointsMax = -1;
-  
+  public int HitPointsMax
+  {
+    get { return _hitPointsMax; }
+  }
+
   int _armorClass = -1;
   public int ArmorClass
   {
@@ -48,6 +52,10 @@ public class PlayerCharacter
   }
 
   int _magicPointsMax = -1;
+  public int MagicPointsMax
+  {
+    get { return _magicPointsMax; }
+  }
 
   // Modifiers
 
@@ -82,7 +90,13 @@ public class PlayerCharacter
   {
     get { return _hungerDecreaseMultiplier; }
   }
-    
+   
+  int _hungerTick = 1;
+  public int HungerTick
+  {
+    get { return _hungerTick; }
+  }
+
   int _experience = -1;
   
   int _level = 1;
@@ -116,7 +130,8 @@ public class PlayerCharacter
     CalculateArmorClass();
     
     _hunger = GlobalConstants.HungerMax;    
-    _hungerDecreaseMultiplier = 1.25f;
+    _hungerDecreaseMultiplier = 1.5f;
+    _hungerTick = 10;
   }
 
   public void InitThief()
@@ -143,7 +158,8 @@ public class PlayerCharacter
     CalculateArmorClass();
         
     _hunger = GlobalConstants.HungerMax;    
-    _hungerDecreaseMultiplier = 0.8f;
+    _hungerDecreaseMultiplier = 0.5f;
+    _hungerTick = 15;
   }
 
   public void InitMage()
@@ -171,6 +187,7 @@ public class PlayerCharacter
 
     _hunger = GlobalConstants.HungerMax;
     _hungerDecreaseMultiplier = 1.0f;
+    _hungerTick = 10;
   }
 
   public void ResetToDefault()
@@ -231,6 +248,15 @@ public class PlayerCharacter
     _hunger += value;
 
     _hunger = Mathf.Clamp(_hunger, 0, GlobalConstants.HungerMax);
+
+    //Debug.Log("Hunger: " + _hunger);
+  }
+
+  public void AddDamage(int value)
+  {
+    _hitPoints += value;
+
+    _hitPoints = Mathf.Clamp(_hitPoints, 0, _hitPointsMax);
   }
 
   public enum CharacterClass

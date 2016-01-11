@@ -152,6 +152,7 @@ public class App : MonoSingleton<App>
     ScreenFader.Instance.FadeIn();
 
     GUIManager.Instance.SetCompassVisibility(true);
+    GUIManager.Instance.PlayerForm.ShowForm(true);
 
     if (MapLoadingFinished != null)
       MapLoadingFinished();    
@@ -914,7 +915,7 @@ public class App : MonoSingleton<App>
   {
     _hungerTimer += Time.smoothDeltaTime * PlayerData.Instance.PlayerCharacterVariable.HungerDecreaseMultiplier;
 
-    if (_hungerTimer > 1.0f)
+    if (_hungerTimer > PlayerData.Instance.PlayerCharacterVariable.HungerTick)
     {
       _hungerTimer = 0.0f;
       PlayerData.Instance.PlayerCharacterVariable.AddHunger(-1);

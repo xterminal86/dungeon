@@ -21,6 +21,7 @@ public class GUIManager : MonoSingleton<GUIManager>
   public Text FormTalkingText;
 
   public FormNewGame NewGameForm;
+  public FormPlayer PlayerForm;
 
   [HideInInspector]
   public List<Sprite> Portraits = new List<Sprite>();
