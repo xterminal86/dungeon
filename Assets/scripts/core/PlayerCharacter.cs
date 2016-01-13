@@ -105,7 +105,7 @@ public class PlayerCharacter
     get { return _hungerDecreaseMultiplier; }
   }
    
-  // Number of seconds (without multiplier) after which hunger decreases for one point
+  // Number of seconds (without multiplier) after which hunger decreases for 1 point
   int _hungerTick = 1;
   public int HungerTick
   {
@@ -147,7 +147,7 @@ public class PlayerCharacter
     
     _hunger = GlobalConstants.HungerMax;    
     _hungerDecreaseMultiplier = 1.0f;
-    _hungerTick = 120;
+    _hungerTick = GlobalConstants.HungerDefaultTick;
   }
 
   public void InitThief()
@@ -176,7 +176,7 @@ public class PlayerCharacter
         
     _hunger = GlobalConstants.HungerMax;    
     _hungerDecreaseMultiplier = 0.8f;
-    _hungerTick = 120;
+    _hungerTick = GlobalConstants.HungerDefaultTick;
   }
 
   public void InitMage()
@@ -205,7 +205,7 @@ public class PlayerCharacter
 
     _hunger = GlobalConstants.HungerMax;
     _hungerDecreaseMultiplier = 2.0f;
-    _hungerTick = 120;
+    _hungerTick = GlobalConstants.HungerDefaultTick;
   }
 
   public void ResetToDefault()

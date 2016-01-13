@@ -28,6 +28,8 @@ public static class GlobalConstants
 
   // Maximum value of hunger
   public const int HungerMax = 100;
+  // Number of seconds (without multiplier) after which hunger decreases for 1 point
+  public const int HungerDefaultTick = 60;
 
   // Speed of camera bobbing
   public const float CameraBobSpeed = 0.5f;
