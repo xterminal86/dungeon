@@ -22,7 +22,7 @@ public class AttackState : GameObjectState
      && _actor.AnimationComponent[GlobalConstants.AnimationAttackName].time > _attackHalfway)
     {
       _trigger = true;
-      PlayerData.Instance.PlayerCharacterVariable.AddDamage(-1);
+      PlayerData.Instance.PlayerCharacterVariable.AddDamage(0);
       SoundManager.Instance.PlaySound(GlobalConstants.SFXPunch.GetHashCode(), 0.0f, _actor.Model.transform.position, true);
     }
 
@@ -40,6 +40,7 @@ public class AttackState : GameObjectState
       else
       {
         _actor.ChangeState(new SearchingForPlayerState(_actor));
+        return;
       }
     }
 
@@ -51,8 +52,14 @@ public class AttackState : GameObjectState
     if (!_actor.Model.AnimationComponent.IsPlaying(GlobalConstants.AnimationAttackName) && !IsPlayerReachable())
     {
       _actor.ChangeState(new SearchingForPlayerState(_actor));
+      return;
     }
   }
+
+  // FIXME: There is a redundant change of states < uncomment Debug.Log in ActorBase.ChangeState() >
+  // possibly due to improper rounding (see WanderingState.cs:219).
+  // When player moved to new cell, after enemy makes a move, rounding shows, that distance equals 1,
+  // so it makes change of states from "attack" to "search" and "approach" and so on.
 
   bool IsPlayerReachable()
   {

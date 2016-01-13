@@ -22,6 +22,7 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public FormNewGame NewGameForm;
   public FormPlayer PlayerForm;
+  public FormInventory InventoryForm;
 
   [HideInInspector]
   public List<Sprite> Portraits = new List<Sprite>();
@@ -42,6 +43,11 @@ public class GUIManager : MonoSingleton<GUIManager>
   public void SetCompassVisibility(bool showFlag)
   {
     FormCompass.SetActive(showFlag);
+  }
+
+  public void ToggleInventoryWindow()
+  {
+    InventoryForm.gameObject.SetActive(!InventoryForm.gameObject.activeSelf);
   }
 
   // FormTalking

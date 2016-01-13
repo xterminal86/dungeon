@@ -215,6 +215,7 @@ public class WanderingState : GameObjectState
       _modelPosition.x += dx * (Time.smoothDeltaTime * _model.WalkingSpeed);
       _modelPosition.z += dy * (Time.smoothDeltaTime * _model.WalkingSpeed);
 
+      // We have to calculate map position from 3d coordinates every frame, so we have to perform a division
       _currentMapPos.X = dx < 0 ? Mathf.CeilToInt(_modelPosition.x / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.x / GlobalConstants.WallScaleFactor);
       _currentMapPos.Y = dy < 0 ? Mathf.CeilToInt(_modelPosition.z / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
 

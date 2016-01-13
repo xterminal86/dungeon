@@ -51,4 +51,32 @@ public class FormPlayer : MonoBehaviour
   {
     FormHolder.SetActive(visibilityFlag);
   }
+
+  public void BackpackClicked()
+  {
+    if (App.Instance.PlayerMoveState == App.PlayerMoveStateEnum.NORMAL)
+    {
+      GUIManager.Instance.ToggleInventoryWindow();
+    }
+  }
+
+  public void LeftHandClicked()
+  {
+    if (Input.GetMouseButtonDown(0))
+    {
+      return;
+    }
+
+    //Debug.Log("Left Hand");
+  }
+
+  public void RightHandClicked()
+  {
+    if (Input.GetMouseButtonDown(0))
+    {
+      return;
+    }
+    
+    //Debug.Log("Right Hand");
+  }
 }

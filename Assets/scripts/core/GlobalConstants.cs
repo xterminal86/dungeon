@@ -218,9 +218,9 @@ public static class GlobalConstants
     
   public static List<string> CharacterClassDescriptions = new List<string>()
   {
-    { "Those from the City who feel military incline within themselves decide to become a Soldier.\nHard work and worthless pay yield tough people." },
-    { "There are people who want to help other people get rid of unnecessary things.\nFor some reason those other people don't like them." },
-    { "Tinkering with occult and arcane, always trying to uncover the mysteries of the world and usually not care a dime about anything else." }
+    { "Regular military people of the City\n\n- high might\n- low spirit\n- moderate defense" },
+    { "Regular petty criminal elements of the City\n\n- moderate might\n- low spirit\n- high defense" },
+    { "Mysterious arcanists of unknown origin\n\n- low might\n- high spirit\n- low defense" }
   };
 
   public enum FootstepSoundType

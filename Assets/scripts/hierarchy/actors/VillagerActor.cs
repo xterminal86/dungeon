@@ -44,6 +44,8 @@ public class VillagerActor : ActorBase
   Job _printTextJob;
   void SetupFormTalking()
   {
+    GUIManager.Instance.InventoryForm.gameObject.SetActive(false);
+
     GUIManager.Instance.FormTalking.SetActive(true);
 
     //Debug.Log(this.ActorName + ": FormTalking subscription");
