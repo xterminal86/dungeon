@@ -98,6 +98,7 @@ public class PlayerCharacter
     get { return _hunger; }
   }
 
+  // Scales deltaTime in App.Update() for hunger counting
   float _hungerDecreaseMultiplier = 1.0f;
   public float HungerDecreaseMultiplier
   {

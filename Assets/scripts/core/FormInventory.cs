@@ -17,6 +17,7 @@ public class FormInventory : MonoBehaviour
   public Text IntVal;
   public Text HealthVal;
   public Text MagicVal;
+  public Text AcVal;
 
   string _charNameAndTitle = string.Empty;
   Vector2 _rectTransformSize = Vector2.zero;
@@ -44,6 +45,8 @@ public class FormInventory : MonoBehaviour
     MagicVal.text = string.Format("{0}/{1}", PlayerData.Instance.PlayerCharacterVariable.Energy.ToString(), 
                                              PlayerData.Instance.PlayerCharacterVariable.EnergyMax.ToString());
 
+    AcVal.text = PlayerData.Instance.PlayerCharacterVariable.ArmorClass.ToString();
+
     CalculateHungerBar();
 	}
 
@@ -61,15 +64,15 @@ public class FormInventory : MonoBehaviour
 
     if (PlayerData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.SOLDIER)
     {
-      ClassPortrait.sprite = isFemale ? GUIManager.Instance.MaleClassesPictures[0] : GUIManager.Instance.FemaleClassesPictures[0];
+      ClassPortrait.sprite = !isFemale ? GUIManager.Instance.MaleClassesPictures[0] : GUIManager.Instance.FemaleClassesPictures[0];
     }
     else if (PlayerData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.THIEF)
     {
-      ClassPortrait.sprite = isFemale ? GUIManager.Instance.MaleClassesPictures[1] : GUIManager.Instance.FemaleClassesPictures[1];
+      ClassPortrait.sprite = !isFemale ? GUIManager.Instance.MaleClassesPictures[1] : GUIManager.Instance.FemaleClassesPictures[1];
     }
     else if (PlayerData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.MAGE)
     {
-      ClassPortrait.sprite = isFemale ? GUIManager.Instance.MaleClassesPictures[2] : GUIManager.Instance.FemaleClassesPictures[2];
+      ClassPortrait.sprite = !isFemale ? GUIManager.Instance.MaleClassesPictures[2] : GUIManager.Instance.FemaleClassesPictures[2];
     }
   }
 
