@@ -219,7 +219,7 @@ public static class GlobalConstants
   public static List<string> CharacterClassDescriptions = new List<string>()
   {
     { "Regular military people of the City\n\n- high might\n- low spirit\n- moderate defense" },
-    { "Regular petty criminal elements of the City\n\n- moderate might\n- low spirit\n- high defense" },
+    { "Regular petty criminal elements of the City\n\n- low might\n- low spirit\n- high defense" },
     { "Mysterious arcanists of unknown origin\n\n- low might\n- high spirit\n- low defense" }
   };
 

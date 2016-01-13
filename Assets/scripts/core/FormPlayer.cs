@@ -23,10 +23,6 @@ public class FormPlayer : MonoBehaviour
     _rectTransformSize.Set((int)HealthBar.rectTransform.rect.width, (int)HealthBar.rectTransform.rect.height);
   }
 
-  void Start()
-  {
-  }
-
   int _healthWidth = 0, _magicWidth = 0;
   Vector2 _rectTransformSize = Vector2.zero;
   void Update()
@@ -35,8 +31,8 @@ public class FormPlayer : MonoBehaviour
                       PlayerData.Instance.PlayerCharacterVariable.HitPointsMax, 
                       HealthBar);
 
-    CalculateBarWidth(PlayerData.Instance.PlayerCharacterVariable.MagicPoints, 
-                      PlayerData.Instance.PlayerCharacterVariable.MagicPointsMax, 
+    CalculateBarWidth(PlayerData.Instance.PlayerCharacterVariable.Energy, 
+                      PlayerData.Instance.PlayerCharacterVariable.EnergyMax, 
                       MagicBar);
   }
 
@@ -78,5 +74,9 @@ public class FormPlayer : MonoBehaviour
     }
     
     //Debug.Log("Right Hand");
+  }
+
+  void Start()
+  {
   }
 }

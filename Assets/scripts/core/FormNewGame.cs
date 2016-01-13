@@ -27,8 +27,6 @@ public class FormNewGame : MonoBehaviour
 
   public Image ClassImage;
 
-  public List<Sprite> MaleClassesPictures = new List<Sprite>();
-  public List<Sprite> FemaleClassesPictures = new List<Sprite>();
 
   void Update() 
   {
@@ -37,7 +35,7 @@ public class FormNewGame : MonoBehaviour
     WillValue.text = PlayerData.Instance.PlayerCharacterVariable.Willpower.ToString();
 
     HPValue.text = PlayerData.Instance.PlayerCharacterVariable.HitPoints.ToString();
-    MPValue.text = PlayerData.Instance.PlayerCharacterVariable.MagicPoints.ToString();
+    MPValue.text = PlayerData.Instance.PlayerCharacterVariable.Energy.ToString();
     ACValue.text = PlayerData.Instance.PlayerCharacterVariable.ArmorClass.ToString();
 
     ClassName.text = GlobalConstants.CharacterClassNames[_indexer];
@@ -45,7 +43,7 @@ public class FormNewGame : MonoBehaviour
 
     MaleToggle.isOn = !PlayerData.Instance.PlayerCharacterVariable.IsFemale;
 
-    ClassImage.sprite = MaleToggle.isOn ? MaleClassesPictures[_indexer] : FemaleClassesPictures[_indexer];    
+    ClassImage.sprite = MaleToggle.isOn ? GUIManager.Instance.MaleClassesPictures[_indexer] : GUIManager.Instance.FemaleClassesPictures[_indexer];    
   }
 
   public void ToggleMale()
@@ -104,7 +102,7 @@ public class FormNewGame : MonoBehaviour
 
   public void OK()
   {
-    PlayerData.Instance.PlayerCharacterVariable.CharacterName = string.IsNullOrEmpty(CharacterName.text) ? "Nameless One" : CharacterName.text;
+    PlayerData.Instance.PlayerCharacterVariable.CharacterName = string.IsNullOrEmpty(CharacterName.text) ? "Nameless" : CharacterName.text;
 
     GUIManager.Instance.ButtonClickSound.Play();
 
@@ -122,15 +120,15 @@ public class FormNewGame : MonoBehaviour
 
   void ReadStats()
   {
-    if (GlobalConstants.CharacterClassNames[_indexer] == "Soldier")
+    if (_indexer == 0)
     {
       PlayerData.Instance.PlayerCharacterVariable.InitSoldier();
     }
-    else if (GlobalConstants.CharacterClassNames[_indexer] == "Thief")
+    else if (_indexer == 1)
     {
       PlayerData.Instance.PlayerCharacterVariable.InitThief();
     }
-    else if (GlobalConstants.CharacterClassNames[_indexer] == "Mage")
+    else if (_indexer == 2)
     {
       PlayerData.Instance.PlayerCharacterVariable.InitMage();
     }

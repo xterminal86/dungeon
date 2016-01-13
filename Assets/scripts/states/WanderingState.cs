@@ -42,7 +42,6 @@ public class WanderingState : GameObjectState
   IEnumerator MoveOnPath()
   {
     _firstStepSound = false;
-    _firstStepOfPath = false;
 
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
@@ -180,7 +179,7 @@ public class WanderingState : GameObjectState
     yield return null;
   }
 
-  bool _firstStepSound = false, _firstStepOfPath = false;
+  bool _firstStepSound = false;
   bool _moveDone = false;
   Int2 _currentMapPos = new Int2();
   Int2 _positionForTalk = new Int2();

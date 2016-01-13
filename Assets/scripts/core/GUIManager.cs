@@ -27,6 +27,9 @@ public class GUIManager : MonoSingleton<GUIManager>
   [HideInInspector]
   public List<Sprite> Portraits = new List<Sprite>();
 
+  public List<Sprite> MaleClassesPictures = new List<Sprite>();
+  public List<Sprite> FemaleClassesPictures = new List<Sprite>();
+
   public Sprite FindPortraitByName(string name)
   {
     foreach (var item in Portraits)

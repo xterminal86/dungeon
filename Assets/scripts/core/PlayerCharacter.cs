@@ -45,16 +45,16 @@ public class PlayerCharacter
     get { return _armorClass; }
   }
 
-  int _magicPoints = -1;
-  public int MagicPoints
+  int _energy = -1;
+  public int Energy
   {
-    get { return _magicPoints; }
+    get { return _energy; }
   }
 
-  int _magicPointsMax = -1;
-  public int MagicPointsMax
+  int _energyMax = -1;
+  public int EnergyMax
   {
-    get { return _magicPointsMax; }
+    get { return _energyMax; }
   }
 
   // Modifiers
@@ -64,7 +64,7 @@ public class PlayerCharacter
   public int WillModifier = 0;
   public int AcModifier = 0;
   public int HpModifier = 0;  // To max HP
-  public int MpModifier = 0;  // To max MP
+  public int EnergyModifier = 0;  // To max MP
 
   // Various
 
@@ -76,21 +76,35 @@ public class PlayerCharacter
     get { return _characterClass; }
   }
 
+  string _charTitle = string.Empty;
+  public string CharacterNameAndTitle
+  {
+    get
+    {
+      return string.Format("{0} the {1}", CharacterName, _charTitle);
+    }
+  }
+
   int _startingHitPoints = 0;
-  int _startingMagicPoints = 0;
+  int _startingEnergy = 0;
   int _hitPointsToAddOnNextLevel = -1;
-  int _magicPointsToAddOnNextLevel = -1;
+  int _energyToAddOnNextLevel = -1;
   
   public bool IsFemale = false;
 
   int _hunger = -1;
-  
+  public int Hunger
+  {
+    get { return _hunger; }
+  }
+
   float _hungerDecreaseMultiplier = 1.0f;
   public float HungerDecreaseMultiplier
   {
     get { return _hungerDecreaseMultiplier; }
   }
    
+  // Number of seconds (without multiplier) after which hunger decreases for one point
   int _hungerTick = 1;
   public int HungerTick
   {
@@ -109,6 +123,7 @@ public class PlayerCharacter
   public void InitSoldier()
   {
     _characterClass = CharacterClass.SOLDIER;
+    _charTitle = "Soldier";
 
     _level = 1;
     _experience = 0;
@@ -118,25 +133,26 @@ public class PlayerCharacter
     _willpower = 1;
 
     _hitPointsToAddOnNextLevel = 10;
-    _magicPointsToAddOnNextLevel = 3;
+    _energyToAddOnNextLevel = 3;
     _startingHitPoints = 20;
     
     CalculateHitPoints();
     _hitPoints = _hitPointsMax;
 
     CalculateMagicPoints();    
-    _magicPoints = _magicPointsMax;
+    _energy = _energyMax;
 
     CalculateArmorClass();
     
     _hunger = GlobalConstants.HungerMax;    
-    _hungerDecreaseMultiplier = 1.5f;
-    _hungerTick = 10;
+    _hungerDecreaseMultiplier = 1.0f;
+    _hungerTick = 120;
   }
 
   public void InitThief()
   {
     _characterClass = CharacterClass.THIEF;
+    _charTitle = "Rogue";
 
     _level = 1;
     _experience = 0;
@@ -146,25 +162,26 @@ public class PlayerCharacter
     _willpower = 2;
 
     _hitPointsToAddOnNextLevel = 6;
-    _magicPointsToAddOnNextLevel = 5;
+    _energyToAddOnNextLevel = 5;
     _startingHitPoints = 10;
 
     CalculateHitPoints();
     _hitPoints = _hitPointsMax;
 
     CalculateMagicPoints();
-    _magicPoints = _magicPointsMax;
+    _energy = _energyMax;
 
     CalculateArmorClass();
         
     _hunger = GlobalConstants.HungerMax;    
-    _hungerDecreaseMultiplier = 0.5f;
-    _hungerTick = 15;
+    _hungerDecreaseMultiplier = 0.8f;
+    _hungerTick = 120;
   }
 
   public void InitMage()
   {
     _characterClass = CharacterClass.MAGE;
+    _charTitle = "Arcanist";
 
     _level = 1;
     _experience = 0;
@@ -174,20 +191,20 @@ public class PlayerCharacter
     _willpower = 6;
 
     _hitPointsToAddOnNextLevel = 3;
-    _magicPointsToAddOnNextLevel = 10;
+    _energyToAddOnNextLevel = 10;
     _startingHitPoints = 5;
 
     CalculateHitPoints();
     _hitPoints = _hitPointsMax;
 
     CalculateMagicPoints();
-    _magicPoints = _magicPointsMax;
+    _energy = _energyMax;
 
     CalculateArmorClass();
 
     _hunger = GlobalConstants.HungerMax;
-    _hungerDecreaseMultiplier = 1.0f;
-    _hungerTick = 10;
+    _hungerDecreaseMultiplier = 2.0f;
+    _hungerTick = 120;
   }
 
   public void ResetToDefault()
@@ -239,8 +256,8 @@ public class PlayerCharacter
       mpCoeff = 3;
     }
 
-    int res = ((_willpower + WillModifier) * mpCoeff + WillModifier) + _magicPointsToAddOnNextLevel * (_level - 1) + MpModifier;
-    _magicPointsMax = res;
+    int res = (_willpower + WillModifier) * mpCoeff + _energyToAddOnNextLevel * (_level - 1) + EnergyModifier;
+    _energyMax = res;
   }
 
   public void AddHunger(int value)
