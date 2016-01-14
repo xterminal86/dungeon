@@ -43,4 +43,7 @@ Credits:
 
 Capes : http://www.planetminecraft.com/blog/capes-collection/ (Avalanche_Ali)
 Skins : http://www.minecraftskins.com/
-Icons : "Designed by Freepik.com", Final Fantasy Wiki
+Icons : 
+  "Designed by Freepik.com", 
+  Final Fantasy Wiki, 
+  http://www.conceptart.org/forums/showthread.php/266140-Game-UI-Design (heyguy)
