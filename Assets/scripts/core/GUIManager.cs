@@ -135,6 +135,20 @@ public class GUIManager : MonoSingleton<GUIManager>
     NewGameForm.SetupForm();
   }
 
+  // Form Inventory
+
+  public void InventorySlotClicked()
+  {
+    if (Input.GetMouseButtonUp(0))
+    {
+      Debug.Log("Left button");
+    }
+    else if (Input.GetMouseButtonUp(1))
+    {
+      Debug.Log("Right button");
+    }
+  }
+
   // Private Methods
 
   void SaveAndQuitHandler()

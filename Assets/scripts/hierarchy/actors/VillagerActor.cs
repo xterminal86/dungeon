@@ -101,14 +101,14 @@ public class VillagerActor : ActorBase
     {
       _textBuf += textToPrint[count];
 
-      count++;
-
       GUIManager.Instance.FormTalkingText.text = _textBuf;
 
       if ((count % 3 == 0) && !formFirstOpen)
       {
         SoundManager.Instance.PlaySound(GUIManager.Instance.CharacterSpeakSound, speakPitch);
       }
+
+      count++;
 
       yield return new WaitForSeconds(0.01f);
     }
