@@ -22,7 +22,8 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public FormNewGame NewGameForm;
   public FormPlayer PlayerForm;
-  public FormInventory InventoryForm;
+
+  public GameObject InventoryForm;
 
   [HideInInspector]
   public List<Sprite> Portraits = new List<Sprite>();

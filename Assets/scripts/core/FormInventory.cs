@@ -7,6 +7,12 @@ public class FormInventory : MonoBehaviour
 {
   int _hungerBarMaxWidth = 0;
 
+  public GameObject InventorySlot;
+  public RectTransform InventorySlotsHolder;
+
+  int _invWidth = 40;
+  int _invHeight = 40;
+
   public Sprite BarGreen;
   public Sprite BarYellow; 
   public Sprite BarRed;
@@ -38,6 +44,23 @@ public class FormInventory : MonoBehaviour
 
     _hungerYellowZone = _hungerBarMaxWidth / 3;
     _hungerRedZone = _hungerBarMaxWidth / 6;
+
+    Vector2 slotsPosition = Vector2.zero;
+    for (int i = 0; i < 2; i++)
+    {
+      for (int j = 0; j < 7; j++)
+      {
+        var go = (GameObject)Instantiate(InventorySlot);
+        var rt = go.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+          rt.SetParent(InventorySlotsHolder, false);
+          slotsPosition.x = -j * _invWidth;
+          slotsPosition.y = i * _invHeight;
+          rt.transform.localPosition = slotsPosition;
+        }
+      }
+    }
   }  	
 
 	void Update () 
