@@ -112,7 +112,7 @@ public class InputController : MonoSingleton<InputController>
     else if (Input.GetKeyDown(KeyCode.Escape))
     {
       App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.HOLD_PLAYER;
-      GUIManager.Instance.InventoryForm.gameObject.SetActive(false);
+      GUIManager.Instance.InventoryFormWindow.gameObject.SetActive(false);
       GUIManager.Instance.FormGameMenu.SetActive(true);
     }
 

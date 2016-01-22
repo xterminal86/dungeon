@@ -22,8 +22,9 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public FormNewGame NewGameForm;
   public FormPlayer PlayerForm;
+  public FormInventory InventoryForm;
 
-  public GameObject InventoryForm;
+  public GameObject InventoryFormWindow;
 
   [HideInInspector]
   public List<Sprite> Portraits = new List<Sprite>();
@@ -51,7 +52,7 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public void ToggleInventoryWindow()
   {
-    InventoryForm.gameObject.SetActive(!InventoryForm.gameObject.activeSelf);
+    InventoryFormWindow.gameObject.SetActive(!InventoryFormWindow.gameObject.activeSelf);
   }
 
   // FormTalking

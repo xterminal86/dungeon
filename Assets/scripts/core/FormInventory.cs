@@ -33,15 +33,10 @@ public class FormInventory : MonoBehaviour
   Vector2 _hungerBarRectTransformSize = Vector2.zero;
   float _hungerYellowZone = 0.0f, _hungerRedZone = 0.0f;
   void Awake()
-  {    
+  {
     _hungerBarMaxWidth = (int)HungerBarBorder.rectTransform.rect.width - 6;
     _hungerBarRectTransformSize.Set((int)HungerBar.rectTransform.rect.width, (int)HungerBar.rectTransform.rect.height);
-
-    _charNameAndTitle = PlayerData.Instance.PlayerCharacterVariable.CharacterNameAndTitle;
-    CharName.text = _charNameAndTitle;
-
-    SetPortrait();
-
+        
     _hungerYellowZone = _hungerBarMaxWidth / 3;
     _hungerRedZone = _hungerBarMaxWidth / 6;
 
@@ -81,7 +76,6 @@ public class FormInventory : MonoBehaviour
     SetHungerBarColor();
 	}
 
-  int _hungerBarWidth = 0;
   void CalculateHungerBar()
   {
     int res = (PlayerData.Instance.PlayerCharacterVariable.Hunger * _hungerBarMaxWidth ) / GlobalConstants.HungerMax;
@@ -123,6 +117,14 @@ public class FormInventory : MonoBehaviour
     {
       HungerBar.sprite = BarGreen;
     }
+  }
+
+  public void SetPlayerNameAndTitle()
+  {
+    _charNameAndTitle = PlayerData.Instance.PlayerCharacterVariable.CharacterNameAndTitle;
+    CharName.text = _charNameAndTitle;
+
+    SetPortrait();
   }
 
   void Start ()

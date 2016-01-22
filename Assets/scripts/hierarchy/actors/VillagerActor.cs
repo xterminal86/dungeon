@@ -44,7 +44,7 @@ public class VillagerActor : ActorBase
   Job _printTextJob;
   void SetupFormTalking()
   {
-    GUIManager.Instance.InventoryForm.gameObject.SetActive(false);
+    GUIManager.Instance.InventoryFormWindow.gameObject.SetActive(false);
 
     GUIManager.Instance.FormTalking.SetActive(true);
 

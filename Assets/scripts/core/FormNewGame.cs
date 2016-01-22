@@ -108,6 +108,8 @@ public class FormNewGame : MonoBehaviour
 
     gameObject.SetActive(false);
 
+    GUIManager.Instance.InventoryForm.SetPlayerNameAndTitle();
+
     ScreenFader.Instance.FadeCompleteCallback += FadeCompleteHandler;
     ScreenFader.Instance.FadeOut();
   }
