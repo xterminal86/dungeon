@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <MAIN>
-  <CHARACTER prefab="char-lightning" class="villager" name="Claire" hailString="(you see a woman carrying a familiar looking sword)" portraitName="portrait-lightning">
+  <CHARACTER prefab="char-lightning" class="villager" name="Claire" hailString="(you see a pink-haired woman)" portraitName="portrait-lightning">
     <NAME text="My name is Claire." />
     <JOB text="I'm a Soldier." />
     <GOSSIP>
