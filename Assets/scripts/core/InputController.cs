@@ -288,22 +288,22 @@ public class InputController : MonoSingleton<InputController>
     float toAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.To]];
     while (Mathf.Abs(cond) < 90.0f)
     {
-      cond += Time.deltaTime * ca.Speed;
+      cond += Time.smoothDeltaTime * ca.Speed;
 
-      if (cond + Time.deltaTime * ca.Speed > 90.0f)
+      if (cond + Time.smoothDeltaTime * ca.Speed > 90.0f)
       {
         break;
       }
 
       if (ca.TurnRight)
       {
-        _cameraAngles.y += Time.deltaTime * ca.Speed;
-        _compassSpriteAngles.z += Time.deltaTime * ca.Speed;
+        _cameraAngles.y += Time.smoothDeltaTime * ca.Speed;
+        _compassSpriteAngles.z += Time.smoothDeltaTime * ca.Speed;
       }
       else
       {
-        _cameraAngles.y -= Time.deltaTime * ca.Speed;
-        _compassSpriteAngles.z -= Time.deltaTime * ca.Speed;
+        _cameraAngles.y -= Time.smoothDeltaTime * ca.Speed;
+        _compassSpriteAngles.z -= Time.smoothDeltaTime * ca.Speed;
       }
       yield return null;
     }
@@ -363,7 +363,7 @@ public class InputController : MonoSingleton<InputController>
     float half = GlobalConstants.WallScaleFactor / 2;
     while (cond < GlobalConstants.WallScaleFactor)
     {
-      cond += Time.deltaTime * ca.Speed;
+      cond += Time.smoothDeltaTime * ca.Speed;
 
       if (cond > half)
       {
@@ -388,23 +388,23 @@ public class InputController : MonoSingleton<InputController>
 
       if (ca.MoveType == CameraMoveType.FORWARD)
       {
-        if (xComponent != 0) _cameraPos.x += xComponent * Time.deltaTime * ca.Speed;
-        else if (zComponent != 0) _cameraPos.z += zComponent * Time.deltaTime * ca.Speed;
+        if (xComponent != 0) _cameraPos.x += xComponent * Time.smoothDeltaTime * ca.Speed;
+        else if (zComponent != 0) _cameraPos.z += zComponent * Time.smoothDeltaTime * ca.Speed;
       }
       else if (ca.MoveType == CameraMoveType.BACKWARD)
       {
-        if (xComponent != 0) _cameraPos.x -= xComponent * Time.deltaTime * ca.Speed;
-        else if (zComponent != 0) _cameraPos.z -= zComponent * Time.deltaTime * ca.Speed;
+        if (xComponent != 0) _cameraPos.x -= xComponent * Time.smoothDeltaTime * ca.Speed;
+        else if (zComponent != 0) _cameraPos.z -= zComponent * Time.smoothDeltaTime * ca.Speed;
       }
       else if (ca.MoveType == CameraMoveType.STRAFE_LEFT)
       {
-        if (xComponent != 0) _cameraPos.z += xComponent * Time.deltaTime * ca.Speed;
-        else if (zComponent != 0) _cameraPos.x -= zComponent * Time.deltaTime * ca.Speed;
+        if (xComponent != 0) _cameraPos.z += xComponent * Time.smoothDeltaTime * ca.Speed;
+        else if (zComponent != 0) _cameraPos.x -= zComponent * Time.smoothDeltaTime * ca.Speed;
       }
       else if (ca.MoveType == CameraMoveType.STRAFE_RIGHT)
       {
-        if (xComponent != 0) _cameraPos.z -= xComponent * Time.deltaTime * ca.Speed;
-        else if (zComponent != 0) _cameraPos.x += zComponent * Time.deltaTime * ca.Speed;
+        if (xComponent != 0) _cameraPos.z -= xComponent * Time.smoothDeltaTime * ca.Speed;
+        else if (zComponent != 0) _cameraPos.x += zComponent * Time.smoothDeltaTime * ca.Speed;
       }
 
       yield return null;
@@ -453,10 +453,10 @@ public class InputController : MonoSingleton<InputController>
     float half = nudge / 2.0f;
     while (cond < nudge)
     {
-      cond += Time.deltaTime * ca.Speed;
+      cond += Time.smoothDeltaTime * ca.Speed;
 
       /*
-      if (cond + Time.deltaTime * ca.Speed > nudge)
+      if (cond + Time.smoothDeltaTime * ca.Speed > nudge)
       {
         break;
       }
@@ -466,52 +466,52 @@ public class InputController : MonoSingleton<InputController>
       {
         if (xComponent != 0)
         {
-          if (cond < half) _cameraPos.x += xComponent * Time.deltaTime * ca.Speed;
-          else _cameraPos.x -= xComponent * Time.deltaTime * ca.Speed;
+          if (cond < half) _cameraPos.x += xComponent * Time.smoothDeltaTime * ca.Speed;
+          else _cameraPos.x -= xComponent * Time.smoothDeltaTime * ca.Speed;
         }
         else if (zComponent != 0) 
         {
-          if (cond < half) _cameraPos.z += zComponent * Time.deltaTime * ca.Speed;
-          else _cameraPos.z -= zComponent * Time.deltaTime * ca.Speed;
+          if (cond < half) _cameraPos.z += zComponent * Time.smoothDeltaTime * ca.Speed;
+          else _cameraPos.z -= zComponent * Time.smoothDeltaTime * ca.Speed;
         }
       }
       else if (ca.MoveType == CameraMoveType.BACKWARD)
       {        
         if (xComponent != 0)
         {
-          if (cond < half) _cameraPos.x -= xComponent * Time.deltaTime * ca.Speed;
-          else _cameraPos.x += xComponent * Time.deltaTime * ca.Speed;
+          if (cond < half) _cameraPos.x -= xComponent * Time.smoothDeltaTime * ca.Speed;
+          else _cameraPos.x += xComponent * Time.smoothDeltaTime * ca.Speed;
         }
         else if (zComponent != 0)
         {
-          if (cond < half) _cameraPos.z -= zComponent * Time.deltaTime * ca.Speed;
-          else _cameraPos.z += zComponent * Time.deltaTime * ca.Speed;
+          if (cond < half) _cameraPos.z -= zComponent * Time.smoothDeltaTime * ca.Speed;
+          else _cameraPos.z += zComponent * Time.smoothDeltaTime * ca.Speed;
         }
       }
       else if (ca.MoveType == CameraMoveType.STRAFE_LEFT)
       {        
         if (xComponent != 0)
         {
-          if (cond < half) _cameraPos.z += xComponent * Time.deltaTime * ca.Speed;
-          else _cameraPos.z -= xComponent * Time.deltaTime * ca.Speed;
+          if (cond < half) _cameraPos.z += xComponent * Time.smoothDeltaTime * ca.Speed;
+          else _cameraPos.z -= xComponent * Time.smoothDeltaTime * ca.Speed;
         }
         else if (zComponent != 0)
         {
-          if (cond < half) _cameraPos.x -= zComponent * Time.deltaTime * ca.Speed;
-          else _cameraPos.x += zComponent * Time.deltaTime * ca.Speed;
+          if (cond < half) _cameraPos.x -= zComponent * Time.smoothDeltaTime * ca.Speed;
+          else _cameraPos.x += zComponent * Time.smoothDeltaTime * ca.Speed;
         }
       }
       else if (ca.MoveType == CameraMoveType.STRAFE_RIGHT)
       {        
         if (xComponent != 0)
         {
-          if (cond < half) _cameraPos.z -= xComponent * Time.deltaTime * ca.Speed;
-          else _cameraPos.z += xComponent * Time.deltaTime * ca.Speed;
+          if (cond < half) _cameraPos.z -= xComponent * Time.smoothDeltaTime * ca.Speed;
+          else _cameraPos.z += xComponent * Time.smoothDeltaTime * ca.Speed;
         }
         else if (zComponent != 0)
         {
-          if (cond < half) _cameraPos.x += zComponent * Time.deltaTime * ca.Speed;
-          else _cameraPos.x -= zComponent * Time.deltaTime * ca.Speed;
+          if (cond < half) _cameraPos.x += zComponent * Time.smoothDeltaTime * ca.Speed;
+          else _cameraPos.x -= zComponent * Time.smoothDeltaTime * ca.Speed;
         }
       }
       
