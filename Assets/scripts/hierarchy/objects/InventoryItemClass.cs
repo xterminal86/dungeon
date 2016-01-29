@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class InventoryItemBase
+public class InventoryItemClass
 {
-  public InventoryItemBase()
+  public InventoryItemClass()
   {    
   }
 }

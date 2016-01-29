@@ -7,7 +7,7 @@ public class InventorySlot : MonoBehaviour
 {	
   public Image Icon;
 
-  InventoryItemBase _item;
+  InventoryItemClass _item;
 
 	void Awake() 
 	{	

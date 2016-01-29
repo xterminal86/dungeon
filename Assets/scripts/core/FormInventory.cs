@@ -10,6 +10,8 @@ public class FormInventory : MonoBehaviour
   public GameObject InventorySlot;
   public RectTransform InventorySlotsHolder;
 
+  public Image DraggedObject;
+
   int _invWidth = 40;
   int _invHeight = 40;
 

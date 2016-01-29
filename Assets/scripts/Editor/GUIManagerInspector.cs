@@ -8,7 +8,7 @@ using System.IO;
 [CustomEditor(typeof(GUIManager))]
 public class GUIManagerInspector : Editor
 {
-  string _path = "Assets\\Resources";
+  string _path = "Assets\\Resources\\portraits";
   string _portraitsList = string.Empty;
 
   public override void OnInspectorGUI()
@@ -30,8 +30,8 @@ public class GUIManagerInspector : Editor
         int indexFront = array[i].LastIndexOf("\\") + 1;
         int indexBack = array[i].IndexOf(".png");
 
-        string name = array[i].Substring(indexFront, indexBack - indexFront);                
-        Sprite res = Resources.Load<Sprite>(name);
+        string name = array[i].Substring(indexFront, indexBack - indexFront);
+        Sprite res = Resources.Load<Sprite>("portraits/" + name);
         m.Portraits.Add(res);
       }
     }
