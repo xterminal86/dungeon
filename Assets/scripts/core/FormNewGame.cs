@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,30 +30,30 @@ public class FormNewGame : MonoBehaviour
 
   void Update() 
   {
-    StrValue.text = PlayerData.Instance.PlayerCharacterVariable.Strength.ToString();
-    DexValue.text = PlayerData.Instance.PlayerCharacterVariable.Dexterity.ToString();
-    WillValue.text = PlayerData.Instance.PlayerCharacterVariable.Willpower.ToString();
+    StrValue.text = GameData.Instance.PlayerCharacterVariable.Strength.ToString();
+    DexValue.text = GameData.Instance.PlayerCharacterVariable.Dexterity.ToString();
+    WillValue.text = GameData.Instance.PlayerCharacterVariable.Willpower.ToString();
 
-    HPValue.text = PlayerData.Instance.PlayerCharacterVariable.HitPoints.ToString();
-    MPValue.text = PlayerData.Instance.PlayerCharacterVariable.Energy.ToString();
-    ACValue.text = PlayerData.Instance.PlayerCharacterVariable.ArmorClass.ToString();
+    HPValue.text = GameData.Instance.PlayerCharacterVariable.HitPoints.ToString();
+    MPValue.text = GameData.Instance.PlayerCharacterVariable.Energy.ToString();
+    ACValue.text = GameData.Instance.PlayerCharacterVariable.ArmorClass.ToString();
 
     ClassName.text = GlobalConstants.CharacterClassNames[_indexer];
     ClassDescrption.text = GlobalConstants.CharacterClassDescriptions[_indexer];
 
-    MaleToggle.isOn = !PlayerData.Instance.PlayerCharacterVariable.IsFemale;
+    MaleToggle.isOn = !GameData.Instance.PlayerCharacterVariable.IsFemale;
 
     ClassImage.sprite = MaleToggle.isOn ? GUIManager.Instance.MaleClassesPictures[_indexer] : GUIManager.Instance.FemaleClassesPictures[_indexer];    
   }
 
   public void ToggleMale()
   {
-    PlayerData.Instance.PlayerCharacterVariable.IsFemale = false;
+    GameData.Instance.PlayerCharacterVariable.IsFemale = false;
   }
 
   public void ToggleFemale()
   {
-    PlayerData.Instance.PlayerCharacterVariable.IsFemale = true;
+    GameData.Instance.PlayerCharacterVariable.IsFemale = true;
   }
 
   int _indexer = 0;
@@ -97,12 +97,12 @@ public class FormNewGame : MonoBehaviour
   {
     _indexer = 0;
 
-    PlayerData.Instance.PlayerCharacterVariable.ResetToDefault();
+    GameData.Instance.PlayerCharacterVariable.ResetToDefault();
   }
 
   public void OK()
   {
-    PlayerData.Instance.PlayerCharacterVariable.CharacterName = string.IsNullOrEmpty(CharacterName.text) ? "Nameless" : CharacterName.text;
+    GameData.Instance.PlayerCharacterVariable.CharacterName = string.IsNullOrEmpty(CharacterName.text) ? "Nameless" : CharacterName.text;
 
     GUIManager.Instance.ButtonClickSound.Play();
 
@@ -124,15 +124,15 @@ public class FormNewGame : MonoBehaviour
   {
     if (_indexer == 0)
     {
-      PlayerData.Instance.PlayerCharacterVariable.InitSoldier();
+      GameData.Instance.PlayerCharacterVariable.InitSoldier();
     }
     else if (_indexer == 1)
     {
-      PlayerData.Instance.PlayerCharacterVariable.InitThief();
+      GameData.Instance.PlayerCharacterVariable.InitThief();
     }
     else if (_indexer == 2)
     {
-      PlayerData.Instance.PlayerCharacterVariable.InitMage();
+      GameData.Instance.PlayerCharacterVariable.InitMage();
     }
   }
 }

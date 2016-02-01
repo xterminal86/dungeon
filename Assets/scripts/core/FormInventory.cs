@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -9,8 +9,6 @@ public class FormInventory : MonoBehaviour
 
   public GameObject InventorySlot;
   public RectTransform InventorySlotsHolder;
-
-  public Image DraggedObject;
 
   int _invWidth = 40;
   int _invHeight = 40;
@@ -62,17 +60,17 @@ public class FormInventory : MonoBehaviour
 
 	void Update () 
 	{
-    StrVal.text = PlayerData.Instance.PlayerCharacterVariable.Strength.ToString();
-    DexVal.text = PlayerData.Instance.PlayerCharacterVariable.Dexterity.ToString();
-    IntVal.text = PlayerData.Instance.PlayerCharacterVariable.Willpower.ToString();
+    StrVal.text = GameData.Instance.PlayerCharacterVariable.Strength.ToString();
+    DexVal.text = GameData.Instance.PlayerCharacterVariable.Dexterity.ToString();
+    IntVal.text = GameData.Instance.PlayerCharacterVariable.Willpower.ToString();
 
-    HealthVal.text = string.Format("{0}/{1}", PlayerData.Instance.PlayerCharacterVariable.HitPoints.ToString(), 
-                                              PlayerData.Instance.PlayerCharacterVariable.HitPointsMax.ToString());
+    HealthVal.text = string.Format("{0}/{1}", GameData.Instance.PlayerCharacterVariable.HitPoints.ToString(), 
+                                              GameData.Instance.PlayerCharacterVariable.HitPointsMax.ToString());
 
-    MagicVal.text = string.Format("{0}/{1}", PlayerData.Instance.PlayerCharacterVariable.Energy.ToString(), 
-                                             PlayerData.Instance.PlayerCharacterVariable.EnergyMax.ToString());
+    MagicVal.text = string.Format("{0}/{1}", GameData.Instance.PlayerCharacterVariable.Energy.ToString(), 
+                                             GameData.Instance.PlayerCharacterVariable.EnergyMax.ToString());
 
-    AcVal.text = PlayerData.Instance.PlayerCharacterVariable.ArmorClass.ToString();
+    AcVal.text = GameData.Instance.PlayerCharacterVariable.ArmorClass.ToString();
 
     CalculateHungerBar();
     SetHungerBarColor();
@@ -80,24 +78,24 @@ public class FormInventory : MonoBehaviour
 
   void CalculateHungerBar()
   {
-    int res = (PlayerData.Instance.PlayerCharacterVariable.Hunger * _hungerBarMaxWidth ) / GlobalConstants.HungerMax;
+    int res = (GameData.Instance.PlayerCharacterVariable.Hunger * _hungerBarMaxWidth ) / GlobalConstants.HungerMax;
     _hungerBarRectTransformSize.x = res;
     HungerBar.rectTransform.sizeDelta = _hungerBarRectTransformSize;
   }
 
   void SetPortrait()
   {
-    bool isFemale = PlayerData.Instance.PlayerCharacterVariable.IsFemale;
+    bool isFemale = GameData.Instance.PlayerCharacterVariable.IsFemale;
 
-    if (PlayerData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.SOLDIER)
+    if (GameData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.SOLDIER)
     {
       ClassPortrait.sprite = !isFemale ? GUIManager.Instance.MaleClassesPictures[0] : GUIManager.Instance.FemaleClassesPictures[0];
     }
-    else if (PlayerData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.THIEF)
+    else if (GameData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.THIEF)
     {
       ClassPortrait.sprite = !isFemale ? GUIManager.Instance.MaleClassesPictures[1] : GUIManager.Instance.FemaleClassesPictures[1];
     }
-    else if (PlayerData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.MAGE)
+    else if (GameData.Instance.PlayerCharacterVariable.GetCharacterClass == PlayerCharacter.CharacterClass.MAGE)
     {
       ClassPortrait.sprite = !isFemale ? GUIManager.Instance.MaleClassesPictures[2] : GUIManager.Instance.FemaleClassesPictures[2];
     }
@@ -123,7 +121,7 @@ public class FormInventory : MonoBehaviour
 
   public void SetPlayerNameAndTitle()
   {
-    _charNameAndTitle = PlayerData.Instance.PlayerCharacterVariable.CharacterNameAndTitle;
+    _charNameAndTitle = GameData.Instance.PlayerCharacterVariable.CharacterNameAndTitle;
     CharName.text = _charNameAndTitle;
 
     SetPortrait();

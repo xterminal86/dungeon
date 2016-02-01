@@ -18,8 +18,9 @@ Melee and ranged actors (different mob types, different damage etc.)
 + Think about scenes loading design: Right now if we load main scene from title screen, going back to menu via "Save & Quit" button leads
                                      to exceptions due to basically setting the scene as it is looks like in editor - i.e. with all objects in the hierarchy window.
                                      Because we have singletons it fucks up everything (most obvious thing is complaint about two audio listeners)
-
-
+Link inventory item and MapObject: 
+      When player places item from inventory into the world, we instantiate BMO with specific MapObject.
+      When player clicks on item object in the world, destroy it and "transfer" it to the image at mouse cursor position.
 
 =====
 MINOR

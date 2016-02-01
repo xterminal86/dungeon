@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -22,7 +22,7 @@ public class AttackState : GameObjectState
      && _actor.AnimationComponent[GlobalConstants.AnimationAttackName].time > _attackHalfway)
     {
       _trigger = true;
-      PlayerData.Instance.PlayerCharacterVariable.AddDamage(0);
+      GameData.Instance.PlayerCharacterVariable.AddDamage(0);
       SoundManager.Instance.PlaySound(GlobalConstants.SFXPunch.GetHashCode(), 0.0f, _actor.Model.transform.position, true);
     }
 

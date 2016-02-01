@@ -919,7 +919,7 @@ public class App : MonoSingleton<App>
       return;
     }
 
-    if (PlayerData.Instance.PlayerCharacterVariable.HitPoints == 0)
+    if (GameData.Instance.PlayerCharacterVariable.HitPoints == 0)
     {
       SoundManager.Instance.StopAllSounds();
       SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerDeath);
@@ -930,12 +930,12 @@ public class App : MonoSingleton<App>
       ScreenFader.Instance.FadeOut();
     }
 
-    _hungerTimer += Time.smoothDeltaTime * PlayerData.Instance.PlayerCharacterVariable.HungerDecreaseMultiplier;
+    _hungerTimer += Time.smoothDeltaTime * GameData.Instance.PlayerCharacterVariable.HungerDecreaseMultiplier;
 
-    if (_hungerTimer > PlayerData.Instance.PlayerCharacterVariable.HungerTick)
+    if (_hungerTimer > GameData.Instance.PlayerCharacterVariable.HungerTick)
     {
       _hungerTimer = 0.0f;
-      PlayerData.Instance.PlayerCharacterVariable.AddHunger(-1);
+      GameData.Instance.PlayerCharacterVariable.AddHunger(-1);
     }
   }
 

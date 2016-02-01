@@ -24,6 +24,9 @@ public class GUIManager : MonoSingleton<GUIManager>
   public FormPlayer PlayerForm;
   public FormInventory InventoryForm;
 
+  // Icon of item being clicked and moved by mouse
+  public Image DraggedObject;
+
   public GameObject InventoryFormWindow;
 
   [HideInInspector]
@@ -31,6 +34,35 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public List<Sprite> MaleClassesPictures = new List<Sprite>();
   public List<Sprite> FemaleClassesPictures = new List<Sprite>();
+
+  // Inventory icons
+  Dictionary<int, Sprite> _iconsByHash = new Dictionary<int, Sprite>();  
+  
+  public Sprite GetItemIcon(string name)
+  {
+    int hash = name.GetHashCode();
+    
+    if (_iconsByHash.ContainsKey(hash))
+    {
+      return _iconsByHash[hash];
+    }
+    
+    return null;
+  }
+
+  protected override void Init()
+  {
+    base.Init();
+    
+    Sprite[] _spritesAtlas = Resources.LoadAll<Sprite>("sprites-atlas/atlas");
+    if (_spritesAtlas != null)
+    {
+      foreach (var item in _spritesAtlas)
+      {
+        _iconsByHash.Add(item.name.GetHashCode(), item);
+      }
+    }
+  }  
 
   public Sprite FindPortraitByName(string name)
   {
@@ -149,6 +181,14 @@ public class GUIManager : MonoSingleton<GUIManager>
     {
       Debug.Log("Right button");
     }
+  }
+
+  Vector2 _mousePosition = Vector2.zero;
+  void Update()
+  {
+    _mousePosition = Input.mousePosition;
+
+    DraggedObject.rectTransform.position = _mousePosition;
   }
 
   // Private Methods

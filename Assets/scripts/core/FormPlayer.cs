@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -27,12 +27,12 @@ public class FormPlayer : MonoBehaviour
   Vector2 _rectTransformSize = Vector2.zero;
   void Update()
   {
-    CalculateBarWidth(PlayerData.Instance.PlayerCharacterVariable.HitPoints, 
-                      PlayerData.Instance.PlayerCharacterVariable.HitPointsMax, 
+    CalculateBarWidth(GameData.Instance.PlayerCharacterVariable.HitPoints, 
+                      GameData.Instance.PlayerCharacterVariable.HitPointsMax, 
                       HealthBar);
 
-    CalculateBarWidth(PlayerData.Instance.PlayerCharacterVariable.Energy, 
-                      PlayerData.Instance.PlayerCharacterVariable.EnergyMax, 
+    CalculateBarWidth(GameData.Instance.PlayerCharacterVariable.Energy, 
+                      GameData.Instance.PlayerCharacterVariable.EnergyMax, 
                       MagicBar);
   }
 

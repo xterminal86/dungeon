@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class InventoryItemClass
+public class PlaceholderMapObject : MapObject
 {
-  public InventoryItemClass()
+  public PlaceholderMapObject()
   {    
   }
 }
