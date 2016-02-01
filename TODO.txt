@@ -21,6 +21,10 @@ Melee and ranged actors (different mob types, different damage etc.)
 Link inventory item and MapObject: 
       When player places item from inventory into the world, we instantiate BMO with specific MapObject.
       When player clicks on item object in the world, destroy it and "transfer" it to the image at mouse cursor position.
+      World object is just a 3D representation of actual object - specific action performed by this object via RMB
+      is calculated from inventory (or hand), so we should somehow instantiate actual InventoryItem once and
+      assign a reference to it on the world object. Since world objects are not supposed to be destroyed,
+      we can try to just deactivate world object.
 
 =====
 MINOR
