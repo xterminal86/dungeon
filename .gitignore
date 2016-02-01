@@ -1,3 +1,4 @@
+*.suo
 /Temp
 /Library
 /*.csproj
@@ -10,4 +11,3 @@
 /Assets/UnityVS.meta
 /UnityVS.*
 /obj
-DungeonCrawler.git-csharp.v11.suo
