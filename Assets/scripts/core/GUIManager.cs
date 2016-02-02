@@ -87,7 +87,7 @@ public class GUIManager : MonoSingleton<GUIManager>
   {
     InventoryFormWindow.gameObject.SetActive(!InventoryFormWindow.gameObject.activeSelf);
   }
-
+  
   // FormTalking
 
   public Callback ButtonNameCallback;
@@ -191,7 +191,7 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     ItemTakenSprite.rectTransform.position = _mousePosition;
   }
-
+    
   // Private Methods
 
   void SaveAndQuitHandler()

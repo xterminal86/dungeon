@@ -16,7 +16,7 @@ public class PlaceholderItemObject : ItemObject
 
   public override void ActionHandler(object sender)
   {
-    SoundManager.Instance.PlaySound("player-item-take");
+    SoundManager.Instance.PlaySound(GlobalConstants.SFXItemTake);
 
     BIO.gameObject.SetActive(false);
     GUIManager.Instance.ItemTakenSprite.sprite = GUIManager.Instance.GetIconFromAtlas(AtlasIcon);

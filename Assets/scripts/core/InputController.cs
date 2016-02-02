@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class InputController : MonoSingleton<InputController> 
 {  
@@ -145,7 +146,7 @@ public class InputController : MonoSingleton<InputController>
   RaycastHit _raycastHit;      
   void ProcessMouse()
   {
-    if (Input.GetMouseButtonDown(0))
+    if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
     {
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -172,10 +173,10 @@ public class InputController : MonoSingleton<InputController>
         {
           PutItem();
         }
-      }
+      }       
     }
   }
-
+    
   Vector3 _itemPos = Vector3.zero;
   void PutItem()
   {
@@ -207,7 +208,7 @@ public class InputController : MonoSingleton<InputController>
       return;
     }
 
-    SoundManager.Instance.PlaySound("player-item-put");
+    SoundManager.Instance.PlaySound(GlobalConstants.SFXItemPut);
     
     GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
 

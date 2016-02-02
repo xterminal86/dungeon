@@ -58,6 +58,8 @@ public static class GlobalConstants
   // Sound Effects
   public const string SFXPunch = "atk-punch";
   public const string SFXPlayerDeath = "player-death";
+  public const string SFXItemTake = "player-item-take";
+  public const string SFXItemPut = "player-item-put";
 
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
   {

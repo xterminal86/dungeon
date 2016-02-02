@@ -7,30 +7,38 @@ public class InventorySlot : MonoBehaviour
 {	
   public Image Icon;
 
+  ItemObject _itemRef;
+
 	void Awake() 
 	{	
 	}
 		
 	void Update () 
-	{	
+	{    
 	}
 
   public void OnMouseDown()
   {
     if (Input.GetMouseButtonDown(0))
     {
-      /*
-      if (GUIManager.Instance.DraggedObject.IsActive())
+      if (_itemRef != null)
       {
-        GUIManager.Instance.DraggedObject.gameObject.SetActive(false);
+        if (_itemRef.ActionCallback != null)
+          _itemRef.ActionCallback(this);
+
+        Icon.gameObject.SetActive(false);
+        _itemRef = null;
       }
-      else
+      else if (GUIManager.Instance.ItemTaken != null)
       {
-        Sprite s = GUIManager.Instance.GetItemIcon("atlas_2");
-        GUIManager.Instance.DraggedObject.sprite = s;
-        GUIManager.Instance.DraggedObject.gameObject.SetActive(true);
+        SoundManager.Instance.PlaySound(GlobalConstants.SFXItemPut);
+    
+        _itemRef = GUIManager.Instance.ItemTaken;
+        Icon.sprite = GUIManager.Instance.GetIconFromAtlas(_itemRef.AtlasIcon);
+        Icon.gameObject.SetActive(true);
+        GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
+        GUIManager.Instance.ItemTaken = null;
       }
-      */
     }
     else if (Input.GetMouseButtonDown(1))
     {
