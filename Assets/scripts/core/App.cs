@@ -169,13 +169,14 @@ public class App : MonoSingleton<App>
   {
     SerializableObject so = new SerializableObject();
 
-    so.X = 1;
+    so.X = 49;
     so.Y = 1;
     so.Layer = 0;
     so.AtlasIcon = "atlas_248".GetHashCode();
     so.PrefabName = "mc-scroll";
     so.ObjectClassName = "item-placeholder";
-    so.TextField = "This is a scroll. Hurray!";
+    so.ObjectName = "Scroll of Development";
+    so.TextField = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
     GameObject go = PrefabsManager.Instance.FindPrefabByName("mc-scroll");
     
@@ -184,8 +185,18 @@ public class App : MonoSingleton<App>
       Debug.LogWarning("Couldn't find prefab: mc-scroll");
       return;
     }
-    
-    GameObject inst = InstantiatePrefab(1, 0, 1, go);
+        
+    GameObject inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
+    CreateItemObject(inst, so);
+
+    go = PrefabsManager.Instance.FindPrefabByName("mc-axe");
+
+    so.AtlasIcon = "atlas_422".GetHashCode();
+    so.PrefabName = "mc-axe";
+    so.ObjectName = "Axe of Development";
+    so.TextField = "This is an axe.";
+
+    inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
     CreateItemObject(inst, so);
   }
 
@@ -203,7 +214,7 @@ public class App : MonoSingleton<App>
     switch (so.ObjectClassName)
     {
       case "item-placeholder":
-        bio.ItemObjectInstance = new PlaceholderItemObject(so.TextField, so.AtlasIcon, bio);
+        bio.ItemObjectInstance = new PlaceholderItemObject(so.ObjectName, so.TextField, so.AtlasIcon, bio);
         (bio.ItemObjectInstance as PlaceholderItemObject).ActionCallback += (bio.ItemObjectInstance as PlaceholderItemObject).ActionHandler;
         break;
 

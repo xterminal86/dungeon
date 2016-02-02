@@ -10,10 +10,13 @@ public abstract class ItemObject
 
   public CallbackO ActionCallback;
 
+  public string ItemNameText = string.Empty;
+  public string DescriptionText = string.Empty;
+
   public ItemObject()
   {
-    
   }
 
+  public virtual void SaveReference() { }
   public virtual void ActionHandler(object sender) { }
 }

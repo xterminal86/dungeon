@@ -17,11 +17,28 @@ public class InventorySlot : MonoBehaviour
 	{    
 	}
 
+  public void OnMouseEnter()
+  {
+    if (_itemRef != null && !GUIManager.Instance.ItemInfoForm.Window.gameObject.activeSelf)
+    {
+      GUIManager.Instance.ItemInfoForm.SetWindowTexts(_itemRef.ItemNameText, _itemRef.DescriptionText);            
+    }
+  }
+
+  public void OnMouseExit()
+  {
+    if (GUIManager.Instance.ItemInfoForm.Window.gameObject.activeSelf)
+    {
+      GUIManager.Instance.ItemInfoForm.HideWindow();
+    }
+  }
+
   public void OnMouseDown()
   {
     if (Input.GetMouseButtonDown(0))
     {
-      if (_itemRef != null)
+      // Take item from slot
+      if (_itemRef != null && GUIManager.Instance.ItemTaken == null)
       {
         if (_itemRef.ActionCallback != null)
           _itemRef.ActionCallback(this);
@@ -29,15 +46,29 @@ public class InventorySlot : MonoBehaviour
         Icon.gameObject.SetActive(false);
         _itemRef = null;
       }
+      // Put item in slot
       else if (GUIManager.Instance.ItemTaken != null)
       {
         SoundManager.Instance.PlaySound(GlobalConstants.SFXItemPut);
-    
-        _itemRef = GUIManager.Instance.ItemTaken;
-        Icon.sprite = GUIManager.Instance.GetIconFromAtlas(_itemRef.AtlasIcon);
-        Icon.gameObject.SetActive(true);
-        GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
-        GUIManager.Instance.ItemTaken = null;
+
+        // If slot is empty
+        if (_itemRef == null)
+        {
+          _itemRef = GUIManager.Instance.ItemTaken;
+          GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
+          GUIManager.Instance.ItemTaken = null;
+        }
+        // If slot has something, swap it
+        else
+        {
+          ItemObject tmp = GUIManager.Instance.ItemTaken;
+          GUIManager.Instance.ItemTaken = _itemRef;
+          _itemRef = tmp;
+          GUIManager.Instance.ItemTakenSprite.sprite = GUIManager.Instance.GetIconFromAtlas(GUIManager.Instance.ItemTaken.AtlasIcon);          
+        }
+
+        Icon.sprite = GUIManager.Instance.GetIconFromAtlas(_itemRef.AtlasIcon);          
+        Icon.gameObject.SetActive(true);          
       }
     }
     else if (Input.GetMouseButtonDown(1))

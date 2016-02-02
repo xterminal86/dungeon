@@ -3,24 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PlaceholderItemObject : ItemObject
-{
-  string _descriptionText = string.Empty;
-
-  public PlaceholderItemObject(string descriptionText, int atlasIcon, BehaviourItemObject bio)
+{  
+  public PlaceholderItemObject(string name, string descriptionText, int atlasIcon, BehaviourItemObject bio)
   {
     BIO = bio;
     AtlasIcon = atlasIcon;
-
-    _descriptionText = descriptionText;
+    ItemNameText = name;
+    DescriptionText = descriptionText;
   }
 
   public override void ActionHandler(object sender)
   {
     SoundManager.Instance.PlaySound(GlobalConstants.SFXItemTake);
 
-    BIO.gameObject.SetActive(false);
+    BIO.gameObject.SetActive(false);    
     GUIManager.Instance.ItemTakenSprite.sprite = GUIManager.Instance.GetIconFromAtlas(AtlasIcon);
     GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(true);
-    GUIManager.Instance.ItemTaken = this;
+    GUIManager.Instance.ItemTaken = this;    
+  }
+
+  public override void SaveReference()
+  {
+    GUIManager.Instance.ItemTakenCopy = this;
   }
 }

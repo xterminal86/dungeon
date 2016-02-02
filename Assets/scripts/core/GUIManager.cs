@@ -13,7 +13,7 @@ public class GUIManager : MonoSingleton<GUIManager>
   public GameObject FormTalking;
   public GameObject FormCompass;
   public GameObject FormGameMenu;
-
+  
   public Image CompassImage;
   public Image PortraitImage;
 
@@ -23,11 +23,13 @@ public class GUIManager : MonoSingleton<GUIManager>
   public FormNewGame NewGameForm;
   public FormPlayer PlayerForm;
   public FormInventory InventoryForm;
-
-  // Icon of item being manipulated in inventory by mouse
+  public FormItemInfo ItemInfoForm;
+  
+  // Icon of item being manipulated
   public Image ItemTakenSprite;
-  // Flag that shows if item is currently in hand
+  // Item that is currently in hand
   public ItemObject ItemTaken;
+  public ItemObject ItemTakenCopy;
 
   public GameObject InventoryFormWindow;
 

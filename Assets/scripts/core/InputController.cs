@@ -150,6 +150,7 @@ public class InputController : MonoSingleton<InputController>
     {
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+      // If we hit something before us
       if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, GlobalConstants.WallScaleFactor + 1))
       {          
         if (_raycastHit.collider != null)
@@ -163,12 +164,22 @@ public class InputController : MonoSingleton<InputController>
           BehaviourItemObject bio = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourItemObject>();
           if (bio != null)
           {
-            ProcessBIO(bio);
+            // If we have item in hand and click on another item on the floor,
+            // item in hand is put down
+            if (GUIManager.Instance.ItemTaken != null)
+            {
+              PutItem();
+            }
+            else
+            {
+              ProcessBIO(bio);
+            }
           }
         }
       }
       else
       {
+        // If floor is empty, put item down
         if (GUIManager.Instance.ItemTaken != null)
         {
           PutItem();
