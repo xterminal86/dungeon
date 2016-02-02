@@ -7,8 +7,6 @@ public class InventorySlot : MonoBehaviour
 {	
   public Image Icon;
 
-  PlaceholderMapObject _item;
-
 	void Awake() 
 	{	
 	}

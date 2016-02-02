@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<MAIN>
-  <ITEM name="Short Sword" spriteName="atlas_70" class="weapon" />
-  <ITEM name="Scroll" spriteName="atlas_248" class="placeholder" />  
-  <ITEM name="Small Potion Red" spriteName="atlas_35" class="consumable" />
-  <ITEM name="Small Potion Blue" spriteName="atlas_38" class="consumable" />  
-  <ITEM name="Bread" spriteName="atlas_21" class="consumable" />
-</MAIN>

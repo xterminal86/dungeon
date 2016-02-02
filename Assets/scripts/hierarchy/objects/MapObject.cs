@@ -6,8 +6,13 @@ using System.Collections;
 /// </summary>
 public abstract class MapObject
 {
+  // Used for deciding which type of MapObject to instantiate (App::CreateMapObject())
   public string ClassName = string.Empty;
+
+  // Unused (for distinguishing objects in Debug.Log)
   public string PrefabName = string.Empty;
+
+  // Unused
   public string ObjectId = string.Empty;
 
   public int Facing = -1;

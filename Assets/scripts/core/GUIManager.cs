@@ -24,8 +24,10 @@ public class GUIManager : MonoSingleton<GUIManager>
   public FormPlayer PlayerForm;
   public FormInventory InventoryForm;
 
-  // Icon of item being clicked and moved by mouse
-  public Image DraggedObject;
+  // Icon of item being manipulated in inventory by mouse
+  public Image ItemTakenSprite;
+  // Flag that shows if item is currently in hand
+  public ItemObject ItemTaken;
 
   public GameObject InventoryFormWindow;
 
@@ -37,18 +39,6 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   // Inventory icons
   Dictionary<int, Sprite> _iconsByHash = new Dictionary<int, Sprite>();  
-  
-  public Sprite GetItemIcon(string name)
-  {
-    int hash = name.GetHashCode();
-    
-    if (_iconsByHash.ContainsKey(hash))
-    {
-      return _iconsByHash[hash];
-    }
-    
-    return null;
-  }
 
   protected override void Init()
   {
@@ -63,6 +53,17 @@ public class GUIManager : MonoSingleton<GUIManager>
       }
     }
   }  
+
+  public Sprite GetIconFromAtlas(int hash)
+  {
+    return _iconsByHash[hash];
+  }
+
+  public Sprite GetIconFromAtlas(string name)
+  {
+    int hash = name.GetHashCode();    
+    return _iconsByHash[hash];
+  }
 
   public Sprite FindPortraitByName(string name)
   {
@@ -188,7 +189,7 @@ public class GUIManager : MonoSingleton<GUIManager>
   {
     _mousePosition = Input.mousePosition;
 
-    DraggedObject.rectTransform.position = _mousePosition;
+    ItemTakenSprite.rectTransform.position = _mousePosition;
   }
 
   // Private Methods

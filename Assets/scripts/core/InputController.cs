@@ -156,24 +156,88 @@ public class InputController : MonoSingleton<InputController>
           BehaviourMapObject bmo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourMapObject>();
           if (bmo != null)
           {            
-            float d = Vector3.Distance(App.Instance.CameraPos, bmo.transform.position);
-            int facing = Mathf.Abs(bmo.MapObjectInstance.Facing - App.Instance.CameraOrientation);
+            ProcessBMO(bmo);
+          }
 
-            float dCond = d - float.Epsilon;
-
-            //Debug.Log(_raycastHit.distance + " " + d);
-
-            //if (dCond <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
-            if ( (facing == 2 && dCond <= GlobalConstants.WallScaleFactor) || 
-                 (facing == 0 && dCond <= 0.0f) || 
-                 (bmo.transform.position.x == App.Instance.CameraPos.x && bmo.transform.position.z == App.Instance.CameraPos.z) )
-            {
-              if (bmo.MapObjectInstance.ActionCallback != null)
-                bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
-            }
+          BehaviourItemObject bio = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourItemObject>();
+          if (bio != null)
+          {
+            ProcessBIO(bio);
           }
         }
       }
+      else
+      {
+        if (GUIManager.Instance.ItemTaken != null)
+        {
+          PutItem();
+        }
+      }
+    }
+  }
+
+  Vector3 _itemPos = Vector3.zero;
+  void PutItem()
+  {
+    int x = PlayerMapPos.X;
+    int y = PlayerMapPos.Y;
+
+    var o = App.Instance.CameraOrientation;
+
+    if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.NORTH)
+    {
+      x--;
+    }
+    else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.EAST) 
+    {
+      y++;
+    }
+    else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.SOUTH) 
+    {
+      x++;
+    }
+    else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.WEST) 
+    {
+      y--;
+    }
+
+    // Check bounds
+    if (x < 0 || x > App.Instance.MapRows - 1 || y < 0 || y > App.Instance.MapColumns - 1)
+    {
+      return;
+    }
+
+    SoundManager.Instance.PlaySound("player-item-put");
+    
+    GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
+
+    _itemPos.x = x * GlobalConstants.WallScaleFactor;
+    _itemPos.z = y * GlobalConstants.WallScaleFactor;
+
+    GUIManager.Instance.ItemTaken.BIO.transform.position = _itemPos;
+    GUIManager.Instance.ItemTaken.BIO.gameObject.SetActive(true);
+    GUIManager.Instance.ItemTaken = null;
+  }
+
+  void ProcessBMO(BehaviourMapObject bmo)
+  {
+    float d = Vector3.Distance(App.Instance.CameraPos, bmo.transform.position);
+    int facing = Mathf.Abs(bmo.MapObjectInstance.Facing - App.Instance.CameraOrientation);
+    float dCond = d - float.Epsilon;
+    //Debug.Log(_raycastHit.distance + " " + d);
+    //if (dCond <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
+    if ((facing == 2 && dCond <= GlobalConstants.WallScaleFactor) || (facing == 0 && dCond <= 0.0f) || (bmo.transform.position.x == App.Instance.CameraPos.x && bmo.transform.position.z == App.Instance.CameraPos.z)) 
+    {
+      if (bmo.MapObjectInstance.ActionCallback != null)
+        bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
+    }
+  }
+
+  void ProcessBIO(BehaviourItemObject bio)
+  {
+    if (bio.CanBeTaken && bio.ItemObjectInstance.ActionCallback != null)
+    {
+      bio.ItemObjectInstance.ActionCallback(this);
     }
   }
 
@@ -438,7 +502,7 @@ public class InputController : MonoSingleton<InputController>
     CameraMoveArgument ca = arg as CameraMoveArgument;
     if (ca == null) yield return null;
 
-    SoundManager.Instance.PlaySound("player-cannot-move");
+    SoundManager.Instance.PlaySound("player-cannot-move2");
 
     _isProcessing = true;
     

@@ -144,6 +144,7 @@ public class App : MonoSingleton<App>
       BuildMap();
     }
 
+    SpawnItems();
     SetupCharacters();
     SetupMobs();
 
@@ -162,6 +163,53 @@ public class App : MonoSingleton<App>
   protected override void Init()
   {
     base.Init();
+  }
+
+  void SpawnItems()
+  {
+    SerializableObject so = new SerializableObject();
+
+    so.X = 1;
+    so.Y = 1;
+    so.Layer = 0;
+    so.AtlasIcon = "atlas_248".GetHashCode();
+    so.PrefabName = "mc-scroll";
+    so.ObjectClassName = "item-placeholder";
+    so.TextField = "This is a scroll. Hurray!";
+
+    GameObject go = PrefabsManager.Instance.FindPrefabByName("mc-scroll");
+    
+    if (go == null)
+    {
+      Debug.LogWarning("Couldn't find prefab: mc-scroll");
+      return;
+    }
+    
+    GameObject inst = InstantiatePrefab(1, 0, 1, go);
+    CreateItemObject(inst, so);
+  }
+
+  void CreateItemObject(GameObject go, SerializableObject so)
+  {
+    BehaviourItemObject bio = go.GetComponent<BehaviourItemObject>();
+    if (bio == null)
+    {
+      Debug.LogWarning("Could not get BIO component from " + so.PrefabName);
+      return;
+    }   
+
+    bio.CalculateMapPosition();
+
+    switch (so.ObjectClassName)
+    {
+      case "item-placeholder":
+        bio.ItemObjectInstance = new PlaceholderItemObject(so.TextField, so.AtlasIcon, bio);
+        (bio.ItemObjectInstance as PlaceholderItemObject).ActionCallback += (bio.ItemObjectInstance as PlaceholderItemObject).ActionHandler;
+        break;
+
+      default:
+        break;
+    }
   }
 
   void SetupMobs()
@@ -885,7 +933,7 @@ public class App : MonoSingleton<App>
 
       case "sign":
         bmo.MapObjectInstance = new SignMapObject(so.ObjectClassName, so.PrefabName, bmo, so.TextField);
-        break;
+        break;      
 
       default:
         break;

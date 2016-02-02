@@ -126,6 +126,7 @@ public class SerializableObject
   public int Y = -1;
   public int Layer = -1;
   public int Facing = 0;
+  public int AtlasIcon = -1;
   public string PrefabName = string.Empty;
   public string ObjectClassName = string.Empty;
   public string DoorSoundType = string.Empty;
