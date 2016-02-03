@@ -19,9 +19,7 @@ public class InventorySlot : MonoBehaviour
 
   public void OnMouseEnter()
   {
-    if (_itemRef != null && 
-        !GUIManager.Instance.ItemInfoForm.Window.gameObject.activeSelf &&
-         GUIManager.Instance.ItemTaken == null)
+    if (_itemRef != null && GUIManager.Instance.ItemTaken == null)
     {
       GUIManager.Instance.ItemInfoForm.SetWindowTexts(_itemRef.ItemNameText, _itemRef.DescriptionText);            
     }
@@ -29,9 +27,14 @@ public class InventorySlot : MonoBehaviour
 
   public void OnMouseExit()
   {
-    if (GUIManager.Instance.ItemInfoForm.Window.gameObject.activeSelf)
+    GUIManager.Instance.ItemInfoForm.HideWindow();
+  }
+
+  public void OnMouseUp()
+  {
+    if (_itemRef != null && GUIManager.Instance.ItemTaken == null)
     {
-      GUIManager.Instance.ItemInfoForm.HideWindow();
+      GUIManager.Instance.ItemInfoForm.SetWindowTexts(_itemRef.ItemNameText, _itemRef.DescriptionText);            
     }
   }
 
@@ -44,6 +47,8 @@ public class InventorySlot : MonoBehaviour
       {
         if (_itemRef.LMBAction != null)
           _itemRef.LMBAction(this);
+
+        GUIManager.Instance.ItemInfoForm.HideWindow();
 
         Icon.gameObject.SetActive(false);
         _itemRef = null;

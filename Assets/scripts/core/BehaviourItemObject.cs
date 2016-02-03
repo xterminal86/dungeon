@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// This script should be placed on all items
+/// </summary>
 public class BehaviourItemObject : MonoBehaviour 
 {
   // Can this object be placed in inventory?

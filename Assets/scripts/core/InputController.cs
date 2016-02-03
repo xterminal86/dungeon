@@ -261,7 +261,7 @@ public class InputController : MonoSingleton<InputController>
     int dy = PlayerMapPos.Y - bio.MapPosition.Y;
 
     // If object is on the same line as camera and can be taken
-    if ((dx == 0 || dy == 0) && bio.CanBeTaken)
+    if ( ( (dx == 0 && dy != 0) || (dy == 0 && dx != 0) ) && bio.CanBeTaken)
     {
       if (bio.ItemObjectInstance.LMBAction != null)
         bio.ItemObjectInstance.LMBAction(this);
