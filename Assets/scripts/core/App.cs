@@ -175,7 +175,7 @@ public class App : MonoSingleton<App>
     so.AtlasIcon = "atlas_248".GetHashCode();
     so.PrefabName = "mc-scroll";
     so.ObjectClassName = "item-placeholder";
-    so.ObjectName = "Scroll of Development";
+    so.ObjectName = "Scroll of Placeholding";
     so.TextField = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n";
     //so.TextField = "0123456789A123456789B123456789C123456789D123456789E123456789F";
 
@@ -200,7 +200,7 @@ public class App : MonoSingleton<App>
 
     so.AtlasIcon = "atlas_422".GetHashCode();
     so.PrefabName = "mc-axe";
-    so.ObjectName = "Axe of Development";
+    so.ObjectName = "Axe of Placeholding";
     so.TextField = "This is an axe.";
 
     inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);

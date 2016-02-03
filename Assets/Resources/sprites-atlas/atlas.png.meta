@@ -850,10 +850,11 @@ TextureImporter:
     21301690: atlas_425
     21301692: atlas_426
     21301694: atlas_427
+    21301696: atlas_428
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     linearTexture: 0
     correctGamma: 0
     fadeOut: 0
@@ -5124,7 +5125,7 @@ TextureImporter:
     - name: atlas_423
       rect:
         serializedVersion: 2
-        x: 306
+        x: 102
         y: 0
         width: 34
         height: 34
@@ -5134,7 +5135,7 @@ TextureImporter:
     - name: atlas_424
       rect:
         serializedVersion: 2
-        x: 340
+        x: 306
         y: 0
         width: 34
         height: 34
@@ -5144,7 +5145,7 @@ TextureImporter:
     - name: atlas_425
       rect:
         serializedVersion: 2
-        x: 374
+        x: 340
         y: 0
         width: 34
         height: 34
@@ -5154,7 +5155,7 @@ TextureImporter:
     - name: atlas_426
       rect:
         serializedVersion: 2
-        x: 408
+        x: 374
         y: 0
         width: 34
         height: 34
@@ -5162,6 +5163,16 @@ TextureImporter:
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: atlas_427
+      rect:
+        serializedVersion: 2
+        x: 408
+        y: 0
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: atlas_428
       rect:
         serializedVersion: 2
         x: 442

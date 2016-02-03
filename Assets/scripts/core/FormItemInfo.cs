@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 public class FormItemInfo : MonoBehaviour 
 {
-  public Image Window;
+  public RectTransform Window;
+  public CanvasScaler Scaler;
 
   public Text HeadText;
   public Text DescriptionText;
@@ -18,10 +19,20 @@ public class FormItemInfo : MonoBehaviour
 
   Vector2 _sizeDelta = Vector2.zero;
   Vector2 _position = Vector2.zero;
+
+  float _scaleFactor = 1.0f;
+  float _diff = 1.0f;
   void Awake()
   {
-    _windowMinWidth = (int)Window.rectTransform.sizeDelta.x;
-    _windowMinHeight = (int)Window.rectTransform.sizeDelta.y;
+    _windowMinWidth = (int)Window.sizeDelta.x;
+    _windowMinHeight = (int)Window.sizeDelta.y;
+
+    _scaleFactor = Scaler.scaleFactor;
+
+    float w = (float)Screen.width;
+    _diff = w / Scaler.referenceResolution.x;
+
+    //Debug.Log(Window.sizeDelta + " " + _scaleFactor + " " + _diff);
   }
 
   public void SetWindowTexts(string head, string desc)
@@ -35,7 +46,7 @@ public class FormItemInfo : MonoBehaviour
     _sizeDelta.x = _windowMinWidth;
     _sizeDelta.y = _windowMinHeight + rows * RowHeight;
 
-    Window.rectTransform.sizeDelta = _sizeDelta;
+    Window.sizeDelta = _sizeDelta;
             
     Window.gameObject.SetActive(true);
   }
@@ -48,9 +59,8 @@ public class FormItemInfo : MonoBehaviour
   void Update()
   {
     _position = Input.mousePosition;
-    _position.x -= (Window.rectTransform.sizeDelta.x / 2 + 10);
-    //_position.y += Window.rectTransform.sizeDelta.y / 2 + 10;
-    
-    Window.rectTransform.position = _position;
+    _position.x -= (Window.sizeDelta.x / 2) * _diff + 10;
+
+    Window.position = _position;
   }
 }
