@@ -191,7 +191,7 @@ public class App : MonoSingleton<App>
     CreateItemObject(inst, so);
 
     so.ObjectName = "Greetings!";
-    so.TextField = "Welcome to Dunegon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development. If you possess any related (especially artistic) skills, your contribution would be great.\n\nxterminal86\n";
+    so.TextField = "Welcome to Dungeon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development. If you possess any related (especially artistic) skills, your contribution would be great.\n\nxterminal86\n";
     inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
     var io = CreateItemObject(inst, so, false);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
