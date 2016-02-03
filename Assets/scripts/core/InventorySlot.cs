@@ -8,6 +8,10 @@ public class InventorySlot : MonoBehaviour
   public Image Icon;
 
   ItemObject _itemRef;
+  public ItemObject ItemRef
+  {
+    get { return _itemRef; }
+  }
 
 	void Awake() 
 	{	
@@ -16,6 +20,13 @@ public class InventorySlot : MonoBehaviour
 	void Update () 
 	{    
 	}
+
+  public void SetItem(ItemObject item)
+  {
+    _itemRef = item;
+    Icon.sprite = GUIManager.Instance.GetIconFromAtlas(_itemRef.AtlasIcon);          
+    Icon.gameObject.SetActive(true);
+  }
 
   public void OnMouseEnter()
   {

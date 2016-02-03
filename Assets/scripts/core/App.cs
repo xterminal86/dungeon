@@ -176,7 +176,8 @@ public class App : MonoSingleton<App>
     so.PrefabName = "mc-scroll";
     so.ObjectClassName = "item-placeholder";
     so.ObjectName = "Scroll of Development";
-    so.TextField = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    so.TextField = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n";
+    //so.TextField = "0123456789A123456789B123456789C123456789D123456789E123456789F";
 
     GameObject go = PrefabsManager.Instance.FindPrefabByName("mc-scroll");
     
@@ -189,6 +190,12 @@ public class App : MonoSingleton<App>
     GameObject inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
     CreateItemObject(inst, so);
 
+    so.ObjectName = "Greetings!";
+    so.TextField = "Welcome to Dunegon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development. If you possess any related (especially artistic) skills, your contribution would be great.\n\nxterminal86\n";
+    inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
+    var io = CreateItemObject(inst, so, false);
+    GUIManager.Instance.InventoryForm.AddItemToInventory(io);
+
     go = PrefabsManager.Instance.FindPrefabByName("mc-axe");
 
     so.AtlasIcon = "atlas_422".GetHashCode();
@@ -200,13 +207,13 @@ public class App : MonoSingleton<App>
     CreateItemObject(inst, so);
   }
 
-  void CreateItemObject(GameObject go, SerializableObject so)
+  ItemObject CreateItemObject(GameObject go, SerializableObject so, bool showInWorld = true)
   {
     BehaviourItemObject bio = go.GetComponent<BehaviourItemObject>();
     if (bio == null)
     {
       Debug.LogWarning("Could not get BIO component from " + so.PrefabName);
-      return;
+      return null;
     }   
 
     bio.CalculateMapPosition();
@@ -215,12 +222,20 @@ public class App : MonoSingleton<App>
     {
       case "item-placeholder":
         bio.ItemObjectInstance = new PlaceholderItemObject(so.ObjectName, so.TextField, so.AtlasIcon, bio);
-        bio.ItemObjectInstance.LMBAction += bio.ItemObjectInstance.LMBHandler;
         break;
 
       default:
         break;
     }
+
+    if (bio.ItemObjectInstance != null)
+    {
+      bio.ItemObjectInstance.LMBAction += bio.ItemObjectInstance.LMBHandler;
+    }
+
+    bio.gameObject.SetActive(showInWorld);
+
+    return bio.ItemObjectInstance;
   }
 
   void SetupMobs()

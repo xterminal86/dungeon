@@ -10,8 +10,13 @@ public class FormInventory : MonoBehaviour
   public GameObject InventorySlot;
   public RectTransform InventorySlotsHolder;
 
+  Dictionary<int, InventorySlot> _inventorySlots = new Dictionary<int, InventorySlot>();
+
   int _invWidth = 40;
   int _invHeight = 40;
+
+  const int _inventoryRows = 2;
+  const int _inventoryCols = 7;
 
   public Sprite BarGreen;
   public Sprite BarYellow; 
@@ -40,10 +45,12 @@ public class FormInventory : MonoBehaviour
     _hungerYellowZone = _hungerBarMaxWidth / 3;
     _hungerRedZone = _hungerBarMaxWidth / 6;
 
+    int slotNumber = 0;
+
     Vector2 slotsPosition = Vector2.zero;
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < _inventoryRows; i++)
     {
-      for (int j = 0; j < 7; j++)
+      for (int j = 0; j < _inventoryCols; j++)
       {
         var go = (GameObject)Instantiate(InventorySlot);
         var rt = go.GetComponent<RectTransform>();
@@ -54,6 +61,14 @@ public class FormInventory : MonoBehaviour
           slotsPosition.y = i * _invHeight;
           rt.transform.localPosition = slotsPosition;
         }
+
+        var slot = go.GetComponent<InventorySlot>();
+        if (slot != null)
+        {
+          _inventorySlots.Add(slotNumber, slot);
+        }
+
+        slotNumber++;
       }
     }
   }  	
@@ -125,6 +140,20 @@ public class FormInventory : MonoBehaviour
     CharName.text = _charNameAndTitle;
 
     SetPortrait();
+  }
+
+  public void AddItemToInventory(ItemObject item)
+  {
+    int totalSlots = _inventoryRows * _inventoryCols;
+
+    for (int i = totalSlots - 1; i >= 0; i--)
+    {
+      if (_inventorySlots[i].ItemRef == null)
+      {
+        _inventorySlots[i].SetItem(item);
+        break;
+      }
+    }
   }
 
   void Start ()

@@ -11,20 +11,29 @@ public class FormItemInfo : MonoBehaviour
   public Text DescriptionText;
 
   public int MaxLettersInRow;
-  public int WindowMinWidth;
-  public int WindowMinHeight;
+  public int RowHeight;
+
+  int _windowMinWidth;
+  int _windowMinHeight;
 
   Vector2 _sizeDelta = Vector2.zero;
   Vector2 _position = Vector2.zero;
+  void Awake()
+  {
+    _windowMinWidth = (int)Window.rectTransform.sizeDelta.x;
+    _windowMinHeight = (int)Window.rectTransform.sizeDelta.y;
+  }
+
   public void SetWindowTexts(string head, string desc)
   {
     HeadText.text = head;
     DescriptionText.text = desc;
 
-    int rows = desc.Length / MaxLettersInRow;
-        
-    _sizeDelta.x = WindowMinWidth;
-    _sizeDelta.y = WindowMinHeight + (rows + 1) * 15;
+    int newLines = desc.Split('\n').Length - 1;
+    int rows = desc.Length / MaxLettersInRow + newLines;
+
+    _sizeDelta.x = _windowMinWidth;
+    _sizeDelta.y = _windowMinHeight + rows * RowHeight;
 
     Window.rectTransform.sizeDelta = _sizeDelta;
             
@@ -40,7 +49,7 @@ public class FormItemInfo : MonoBehaviour
   {
     _position = Input.mousePosition;
     _position.x -= (Window.rectTransform.sizeDelta.x / 2 + 10);
-    _position.y -= Window.rectTransform.sizeDelta.y / 2 + 10;
+    //_position.y += Window.rectTransform.sizeDelta.y / 2 + 10;
     
     Window.rectTransform.position = _position;
   }
