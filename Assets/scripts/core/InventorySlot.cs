@@ -19,7 +19,9 @@ public class InventorySlot : MonoBehaviour
 
   public void OnMouseEnter()
   {
-    if (_itemRef != null && !GUIManager.Instance.ItemInfoForm.Window.gameObject.activeSelf)
+    if (_itemRef != null && 
+        !GUIManager.Instance.ItemInfoForm.Window.gameObject.activeSelf &&
+         GUIManager.Instance.ItemTaken == null)
     {
       GUIManager.Instance.ItemInfoForm.SetWindowTexts(_itemRef.ItemNameText, _itemRef.DescriptionText);            
     }
@@ -40,8 +42,8 @@ public class InventorySlot : MonoBehaviour
       // Take item from slot
       if (_itemRef != null && GUIManager.Instance.ItemTaken == null)
       {
-        if (_itemRef.ActionCallback != null)
-          _itemRef.ActionCallback(this);
+        if (_itemRef.LMBAction != null)
+          _itemRef.LMBAction(this);
 
         Icon.gameObject.SetActive(false);
         _itemRef = null;

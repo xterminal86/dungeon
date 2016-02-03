@@ -58,6 +58,7 @@ public static class GlobalConstants
   // Sound Effects
   public const string SFXPunch = "atk-punch";
   public const string SFXPlayerDeath = "player-death";
+  public const string SFXPlayerCannotMove = "player-cannot-move2";
   public const string SFXItemTake = "player-item-take";
   public const string SFXItemPut = "player-item-put";
 

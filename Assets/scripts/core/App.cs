@@ -215,7 +215,7 @@ public class App : MonoSingleton<App>
     {
       case "item-placeholder":
         bio.ItemObjectInstance = new PlaceholderItemObject(so.ObjectName, so.TextField, so.AtlasIcon, bio);
-        (bio.ItemObjectInstance as PlaceholderItemObject).ActionCallback += (bio.ItemObjectInstance as PlaceholderItemObject).ActionHandler;
+        bio.ItemObjectInstance.LMBAction += bio.ItemObjectInstance.LMBHandler;
         break;
 
       default:

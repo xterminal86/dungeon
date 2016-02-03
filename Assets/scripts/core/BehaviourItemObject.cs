@@ -10,6 +10,7 @@ public class BehaviourItemObject : MonoBehaviour
   // Reference to 3D model - we're going to hide it when we take it in inventory
   public GameObject Model;
 
+  // Logic class instance
   public ItemObject ItemObjectInstance;
 
   Int2 _mapPosition = new Int2();

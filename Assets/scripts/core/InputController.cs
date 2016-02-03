@@ -189,6 +189,7 @@ public class InputController : MonoSingleton<InputController>
   }
     
   Vector3 _itemPos = Vector3.zero;
+  Vector3 _itemRotation = Vector3.zero;
   void PutItem()
   {
     int x = PlayerMapPos.X;
@@ -219,6 +220,8 @@ public class InputController : MonoSingleton<InputController>
       return;
     }
 
+    if (!App.Instance.GeneratedMap.PathfindingMap[x, y].Walkable) return;
+
     SoundManager.Instance.PlaySound(GlobalConstants.SFXItemPut);
     
     GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
@@ -226,7 +229,14 @@ public class InputController : MonoSingleton<InputController>
     _itemPos.x = x * GlobalConstants.WallScaleFactor;
     _itemPos.z = y * GlobalConstants.WallScaleFactor;
 
+    _itemRotation = GUIManager.Instance.ItemTaken.BIO.gameObject.transform.eulerAngles;
+
+    GlobalConstants.Orientation or = GlobalConstants.OrientationsMap[App.Instance.CameraOrientation];
+    _itemRotation.y = GlobalConstants.OrientationAngles[or];
+
     GUIManager.Instance.ItemTaken.BIO.transform.position = _itemPos;
+    GUIManager.Instance.ItemTaken.BIO.transform.eulerAngles = _itemRotation;
+    GUIManager.Instance.ItemTaken.BIO.CalculateMapPosition();
     GUIManager.Instance.ItemTaken.BIO.gameObject.SetActive(true);
     GUIManager.Instance.ItemTaken = null;
   }
@@ -247,9 +257,14 @@ public class InputController : MonoSingleton<InputController>
 
   void ProcessBIO(BehaviourItemObject bio)
   {
-    if (bio.CanBeTaken && bio.ItemObjectInstance.ActionCallback != null)
+    int dx = PlayerMapPos.X - bio.MapPosition.X;
+    int dy = PlayerMapPos.Y - bio.MapPosition.Y;
+
+    // If object is on the same line as camera and can be taken
+    if ((dx == 0 || dy == 0) && bio.CanBeTaken)
     {
-      bio.ItemObjectInstance.ActionCallback(this);
+      if (bio.ItemObjectInstance.LMBAction != null)
+        bio.ItemObjectInstance.LMBAction(this);
     }
   }
 
@@ -514,7 +529,7 @@ public class InputController : MonoSingleton<InputController>
     CameraMoveArgument ca = arg as CameraMoveArgument;
     if (ca == null) yield return null;
 
-    SoundManager.Instance.PlaySound("player-cannot-move2");
+    SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerCannotMove);
 
     _isProcessing = true;
     
