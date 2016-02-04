@@ -101,8 +101,9 @@ public class SoundManager : MonoSingleton<SoundManager>
       a.volume = is3D ? SoundVolume : 1.0f;
       a.maxDistance = AudioSourceOneShotPrefab.maxDistance;
       a.minDistance = AudioSourceOneShotPrefab.minDistance;
-      //a.rolloffMode = AudioSourcePrefab.rolloffMode;      
-      a.rolloffMode = AudioRolloffMode.Linear;
+      a.rolloffMode = AudioRolloffMode.Custom;
+      var curve = AudioSourceOneShotPrefab.GetCustomCurve(AudioSourceCurveType.CustomRolloff);
+      a.SetCustomCurve(AudioSourceCurveType.CustomRolloff, curve);
       a.clip = _audioSourcesByHash[hash].clip;
       a.Play();
       Destroy(go, a.clip.length);
