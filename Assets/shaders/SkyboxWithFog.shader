@@ -19,7 +19,7 @@
 	     CGINCLUDE
 	     #include "UnityCG.cginc"
 	 
-	     half4 unity_FogColor; // fog color defined by RenderSettings
+	     //half4 unity_FogColor; // fog color defined by RenderSettings
 	     fixed _Fog;
 	     
 	     struct appdata_t 

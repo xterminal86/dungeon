@@ -97,7 +97,7 @@ public class SoundManager : MonoSingleton<SoundManager>
       go.transform.position = position;
       AudioSource a = go.AddComponent<AudioSource>();
       a.playOnAwake = false;
-      a.panLevel = is3D ? 1.0f : 0.0f;
+      a.spatialBlend = is3D ? 1.0f : 0.0f;
       a.volume = is3D ? SoundVolume : 1.0f;
       a.maxDistance = AudioSourceOneShotPrefab.maxDistance;
       a.minDistance = AudioSourceOneShotPrefab.minDistance;
