@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -61,7 +62,7 @@ public class TitleScreen : MonoBehaviour
   void FadeCompleteHandler()
   {
     ScreenFader.Instance.FadeCompleteCallback -= FadeCompleteHandler;
-    Application.LoadLevel("main");
+    SceneManager.LoadScene("main");
   }
 
   void ExitGame()

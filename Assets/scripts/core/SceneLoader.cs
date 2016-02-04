@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,8 +7,8 @@ public class SceneLoader : MonoBehaviour
 {
   AsyncOperation _level;
 	void Start() 
-	{
-    _level = Application.LoadLevelAsync("title");
+	{    
+    _level = SceneManager.LoadSceneAsync("title");
 
     StartCoroutine(LoadLevelRoutine());
 	}

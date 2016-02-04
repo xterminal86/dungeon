@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -1036,7 +1037,7 @@ public class App : MonoSingleton<App>
     }
 
     ScreenFader.Instance.FadeCompleteCallback -= GameOverHandler;
-    Application.LoadLevel("entry");
+    SceneManager.LoadScene("entry");
   }
 
   public enum MapFilename

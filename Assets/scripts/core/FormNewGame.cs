@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -117,7 +118,7 @@ public class FormNewGame : MonoBehaviour
   void FadeCompleteHandler()
   {
     ScreenFader.Instance.FadeCompleteCallback -= FadeCompleteHandler;
-    Application.LoadLevel("main");
+    SceneManager.LoadScene("main");
   }
 
   void ReadStats()

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -215,6 +216,6 @@ public class GUIManager : MonoSingleton<GUIManager>
     }
 
     ScreenFader.Instance.FadeCompleteCallback -= ReturnToMenuHandler;
-    Application.LoadLevel("entry");
+    SceneManager.LoadScene("entry");
   }  
 }
