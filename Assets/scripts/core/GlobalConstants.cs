@@ -43,6 +43,10 @@ public static class GlobalConstants
 
   public static Vector3 DefaultVillageMountainsSize = new Vector3(25, 30, 25);
 
+  // Greeting string
+
+  public const string PlayerGreeting = "Welcome to Dungeon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development.\nUse spacebar to talk with villagers and mouse to interact with objects.\n\nxterminal86";
+
   // Model Animation Names
 
   public const string AnimationIdleName = "Idle";
@@ -56,6 +60,7 @@ public static class GlobalConstants
   public const string ActorVillagerClass = "villager";
 
   // Sound Effects
+
   public const string SFXPunch = "atk-punch";
   public const string SFXPlayerDeath = "player-death";
   public const string SFXPlayerCannotMove = "player-cannot-move2";

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<MAIN>
+  <ITEM name="Loaf of Bread" type="food" prefabName="mc-bread" atlasIcon="atlas_424"/>
+  <ITEM name="Long Sword" type="weapon-melee" prefabName="mc-sword-iron" atlasIcon="atlas_420"/>
+  <ITEM name="Pickaxe" type="weapon-melee" prefabName="mc-pickaxe" atlasIcon="atlas_421"/>
+  <ITEM name="Axe" type="weapon-melee" prefabName="mc-axe" atlasIcon="atlas_422"/>
+  <ITEM name="Scroll" type="placeholder" prefabName="mc-scroll" atlasIcon="atlas_248"/>
+</MAIN>

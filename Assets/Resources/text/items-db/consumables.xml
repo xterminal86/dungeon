@@ -1,3 +1,4 @@
 <?xml version="1.0"?>
-<MAIN>  
+<MAIN>
+  <ITEM name="Loaf of Bread" type="food" value="50" prefabName="mc-bread" atlasIcon="atlas_424"/>
 </MAIN>
