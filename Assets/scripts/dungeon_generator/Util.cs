@@ -126,7 +126,6 @@ public class SerializableObject
   public int Y = -1;
   public int Layer = -1;
   public int Facing = 0;
-  public int AtlasIcon = -1;
   public string ObjectName = string.Empty;
   public string PrefabName = string.Empty;
   public string ObjectClassName = string.Empty;
@@ -142,6 +141,46 @@ public class SerializableObject
     return string.Format("X = {0} Y = {1} Layer = {2} Facing = {3} PrefabName = {4}", X, Y, Layer, Facing, PrefabName);
   }
 }
+
+[Serializable]
+public class SerializableItem
+{
+  public int X = -1;
+  public int Y = -1;
+  public int Layer = -1;
+  public int Facing = 0;
+  public int AtlasIconHash = -1;
+  public int Value = 0;  // Money cost value
+  public string PrefabName = string.Empty;
+  public string ItemName = string.Empty;
+  public string ItemDescription = string.Empty;
+  public string ItemType = string.Empty;
+}
+
+[Serializable]
+public class SerializableFoodItem : SerializableItem
+{
+  public int HungerDecreaseValue = 0;
+
+  // TODO: food rotting?
+  // Have to calculate all food objects and decrease food "durability" over time.
+}
+
+[Serializable]
+public class SerializableWeaponItem : SerializableItem
+{
+}
+
+/*
+public enum ObjectItemType
+{
+  PLACEHOLDER = 0,
+  ARMOR,
+  ACCESSORY,
+  CONSUMABLE,
+  WEAPON
+}
+*/
 
 [Serializable]
 public class CameraStartingPos

@@ -168,6 +168,20 @@ public class App : MonoSingleton<App>
 
   void SpawnItems()
   {
+    SerializableItem si = new SerializableItem();
+
+    si.AtlasIconHash = "atlas_248".GetHashCode();
+    si.PrefabName = "mc-scroll";
+    si.ItemType = "placeholder";
+    si.ItemName = "Scroll of Welcoming";
+    si.ItemDescription = GlobalConstants.PlayerGreeting;
+
+    GameObject go = PrefabsManager.Instance.FindPrefabByName("mc-scroll");
+    GameObject inst = InstantiatePrefab(si.X, si.Layer, si.Y, go);
+    var io = CreateItemObject(inst, si);
+    GUIManager.Instance.InventoryForm.AddItemToInventory(io);
+
+    /*
     SerializableObject so = new SerializableObject();
 
     so.X = 49;
@@ -207,23 +221,24 @@ public class App : MonoSingleton<App>
 
     inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
     CreateItemObject(inst, so);
+    */
   }
 
-  ItemObject CreateItemObject(GameObject go, SerializableObject so, bool showInWorld = true)
+  ItemObject CreateItemObject(GameObject go, SerializableItem si, bool showInWorld = true)
   {
     BehaviourItemObject bio = go.GetComponent<BehaviourItemObject>();
     if (bio == null)
     {
-      Debug.LogWarning("Could not get BIO component from " + so.PrefabName);
+      Debug.LogWarning("Could not get BIO component from " + si.ItemName);
       return null;
     }   
 
     bio.CalculateMapPosition();
 
-    switch (so.ObjectClassName)
+    switch (si.ItemType)
     {
-      case "item-placeholder":
-        bio.ItemObjectInstance = new PlaceholderItemObject(so.ObjectName, so.TextField, so.AtlasIcon, bio);
+      case "placeholder":
+        bio.ItemObjectInstance = new PlaceholderItemObject(si.ItemName, si.ItemDescription, si.AtlasIconHash, bio);
         break;
 
       default:

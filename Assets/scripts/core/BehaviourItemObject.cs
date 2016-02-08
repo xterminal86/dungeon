@@ -28,12 +28,3 @@ public class BehaviourItemObject : MonoBehaviour
     _mapPosition.Y = (int)transform.position.z / GlobalConstants.WallScaleFactor;
   }
 }
-
-public enum InventoryItemType
-{
-  PLACEHOLDER = 0,
-  ARMOR,
-  ACCESSORY,
-  CONSUMABLE,
-  WEAPON
-}
