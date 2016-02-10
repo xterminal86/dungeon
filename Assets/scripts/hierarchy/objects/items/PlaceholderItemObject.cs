@@ -7,11 +7,8 @@ using System.Collections.Generic;
 /// </summary>
 public class PlaceholderItemObject : ItemObject
 {  
-  public PlaceholderItemObject(string name, string descriptionText, int atlasIcon, BehaviourItemObject bio)
-  {
-    BIO = bio;
-    AtlasIcon = atlasIcon;
-    ItemNameText = name;
-    DescriptionText = descriptionText;
+  public PlaceholderItemObject(string name, string desc, int atlasIcon, BehaviourItemObject bio) 
+    : base(name, desc, atlasIcon, bio)
+  {    
   }
 }

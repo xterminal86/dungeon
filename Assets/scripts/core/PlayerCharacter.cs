@@ -267,6 +267,8 @@ public class PlayerCharacter
 
     _hunger = Mathf.Clamp(_hunger, 0, GlobalConstants.HungerMax);
 
+    App.Instance.ResetHungerTimer();
+
     //Debug.Log("Hunger: " + _hunger);
   }
 

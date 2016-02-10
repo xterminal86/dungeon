@@ -321,7 +321,29 @@ public static class GlobalConstants
     { ObjectPrefabsEnum.BUTTON, "button" },
     { ObjectPrefabsEnum.LEVER, "lever" },
     { ObjectPrefabsEnum.VILLAGE_SIGN, "sign-village" }
-  };  
+  };
+
+  public enum WorldItemType
+  {
+    PLACEHOLDER = 0,
+    ARMOR,
+    ACCESSORY,
+    FOOD,
+    POTION,
+    WEAPON_MELEE,
+    WEAPON_RANGED
+  }
+
+  public static Dictionary<string, WorldItemType> WorldItemTypes = new Dictionary<string, WorldItemType>()
+  {
+    { "placeholder", WorldItemType.PLACEHOLDER },
+    { "armor", WorldItemType.ARMOR },
+    { "accessory", WorldItemType.ACCESSORY },
+    { "food", WorldItemType.FOOD },
+    { "potion", WorldItemType.POTION },
+    { "weapon-melee", WorldItemType.WEAPON_MELEE },
+    { "weapon-ranged", WorldItemType.WEAPON_RANGED },
+  };
 }
 
 public class VillagerInfo

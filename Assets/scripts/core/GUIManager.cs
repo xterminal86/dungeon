@@ -41,7 +41,7 @@ public class GUIManager : MonoSingleton<GUIManager>
   public List<Sprite> FemaleClassesPictures = new List<Sprite>();
 
   // Inventory icons
-  Dictionary<int, Sprite> _iconsByHash = new Dictionary<int, Sprite>();  
+  List<Sprite> _itemsIcons = new List<Sprite>();  
 
   protected override void Init()
   {
@@ -51,21 +51,15 @@ public class GUIManager : MonoSingleton<GUIManager>
     if (_spritesAtlas != null)
     {
       foreach (var item in _spritesAtlas)
-      {
-        _iconsByHash.Add(item.name.GetHashCode(), item);
+      {        
+        _itemsIcons.Add(item);
       }
     }
   }  
 
-  public Sprite GetIconFromAtlas(int hash)
+  public Sprite GetIconFromAtlas(int index)
   {
-    return _iconsByHash[hash];
-  }
-
-  public Sprite GetIconFromAtlas(string name)
-  {
-    int hash = name.GetHashCode();    
-    return _iconsByHash[hash];
+    return _itemsIcons[index];
   }
 
   public Sprite FindPortraitByName(string name)

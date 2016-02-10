@@ -142,6 +142,8 @@ public class SerializableObject
   }
 }
 
+// TODO: item durability
+
 [Serializable]
 public class SerializableItem
 {
@@ -149,38 +151,71 @@ public class SerializableItem
   public int Y = -1;
   public int Layer = -1;
   public int Facing = 0;
-  public int AtlasIconHash = -1;
-  public int Value = 0;  // Money cost value
+  public int AtlasIconIndex = 0;
+  public int Cost = 0;  // Money cost value
+  public int StrReq = 0;
+  public int IntReq = 0;
+  public int WillReq = 0;
   public string PrefabName = string.Empty;
   public string ItemName = string.Empty;
   public string ItemDescription = string.Empty;
-  public string ItemType = string.Empty;
+  public GlobalConstants.WorldItemType ItemType = GlobalConstants.WorldItemType.PLACEHOLDER;
+
+  public SerializableItem()
+  {    
+  }
+
+  public SerializableItem(SerializableItem rhs)
+  {
+    X = rhs.X;
+    Y = rhs.Y;
+    Layer = rhs.Layer;
+    Facing = rhs.Facing;
+    AtlasIconIndex = rhs.AtlasIconIndex;
+    Cost = rhs.Cost;
+    StrReq = rhs.StrReq;
+    IntReq = rhs.IntReq;
+    WillReq = rhs.WillReq;
+    PrefabName = rhs.PrefabName;
+    ItemName = rhs.ItemName;
+    ItemDescription = rhs.ItemDescription;
+    ItemType = rhs.ItemType;
+  }
 }
 
 [Serializable]
 public class SerializableFoodItem : SerializableItem
 {
-  public int HungerDecreaseValue = 0;
+  public int Saturation = 0;
 
-  // TODO: food rotting?
-  // Have to calculate all food objects and decrease food "durability" over time.
+  public SerializableFoodItem()
+  {    
+  }
+
+  public SerializableFoodItem(SerializableFoodItem rhs) : base(rhs)
+  {
+    Saturation = rhs.Saturation;
+  }
 }
 
 [Serializable]
 public class SerializableWeaponItem : SerializableItem
-{
-}
+{  
+  public int MinimumDamage = 0;
+  public int MaximumDamage = 0;
+  public int Cooldown = 0;
 
-/*
-public enum ObjectItemType
-{
-  PLACEHOLDER = 0,
-  ARMOR,
-  ACCESSORY,
-  CONSUMABLE,
-  WEAPON
+  public SerializableWeaponItem()
+  {
+  }
+
+  public SerializableWeaponItem(SerializableWeaponItem rhs) : base(rhs)
+  {
+    MinimumDamage = rhs.MinimumDamage;
+    MaximumDamage = rhs.MaximumDamage;
+    Cooldown = rhs.Cooldown;
+  }
 }
-*/
 
 [Serializable]
 public class CameraStartingPos

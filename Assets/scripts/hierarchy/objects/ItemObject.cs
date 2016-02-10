@@ -20,8 +20,12 @@ public abstract class ItemObject
   public string ItemNameText = string.Empty;
   public string DescriptionText = string.Empty;
 
-  public ItemObject()
+  public ItemObject(string name, string descriptionText, int atlasIcon, BehaviourItemObject bio)
   {
+    ItemNameText = name;
+    DescriptionText = descriptionText;
+    AtlasIcon = atlasIcon;
+    BIO = bio;
   }
 
   // Method for saving reference to this instance of IO

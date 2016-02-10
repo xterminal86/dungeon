@@ -168,77 +168,70 @@ public class App : MonoSingleton<App>
 
   void SpawnItems()
   {
-    SerializableItem si = new SerializableItem();
-
-    si.AtlasIconHash = "atlas_248".GetHashCode();
-    si.PrefabName = "mc-scroll";
-    si.ItemType = "placeholder";
-    si.ItemName = "Scroll of Welcoming";
-    si.ItemDescription = GlobalConstants.PlayerGreeting;
-
-    GameObject go = PrefabsManager.Instance.FindPrefabByName("mc-scroll");
-    GameObject inst = InstantiatePrefab(si.X, si.Layer, si.Y, go);
-    var io = CreateItemObject(inst, si);
+    var io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread");
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    /*
-    SerializableObject so = new SerializableObject();
-
-    so.X = 49;
-    so.Y = 1;
-    so.Layer = 0;
-    so.AtlasIcon = "atlas_248".GetHashCode();
-    so.PrefabName = "mc-scroll";
-    so.ObjectClassName = "item-placeholder";
-    so.ObjectName = "Scroll of Placeholding";
-    so.TextField = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n";
-    //so.TextField = "0123456789A123456789B123456789C123456789D123456789E123456789F";
-
-    GameObject go = PrefabsManager.Instance.FindPrefabByName("mc-scroll");
-    
-    if (go == null)
-    {
-      Debug.LogWarning("Couldn't find prefab: mc-scroll");
-      return;
-    }
-        
-    GameObject inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
-    CreateItemObject(inst, so);
-
-    so.ObjectName = "Scroll of Welcoming";
-    so.TextField = GlobalConstants.PlayerGreeting;
-
-    inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
-    var io = CreateItemObject(inst, so, false);
+    io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
-
-    go = PrefabsManager.Instance.FindPrefabByName("mc-axe");
-
-    so.AtlasIcon = "atlas_422".GetHashCode();
-    so.PrefabName = "mc-axe";
-    so.ObjectName = "Axe of Placeholding";
-    so.TextField = "This is an axe.";
-
-    inst = InstantiatePrefab(so.X, so.Layer, so.Y, go);
-    CreateItemObject(inst, so);
-    */
   }
 
-  ItemObject CreateItemObject(GameObject go, SerializableItem si, bool showInWorld = true)
+  ItemObject SpawnItem(GlobalConstants.WorldItemType type, string databaseName, string itemName = "", string description = "")
   {
+    SerializableItem copy = null;
+    var item = GameData.Instance.GetItem(type, databaseName);
+    if (item != null)
+    {      
+      switch (type)
+      {
+        case GlobalConstants.WorldItemType.PLACEHOLDER:
+          copy = new SerializableItem(item as SerializableItem);
+          break;
+
+        case GlobalConstants.WorldItemType.FOOD:
+          copy = new SerializableFoodItem(item as SerializableFoodItem);
+          break;
+
+        default:
+          break;
+      }
+
+      if (copy != null)
+      {
+        copy.ItemName = string.IsNullOrEmpty(itemName) ? databaseName : itemName;
+        copy.ItemDescription = description;
+
+        GameObject go = PrefabsManager.Instance.FindPrefabByName(copy.PrefabName);
+        if (go != null)
+        {
+          GameObject inst = InstantiatePrefab(0, 0, 0, go);
+          var io = CreateItemObject(inst, copy);
+          return io;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  ItemObject CreateItemObject(GameObject go, SerializableItem item, bool showInWorld = true)
+  {    
     BehaviourItemObject bio = go.GetComponent<BehaviourItemObject>();
     if (bio == null)
     {
-      Debug.LogWarning("Could not get BIO component from " + si.ItemName);
+      Debug.LogWarning("Could not get BIO component from " + item.ItemName);
       return null;
     }   
 
     bio.CalculateMapPosition();
 
-    switch (si.ItemType)
+    switch (item.ItemType)
     {
-      case "placeholder":
-        bio.ItemObjectInstance = new PlaceholderItemObject(si.ItemName, si.ItemDescription, si.AtlasIconHash, bio);
+      case GlobalConstants.WorldItemType.PLACEHOLDER:
+        bio.ItemObjectInstance = new PlaceholderItemObject(item.ItemName, item.ItemDescription, item.AtlasIconIndex, bio);
+        break;
+
+      case GlobalConstants.WorldItemType.FOOD:        
+        bio.ItemObjectInstance = new FoodItemObject(item.ItemName, item.ItemDescription, item.AtlasIconIndex, bio, (item as SerializableFoodItem).Saturation);
         break;
 
       default:
@@ -248,6 +241,7 @@ public class App : MonoSingleton<App>
     if (bio.ItemObjectInstance != null)
     {
       bio.ItemObjectInstance.LMBAction += bio.ItemObjectInstance.LMBHandler;
+      bio.ItemObjectInstance.RMBAction += bio.ItemObjectInstance.RMBHandler;
     }
 
     bio.gameObject.SetActive(showInWorld);
@@ -583,6 +577,7 @@ public class App : MonoSingleton<App>
     }
   }
 
+  /*
   void InstantiatePrefab(int x, int z, GameObject goToInstantiate)
   {
     Vector3 goPosition = Vector3.zero;
@@ -595,6 +590,7 @@ public class App : MonoSingleton<App>
     go.transform.position = goPosition;
     go.transform.parent = ObjectsInstancesTransform.transform;
   }
+  */
 
   GameObject InstantiatePrefab(int x, int yOffset, int z, GameObject goToInstantiate, int facing = 0, bool flip = false)
   {
@@ -1024,10 +1020,14 @@ public class App : MonoSingleton<App>
     _hungerTimer += Time.smoothDeltaTime * GameData.Instance.PlayerCharacterVariable.HungerDecreaseMultiplier;
 
     if (_hungerTimer > GameData.Instance.PlayerCharacterVariable.HungerTick)
-    {
-      _hungerTimer = 0.0f;
+    {      
       GameData.Instance.PlayerCharacterVariable.AddHunger(-1);
     }
+  }
+
+  public void ResetHungerTimer()
+  {
+    _hungerTimer = 0.0f;
   }
 
   void GameOverHandler()

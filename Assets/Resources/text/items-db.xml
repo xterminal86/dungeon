@@ -1,8 +1,26 @@
 <?xml version="1.0"?>
 <MAIN>
-  <ITEM name="Bread" type="food" prefabName="mc-bread" atlasIcon="atlas_424"/>
-  <ITEM name="Long Sword" type="weapon-melee" prefabName="mc-sword-iron" atlasIcon="atlas_420"/>
-  <ITEM name="Pickaxe" type="weapon-melee" prefabName="mc-pickaxe" atlasIcon="atlas_421"/>
-  <ITEM name="Axe" type="weapon-melee" prefabName="mc-axe" atlasIcon="atlas_422"/>
-  <ITEM name="Scroll" type="placeholder" prefabName="mc-scroll" atlasIcon="atlas_248"/>
+  <ITEM name="Bread" type="food" prefabName="mc-bread" atlasIcon="423">
+    <ATTR name="action" value="50" />    
+    <ATTR name="cost" value="5" />
+  </ITEM>
+  <ITEM name="Long Sword" type="weapon-melee" prefabName="mc-sword-iron" atlasIcon="420">
+    <ATTR name="action" value="2d6" />
+    <ATTR name="req" value="s:4" />
+    <ATTR name="cooldown" value="2000" />
+    <ATTR name="cost" value="200" />
+  </ITEM>
+  <ITEM name="Pickaxe" type="weapon-melee" prefabName="mc-pickaxe" atlasIcon="421">
+    <ATTR name="action" value="1d6" />
+    <ATTR name="req" value="s:3" />
+    <ATTR name="cooldown" value="1500" />
+    <ATTR name="cost" value="100" />
+  </ITEM>
+  <ITEM name="Battleaxe" type="weapon-melee" prefabName="mc-axe" atlasIcon="142">
+    <ATTR name="action" value="3d8" />
+    <ATTR name="req" value="s:5" />
+    <ATTR name="cooldown" value="4000" />
+    <ATTR name="cost" value="400" />
+  </ITEM>
+  <ITEM name="Scroll" type="placeholder" prefabName="mc-scroll" atlasIcon="248" />
 </MAIN>

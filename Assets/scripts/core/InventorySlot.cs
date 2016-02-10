@@ -13,13 +13,11 @@ public class InventorySlot : MonoBehaviour
     get { return _itemRef; }
   }
 
-	void Awake() 
-	{	
-	}
-		
-	void Update () 
-	{    
-	}
+  public void DeleteItem()
+  {
+    _itemRef = null;
+    Icon.gameObject.SetActive(false);
+  }
 
   public void SetItem(ItemObject item)
   {
@@ -50,7 +48,7 @@ public class InventorySlot : MonoBehaviour
   }
 
   public void OnMouseDown()
-  {
+  {    
     if (Input.GetMouseButtonDown(0))
     {
       // Take item from slot
@@ -90,8 +88,11 @@ public class InventorySlot : MonoBehaviour
       }
     }
     else if (Input.GetMouseButtonDown(1))
-    {
-      Debug.Log("Right button");
+    {      
+      if (_itemRef == null) return;
+      
+      if (_itemRef.RMBAction != null)
+        _itemRef.RMBAction(this);
     }
   }
 }

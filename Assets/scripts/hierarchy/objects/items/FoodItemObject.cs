@@ -1,0 +1,20 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class FoodItemObject : ItemObject
+{
+  int _saturation = 0;
+  public FoodItemObject(string name, string desc, int atlasIcon, BehaviourItemObject bio, int saturation)
+    : base(name, desc, atlasIcon, bio)
+  {
+    _saturation = saturation;
+  }
+
+  public override void RMBHandler(object sender)
+  {
+    GameData.Instance.PlayerCharacterVariable.AddHunger(_saturation);
+    (sender as InventorySlot).DeleteItem();
+    GameObject.Destroy(BIO.Model.gameObject);
+    GameObject.Destroy(BIO.gameObject);
+  }
+}

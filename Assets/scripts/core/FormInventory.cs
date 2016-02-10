@@ -144,6 +144,12 @@ public class FormInventory : MonoBehaviour
 
   public void AddItemToInventory(ItemObject item)
   {
+    if (item == null)
+    {
+      Debug.LogWarning("Trying to add null item to inventory!");
+      return;
+    }
+
     int totalSlots = _inventoryRows * _inventoryCols;
 
     for (int i = totalSlots - 1; i >= 0; i--)
