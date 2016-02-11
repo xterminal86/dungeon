@@ -17,6 +17,7 @@ public class InventorySlot : MonoBehaviour
   {
     _itemRef = null;
     Icon.gameObject.SetActive(false);
+    GUIManager.Instance.ItemInfoForm.HideWindow();
   }
 
   public void SetItem(ItemObject item)
