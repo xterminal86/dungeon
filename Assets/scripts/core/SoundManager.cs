@@ -107,7 +107,7 @@ public class SoundManager : MonoSingleton<SoundManager>
       var curve = AudioSourceOneShotPrefab.GetCustomCurve(AudioSourceCurveType.CustomRolloff);
       a.SetCustomCurve(AudioSourceCurveType.CustomRolloff, curve);
       a.clip = _audioSourcesByHash[hash].clip;
-      float length = a.clip.length / pitch;
+      float length = a.clip.length / pitch + 1.0f;
       a.Play();
       Destroy(go, length);
     }
@@ -121,8 +121,9 @@ public class SoundManager : MonoSingleton<SoundManager>
     a.volume = premade.volume;
     a.clip = premade.clip;    
     a.pitch = pitch;
+    float length = a.clip.length / pitch + 1.0f;
     a.Play();
-    Destroy(go, a.clip.length);    
+    Destroy(go, length);    
   }
 
   int _lastPlayedSoundOfPlayer = -1;
