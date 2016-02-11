@@ -64,17 +64,14 @@ public class SoundManager : MonoSingleton<SoundManager>
 
   public void PlaySound(string name)
   {
-    int hash = name.GetHashCode();
-    if (_audioSourcesByHash.ContainsKey(hash))
-    {
-      _audioSourcesByHash[hash].Play();
-    }
+    PlaySound(name.GetHashCode());
   }
 
   public void PlaySound(int hash)
   {
     if (_audioSourcesByHash.ContainsKey(hash))
-    {      
+    {
+      _audioSourcesByHash[hash].spatialBlend = 0.0f;
       _audioSourcesByHash[hash].Play();
     }
   }

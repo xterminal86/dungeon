@@ -12,6 +12,7 @@ public class FoodItemObject : ItemObject
 
   public override void RMBHandler(object sender)
   {
+    SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerEat);
     GameData.Instance.PlayerCharacterVariable.AddHunger(_saturation);
     (sender as InventorySlot).DeleteItem();
     GameObject.Destroy(BIO.Model.gameObject);

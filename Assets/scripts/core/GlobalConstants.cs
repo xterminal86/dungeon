@@ -67,6 +67,7 @@ public static class GlobalConstants
   public const string SFXPlayerCannotMove = "player-cannot-move2";
   public const string SFXItemTake = "player-item-take";
   public const string SFXItemPut = "player-item-put";
+  public const string SFXPlayerEat = "player-eat";
   public const string SFXFemaleVillagerHuh = "act-huh-f";
   public const string SFXMaleVillagerHuh = "act-huh-m";
 
