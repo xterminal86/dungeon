@@ -24,6 +24,7 @@ public static class GlobalConstants
 
   // How often enemy tries to perform search for player routine (in seconds)
   public const float SearchingForPlayerRate = 0.1f;
+  // FIXME: temporary, attack cooldown of enemies - every enemy will have its own
   public const float AttackCooldown = 3.0f;
 
   // Maximum value of hunger

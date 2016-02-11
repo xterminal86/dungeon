@@ -1,0 +1,1654 @@
+fileFormatVersion: 2
+guid: a3ee259f83921924dad8dbbe2c866797
+timeCreated: 1455201112
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: my-atlas_0
+    21300002: my-atlas_1
+    21300004: my-atlas_2
+    21300006: my-atlas_3
+    21300008: my-atlas_4
+    21300010: my-atlas_5
+    21300012: my-atlas_6
+    21300014: my-atlas_7
+    21300016: my-atlas_8
+    21300018: my-atlas_9
+    21300020: my-atlas_10
+    21300022: my-atlas_11
+    21300024: my-atlas_12
+    21300026: my-atlas_13
+    21300028: my-atlas_14
+    21300030: my-atlas_15
+    21300032: my-atlas_16
+    21300034: my-atlas_17
+    21300036: my-atlas_18
+    21300038: my-atlas_19
+    21300040: my-atlas_20
+    21300042: my-atlas_21
+    21300044: my-atlas_22
+    21300046: my-atlas_23
+    21300048: my-atlas_24
+    21300050: my-atlas_25
+    21300052: my-atlas_26
+    21300054: my-atlas_27
+    21300056: my-atlas_28
+    21300058: my-atlas_29
+    21300060: my-atlas_30
+    21300062: my-atlas_31
+    21300064: my-atlas_32
+    21300066: my-atlas_33
+    21300068: my-atlas_34
+    21300070: my-atlas_35
+    21300072: my-atlas_36
+    21300074: my-atlas_37
+    21300076: my-atlas_38
+    21300078: my-atlas_39
+    21300080: my-atlas_40
+    21300082: my-atlas_41
+    21300084: my-atlas_42
+    21300086: my-atlas_43
+    21300088: my-atlas_44
+    21300090: my-atlas_45
+    21300092: my-atlas_46
+    21300094: my-atlas_47
+    21300096: my-atlas_48
+    21300098: my-atlas_49
+    21300100: my-atlas_50
+    21300102: my-atlas_51
+    21300104: my-atlas_52
+    21300106: my-atlas_53
+    21300108: my-atlas_54
+    21300110: my-atlas_55
+    21300112: my-atlas_56
+    21300114: my-atlas_57
+    21300116: my-atlas_58
+    21300118: my-atlas_59
+    21300120: my-atlas_60
+    21300122: my-atlas_61
+    21300124: my-atlas_62
+    21300126: my-atlas_63
+    21300128: my-atlas_64
+    21300130: my-atlas_65
+    21300132: my-atlas_66
+    21300134: my-atlas_67
+    21300136: my-atlas_68
+    21300138: my-atlas_69
+    21300140: my-atlas_70
+    21300142: my-atlas_71
+    21300144: my-atlas_72
+    21300146: my-atlas_73
+    21300148: my-atlas_74
+    21300150: my-atlas_75
+    21300152: my-atlas_76
+    21300154: my-atlas_77
+    21300156: my-atlas_78
+    21300158: my-atlas_79
+    21300160: my-atlas_80
+    21300162: my-atlas_81
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: my-atlas_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -6, y: 16}
+        - {x: -14, y: 12}
+        - {x: -16, y: 8}
+        - {x: -16, y: -13}
+        - {x: -11, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 14}
+        - {x: 9, y: 16}
+    - name: my-atlas_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 16}
+        - {x: -16, y: 2}
+        - {x: -16, y: -16}
+        - {x: -2, y: -16}
+        - {x: 16, y: -4}
+        - {x: 16, y: 14}
+        - {x: 11, y: 16}
+    - name: my-atlas_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -11, y: 16}
+        - {x: -16, y: 11}
+        - {x: -16, y: -10}
+        - {x: -7, y: -16}
+        - {x: 12, y: -16}
+        - {x: 16, y: -6}
+        - {x: 16, y: 13}
+        - {x: 10, y: 16}
+    - name: my-atlas_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 14}
+        - {x: -16, y: 11}
+        - {x: -16, y: -12}
+        - {x: -13, y: -14}
+        - {x: 15, y: -14}
+        - {x: 16, y: -11}
+        - {x: 16, y: 12}
+        - {x: 13, y: 14}
+    - name: my-atlas_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -5, y: 16}
+        - {x: -16, y: -2}
+        - {x: -16, y: -16}
+        - {x: 6, y: -16}
+        - {x: 16, y: -9}
+        - {x: 16, y: 11}
+        - {x: 10, y: 16}
+    - name: my-atlas_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 16, y: 16}
+        - {x: -6, y: 16}
+        - {x: -16, y: 13}
+        - {x: -16, y: -16}
+        - {x: -1, y: -16}
+        - {x: 7, y: -13}
+        - {x: 16, y: 5}
+    - name: my-atlas_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -2, y: 16}
+        - {x: -16, y: 14}
+        - {x: -16, y: -8}
+        - {x: -3, y: -16}
+        - {x: 12, y: -16}
+        - {x: 16, y: -15}
+        - {x: 16, y: 12}
+        - {x: 11, y: 16}
+    - name: my-atlas_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 480
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_9
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_10
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_11
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_12
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_13
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_14
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_15
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 448
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_17
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5, y: 13}
+        - {x: -6, y: 13}
+        - {x: -8, y: 4}
+        - {x: -10, y: -3}
+        - {x: -10, y: -12}
+        - {x: -7, y: -15}
+        - {x: 6, y: -15}
+        - {x: 10, y: -12}
+        - {x: 10, y: 0}
+    - name: my-atlas_18
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 16}
+        - {x: -16, y: 10}
+        - {x: -16, y: -9}
+        - {x: -8, y: -16}
+        - {x: 13, y: -16}
+        - {x: 16, y: -10}
+        - {x: 16, y: 16}
+    - name: my-atlas_19
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 16}
+        - {x: -16, y: 10}
+        - {x: -16, y: -9}
+        - {x: -8, y: -16}
+        - {x: 13, y: -16}
+        - {x: 16, y: -10}
+        - {x: 16, y: 16}
+    - name: my-atlas_20
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 16}
+        - {x: -14, y: -9}
+        - {x: -7, y: -15}
+        - {x: -4, y: -16}
+        - {x: 4, y: -16}
+        - {x: 7, y: -15}
+        - {x: 14, y: -9}
+        - {x: 14, y: 16}
+    - name: my-atlas_21
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -12, y: 16}
+        - {x: -16, y: 8}
+        - {x: -16, y: -14}
+        - {x: -12, y: -16}
+        - {x: 14, y: -16}
+        - {x: 16, y: -13}
+        - {x: 16, y: 9}
+        - {x: 14, y: 16}
+    - name: my-atlas_22
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -12, y: 16}
+        - {x: -16, y: 8}
+        - {x: -16, y: -14}
+        - {x: -12, y: -16}
+        - {x: 14, y: -16}
+        - {x: 16, y: -13}
+        - {x: 16, y: 9}
+        - {x: 14, y: 16}
+    - name: my-atlas_23
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13, y: 16}
+        - {x: -15, y: 10}
+        - {x: -15, y: -9}
+        - {x: -9, y: -16}
+        - {x: 5, y: -16}
+        - {x: 15, y: -11}
+        - {x: 15, y: 13}
+        - {x: 9, y: 16}
+    - name: my-atlas_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 9, y: -16}
+        - {x: 16, y: -11}
+        - {x: 16, y: 16}
+    - name: my-atlas_25
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -12, y: 16}
+        - {x: -15, y: 14}
+        - {x: -15, y: -9}
+        - {x: -11, y: -16}
+        - {x: 10, y: -16}
+        - {x: 16, y: -12}
+        - {x: 16, y: 16}
+    - name: my-atlas_26
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -11}
+        - {x: -15, y: -16}
+        - {x: 11, y: -16}
+        - {x: 16, y: -12}
+        - {x: 16, y: 16}
+    - name: my-atlas_27
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 15, y: 16}
+        - {x: -14, y: 16}
+        - {x: -16, y: 9}
+        - {x: -16, y: -10}
+        - {x: -13, y: -16}
+        - {x: 9, y: -16}
+        - {x: 16, y: -7}
+        - {x: 16, y: 10}
+    - name: my-atlas_28
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -9}
+        - {x: -14, y: -16}
+        - {x: 14, y: -16}
+        - {x: 16, y: -6}
+        - {x: 16, y: 16}
+    - name: my-atlas_29
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 16}
+        - {x: -15, y: 15}
+        - {x: -15, y: -9}
+        - {x: -10, y: -16}
+        - {x: 11, y: -16}
+        - {x: 14, y: -12}
+        - {x: 14, y: 16}
+    - name: my-atlas_30
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 9, y: 16}
+        - {x: -12, y: 16}
+        - {x: -16, y: 12}
+        - {x: -16, y: -11}
+        - {x: -9, y: -16}
+        - {x: 9, y: -16}
+        - {x: 16, y: -2}
+        - {x: 16, y: 7}
+        - {x: 11, y: 15}
+    - name: my-atlas_31
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 16}
+        - {x: -13, y: 14}
+        - {x: -16, y: 10}
+        - {x: -16, y: -11}
+        - {x: -12, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 8}
+        - {x: 8, y: 16}
+    - name: my-atlas_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 352
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 9, y: 16}
+        - {x: -11, y: 16}
+        - {x: -16, y: 13}
+        - {x: -16, y: -15}
+        - {x: -15, y: -16}
+        - {x: 12, y: -16}
+        - {x: 16, y: -9}
+        - {x: 16, y: 8}
+        - {x: 10, y: 15}
+    - name: my-atlas_33
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 352
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+    - name: my-atlas_34
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 352
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 16}
+        - {x: -16, y: 11}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 11}
+        - {x: 13, y: 16}
+    - name: my-atlas_35
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 352
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 9, y: 16}
+        - {x: -10, y: 16}
+        - {x: -16, y: 11}
+        - {x: -16, y: -14}
+        - {x: -15, y: -16}
+        - {x: 13, y: -16}
+        - {x: 16, y: -13}
+        - {x: 16, y: 8}
+        - {x: 15, y: 11}
+    - name: my-atlas_36
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 352
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 16}
+        - {x: -14, y: -16}
+        - {x: 14, y: -16}
+        - {x: 14, y: 16}
+    - name: my-atlas_37
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 352
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 16}
+        - {x: -16, y: 14}
+        - {x: -16, y: -13}
+        - {x: -12, y: -16}
+        - {x: 8, y: -16}
+        - {x: 15, y: -14}
+        - {x: 16, y: -11}
+        - {x: 16, y: 10}
+        - {x: 15, y: 16}
+    - name: my-atlas_38
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 352
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+    - name: my-atlas_39
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 352
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -13}
+        - {x: -15, y: -16}
+        - {x: 12, y: -16}
+        - {x: 16, y: -8}
+        - {x: 16, y: 16}
+    - name: my-atlas_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 320
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -9}
+        - {x: -14, y: -16}
+        - {x: 11, y: -16}
+        - {x: 16, y: -9}
+        - {x: 16, y: 16}
+    - name: my-atlas_41
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 320
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -13}
+        - {x: -15, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+    - name: my-atlas_42
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 320
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+    - name: my-atlas_43
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 320
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 10, y: 16}
+        - {x: 2, y: 16}
+        - {x: -16, y: 2}
+        - {x: -16, y: -11}
+        - {x: -10, y: -15}
+        - {x: 15, y: -15}
+        - {x: 16, y: -12}
+        - {x: 16, y: 9}
+        - {x: 15, y: 13}
+    - name: my-atlas_44
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 320
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -8, y: 14}
+        - {x: -16, y: 7}
+        - {x: -16, y: -12}
+        - {x: 4, y: -12}
+        - {x: 15, y: -8}
+        - {x: 15, y: 6}
+        - {x: 12, y: 14}
+    - name: my-atlas_45
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 320
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -7, y: 14}
+        - {x: -16, y: 3}
+        - {x: -16, y: -11}
+        - {x: -14, y: -14}
+        - {x: 16, y: -14}
+        - {x: 16, y: 2}
+        - {x: 5, y: 14}
+    - name: my-atlas_46
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 320
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 8, y: 16}
+        - {x: -12, y: 16}
+        - {x: -14, y: 13}
+        - {x: -14, y: 1}
+        - {x: -10, y: -8}
+        - {x: -6, y: -16}
+        - {x: 7, y: -16}
+        - {x: 11, y: -9}
+        - {x: 14, y: 8}
+        - {x: 14, y: 12}
+    - name: my-atlas_47
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 320
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 7, y: 16}
+        - {x: -9, y: 16}
+        - {x: -12, y: 15}
+        - {x: -12, y: -11}
+        - {x: -10, y: -16}
+        - {x: 7, y: -16}
+        - {x: 12, y: -9}
+        - {x: 12, y: 12}
+    - name: my-atlas_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 288
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: 8}
+        - {x: -5, y: -13}
+        - {x: 2, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 2}
+        - {x: -3, y: 16}
+    - name: my-atlas_49
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 288
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -11, y: 11}
+        - {x: -11, y: -3}
+        - {x: 1, y: -11}
+        - {x: 11, y: -11}
+        - {x: 11, y: 2}
+        - {x: -2, y: 11}
+    - name: my-atlas_50
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 288
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 15}
+        - {x: -14, y: 8}
+        - {x: -13, y: 5}
+        - {x: 9, y: -16}
+        - {x: 12, y: -16}
+        - {x: 15, y: -13}
+        - {x: 15, y: -10}
+        - {x: -11, y: 16}
+    - name: my-atlas_51
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 288
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 16}
+        - {x: -16, y: 16}
+        - {x: -16, y: 7}
+        - {x: -2, y: -15}
+        - {x: 0, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: -3}
+        - {x: 11, y: 5}
+    - name: my-atlas_52
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 288
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13, y: 16}
+        - {x: -13, y: -5}
+        - {x: -6, y: -16}
+        - {x: 11, y: -16}
+        - {x: 14, y: -10}
+        - {x: 14, y: 11}
+        - {x: 9, y: 16}
+    - name: my-atlas_53
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 288
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 16}
+        - {x: -15, y: 14}
+        - {x: -15, y: 3}
+        - {x: -13, y: -6}
+        - {x: 2, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 14}
+        - {x: 10, y: 16}
+    - name: my-atlas_54
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 288
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: 4}
+        - {x: -15, y: 1}
+        - {x: 10, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: -3}
+        - {x: 11, y: 15}
+        - {x: 5, y: 16}
+    - name: my-atlas_55
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 288
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -2, y: 16}
+        - {x: -8, y: 14}
+        - {x: -16, y: -2}
+        - {x: -16, y: -16}
+        - {x: -5, y: -16}
+        - {x: 16, y: 3}
+        - {x: 16, y: 15}
+        - {x: 14, y: 16}
+    - name: my-atlas_56
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 16}
+        - {x: -16, y: 16}
+        - {x: -16, y: -6}
+        - {x: -7, y: -15}
+        - {x: -1, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: -9}
+        - {x: 15, y: -6}
+    - name: my-atlas_57
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: 5}
+        - {x: -7, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: -9}
+        - {x: -8, y: 16}
+    - name: my-atlas_58
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -4, y: 16}
+        - {x: -16, y: 2}
+        - {x: -16, y: -14}
+        - {x: -13, y: -16}
+        - {x: 14, y: -16}
+        - {x: 16, y: -15}
+        - {x: 16, y: 11}
+        - {x: 14, y: 16}
+    - name: my-atlas_59
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 12, y: 14}
+        - {x: -12, y: 14}
+        - {x: -14, y: 8}
+        - {x: -14, y: -12}
+        - {x: -9, y: -15}
+        - {x: 5, y: -15}
+        - {x: 12, y: -7}
+        - {x: 14, y: 1}
+        - {x: 14, y: 11}
+    - name: my-atlas_60
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 10, y: 15}
+        - {x: -7, y: 15}
+        - {x: -15, y: 4}
+        - {x: -15, y: -10}
+        - {x: -7, y: -14}
+        - {x: 2, y: -14}
+        - {x: 11, y: -6}
+        - {x: 13, y: 2}
+        - {x: 13, y: 10}
+    - name: my-atlas_61
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -15, y: 16}
+        - {x: -16, y: 15}
+        - {x: -16, y: -12}
+        - {x: -13, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+    - name: my-atlas_62
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 16}
+        - {x: -15, y: 11}
+        - {x: -15, y: -16}
+        - {x: 5, y: -16}
+        - {x: 16, y: -2}
+        - {x: 16, y: 11}
+        - {x: 8, y: 16}
+    - name: my-atlas_63
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 256
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 16}
+        - {x: -15, y: 14}
+        - {x: -15, y: 1}
+        - {x: -11, y: -10}
+        - {x: -8, y: -16}
+        - {x: 8, y: -16}
+        - {x: 14, y: -4}
+        - {x: 14, y: 13}
+        - {x: 13, y: 16}
+    - name: my-atlas_64
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -5, y: -12}
+        - {x: 0, y: -12}
+        - {x: 15, y: 2}
+        - {x: 15, y: 11}
+        - {x: 10, y: 13}
+        - {x: -15, y: 13}
+        - {x: -16, y: 12}
+        - {x: -16, y: 3}
+    - name: my-atlas_65
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -7, y: 16}
+        - {x: -11, y: 12}
+        - {x: -11, y: -13}
+        - {x: -5, y: -15}
+        - {x: 7, y: -15}
+        - {x: 11, y: -11}
+        - {x: 11, y: 14}
+        - {x: 5, y: 16}
+    - name: my-atlas_66
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 15}
+        - {x: -12, y: 11}
+        - {x: -12, y: -9}
+        - {x: -7, y: -14}
+        - {x: 12, y: -14}
+        - {x: 13, y: -11}
+        - {x: 13, y: 13}
+        - {x: 8, y: 15}
+    - name: my-atlas_67
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 3, y: 15}
+        - {x: -7, y: 15}
+        - {x: -13, y: 3}
+        - {x: -13, y: -8}
+        - {x: -9, y: -12}
+        - {x: -3, y: -14}
+        - {x: 3, y: -14}
+        - {x: 9, y: -12}
+        - {x: 13, y: -9}
+        - {x: 13, y: 6}
+    - name: my-atlas_68
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 13}
+        - {x: -13, y: 8}
+        - {x: -13, y: -12}
+        - {x: -8, y: -13}
+        - {x: 11, y: -13}
+        - {x: 13, y: -11}
+        - {x: 13, y: 6}
+        - {x: 10, y: 13}
+    - name: my-atlas_69
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -9, y: 15}
+        - {x: -11, y: 10}
+        - {x: -11, y: -13}
+        - {x: -9, y: -14}
+        - {x: 5, y: -14}
+        - {x: 11, y: -11}
+        - {x: 11, y: 10}
+        - {x: 6, y: 15}
+    - name: my-atlas_70
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13, y: 12}
+        - {x: -14, y: 6}
+        - {x: -14, y: -11}
+        - {x: -13, y: -12}
+        - {x: 9, y: -12}
+        - {x: 15, y: -9}
+        - {x: 15, y: 6}
+        - {x: 8, y: 12}
+    - name: my-atlas_71
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 224
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -12, y: 16}
+        - {x: -12, y: -16}
+        - {x: 4, y: -16}
+        - {x: 10, y: -11}
+        - {x: 13, y: 1}
+        - {x: 13, y: 16}
+    - name: my-atlas_72
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -2, y: 16}
+        - {x: -14, y: 16}
+        - {x: -14, y: -5}
+        - {x: -2, y: -16}
+        - {x: 11, y: -16}
+        - {x: 13, y: -15}
+        - {x: 13, y: -2}
+        - {x: 10, y: 10}
+    - name: my-atlas_73
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 0, y: 16}
+        - {x: -16, y: 3}
+        - {x: -16, y: -16}
+        - {x: 3, y: -16}
+        - {x: 16, y: 3}
+        - {x: 16, y: 16}
+    - name: my-atlas_74
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 6, y: 16}
+        - {x: -6, y: 16}
+        - {x: -10, y: 11}
+        - {x: -10, y: -13}
+        - {x: -8, y: -16}
+        - {x: 9, y: -16}
+        - {x: 9, y: 9}
+        - {x: 8, y: 13}
+    - name: my-atlas_75
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13, y: 16}
+        - {x: -13, y: -14}
+        - {x: -11, y: -16}
+        - {x: 11, y: -16}
+        - {x: 13, y: -14}
+        - {x: 13, y: 16}
+    - name: my-atlas_76
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: -16}
+        - {x: 14, y: -16}
+        - {x: 14, y: 16}
+        - {x: -13, y: 16}
+        - {x: -14, y: 15}
+    - name: my-atlas_77
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 16}
+        - {x: -13, y: 13}
+        - {x: -13, y: -14}
+        - {x: -11, y: -16}
+        - {x: 11, y: -16}
+        - {x: 13, y: -14}
+        - {x: 13, y: 13}
+        - {x: 10, y: 16}
+    - name: my-atlas_78
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -10}
+        - {x: -13, y: -16}
+        - {x: 11, y: -16}
+        - {x: 15, y: -10}
+        - {x: 15, y: 12}
+        - {x: 14, y: 16}
+    - name: my-atlas_79
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 192
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10, y: 16}
+        - {x: -13, y: 13}
+        - {x: -13, y: -13}
+        - {x: -10, y: -16}
+        - {x: 10, y: -16}
+        - {x: 13, y: -13}
+        - {x: 13, y: 13}
+        - {x: 10, y: 16}
+    - name: my-atlas_80
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -14, y: 16}
+        - {x: -14, y: -13}
+        - {x: -11, y: -16}
+        - {x: 11, y: -16}
+        - {x: 13, y: -14}
+        - {x: 13, y: 16}
+    - name: my-atlas_81
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13, y: 16}
+        - {x: -13, y: -16}
+        - {x: 13, y: -16}
+        - {x: 13, y: 16}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
