@@ -33,8 +33,18 @@ public class GameData : MonoSingleton<GameData>
 
   void BuildItemsDatabase()
   {
+    var resource = Resources.Load("text/items-db");
+
+    if (resource == null)
+    {
+      Debug.LogError("Could not load items database!");
+      return;
+    }
+
+    TextAsset ta = resource as TextAsset;
+
     XmlDocument doc = new XmlDocument();
-    doc.Load("Assets/Resources/text/items-db.xml");
+    doc.LoadXml(ta.text);
     foreach (XmlNode node in doc.DocumentElement.ChildNodes)
     { 
       CreateItemEntry(node);
