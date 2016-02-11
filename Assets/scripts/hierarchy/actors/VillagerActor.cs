@@ -34,6 +34,12 @@ public class VillagerActor : ActorBase
       (ActorState as WanderingState).KillAllJobs();
       (ActorState as WanderingState).AdjustModelPosition();
 
+      if (Model.ActorName != "???")
+      {      
+        SoundManager.Instance.PlaySound(Model.IsFemale ? GlobalConstants.SFXFemaleVillagerHuh : GlobalConstants.SFXMaleVillagerHuh, 
+                                        Model.transform.position, true, Model.VoicePitch);
+      }
+
       ChangeState(new TalkingState(this));      
 
       SetupFormTalking();
@@ -95,7 +101,7 @@ public class VillagerActor : ActorBase
 
     _coroutineDone = false;
 
-    float speakPitch = Model.FemaleVoice ? 2.0f : 1.0f;
+    float speakPitch = Model.SpeakPitch;
 
     while (count < textToPrint.Length)
     {

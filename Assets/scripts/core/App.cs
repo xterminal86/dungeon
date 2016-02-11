@@ -168,14 +168,14 @@ public class App : MonoSingleton<App>
 
   void SpawnItems()
   {
-    var io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread");
+    var io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
+    io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
   }
 
-  ItemObject SpawnItem(GlobalConstants.WorldItemType type, string databaseName, string itemName = "", string description = "")
+  ItemObject SpawnItem(GlobalConstants.WorldItemType type, string databaseName, bool showInWorld = true, string itemName = "", string description = "")
   {
     SerializableItem copy = null;
     var item = GameData.Instance.GetItem(type, databaseName);
@@ -204,7 +204,7 @@ public class App : MonoSingleton<App>
         if (go != null)
         {
           GameObject inst = InstantiatePrefab(0, 0, 0, go);
-          var io = CreateItemObject(inst, copy);
+          var io = CreateItemObject(inst, copy, showInWorld);
           return io;
         }
       }

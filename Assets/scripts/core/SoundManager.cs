@@ -88,25 +88,31 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
   }
 
-  public void PlaySound(int hash, float pitchOffset, Vector3 position, bool is3D)
+  public void PlaySound(string name, Vector3 position, bool is3D, float pitch = 1.0f)
+  {
+    PlaySound(name.GetHashCode(), position, is3D, pitch);
+  }
+
+  public void PlaySound(int hash, Vector3 position, bool is3D, float pitch = 1.0f)
   {
     if (_audioSourcesByHash.ContainsKey(hash))
-    {
-      _audioSourcesByHash[hash].pitch = 1 + Random.Range(-pitchOffset, pitchOffset);
+    {      
       GameObject go = new GameObject("SFX-3D");
       go.transform.position = position;
       AudioSource a = go.AddComponent<AudioSource>();
       a.playOnAwake = false;
       a.spatialBlend = is3D ? 1.0f : 0.0f;
       a.volume = is3D ? SoundVolume : 1.0f;
+      a.pitch = pitch;
       a.maxDistance = AudioSourceOneShotPrefab.maxDistance;
       a.minDistance = AudioSourceOneShotPrefab.minDistance;
       a.rolloffMode = AudioRolloffMode.Custom;
       var curve = AudioSourceOneShotPrefab.GetCustomCurve(AudioSourceCurveType.CustomRolloff);
       a.SetCustomCurve(AudioSourceCurveType.CustomRolloff, curve);
       a.clip = _audioSourcesByHash[hash].clip;
+      float length = a.clip.length / pitch;
       a.Play();
-      Destroy(go, a.clip.length);
+      Destroy(go, length);
     }
   }
 
@@ -159,7 +165,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
       }
 
-      PlaySound(GlobalConstants.Footsteps3dListByType[type][which], 0.1f, position, is3D);
+      PlaySound(GlobalConstants.Footsteps3dListByType[type][which], position, is3D);
 
       LastPlayedSoundOfChar[hash] = which;
     }

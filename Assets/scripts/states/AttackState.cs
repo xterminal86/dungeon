@@ -23,7 +23,7 @@ public class AttackState : GameObjectState
     {
       _trigger = true;
       GameData.Instance.PlayerCharacterVariable.AddDamage(0);
-      SoundManager.Instance.PlaySound(GlobalConstants.SFXPunch.GetHashCode(), 0.0f, _actor.Model.transform.position, true);
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXPunch.GetHashCode(), _actor.Model.transform.position, true);
     }
 
     _timer += Time.smoothDeltaTime;

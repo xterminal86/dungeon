@@ -98,7 +98,7 @@ public class WanderingState : GameObjectState
       yield return null;
     }
 
-    if (Random.Range(0, 2) == 0 && _model.FemaleVoice)
+    if (Random.Range(0, 2) == 0 && _model.IsFemale)
     {
       _model.AnimationComponent.Play(GlobalConstants.AnimationThinkingName);
     }

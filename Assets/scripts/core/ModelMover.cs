@@ -10,7 +10,13 @@ using System.Collections.Generic;
 public class ModelMover : MonoBehaviour 
 {
   public string ActorName = string.Empty;
-  public bool FemaleVoice = false;
+
+  [Range(0.1f, 2.0f)]
+  public float VoicePitch = 1.0f;
+  [Range(0.1f, 4.0f)]
+  public float SpeakPitch = 1.0f;
+
+  public bool IsFemale = false;
 
   public Transform RaycastPoint;
 
