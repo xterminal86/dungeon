@@ -46,7 +46,10 @@ Tie footsteps sounds to animation speed (e.g. Tigra is a small girl, so she has 
 Credits:
 ========
 
-Sounds: Thief 1, 2 ; Ultima Online
+Sounds: 
+    Thief 1, 2 
+    Ultima Online
+    Legend of Grimrock
 Capes : http://www.planetminecraft.com/blog/capes-collection/ (Avalanche_Ali)
 Skins : http://www.minecraftskins.com/
 Icons : 

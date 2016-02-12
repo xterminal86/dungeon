@@ -8,8 +8,6 @@ public class SoundManager : MonoSingleton<SoundManager>
   [Range(0.0f, 1.0f)]
   public float MusicVolume = 1.0f;  
 
-  public Transform AudioSourcesHolder;
-
   public AudioSource AudioSourceOneShotPrefab;
 
   public List<AudioClip> MusicTracks = new List<AudioClip>();
@@ -32,7 +30,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     foreach (var item in MusicTracks)
     {
       AudioSource s = (AudioSource)Instantiate(AudioSourceOneShotPrefab);
-      s.transform.parent = AudioSourcesHolder;
+      s.transform.parent = transform;
       
       s.clip = item;
       s.volume = MusicVolume;
@@ -50,7 +48,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     foreach (var item in SoundEffects)
     {
       AudioSource s = (AudioSource)Instantiate(AudioSourceOneShotPrefab);
-      s.transform.parent = AudioSourcesHolder;
+      s.transform.parent = transform;
 
       s.clip = item;
       s.volume = SoundVolume;
@@ -95,6 +93,7 @@ public class SoundManager : MonoSingleton<SoundManager>
     if (_audioSourcesByHash.ContainsKey(hash))
     {      
       GameObject go = new GameObject("SFX-3D");
+      go.transform.parent = transform;
       go.transform.position = position;
       AudioSource a = go.AddComponent<AudioSource>();
       a.playOnAwake = false;
@@ -116,6 +115,7 @@ public class SoundManager : MonoSingleton<SoundManager>
   public void PlaySound(AudioSource premade, float pitch)
   {    
     GameObject go = new GameObject("SFX-one-shot");
+    go.transform.parent = transform;
     AudioSource a = go.AddComponent<AudioSource>();
     a.playOnAwake = false;
     a.volume = premade.volume;
