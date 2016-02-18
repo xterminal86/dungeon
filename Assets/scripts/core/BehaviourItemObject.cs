@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public class BehaviourItemObject : MonoBehaviour 
 {
-  // Can this object be placed in inventory?
+  // Can this object be picked up in the world?
   public bool CanBeTaken = true;
   	
   // Reference to 3D model - we're going to hide it when we take it in inventory

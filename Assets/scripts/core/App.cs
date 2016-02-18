@@ -166,6 +166,7 @@ public class App : MonoSingleton<App>
     base.Init();
   }
 
+  // TODO: In the future move all item names from items-db.xml somewhere
   void SpawnItems()
   {
     var io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false);
@@ -173,8 +174,21 @@ public class App : MonoSingleton<App>
 
     io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
+
+    io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Long Sword", false, "Iron Sword");
+    GUIManager.Instance.InventoryForm.AddItemToInventory(io);
   }
 
+  /// <summary>
+  /// Constructs a copy of the database item instance and 
+  /// uses it to create unique instance of corresponding ItemObject.
+  /// </summary>
+  /// <returns>Unique instance of corresponding database object</returns>
+  /// <param name="type">Database item type</param>
+  /// <param name="databaseName">Database item name</param>
+  /// <param name="showInWorld">If set to <c>true</c> show 3D model in the world.</param>
+  /// <param name="itemName">Item name for description window</param>
+  /// <param name="description">Item description for description window</param>
   ItemObject SpawnItem(GlobalConstants.WorldItemType type, string databaseName, bool showInWorld = true, string itemName = "", string description = "")
   {
     SerializableItem copy = null;
@@ -189,6 +203,10 @@ public class App : MonoSingleton<App>
 
         case GlobalConstants.WorldItemType.FOOD:
           copy = new SerializableFoodItem(item as SerializableFoodItem);
+          break;
+
+        case GlobalConstants.WorldItemType.WEAPON_MELEE:
+          copy = new SerializableWeaponItem(item as SerializableWeaponItem);
           break;
 
         default:
@@ -213,6 +231,9 @@ public class App : MonoSingleton<App>
     return null;
   }
 
+  /// <summary>
+  /// Attaches specific ItemObject to prefab (BehaviourItemObject)
+  /// </summary>
   ItemObject CreateItemObject(GameObject go, SerializableItem item, bool showInWorld = true)
   {    
     BehaviourItemObject bio = go.GetComponent<BehaviourItemObject>();
@@ -230,8 +251,15 @@ public class App : MonoSingleton<App>
         bio.ItemObjectInstance = new PlaceholderItemObject(item.ItemName, item.ItemDescription, item.AtlasIconIndex, bio);
         break;
 
-      case GlobalConstants.WorldItemType.FOOD:        
-        bio.ItemObjectInstance = new FoodItemObject(item.ItemName, item.ItemDescription, item.AtlasIconIndex, bio, (item as SerializableFoodItem).Saturation);
+      case GlobalConstants.WorldItemType.FOOD:
+        var sfi = item as SerializableFoodItem;
+        bio.ItemObjectInstance = new FoodItemObject(item.ItemName, item.ItemDescription, item.AtlasIconIndex, bio, sfi.Saturation);
+        break;
+
+      case GlobalConstants.WorldItemType.WEAPON_MELEE:
+        var swi = item as SerializableWeaponItem;
+        bio.ItemObjectInstance = new WeaponItemObject(item.ItemName, item.ItemDescription, item.AtlasIconIndex, bio,
+          swi.MinimumDamage, swi.MaximumDamage, swi.Cooldown);
         break;
 
       default:
@@ -240,6 +268,7 @@ public class App : MonoSingleton<App>
 
     if (bio.ItemObjectInstance != null)
     {
+      bio.ItemObjectInstance.ItemType = item.ItemType;
       bio.ItemObjectInstance.LMBAction += bio.ItemObjectInstance.LMBHandler;
       bio.ItemObjectInstance.RMBAction += bio.ItemObjectInstance.RMBHandler;
     }

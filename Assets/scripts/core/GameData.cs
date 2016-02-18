@@ -138,6 +138,11 @@ public class GameData : MonoSingleton<GameData>
     }
   }
 
+  /// <summary>
+  /// Returns reference to database item instance. Should not be modified.
+  /// </summary>
+  /// <param name="type">Type of the item to return</param>
+  /// <param name="hash">Database item name</param>
   public SerializableItem GetItem(GlobalConstants.WorldItemType type, string name)
   {
     int hash = name.GetHashCode();

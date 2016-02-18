@@ -7,13 +7,13 @@
   <ITEM name="Long Sword" type="weapon-melee" prefabName="mc-sword-iron" atlasIcon="5">
     <ATTR name="action" value="2d6" />
     <ATTR name="req" value="s:4" />
-    <ATTR name="cooldown" value="2000" />
+    <ATTR name="cooldown" value="3000" />
     <ATTR name="cost" value="200" />
   </ITEM>
   <ITEM name="Pickaxe" type="weapon-melee" prefabName="mc-pickaxe" atlasIcon="2">
     <ATTR name="action" value="1d6" />
     <ATTR name="req" value="s:3" />
-    <ATTR name="cooldown" value="1500" />
+    <ATTR name="cooldown" value="2000" />
     <ATTR name="cost" value="100" />
   </ITEM>
   <ITEM name="Battleaxe" type="weapon-melee" prefabName="mc-axe" atlasIcon="0">
@@ -22,5 +22,9 @@
     <ATTR name="cooldown" value="4000" />
     <ATTR name="cost" value="400" />
   </ITEM>
+  <ITEM name="Ring of Protection" type="accessory" prefabName="mc-ring" atlasIcon="59">
+    <ATTR name="AC" value="5" />  
+    <ATTR name="cost" value="10" />
+  </ITEM>  
   <ITEM name="Scroll" type="placeholder" prefabName="mc-scroll" atlasIcon="4" />  
 </MAIN>

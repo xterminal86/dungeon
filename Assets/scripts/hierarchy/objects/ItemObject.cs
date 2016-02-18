@@ -20,6 +20,9 @@ public abstract class ItemObject
   public string ItemNameText = string.Empty;
   public string DescriptionText = string.Empty;
 
+  // Type of item for equipment slots resolution
+  public GlobalConstants.WorldItemType ItemType = GlobalConstants.WorldItemType.PLACEHOLDER;
+
   public ItemObject(string name, string descriptionText, int atlasIcon, BehaviourItemObject bio)
   {
     ItemNameText = name;

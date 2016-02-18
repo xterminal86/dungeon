@@ -142,7 +142,10 @@ public class SerializableObject
   }
 }
 
-// TODO: item durability
+// Serializable*Item classes are made to be used in conjunction with random map generation
+// similarily to SerializableObject and SerializableBlock.
+
+// TODO: item durability?
 
 [Serializable]
 public class SerializableItem
