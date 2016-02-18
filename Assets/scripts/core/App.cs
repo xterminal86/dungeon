@@ -168,14 +168,17 @@ public class App : MonoSingleton<App>
 
   // TODO: In the future move all item names from items-db.xml somewhere
   void SpawnItems()
-  {
-    var io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false);
+  {    
+    var io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
+    io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
     io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Long Sword", false, "Iron Sword");
+    GUIManager.Instance.InventoryForm.AddItemToInventory(io);
+
+    io = SpawnItem(GlobalConstants.WorldItemType.ARMOR_CHEST, "Cloth Armor", false, "Green Cloth Armor");
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
   }
 
@@ -207,6 +210,10 @@ public class App : MonoSingleton<App>
 
         case GlobalConstants.WorldItemType.WEAPON_MELEE:
           copy = new SerializableWeaponItem(item as SerializableWeaponItem);
+          break;
+
+        case GlobalConstants.WorldItemType.ARMOR_CHEST:
+          copy = new SerializableArmorItem(item as SerializableArmorItem);
           break;
 
         default:
@@ -260,6 +267,11 @@ public class App : MonoSingleton<App>
         var swi = item as SerializableWeaponItem;
         bio.ItemObjectInstance = new WeaponItemObject(item.ItemName, item.ItemDescription, item.AtlasIconIndex, bio,
           swi.MinimumDamage, swi.MaximumDamage, swi.Cooldown);
+        break;
+
+      case GlobalConstants.WorldItemType.ARMOR_CHEST:
+        var sai = item as SerializableArmorItem;
+        bio.ItemObjectInstance = new ArmorItemObject(item.ItemName, item.ItemDescription, item.AtlasIconIndex, bio, sai.ArmorClassModifier);          
         break;
 
       default:

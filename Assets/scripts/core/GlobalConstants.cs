@@ -330,8 +330,13 @@ public static class GlobalConstants
   public enum WorldItemType
   {
     PLACEHOLDER = 0,
-    ARMOR,
-    ACCESSORY,
+    ARMOR_HEAD,
+    ARMOR_CHEST,
+    ARMOR_PANTS,
+    ARMOR_BOOTS,
+    ACCESSORY_CLOAK,
+    ACCESSORY_HAND,
+    ACCESSORY_NECK,
     FOOD,
     POTION,
     WEAPON_MELEE,
@@ -341,8 +346,13 @@ public static class GlobalConstants
   public static Dictionary<string, WorldItemType> WorldItemTypes = new Dictionary<string, WorldItemType>()
   {
     { "placeholder", WorldItemType.PLACEHOLDER },
-    { "armor", WorldItemType.ARMOR },
-    { "accessory", WorldItemType.ACCESSORY },
+    { "armor-head", WorldItemType.ARMOR_HEAD },
+    { "armor-chest", WorldItemType.ARMOR_CHEST },
+    { "armor-pants", WorldItemType.ARMOR_PANTS },
+    { "armor-boots", WorldItemType.ARMOR_BOOTS },
+    { "accessory-cloak", WorldItemType.ACCESSORY_CLOAK },
+    { "accessory-neck", WorldItemType.ACCESSORY_NECK },
+    { "accessory-hand", WorldItemType.ACCESSORY_HAND },
     { "food", WorldItemType.FOOD },
     { "potion", WorldItemType.POTION },
     { "weapon-melee", WorldItemType.WEAPON_MELEE },

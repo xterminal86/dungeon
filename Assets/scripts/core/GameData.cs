@@ -8,6 +8,8 @@ public class GameData : MonoSingleton<GameData>
   Dictionary<int, SerializableItem> _placeholderItemsByHash = new Dictionary<int, SerializableItem>();
   Dictionary<int, SerializableItem> _weaponItemsByHash = new Dictionary<int, SerializableItem>();
   Dictionary<int, SerializableItem> _foodItemsByHash = new Dictionary<int, SerializableItem>();
+  Dictionary<int, SerializableItem> _armorItemsByHash = new Dictionary<int, SerializableItem>();
+  Dictionary<int, SerializableItem> _accessoryItemsByHash = new Dictionary<int, SerializableItem>();
 
   int[] _placeholderKeys;
   int[] _weaponsKeys;
@@ -69,6 +71,11 @@ public class GameData : MonoSingleton<GameData>
         ParseAttributes(node.ChildNodes, itemType, item);
         break;
 
+      case GlobalConstants.WorldItemType.ARMOR_CHEST:
+        item = new SerializableArmorItem();
+        ParseAttributes(node.ChildNodes, itemType, item);
+        break;
+
       case GlobalConstants.WorldItemType.PLACEHOLDER:
         item = new SerializableItem();
         break;
@@ -95,7 +102,24 @@ public class GameData : MonoSingleton<GameData>
           break;
 
         case GlobalConstants.WorldItemType.WEAPON_MELEE:
+        case GlobalConstants.WorldItemType.WEAPON_RANGED:
           _weaponItemsByHash.Add(hash, item);
+          break;
+
+        case GlobalConstants.WorldItemType.ARMOR_CHEST:
+        case GlobalConstants.WorldItemType.ARMOR_BOOTS:
+        case GlobalConstants.WorldItemType.ARMOR_HEAD:
+        case GlobalConstants.WorldItemType.ARMOR_PANTS:
+          _armorItemsByHash.Add(hash, item);
+          break;
+
+        case GlobalConstants.WorldItemType.ACCESSORY_NECK:
+        case GlobalConstants.WorldItemType.ACCESSORY_HAND:
+        case GlobalConstants.WorldItemType.ACCESSORY_CLOAK:
+          _accessoryItemsByHash.Add(hash, item);
+          break;
+
+        default:
           break;
       }
     }
@@ -131,16 +155,24 @@ public class GameData : MonoSingleton<GameData>
           //string[] s = attr.Attributes["value"].InnerText.Split(':');
           break;
 
+        case "armor":
+          (item as SerializableArmorItem).ArmorClassModifier = int.Parse(attr.Attributes["value"].InnerText);
+          break;
+
         case "cost":
           item.Cost = int.Parse(attr.Attributes["value"].InnerText);
+          break;
+
+        default:
           break;
       }
     }
   }
 
   /// <summary>
-  /// Returns reference to database item instance. Should not be modified.
+  /// Returns reference to database item instance.
   /// </summary>
+  /// <returns>Should not be modified</returns>
   /// <param name="type">Type of the item to return</param>
   /// <param name="hash">Database item name</param>
   public SerializableItem GetItem(GlobalConstants.WorldItemType type, string name)
@@ -164,6 +196,13 @@ public class GameData : MonoSingleton<GameData>
 
       case GlobalConstants.WorldItemType.PLACEHOLDER:
         return _placeholderItemsByHash[hash];
+        break;
+
+      case GlobalConstants.WorldItemType.ARMOR_CHEST:
+      case GlobalConstants.WorldItemType.ARMOR_BOOTS:
+      case GlobalConstants.WorldItemType.ARMOR_HEAD:
+      case GlobalConstants.WorldItemType.ARMOR_PANTS:
+        return _armorItemsByHash[hash];
         break;
 
       default:

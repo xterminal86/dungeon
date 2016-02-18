@@ -22,9 +22,13 @@
     <ATTR name="cooldown" value="4000" />
     <ATTR name="cost" value="400" />
   </ITEM>
-  <ITEM name="Ring of Protection" type="accessory" prefabName="mc-ring" atlasIcon="59">
-    <ATTR name="AC" value="5" />  
+  <ITEM name="Ring of Protection" type="accessory-hand" prefabName="mc-ring" atlasIcon="59">
+    <ATTR name="armor" value="1" />  
     <ATTR name="cost" value="10" />
   </ITEM>  
+  <ITEM name="Cloth Armor" type="armor-chest" prefabName="mc-ac-cloth" atlasIcon="32">
+    <ATTR name="armor" value="2" />  
+    <ATTR name="cost" value="30" />
+  </ITEM>
   <ITEM name="Scroll" type="placeholder" prefabName="mc-scroll" atlasIcon="4" />  
 </MAIN>

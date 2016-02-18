@@ -87,6 +87,8 @@ public enum SerializableBlockType
 
 // ********************* SERIALIZATION ********************* //
 
+// Holds data for map generation 
+
 [Serializable]
 public class SerializableMap
 {
@@ -100,16 +102,26 @@ public class SerializableMap
   public List<SerializableObject> SerializableObjectsList = new List<SerializableObject>();
 }
 
+// Represents any kind of obstacle (column, wall etc.)
+
 [Serializable]
 public class SerializableBlock
 {
+  // Map position X
   public int X = -1;
+  // Map position Z
   public int Y = -1;
+  // Y height
   public int Layer = -1;
+  // Direction of object's front view
   public int Facing = 0;
+  // Name of the prefab to instantiate
   public string PrefabName = string.Empty;
+  // Should we rotate the object 180 around X? (useful for making ceiling from floor)
   public bool FlipFlag = false;
+  // Hash of the footstep sound on this tile
   public int FootstepSoundType = -1;
+  // For generator algorithms to distinguish specific blocks
   public SerializableBlockType BlockType = SerializableBlockType.NONE;
 
   public override string ToString()
@@ -119,21 +131,34 @@ public class SerializableBlock
   }
 }
 
+// Any kind of interactable object (lever, door etc.)
+
 [Serializable]
 public class SerializableObject
 {
+  // Map position X
   public int X = -1;
+  // Map position Z
   public int Y = -1;
+  // Y height
   public int Layer = -1;
+  // Direction of object's front view
   public int Facing = 0;
+  // In-game object name
   public string ObjectName = string.Empty;
+  // Name of the prefab to instantiate
   public string PrefabName = string.Empty;
+  // Name of the logic class that will control this object
   public string ObjectClassName = string.Empty;
+  // Door related data follows - might be my bad design ¯\_(ツ)_/¯
   public string DoorSoundType = string.Empty;
   public float AnimationOpenSpeed = 1.0f;
   public float AnimationCloseSpeed = 1.0f;
+  // Id (i.e. unique name) of this object
   public string ObjectId = string.Empty;
+  // Id of the object that this object controls
   public string ObjectToControlId = string.Empty;
+  // Some text field for in-game usage (description, signs etc.)
   public string TextField = string.Empty;
 
   public override string ToString()
@@ -182,6 +207,7 @@ public class SerializableItem
     PrefabName = rhs.PrefabName;
     ItemName = rhs.ItemName;
     ItemDescription = rhs.ItemDescription;
+    // TODO: We can just hardcode specific WorldItemType in constructors of corresponding classes
     ItemType = rhs.ItemType;
   }
 }
@@ -217,6 +243,21 @@ public class SerializableWeaponItem : SerializableItem
     MinimumDamage = rhs.MinimumDamage;
     MaximumDamage = rhs.MaximumDamage;
     Cooldown = rhs.Cooldown;
+  }
+}
+
+[Serializable]
+public class SerializableArmorItem : SerializableItem
+{
+  public int ArmorClassModifier = 0;
+
+  public SerializableArmorItem()
+  {    
+  }
+
+  public SerializableArmorItem(SerializableArmorItem rhs) : base(rhs)
+  {
+    ArmorClassModifier = rhs.ArmorClassModifier;
   }
 }
 
