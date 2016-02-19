@@ -11,6 +11,8 @@ public class InputController : MonoSingleton<InputController>
   public Int2 PlayerMapPos = new Int2();
   public Int2 PlayerPreviousMapPos = new Int2();
 
+  public GameObject TrailPrefab;
+
   Vector3 _centerOfScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0.0f);
 
   float _raycastDistance = GlobalConstants.WallScaleFactor + GlobalConstants.WallScaleFactor / 2;
@@ -18,7 +20,7 @@ public class InputController : MonoSingleton<InputController>
   CameraTurnArgument _cameraTurnArgument = new CameraTurnArgument();
   CameraMoveArgument _cameraMoveArgument = new CameraMoveArgument();
   void Awake () 
-  {	
+  {	    
     _cameraTurnArgument.Speed = GlobalConstants.CameraTurnSpeed;
     _cameraMoveArgument.Speed = GlobalConstants.CameraMoveSpeed;
 	}
@@ -638,6 +640,89 @@ public class InputController : MonoSingleton<InputController>
     _cameraForwardVector.z = zComponent;
 
     return _cameraForwardVector;
+  }
+
+  bool _horizontalTrail = false;
+  public void DrawTrail()
+  {
+    if (!_horizontalTrail)
+    {
+      StartCoroutine(DrawHorizontalTrailRoutine());
+    }
+    else
+    {
+      StartCoroutine(DrawVerticalTrailRoutine());
+    }
+
+    _horizontalTrail = !_horizontalTrail;
+  }
+
+  IEnumerator DrawHorizontalTrailRoutine()
+  {    
+    float dy = Random.Range(-0.2f, 0.2f);
+
+    Vector3 trailPos = Vector3.zero;
+
+    trailPos.Set(-(GlobalConstants.WallScaleFactor + 1), TrailPrefab.transform.position.y + dy, TrailPrefab.transform.position.z);
+
+    var trail = (GameObject)Instantiate(TrailPrefab, trailPos, Quaternion.identity);
+    trail.transform.parent = transform;
+
+    while (trailPos.x < GlobalConstants.WallScaleFactor + 1)
+    {      
+      trailPos.x += Time.smoothDeltaTime * GlobalConstants.AttackTrailSpeed;
+
+      if (dy < 0.0f)
+      {
+        trailPos.y += Time.smoothDeltaTime;
+      }
+      else
+      {
+        trailPos.y -= Time.smoothDeltaTime;
+      }
+
+      trail.transform.localPosition = trailPos;
+
+      yield return null;
+    }
+
+    Destroy(trail.gameObject);
+
+    yield return null;
+  }
+
+  IEnumerator DrawVerticalTrailRoutine()
+  {    
+    float dx = Random.Range(-0.1f, 0.1f);
+
+    Vector3 trailPos = Vector3.zero;
+
+    trailPos.Set(0.0f + dx, GlobalConstants.WallScaleFactor + 1, TrailPrefab.transform.position.z);
+
+    var trail = (GameObject)Instantiate(TrailPrefab, trailPos, Quaternion.identity);
+    trail.transform.parent = transform;
+
+    while (trailPos.y > -(GlobalConstants.WallScaleFactor + 1))
+    {      
+      trailPos.y -= Time.smoothDeltaTime * GlobalConstants.AttackTrailSpeed;
+
+      if (dx < 0.0f)
+      {
+        trailPos.x += Time.smoothDeltaTime;
+      }
+      else
+      {
+        trailPos.x -= Time.smoothDeltaTime;
+      }
+
+      trail.transform.localPosition = trailPos;
+
+      yield return null;
+    }
+
+    Destroy(trail.gameObject);
+
+    yield return null;
   }
 }
 

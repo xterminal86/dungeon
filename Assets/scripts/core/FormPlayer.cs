@@ -14,6 +14,9 @@ public class FormPlayer : MonoBehaviour
 
   public Image BarBorder;
 
+  public Image ItemLH;
+  public Image ItemRH;
+
   void Awake()
   {
     _barMaxWidth = (int)BarBorder.rectTransform.rect.width - 6;
@@ -59,6 +62,10 @@ public class FormPlayer : MonoBehaviour
     {
       return;
     }
+
+    SoundManager.Instance.PlaySound(GlobalConstants.SFXSwing);
+
+    InputController.Instance.DrawTrail();
 
     //Debug.Log("Left Hand");
   }

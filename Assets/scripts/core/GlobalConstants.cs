@@ -42,6 +42,9 @@ public static class GlobalConstants
   public const float CharacterRotationSpeed = 150.0f;
   public const float CharacterAnimationTalkSpeed = 2.0f;
 
+  // Speed of attack trail drawing
+  public const float AttackTrailSpeed = 20.0f;
+
   public static Vector3 DefaultVillageMountainsSize = new Vector3(25, 30, 25);
 
   // Greeting string
@@ -63,6 +66,7 @@ public static class GlobalConstants
   // Sound Effects
 
   public const string SFXPunch = "atk-punch";
+  public const string SFXSwing = "atk-swing";
   public const string SFXPlayerDeath = "player-death";
   public const string SFXPlayerCannotMove = "player-cannot-move2";
   public const string SFXItemTake = "player-item-take";
