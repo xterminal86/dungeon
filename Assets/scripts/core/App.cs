@@ -180,6 +180,9 @@ public class App : MonoSingleton<App>
 
     io = SpawnItem(GlobalConstants.WorldItemType.ARMOR_CHEST, "Cloth Armor", false, "Green Cloth Armor");
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
+
+    io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Battleaxe", false, "Battle Axe");
+    GUIManager.Instance.InventoryForm.AddItemToInventory(io);
   }
 
   /// <summary>
