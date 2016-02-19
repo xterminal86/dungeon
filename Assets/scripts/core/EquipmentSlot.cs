@@ -40,41 +40,46 @@ public class EquipmentSlot : MonoBehaviour
   {
     if (Input.GetMouseButtonDown(0))
     {  
-      // Something is in slot and we don't have anything "in hand"
-      if (_itemRef != null && GUIManager.Instance.ItemTaken == null)
-      { 
-        SoundManager.Instance.PlaySound(GlobalConstants.SFXItemTake);
+      ProcessItem();
+    }
+  }
 
-        if (_itemRef.LMBAction != null)
-          _itemRef.LMBAction(this);
+  public void ProcessItem()
+  {
+    // Something is in slot and we don't have anything "in hand"
+    if (_itemRef != null && GUIManager.Instance.ItemTaken == null)
+    { 
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXItemTake);
 
-        GUIManager.Instance.ItemInfoForm.HideWindow();
+      if (_itemRef.LMBAction != null)
+        _itemRef.LMBAction(this);
 
-        ItemImage.gameObject.SetActive(false);
-        _itemRef = null;
-      }
-      // Put in slot
-      else if (GUIManager.Instance.ItemTaken != null && CanBeEquipped())
+      GUIManager.Instance.ItemInfoForm.HideWindow();
+
+      ItemImage.gameObject.SetActive(false);
+      _itemRef = null;
+    }
+    // Put in slot
+    else if (GUIManager.Instance.ItemTaken != null && CanBeEquipped())
+    {
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXItemPut);
+
+      if (_itemRef == null)
       {
-        SoundManager.Instance.PlaySound(GlobalConstants.SFXItemPut);
-
-        if (_itemRef == null)
-        {
-          _itemRef = GUIManager.Instance.ItemTaken;
-          GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
-          GUIManager.Instance.ItemTaken = null;
-        }
-        else
-        {
-          ItemObject tmp = GUIManager.Instance.ItemTaken;
-          GUIManager.Instance.ItemTaken = _itemRef;
-          _itemRef = tmp;
-          GUIManager.Instance.ItemTakenSprite.sprite = GUIManager.Instance.GetIconFromAtlas(GUIManager.Instance.ItemTaken.AtlasIcon);          
-        }
-
-        ItemImage.sprite = GUIManager.Instance.GetIconFromAtlas(_itemRef.AtlasIcon);          
-        ItemImage.gameObject.SetActive(true);
+        _itemRef = GUIManager.Instance.ItemTaken;
+        GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
+        GUIManager.Instance.ItemTaken = null;
       }
+      else
+      {
+        ItemObject tmp = GUIManager.Instance.ItemTaken;
+        GUIManager.Instance.ItemTaken = _itemRef;
+        _itemRef = tmp;
+        GUIManager.Instance.ItemTakenSprite.sprite = GUIManager.Instance.GetIconFromAtlas(GUIManager.Instance.ItemTaken.AtlasIcon);          
+      }
+
+      ItemImage.sprite = GUIManager.Instance.GetIconFromAtlas(_itemRef.AtlasIcon);          
+      ItemImage.gameObject.SetActive(true);
     }
   }
 

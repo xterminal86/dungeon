@@ -27,6 +27,9 @@ public static class GlobalConstants
   // FIXME: temporary, attack cooldown of enemies - every enemy will have its own
   public const float AttackCooldown = 3.0f;
 
+  // Player bare hands attack cooldown
+  public const float PlayerPunchAttackCooldown = 1.0f;
+
   // Maximum value of hunger
   public const int HungerMax = 100;
   // Number of seconds (without multiplier) after which hunger decreases for 1 point

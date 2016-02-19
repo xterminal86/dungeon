@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 39177c2d5504c634d80bdab3828421be
-timeCreated: 1455203041
+timeCreated: 1455903296
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -168,6 +168,8 @@ TextureImporter:
     21300322: atlas_79
     21300324: atlas_80
     21300326: atlas_81
+    21300328: atlas_82
+    21300330: atlas_83
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -222,18 +224,18 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_1
       rect:
         serializedVersion: 2
-        x: 34
-        y: 482
-        width: 28
-        height: 28
+        x: 32
+        y: 480
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_2
@@ -244,29 +246,29 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_3
       rect:
         serializedVersion: 2
-        x: 97
-        y: 485
-        width: 30
-        height: 22
+        x: 96
+        y: 480
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_4
       rect:
         serializedVersion: 2
-        x: 129
+        x: 128
         y: 480
-        width: 30
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_5
@@ -277,293 +279,293 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_6
       rect:
         serializedVersion: 2
-        x: 194
-        y: 482
-        width: 30
-        height: 28
+        x: 192
+        y: 480
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_7
       rect:
         serializedVersion: 2
-        x: 232
-        y: 483
-        width: 16
-        height: 24
+        x: 224
+        y: 480
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_8
       rect:
         serializedVersion: 2
-        x: 8
-        y: 451
-        width: 16
-        height: 24
+        x: 0
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_9
       rect:
         serializedVersion: 2
-        x: 40
-        y: 451
-        width: 16
-        height: 24
+        x: 32
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_10
       rect:
         serializedVersion: 2
-        x: 72
-        y: 451
-        width: 16
-        height: 24
+        x: 64
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_11
       rect:
         serializedVersion: 2
-        x: 104
-        y: 451
-        width: 16
-        height: 24
+        x: 96
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_12
       rect:
         serializedVersion: 2
-        x: 136
-        y: 451
-        width: 16
-        height: 24
+        x: 128
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_13
       rect:
         serializedVersion: 2
-        x: 168
-        y: 451
-        width: 16
-        height: 24
+        x: 160
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_14
       rect:
         serializedVersion: 2
-        x: 200
-        y: 451
-        width: 16
-        height: 24
+        x: 192
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_15
       rect:
         serializedVersion: 2
-        x: 232
-        y: 451
-        width: 16
-        height: 24
+        x: 224
+        y: 448
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_16
       rect:
         serializedVersion: 2
-        x: 8
-        y: 419
-        width: 16
-        height: 24
+        x: 0
+        y: 416
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_17
       rect:
         serializedVersion: 2
-        x: 40
-        y: 419
-        width: 16
-        height: 24
+        x: 32
+        y: 416
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_18
       rect:
         serializedVersion: 2
-        x: 65
-        y: 417
-        width: 30
-        height: 30
+        x: 64
+        y: 416
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_19
       rect:
         serializedVersion: 2
-        x: 97
-        y: 417
-        width: 30
-        height: 30
+        x: 96
+        y: 416
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_20
       rect:
         serializedVersion: 2
-        x: 132
-        y: 417
-        width: 24
-        height: 30
+        x: 128
+        y: 416
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_21
       rect:
         serializedVersion: 2
-        x: 161
-        y: 417
-        width: 30
-        height: 30
+        x: 160
+        y: 416
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_22
       rect:
         serializedVersion: 2
-        x: 193
-        y: 417
-        width: 30
-        height: 30
+        x: 192
+        y: 416
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_23
       rect:
         serializedVersion: 2
-        x: 227
+        x: 224
         y: 416
-        width: 26
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_24
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 384
-        width: 30
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_25
       rect:
         serializedVersion: 2
-        x: 35
+        x: 32
         y: 384
-        width: 27
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_26
       rect:
         serializedVersion: 2
-        x: 66
+        x: 64
         y: 384
-        width: 29
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_27
       rect:
         serializedVersion: 2
-        x: 97
+        x: 96
         y: 384
-        width: 30
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_28
       rect:
         serializedVersion: 2
-        x: 129
+        x: 128
         y: 384
-        width: 30
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_29
       rect:
         serializedVersion: 2
-        x: 163
-        y: 385
-        width: 25
-        height: 31
+        x: 160
+        y: 384
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_30
       rect:
         serializedVersion: 2
-        x: 193
-        y: 385
-        width: 30
-        height: 30
+        x: 192
+        y: 384
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_31
       rect:
         serializedVersion: 2
         x: 224
-        y: 385
+        y: 384
         width: 32
-        height: 30
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_32
@@ -572,31 +574,31 @@ TextureImporter:
         x: 0
         y: 352
         width: 32
-        height: 31
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_33
       rect:
         serializedVersion: 2
-        x: 33
+        x: 32
         y: 352
-        width: 30
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_34
       rect:
         serializedVersion: 2
-        x: 65
+        x: 64
         y: 352
-        width: 30
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_35
@@ -604,32 +606,32 @@ TextureImporter:
         serializedVersion: 2
         x: 96
         y: 352
-        width: 31
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_36
       rect:
         serializedVersion: 2
-        x: 132
-        y: 353
-        width: 24
-        height: 30
+        x: 128
+        y: 352
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_37
       rect:
         serializedVersion: 2
-        x: 161
-        y: 354
-        width: 29
-        height: 28
+        x: 160
+        y: 352
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_38
@@ -640,7 +642,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_39
@@ -649,9 +651,9 @@ TextureImporter:
         x: 224
         y: 352
         width: 32
-        height: 31
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_40
@@ -662,7 +664,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_41
@@ -673,7 +675,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_42
@@ -684,62 +686,62 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_43
       rect:
         serializedVersion: 2
         x: 96
-        y: 323
+        y: 320
         width: 32
-        height: 27
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_44
       rect:
         serializedVersion: 2
-        x: 130
-        y: 326
-        width: 27
-        height: 22
+        x: 128
+        y: 320
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_45
       rect:
         serializedVersion: 2
-        x: 162
-        y: 324
-        width: 28
-        height: 24
+        x: 160
+        y: 320
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_46
       rect:
         serializedVersion: 2
-        x: 196
+        x: 192
         y: 320
-        width: 24
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_47
       rect:
         serializedVersion: 2
-        x: 230
+        x: 224
         y: 320
-        width: 20
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_48
@@ -750,73 +752,73 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_49
       rect:
         serializedVersion: 2
-        x: 39
-        y: 295
-        width: 18
-        height: 18
+        x: 32
+        y: 288
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_50
       rect:
         serializedVersion: 2
-        x: 68
-        y: 290
-        width: 25
-        height: 28
+        x: 64
+        y: 288
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_51
       rect:
         serializedVersion: 2
-        x: 97
-        y: 289
-        width: 30
-        height: 30
+        x: 96
+        y: 288
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_52
       rect:
         serializedVersion: 2
-        x: 133
+        x: 128
         y: 288
-        width: 23
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_53
       rect:
         serializedVersion: 2
-        x: 163
-        y: 290
-        width: 27
-        height: 29
+        x: 160
+        y: 288
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_54
       rect:
         serializedVersion: 2
-        x: 193
+        x: 192
         y: 288
-        width: 31
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_55
@@ -827,7 +829,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_56
@@ -835,54 +837,54 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 256
-        width: 31
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_57
       rect:
         serializedVersion: 2
-        x: 33
+        x: 32
         y: 256
-        width: 31
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_58
       rect:
         serializedVersion: 2
-        x: 65
-        y: 257
-        width: 30
-        height: 30
+        x: 64
+        y: 256
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_59
       rect:
         serializedVersion: 2
-        x: 100
-        y: 259
-        width: 24
-        height: 25
+        x: 96
+        y: 256
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_60
       rect:
         serializedVersion: 2
-        x: 131
-        y: 260
-        width: 24
-        height: 25
+        x: 128
+        y: 256
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_61
@@ -893,128 +895,128 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_62
       rect:
         serializedVersion: 2
-        x: 195
+        x: 192
         y: 256
-        width: 27
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_63
       rect:
         serializedVersion: 2
-        x: 227
+        x: 224
         y: 256
-        width: 25
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_64
       rect:
         serializedVersion: 2
-        x: 2
-        y: 230
-        width: 27
-        height: 21
+        x: 0
+        y: 224
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_65
       rect:
         serializedVersion: 2
-        x: 39
-        y: 227
-        width: 18
-        height: 27
+        x: 32
+        y: 224
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_66
       rect:
         serializedVersion: 2
-        x: 70
-        y: 228
-        width: 21
-        height: 25
+        x: 64
+        y: 224
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_67
       rect:
         serializedVersion: 2
-        x: 101
-        y: 228
-        width: 22
-        height: 25
+        x: 96
+        y: 224
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_68
       rect:
         serializedVersion: 2
-        x: 133
-        y: 229
-        width: 22
-        height: 22
+        x: 128
+        y: 224
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_69
       rect:
         serializedVersion: 2
-        x: 167
-        y: 228
-        width: 18
-        height: 25
+        x: 160
+        y: 224
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_70
       rect:
         serializedVersion: 2
-        x: 196
-        y: 230
-        width: 25
-        height: 20
+        x: 192
+        y: 224
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_71
       rect:
         serializedVersion: 2
-        x: 230
+        x: 224
         y: 224
-        width: 21
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_72
       rect:
         serializedVersion: 2
-        x: 4
+        x: 0
         y: 192
-        width: 23
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_73
@@ -1022,98 +1024,120 @@ TextureImporter:
         serializedVersion: 2
         x: 32
         y: 192
-        width: 31
-        height: 31
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_74
       rect:
         serializedVersion: 2
-        x: 72
+        x: 64
         y: 192
-        width: 15
+        width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_75
       rect:
         serializedVersion: 2
-        x: 101
-        y: 193
-        width: 22
-        height: 30
+        x: 96
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_76
       rect:
         serializedVersion: 2
-        x: 132
-        y: 193
-        width: 24
-        height: 30
+        x: 128
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_77
       rect:
         serializedVersion: 2
-        x: 165
-        y: 193
-        width: 22
-        height: 29
+        x: 160
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_78
       rect:
         serializedVersion: 2
-        x: 194
-        y: 194
-        width: 27
-        height: 29
+        x: 192
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_79
       rect:
         serializedVersion: 2
-        x: 229
-        y: 194
-        width: 22
-        height: 28
+        x: 224
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_80
       rect:
         serializedVersion: 2
-        x: 4
-        y: 161
-        width: 23
-        height: 30
+        x: 0
+        y: 160
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     - name: atlas_81
       rect:
         serializedVersion: 2
-        x: 37
-        y: 161
-        width: 22
-        height: 30
+        x: 32
+        y: 160
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: atlas_82
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+    - name: atlas_83
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 160
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
     outline: []

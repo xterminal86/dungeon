@@ -13,6 +13,8 @@ public class InputController : MonoSingleton<InputController>
 
   public GameObject TrailPrefab;
 
+  public bool PlayerCanAttack = true;
+
   Vector3 _centerOfScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0.0f);
 
   float _raycastDistance = GlobalConstants.WallScaleFactor + GlobalConstants.WallScaleFactor / 2;
@@ -659,7 +661,7 @@ public class InputController : MonoSingleton<InputController>
 
   IEnumerator DrawHorizontalTrailRoutine()
   {    
-    float dy = Random.Range(-0.2f, 0.2f);
+    float dy = Random.Range(-0.1f, 0.1f);
 
     Vector3 trailPos = Vector3.zero;
 

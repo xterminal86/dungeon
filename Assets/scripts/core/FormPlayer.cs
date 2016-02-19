@@ -9,6 +9,9 @@ public class FormPlayer : MonoBehaviour
 
   public GameObject FormHolder;
 
+  public EquipmentSlot HandEqSlotLeft;
+  public EquipmentSlot HandEqSlotRight;
+
   public Image HealthBar;
   public Image MagicBar;
 
@@ -17,8 +20,14 @@ public class FormPlayer : MonoBehaviour
   public Image ItemLH;
   public Image ItemRH;
 
+  public Image LockR;
+  public Image LockL;
+
+  public Sprite HandSpriteL;
+  public Sprite HandSpriteR;
+
   void Awake()
-  {
+  {    
     _barMaxWidth = (int)BarBorder.rectTransform.rect.width - 6;
     _rectTransformSize.Set((int)HealthBar.rectTransform.rect.width, (int)HealthBar.rectTransform.rect.height);
   }
@@ -34,6 +43,9 @@ public class FormPlayer : MonoBehaviour
     CalculateBarWidth(GameData.Instance.PlayerCharacterVariable.Energy, 
                       GameData.Instance.PlayerCharacterVariable.EnergyMax, 
                       MagicBar);
+
+    ItemLH.sprite = (HandEqSlotLeft.ItemRef != null) ? HandEqSlotLeft.ItemImage.sprite : HandSpriteL;
+    ItemRH.sprite = (HandEqSlotRight.ItemRef != null) ? HandEqSlotRight.ItemImage.sprite : HandSpriteR;
   }
 
   void CalculateBarWidth(int current, int max, Image bar)
@@ -57,27 +69,76 @@ public class FormPlayer : MonoBehaviour
   }
 
   public void LeftHandClicked()
-  {
+  {   
     if (Input.GetMouseButtonDown(0))
     {
+      HandEqSlotLeft.ProcessItem();
+
       return;
     }
-
-    SoundManager.Instance.PlaySound(GlobalConstants.SFXSwing);
-
-    InputController.Instance.DrawTrail();
-
-    //Debug.Log("Left Hand");
+    else if (Input.GetMouseButtonDown(1))
+    {
+      ProcessPlayerAttack(HandEqSlotLeft.ItemRef);
+    }
   }
 
   public void RightHandClicked()
   {
     if (Input.GetMouseButtonDown(0))
     {
+      HandEqSlotRight.ProcessItem();
+
       return;
     }
-    
-    //Debug.Log("Right Hand");
+    else if (Input.GetMouseButtonDown(1))
+    {
+      ProcessPlayerAttack(HandEqSlotRight.ItemRef);
+    }
+  }
+
+  void ProcessPlayerAttack(ItemObject io)
+  {
+    if (InputController.Instance.PlayerCanAttack)
+    {
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXSwing);
+      InputController.Instance.DrawTrail();
+
+      // Attack with weapon in hand
+      if (io != null)
+      {
+        if (io.RMBAction != null)
+          io.RMBAction(this);
+      }
+      // Process attack with bare hand
+      else
+      {
+        StartCoroutine(PunchRoutine());
+      }
+    }
+  }
+
+  IEnumerator PunchRoutine()
+  {
+    InputController.Instance.PlayerCanAttack = false;
+
+    LockR.gameObject.SetActive(true);
+    LockL.gameObject.SetActive(true);
+
+    float timer = 0.0f;
+
+    while (timer < GlobalConstants.PlayerPunchAttackCooldown)
+    {
+      timer += Time.smoothDeltaTime;
+
+      yield return null;
+    }
+
+    InputController.Instance.PlayerCanAttack = true;
+
+    LockR.gameObject.SetActive(false);
+    LockL.gameObject.SetActive(false);
+
+    yield return null;
   }
 
   void Start()
