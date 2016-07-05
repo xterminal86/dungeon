@@ -60,8 +60,6 @@ public class FormNewGame : MonoBehaviour
   int _indexer = 0;
   public void LeftArrowHandler()
   {
-    GUIManager.Instance.ButtonClickSoundShort.Play();
-
     _indexer--;
 
     if (_indexer < 0)
@@ -74,8 +72,6 @@ public class FormNewGame : MonoBehaviour
 
   public void RightArrowHandler()
   {
-    GUIManager.Instance.ButtonClickSoundShort.Play();
-
     _indexer++;
 
     if (_indexer == GlobalConstants.CharacterClassNames.Count)
@@ -88,8 +84,6 @@ public class FormNewGame : MonoBehaviour
 
   public void CloseForm()
   {
-    GUIManager.Instance.ButtonClickSound.Play();
-
     gameObject.SetActive(false);
     GUIManager.Instance.TitleScreenButtonsHolder.SetActive(true);
   }
@@ -104,8 +98,6 @@ public class FormNewGame : MonoBehaviour
   public void OK()
   {
     GameData.Instance.PlayerCharacterVariable.CharacterName = string.IsNullOrEmpty(CharacterName.text) ? "Nameless" : CharacterName.text;
-
-    GUIManager.Instance.ButtonClickSound.Play();
 
     gameObject.SetActive(false);
 

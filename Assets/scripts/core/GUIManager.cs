@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class GUIManager : MonoSingleton<GUIManager> 
 {
-  public AudioSource ButtonClickSound;
-  public AudioSource ButtonClickSoundShort;
   public AudioSource CharacterSpeakSound;
 
   public GameObject TitleScreenButtonsHolder;
@@ -96,32 +94,24 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public void FormTalkingNameHandler()
   {
-    ButtonClickSound.Play();
-
     if (ButtonNameCallback != null)
       ButtonNameCallback();  
   }
 
   public void FormTalkingJobHandler()
   {
-    ButtonClickSound.Play();
-
     if (ButtonJobCallback != null)
       ButtonJobCallback();    
   }
 
   public void FormTalkingGossipHandler()
   {
-    ButtonClickSound.Play();
-
     if (ButtonGossipCallback != null)
       ButtonGossipCallback();    
   }
 
   public void FormTalkingByeHandler()
   {
-    ButtonClickSound.Play();
-
     if (ButtonByeCallback != null)
       ButtonByeCallback();    
   }
@@ -130,8 +120,6 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public void FormMenuSaveAndQuitHandler()
   {
-    ButtonClickSound.Play();
-
     App.Instance.CurrentGameState = App.GameState.PAUSED;
 
     ScreenFader.Instance.FadeCompleteCallback += SaveAndQuitHandler;
@@ -140,8 +128,6 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public void FormMenuReturnToMenuHandler()
   {
-    ButtonClickSound.Play();
-
     App.Instance.CurrentGameState = App.GameState.PAUSED;
 
     ScreenFader.Instance.FadeCompleteCallback += ReturnToMenuHandler;
@@ -150,8 +136,6 @@ public class GUIManager : MonoSingleton<GUIManager>
 
   public void FormMenuResumeHandler()
   {
-    ButtonClickSound.Play();
-
     FormGameMenu.SetActive(false);
 
     App.Instance.PlayerMoveState = App.PlayerMoveStateEnum.NORMAL;
