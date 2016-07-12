@@ -142,22 +142,36 @@ public class GUIManager : MonoSingleton<GUIManager>
   {
     FormGameMenu.SetActive(false);
 
+    CloseGameForms();
+
     GameData.Instance.CurrentGameState = GameData.GameState.PAUSED;
 
     JobManager.Instance.StopAllCoroutines();
 
-    ScreenFader.Instance.FadeOut(() => { Application.Quit(); });
+    ScreenFader.Instance.FadeOut(() => 
+      { 
+        InventoryForm.InventorySlots.Clear();
+        SoundManager.Instance.StopAllSounds();
+        Application.Quit(); 
+      });
   }
 
   public void FormMenuReturnToMenuHandler()
   {
     FormGameMenu.SetActive(false);
 
+    CloseGameForms();
+
     GameData.Instance.CurrentGameState = GameData.GameState.PAUSED;
 
     JobManager.Instance.StopAllCoroutines();
 
-    ScreenFader.Instance.FadeOut(() => { SceneManager.LoadScene("title"); });
+    ScreenFader.Instance.FadeOut(() => 
+      { 
+        InventoryForm.InventorySlots.Clear();
+        SoundManager.Instance.StopAllSounds();
+        SceneManager.LoadScene("title"); 
+      });
   }
 
   public void FormMenuResumeHandler()
@@ -189,6 +203,20 @@ public class GUIManager : MonoSingleton<GUIManager>
     {
       Debug.Log("Right button");
     }
+  }
+
+  public void CloseGameForms()
+  {
+    PlayerForm.gameObject.SetActive(false); 
+    CompassImage.gameObject.SetActive(false);
+    FormTalking.SetActive(false);
+  }
+
+  public void SetupGameForms()
+  {
+    PlayerForm.gameObject.SetActive(true); 
+    CompassImage.gameObject.SetActive(true);
+    FormTalking.SetActive(false);
   }
 
   Vector2 _mousePosition = Vector2.zero;

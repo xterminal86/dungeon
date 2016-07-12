@@ -152,6 +152,8 @@ public class App : MonoBehaviour
 
     InputControllerScript.MapLoadingFinishedHandler();
     SoundManager.Instance.MapLoadingFinishedHandler();
+
+    GUIManager.Instance.SetupGameForms();
   }
 
   // TODO: In the future move all item names from items-db.xml somewhere
@@ -287,7 +289,10 @@ public class App : MonoBehaviour
     var mm = go.GetComponent<ModelMover>();
     if (mm != null)
     {
-      SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+      if (!SoundManager.Instance.LastPlayedSoundOfChar.ContainsKey(go.name.GetHashCode())) 
+      {
+        SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+      }
       
       mm.Actor = new EnemyActor(mm, this, InputControllerScript);
     }
@@ -376,7 +381,10 @@ public class App : MonoBehaviour
         var mm = go.GetComponent<ModelMover>();
         if (mm != null)
         {
-          SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+          if (!SoundManager.Instance.LastPlayedSoundOfChar.ContainsKey(go.name.GetHashCode()))
+          {
+            SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+          }
 
           mm.ModelPos.X = pos.X;
           mm.ModelPos.Y = pos.Y;

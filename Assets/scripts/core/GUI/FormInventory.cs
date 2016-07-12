@@ -11,6 +11,10 @@ public class FormInventory : MonoBehaviour
   public RectTransform InventorySlotsHolder;
 
   Dictionary<int, InventorySlot> _inventorySlots = new Dictionary<int, InventorySlot>();
+  public Dictionary<int, InventorySlot> InventorySlots
+  {
+    get { return _inventorySlots; }
+  }
 
   int _invWidth = 40;
   int _invHeight = 40;
@@ -160,9 +164,5 @@ public class FormInventory : MonoBehaviour
         break;
       }
     }
-  }
-
-  void Start ()
-  {    
   }
 }
