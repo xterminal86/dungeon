@@ -19,7 +19,7 @@ public class WanderingState : GameObjectState
     _model = actor.Model;
     _working = false;
 
-    _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.PathfindingMap, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+    _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
         
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
@@ -47,7 +47,7 @@ public class WanderingState : GameObjectState
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
-    Int2 destination = App.Instance.GeneratedMap.GetRandomUnoccupiedCell();
+    Int2 destination = _actor.AppRef.GeneratedMap.GetRandomUnoccupiedCell();
 
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
 
@@ -129,7 +129,7 @@ public class WanderingState : GameObjectState
 
   bool _rotateDone = false;
   IEnumerator RotateModel(float angle)
-  {    
+  { 
     _model.AnimationComponent.CrossFade(GlobalConstants.AnimationIdleName);
 
     _rotateDone = false;
@@ -266,22 +266,22 @@ public class WanderingState : GameObjectState
 
   public void AdjustModelPosition()
   {
-    int modelX = InputController.Instance.PlayerMapPos.X;
-    int modelZ = InputController.Instance.PlayerMapPos.Y;
+    int modelX = _actor.InputRef.PlayerMapPos.X;
+    int modelZ = _actor.InputRef.PlayerMapPos.Y;
 
-    if (App.Instance.CameraOrientation == (int)GlobalConstants.Orientation.EAST)
+    if (_actor.AppRef.CameraOrientation == (int)GlobalConstants.Orientation.EAST)
     {
       modelZ++;
     }
-    else if (App.Instance.CameraOrientation == (int)GlobalConstants.Orientation.SOUTH)
+    else if (_actor.AppRef.CameraOrientation == (int)GlobalConstants.Orientation.SOUTH)
     {
       modelX++;
     }
-    else if (App.Instance.CameraOrientation == (int)GlobalConstants.Orientation.WEST)
+    else if (_actor.AppRef.CameraOrientation == (int)GlobalConstants.Orientation.WEST)
     {
       modelZ--;
     }
-    else if (App.Instance.CameraOrientation == (int)GlobalConstants.Orientation.NORTH)
+    else if (_actor.AppRef.CameraOrientation == (int)GlobalConstants.Orientation.NORTH)
     {
       modelX--;
     }

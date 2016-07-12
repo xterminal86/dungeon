@@ -19,7 +19,7 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
-    _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.PathfindingMap, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+    _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
 
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
@@ -47,7 +47,7 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
     
-    Int2 destination = App.Instance.GeneratedMap.GetRandomUnoccupiedCell();
+    Int2 destination = _actor.AppRef.GeneratedMap.GetRandomUnoccupiedCell();
     
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
 

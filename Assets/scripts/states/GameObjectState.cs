@@ -11,9 +11,14 @@ public abstract class GameObjectState
   protected Int2 _oldPlayerPos = new Int2();
 
   public GameObjectState()
-  {
-    _oldPlayerPos.X = InputController.Instance.PlayerMapPos.X;
-    _oldPlayerPos.Y = InputController.Instance.PlayerMapPos.Y;
+  {    
+    //Debug.Log("[GameObjectState] ctor [" + _actor + "]");
+
+    if (_actor != null)
+    {
+      _oldPlayerPos.X = _actor.InputRef.PlayerMapPos.X;
+      _oldPlayerPos.Y = _actor.InputRef.PlayerMapPos.Y;
+    }
   }
 
   public virtual void Run()
@@ -22,18 +27,18 @@ public abstract class GameObjectState
 
   protected void PlayFootstepSound3D(Int2 mapPos, Vector3 position3D)
   {
-    if (App.Instance.FloorSoundTypeByPosition[mapPos.X, mapPos.Y] != -1)
+    if (_actor.AppRef.FloorSoundTypeByPosition[mapPos.X, mapPos.Y] != -1)
     {
-      SoundManager.Instance.PlayFootstepSound(_actor.Model.name, (GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[mapPos.X, mapPos.Y], position3D);
+      SoundManager.Instance.PlayFootstepSound(_actor.Model.name, (GlobalConstants.FootstepSoundType)_actor.AppRef.FloorSoundTypeByPosition[mapPos.X, mapPos.Y], position3D);
     }
   }
 
   protected bool IsPlayerPositionChanged()
   {
-    if (InputController.Instance.PlayerMapPos.X != _oldPlayerPos.X || InputController.Instance.PlayerMapPos.Y != _oldPlayerPos.Y)
+    if (_actor.InputRef.PlayerMapPos.X != _oldPlayerPos.X || _actor.InputRef.PlayerMapPos.Y != _oldPlayerPos.Y)
     {
-      _oldPlayerPos.X = InputController.Instance.PlayerMapPos.X;
-      _oldPlayerPos.Y = InputController.Instance.PlayerMapPos.Y;  
+      _oldPlayerPos.X = _actor.InputRef.PlayerMapPos.X;
+      _oldPlayerPos.Y = _actor.InputRef.PlayerMapPos.Y;  
       
       return true;
     }
@@ -45,13 +50,13 @@ public abstract class GameObjectState
   {
     Int2 pos = _actor.Model.ModelPos;
     
-    int lx = Mathf.Clamp(pos.X - (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapHeight - 1);
-    int ly = Mathf.Clamp(pos.Y - (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapWidth - 1);
-    int hx = Mathf.Clamp(pos.X + (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapHeight - 1);
-    int hy = Mathf.Clamp(pos.Y + (_actor as EnemyActor).AgroRange, 0, App.Instance.GeneratedMapWidth - 1);
+    int lx = Mathf.Clamp(pos.X - (_actor as EnemyActor).AgroRange, 0, _actor.AppRef.GeneratedMapHeight - 1);
+    int ly = Mathf.Clamp(pos.Y - (_actor as EnemyActor).AgroRange, 0, _actor.AppRef.GeneratedMapWidth - 1);
+    int hx = Mathf.Clamp(pos.X + (_actor as EnemyActor).AgroRange, 0, _actor.AppRef.GeneratedMapHeight - 1);
+    int hy = Mathf.Clamp(pos.Y + (_actor as EnemyActor).AgroRange, 0, _actor.AppRef.GeneratedMapWidth - 1);
     
-    if (InputController.Instance.PlayerMapPos.X <= hx && InputController.Instance.PlayerMapPos.X >= lx 
-     && InputController.Instance.PlayerMapPos.Y <= hy && InputController.Instance.PlayerMapPos.Y >= ly)
+    if (_actor.InputRef.PlayerMapPos.X <= hx && _actor.InputRef.PlayerMapPos.X >= lx 
+     && _actor.InputRef.PlayerMapPos.Y <= hy && _actor.InputRef.PlayerMapPos.Y >= ly)
     {
       return true;
     }

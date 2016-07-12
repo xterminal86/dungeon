@@ -18,7 +18,7 @@ public class ApproachingPlayerState : GameObjectState
   {
     _actor = actor;
     _model = actor.Model;
-    _roadBuilder = new RoadBuilder(App.Instance.GeneratedMap.PathfindingMap, App.Instance.GeneratedMapWidth, App.Instance.GeneratedMapHeight);
+    _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
       
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
@@ -53,7 +53,7 @@ public class ApproachingPlayerState : GameObjectState
       _roadBuilder.AbortThread();
     }
     
-    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, InputController.Instance.PlayerMapPos, true);
+    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, _actor.InputRef.PlayerMapPos, true);
 
     while ((_road = _roadBuilder.GetResult()) == null)
     {      
@@ -145,10 +145,10 @@ public class ApproachingPlayerState : GameObjectState
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     // Rotate to face player on last step...
-    if (Utils.BlockDistance(_model.ModelPos, InputController.Instance.PlayerMapPos) == 1)
+    if (Utils.BlockDistance(_model.ModelPos, _actor.InputRef.PlayerMapPos) == 1)
     {
       angleStart = _model.transform.rotation.eulerAngles.y;
-      angleEnd = GetAngleToRotate(InputController.Instance.PlayerMapPos);
+      angleEnd = GetAngleToRotate(_actor.InputRef.PlayerMapPos);
 
       if ((int)angleStart != (int)angleEnd)
       {
@@ -161,7 +161,7 @@ public class ApproachingPlayerState : GameObjectState
       }
             
       // ...and switch to attack mode if there is no wall before us...
-      if (CanMove(InputController.Instance.PlayerMapPos))
+      if (CanMove(_actor.InputRef.PlayerMapPos))
       {
         _actor.ChangeState(new AttackState(_actor));
         yield break;
@@ -198,9 +198,9 @@ public class ApproachingPlayerState : GameObjectState
     int x = nextCellCoord.X;
     int y = nextCellCoord.Y;
 
-    if (!App.Instance.GeneratedMap.PathfindingMap[x, y].Walkable 
-      || App.Instance.GeneratedMap.PathfindingMap[_model.ModelPos.X, _model.ModelPos.Y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
-      || App.Instance.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
+    if (!_actor.AppRef.GeneratedMap.PathfindingMap[x, y].Walkable 
+      || _actor.AppRef.GeneratedMap.PathfindingMap[_model.ModelPos.X, _model.ModelPos.Y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
+      || _actor.AppRef.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
     {
       return false;
     }
