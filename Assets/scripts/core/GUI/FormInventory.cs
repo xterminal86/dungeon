@@ -161,8 +161,16 @@ public class FormInventory : MonoBehaviour
       if (_inventorySlots[i].ItemRef == null)
       {
         _inventorySlots[i].SetItem(item);
-        break;
+        return;
       }
+    }
+  }
+
+  public void CleanInventory()
+  {
+    for (int i = 0; i < _inventorySlots.Count; i++)
+    {
+      _inventorySlots[i].ItemRef = null;
     }
   }
 }

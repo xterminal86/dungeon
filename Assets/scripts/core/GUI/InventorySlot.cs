@@ -11,6 +11,7 @@ public class InventorySlot : MonoBehaviour
   public ItemObject ItemRef
   {
     get { return _itemRef; }
+    set { _itemRef = value; }
   }
 
   public void DeleteItem()

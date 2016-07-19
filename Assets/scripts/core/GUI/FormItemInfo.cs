@@ -40,11 +40,54 @@ public class FormItemInfo : MonoBehaviour
     HeadText.text = head;
     DescriptionText.text = desc;
 
-    int newLines = desc.Split('\n').Length - 1;
-    int rows = desc.Length / MaxLettersInRow + newLines;
+    int newLines = 0;
+    int rows = 0;
+
+    string[] splitString = desc.Split('\n');
+    for (int i = 0; i < splitString.Length; i++)
+    {
+      if (splitString[i].Length == 0)
+      {
+        newLines++;
+      } else
+      {        
+        rows = (splitString[i].Length / MaxLettersInRow) + 1;
+        newLines += rows;
+      }
+
+      //Debug.Log(splitString[i].Length);
+    }
+
+    /*
+    int newLines = 0;
+
+    int charactersCount = 0;
+    for (int i = 0; i < desc.Length; i++)
+    {
+      if (desc[i] != '\n')
+      {
+        charactersCount++;
+      }
+      else
+      {
+        charactersCount = 0;
+      }
+
+      if (charactersCount == MaxLettersInRow)
+      {
+        newLines++;
+        charactersCount = 0;
+      }
+    }
+    */
+
+    //int rows = desc.Length / MaxLettersInRow + newLines;
+
+    Debug.Log("new lines: " + newLines + " | rows: " + rows);
 
     _sizeDelta.x = _windowMinWidth;
-    _sizeDelta.y = _windowMinHeight + rows * RowHeight;
+    _sizeDelta.y = _windowMinHeight + newLines * RowHeight + 48 + 36;
+    //_sizeDelta.y = _windowMinHeight + 2 * RowHeight;
 
     Window.sizeDelta = _sizeDelta;
             
@@ -59,7 +102,7 @@ public class FormItemInfo : MonoBehaviour
   void Update()
   {
     _position = Input.mousePosition;
-    _position.x -= (Window.sizeDelta.x / 2) * _diff + 10;
+    _position.x -= (Window.sizeDelta.x / 2) * _diff;
 
     Window.position = _position;
   }

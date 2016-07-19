@@ -150,7 +150,6 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     ScreenFader.Instance.FadeOut(() => 
       { 
-        InventoryForm.InventorySlots.Clear();
         SoundManager.Instance.StopAllSounds();
         Application.Quit(); 
       });
@@ -168,7 +167,7 @@ public class GUIManager : MonoSingleton<GUIManager>
 
     ScreenFader.Instance.FadeOut(() => 
       { 
-        InventoryForm.InventorySlots.Clear();
+        InventoryForm.CleanInventory();
         SoundManager.Instance.StopAllSounds();
         SceneManager.LoadScene("title"); 
       });
