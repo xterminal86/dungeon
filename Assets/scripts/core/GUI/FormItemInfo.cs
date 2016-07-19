@@ -11,11 +11,14 @@ public class FormItemInfo : MonoBehaviour
   public Text HeadText;
   public Text DescriptionText;
 
+  // You should experimentally find these out:
+  // MaxLettersInRow are simply number of characters that fits in line before text starts to wrap.
+  // RowHeight is the height in pixels of one line of text (see comments in SetWindowTexts())
+  //
+  // Probably works the best on monospaced fonts only.
+
   public int MaxLettersInRow;
   public int RowHeight;
-
-  int _windowMinWidth;
-  int _windowMinHeight;
 
   Vector2 _sizeDelta = Vector2.zero;
   Vector2 _position = Vector2.zero;
@@ -24,9 +27,6 @@ public class FormItemInfo : MonoBehaviour
   float _diff = 1.0f;
   void Awake()
   {
-    _windowMinWidth = (int)Window.sizeDelta.x;
-    _windowMinHeight = (int)Window.sizeDelta.y;
-
     _scaleFactor = Scaler.scaleFactor;
 
     float w = (float)Screen.width;
@@ -49,45 +49,35 @@ public class FormItemInfo : MonoBehaviour
       if (splitString[i].Length == 0)
       {
         newLines++;
-      } else
+      } 
+      else
       {        
-        rows = (splitString[i].Length / MaxLettersInRow) + 1;
+        rows = (splitString[i].Length / MaxLettersInRow);
+
+        // If our line of text is equal to MaxLettersInRow, we shouldn't add new line
+        // since such text fits.
+        if (splitString[i].Length != MaxLettersInRow)
+        {
+          rows++;
+        }
+
         newLines += rows;
       }
-
-      //Debug.Log(splitString[i].Length);
     }
 
-    /*
-    int newLines = 0;
+    //Debug.Log("new lines: " + newLines + " | rows: " + rows);
 
-    int charactersCount = 0;
-    for (int i = 0; i < desc.Length; i++)
-    {
-      if (desc[i] != '\n')
-      {
-        charactersCount++;
-      }
-      else
-      {
-        charactersCount = 0;
-      }
+    // Even if font is monospaced, its size in Text component is not equal
+    // to its height. You should experimentally find out height in pixels of the specific font.
+    // In case of Old_Terminal its 15 and only works on Constant Pixel Size canvas scaler
+    // with scale factor of 1
 
-      if (charactersCount == MaxLettersInRow)
-      {
-        newLines++;
-        charactersCount = 0;
-      }
-    }
-    */
+    _sizeDelta.x = Window.sizeDelta.x;
 
-    //int rows = desc.Length / MaxLettersInRow + newLines;
-
-    Debug.Log("new lines: " + newLines + " | rows: " + rows);
-
-    _sizeDelta.x = _windowMinWidth;
-    _sizeDelta.y = _windowMinHeight + newLines * RowHeight + 48 + 36;
-    //_sizeDelta.y = _windowMinHeight + 2 * RowHeight;
+    // We should consider the offset from the top of the window where item name is located.
+    // Right now it's -45, so we add 45 to the window height
+    // and some more to make space after last line.
+    _sizeDelta.y = newLines * RowHeight + 60;
 
     Window.sizeDelta = _sizeDelta;
             
@@ -102,7 +92,7 @@ public class FormItemInfo : MonoBehaviour
   void Update()
   {
     _position = Input.mousePosition;
-    _position.x -= (Window.sizeDelta.x / 2) * _diff;
+    _position.x -= (Window.sizeDelta.x / 2);
 
     Window.position = _position;
   }

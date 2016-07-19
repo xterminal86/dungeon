@@ -162,16 +162,16 @@ public class App : MonoBehaviour
     var io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false, "Loaf of Bread", "- This is delicious!\n- Guess you won't needin' those tapes I made for ya. Want me to get rid of 'em?\n- Don't be hasty! Not until I see those \"street fighters\" pummeled to dust which should be any moment now... YESH!!! YESH!!!");
+    io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false, "Loaf of Bread", GlobalConstants.Phrase2);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
     io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Long Sword", false, "Iron Sword", GlobalConstants.LoremIpsum);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    io = SpawnItem(GlobalConstants.WorldItemType.ARMOR_CHEST, "Cloth Armor", false, "Green Cloth Armor", "- Sonny, when the hell are you wearin', are you from the future or sum'n'?\n- Keep your fucking distance, pal, will ya?!");
+    io = SpawnItem(GlobalConstants.WorldItemType.ARMOR_CHEST, "Cloth Armor", false, "Green Cloth Armor", GlobalConstants.Phrase1);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Battleaxe", false, "Battle Axe", GlobalConstants.LoremIpsumDoubled);
+    io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Battleaxe", false, "Battle Axe", GlobalConstants.LoremIpsum + GlobalConstants.LoremIpsum);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
   }
  
