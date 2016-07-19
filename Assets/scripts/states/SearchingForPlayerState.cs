@@ -7,6 +7,8 @@ public class SearchingForPlayerState : GameObjectState
   bool _working = false;
   Vector3 _modelPosition = Vector3.zero;
 
+  int[,] _visitedCells;
+
   RoadBuilder _roadBuilder;
   ModelMover _model;
   public SearchingForPlayerState(ActorBase actor) : base()
@@ -15,13 +17,15 @@ public class SearchingForPlayerState : GameObjectState
     _model = _actor.Model;
     _working = false;
 
+    _visitedCells = new int[_actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight];
+
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
     _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
 
-    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+    _mainJob = JobManager.Instance.CreateCoroutine(WanderRoutine());
   }
 
   Job _mainJob, _stepJob, _rotateJob, _delayJob; 
@@ -29,13 +33,122 @@ public class SearchingForPlayerState : GameObjectState
   GeneratedMapCell _playerCell;
   public override void Run()
   {
+    /*
     if (!_working)
     {
       _working = true;
-      _mainJob = JobManager.Instance.CreateCoroutine(MoveOnPath());
+      //_mainJob = JobManager.Instance.CreateCoroutine(MoveOnPath());
+      //_mainJob = JobManager.Instance.CreateCoroutine(WanderRoutine());
     }
+    */
 
     _model.transform.position = _modelPosition;
+  }
+
+  IEnumerator WanderRoutine()
+  {    
+    LookAround();
+
+    float angleStart = 0.0f, angleEnd = 0.0f;
+
+    while (_cellsAround.Count != 0)
+    {      
+      _visitedCells[_model.ModelPos.X, _model.ModelPos.Y] = 1;
+
+      int index = Random.Range(0, _cellsAround.Count);
+
+      angleStart = _model.transform.rotation.eulerAngles.y;
+      angleEnd = GetAngleToRotate(_cellsAround[index]);
+
+      //Debug.Log(angleStart + " " + angleEnd);
+
+      if ((int)angleStart != (int)angleEnd)
+      {
+        _rotateJob = JobManager.Instance.CreateCoroutine(RotateModel(angleEnd));
+
+        while (!_rotateDone)
+        {
+          yield return null;
+        }        
+      }
+
+      _stepJob = JobManager.Instance.CreateCoroutine(MoveModel(_cellsAround[index]));
+
+      while (!_moveDone)
+      {
+        yield return null;
+      }
+
+      LookAround();
+
+      yield return null;
+    }
+
+    _actor.ChangeState(new IdleState(_actor));
+
+    /*
+    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+
+    for (int x = 0; x < _actor.AppRef.GeneratedMapWidth; x++)
+    {
+      for (int y = 0; y < _actor.AppRef.GeneratedMapHeight; y++)
+      {
+        _visitedCells[x, y] = 0;
+      }
+    }
+
+    _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine(() => { _working = false; }));
+    */
+
+    yield return null;
+  }
+
+  List<Int2> _cellsAround = new List<Int2>();
+  sbyte[,] _direction = new sbyte[4, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
+  void LookAround()
+  {
+    _cellsAround.Clear();
+
+    var map = _actor.AppRef.GeneratedMap.PathfindingMap;
+
+    Int2 pos = _model.ModelPos;
+
+    for (int i = 0; i < 4; i++)
+    {
+      int x = pos.X + _direction[i, 0];
+      int y = pos.Y + _direction[i, 1];
+
+      Int2 cellCoord = new Int2(x, y);
+
+      if (x < 0 || x > _actor.AppRef.GeneratedMapWidth - 1 || y < 0 || y > _actor.AppRef.GeneratedMapHeight - 1)
+      {
+        continue;
+      }
+          
+      //if (CanMove(cellCoord) && _visitedCells[x, y] != 1)
+      if (map[x, y].Walkable && _visitedCells[x, y] != 1)
+      {
+        _cellsAround.Add(cellCoord);
+      }
+    }
+  }
+
+  bool CanMove(Int2 nextCellCoord)
+  {
+    int modelFacing = (int)GlobalConstants.OrientationByAngle[(int)_model.transform.eulerAngles.y];
+    int nextCellSide = (int)GlobalConstants.OppositeOrientationByAngle[(int)_model.transform.eulerAngles.y];
+
+    int x = nextCellCoord.X;
+    int y = nextCellCoord.Y;
+
+    if (!_actor.AppRef.GeneratedMap.PathfindingMap[x, y].Walkable 
+      || _actor.AppRef.GeneratedMap.PathfindingMap[_model.ModelPos.X, _model.ModelPos.Y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
+      || _actor.AppRef.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
+    {
+      return false;
+    }
+
+    return true;
   }
 
   List<RoadBuilder.PathNode> _road, _roadToPlayer;
@@ -68,13 +181,7 @@ public class SearchingForPlayerState : GameObjectState
 
       yield return null;
     }
-    
-    _currentMapPos.X = _model.ModelPos.X;
-    _currentMapPos.Y = _model.ModelPos.Y;
-    
-    _positionForTalk.X = _currentMapPos.X;
-    _positionForTalk.Y = _currentMapPos.Y;
-    
+
     float angleStart = 0.0f, angleEnd = 0.0f;
     
     while (_road.Count != 0)
@@ -119,7 +226,7 @@ public class SearchingForPlayerState : GameObjectState
 
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
-    _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine());
+    _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine(() => { _working = false; }));
 
     yield return null;
   }
@@ -178,8 +285,6 @@ public class SearchingForPlayerState : GameObjectState
   
   bool _firstStepSound = false;
   bool _moveDone = false;
-  Int2 _currentMapPos = new Int2();
-  Int2 _positionForTalk = new Int2();
   RaycastHit _raycastHit;
   IEnumerator MoveModel(Int2 newMapPos)
   {
@@ -190,12 +295,9 @@ public class SearchingForPlayerState : GameObjectState
 
     _moveDone = false;
     
-    _currentMapPos.X = _model.ModelPos.X;
-    _currentMapPos.Y = _model.ModelPos.Y;
-    
-    int dx = newMapPos.X - _currentMapPos.X;
-    int dy = newMapPos.Y - _currentMapPos.Y;
-        
+    int dx = newMapPos.X - _model.ModelPos.X;
+    int dy = newMapPos.Y - _model.ModelPos.Y;
+
     if (!_firstStepSound)
     {
       PlayFootstepSound3D(_model.ModelPos, _modelPosition);
@@ -207,11 +309,11 @@ public class SearchingForPlayerState : GameObjectState
       _modelPosition.x += dx * (Time.smoothDeltaTime * _model.WalkingSpeed);
       _modelPosition.z += dy * (Time.smoothDeltaTime * _model.WalkingSpeed);
       
-      _currentMapPos.X = dx < 0 ? Mathf.CeilToInt(_modelPosition.x / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.x / GlobalConstants.WallScaleFactor);
-      _currentMapPos.Y = dy < 0 ? Mathf.CeilToInt(_modelPosition.z / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
+      _model.ModelPos.X = dx < 0 ? Mathf.CeilToInt(_modelPosition.x / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.x / GlobalConstants.WallScaleFactor);
+      _model.ModelPos.Y = dy < 0 ? Mathf.CeilToInt(_modelPosition.z / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
       
-      dx = newMapPos.X - _currentMapPos.X;
-      dy = newMapPos.Y - _currentMapPos.Y;      
+      dx = newMapPos.X - _model.ModelPos.X;
+      dy = newMapPos.Y - _model.ModelPos.Y;      
       
       yield return null;
     }
@@ -230,7 +332,7 @@ public class SearchingForPlayerState : GameObjectState
   }
 
   float _delay = 0.0f;
-  IEnumerator DelayRoutine()
+  IEnumerator DelayRoutine(Callback cb = null)
   {
     _delay = Random.Range(GlobalConstants.WanderingMinDelaySeconds + 1, GlobalConstants.WanderingMaxDelaySeconds + 1);
 
@@ -240,24 +342,27 @@ public class SearchingForPlayerState : GameObjectState
     {
       time += Time.smoothDeltaTime;
 
+      /*
       if (IsPlayerInRange())
       {
         _actor.ChangeState(new ApproachingPlayerState(_actor));
         yield break;
       }
+      */
 
       yield return null;
     }
 
-    _working = false;
-
+    if (cb != null)
+      cb();
+    
     yield return null;
   }
 
   float GetAngleToRotate(Int2 cellToLook)
   {
-    int dx = cellToLook.X - _currentMapPos.X;
-    int dy = cellToLook.Y - _currentMapPos.Y;
+    int dx = cellToLook.X - _model.ModelPos.X;
+    int dy = cellToLook.Y - _model.ModelPos.Y;
     
     float angleEnd = 0.0f;
     
