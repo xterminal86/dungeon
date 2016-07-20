@@ -41,7 +41,7 @@ public static class GlobalConstants
   // ScreenFader speed
   public const float FadeSpeed = 1.0f;
 
-  // VillagerActor rotation and animation speeds
+  // VillagerActor rotation and speech speeds
   public const float CharacterRotationSpeed = 150.0f;
   public const float CharacterAnimationTalkSpeed = 2.0f;
 

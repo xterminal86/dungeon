@@ -142,6 +142,28 @@ public class App : MonoBehaviour
     //SetupCharacters();
     SetupMobs();
 
+    /*
+    string output = string.Empty;
+    for (int x = 0; x < GeneratedMapWidth; x++)
+    {
+      for (int y = 0; y < GeneratedMapHeight; y++)
+      {
+        output += string.Format("[ {0} ; {1} ] -> ", x, y);
+
+        foreach (var item in _generatedMap.PathfindingMap[x, y].SidesWalkability)
+        {
+          output += string.Format(" | {0} {1} | ", item.Key, item.Value);
+        }
+
+        output += string.Format("walkable: {0}", _generatedMap.PathfindingMap[x, y].Walkable);
+
+        output += "\n";
+      }
+    }
+
+    Debug.Log("Map:\n" + output);
+    */
+
     ScreenFader.Instance.FadeIn();
 
     GUIManager.Instance.SetCompassVisibility(true);

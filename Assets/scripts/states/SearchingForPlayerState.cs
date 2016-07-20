@@ -24,8 +24,6 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
     _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
-
-    _mainJob = JobManager.Instance.CreateCoroutine(WanderRoutine());
   }
 
   Job _mainJob, _stepJob, _rotateJob, _delayJob; 
@@ -33,18 +31,16 @@ public class SearchingForPlayerState : GameObjectState
   GeneratedMapCell _playerCell;
   public override void Run()
   {
-    /*
     if (!_working)
     {
       _working = true;
       //_mainJob = JobManager.Instance.CreateCoroutine(MoveOnPath());
-      //_mainJob = JobManager.Instance.CreateCoroutine(WanderRoutine());
+      _mainJob = JobManager.Instance.CreateCoroutine(WanderRoutine());
     }
-    */
 
     _model.transform.position = _modelPosition;
   }
-
+  
   IEnumerator WanderRoutine()
   {    
     LookAround();
@@ -59,6 +55,8 @@ public class SearchingForPlayerState : GameObjectState
 
       angleStart = _model.transform.rotation.eulerAngles.y;
       angleEnd = GetAngleToRotate(_cellsAround[index]);
+
+      //PrintCellInfo(_cellsAround[index]);
 
       //Debug.Log(angleStart + " " + angleEnd);
 
@@ -124,26 +122,69 @@ public class SearchingForPlayerState : GameObjectState
       {
         continue;
       }
-          
-      //if (CanMove(cellCoord) && _visitedCells[x, y] != 1)
-      if (map[x, y].Walkable && _visitedCells[x, y] != 1)
+
+      //CanMove(cellCoord);
+
+      if (CanMove(cellCoord) && _visitedCells[x, y] != 1)
+      //if (map[x, y].Walkable && _visitedCells[x, y] != 1)
       {
         _cellsAround.Add(cellCoord);
       }
     }
   }
 
+  // Model may be facing in different direction than randomly chosen cell,
+  // so CanMove() was tweaked accordingly.
   bool CanMove(Int2 nextCellCoord)
-  {
-    int modelFacing = (int)GlobalConstants.OrientationByAngle[(int)_model.transform.eulerAngles.y];
-    int nextCellSide = (int)GlobalConstants.OppositeOrientationByAngle[(int)_model.transform.eulerAngles.y];
+  {    
+    int nextCellX = nextCellCoord.X;
+    int nextCellY = nextCellCoord.Y;
 
-    int x = nextCellCoord.X;
-    int y = nextCellCoord.Y;
+    int modelX = _model.ModelPos.X;
+    int modelY = _model.ModelPos.Y;
 
-    if (!_actor.AppRef.GeneratedMap.PathfindingMap[x, y].Walkable 
-      || _actor.AppRef.GeneratedMap.PathfindingMap[_model.ModelPos.X, _model.ModelPos.Y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
-      || _actor.AppRef.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
+    GlobalConstants.Orientation orientation = 0;
+    GlobalConstants.Orientation oppositeOrientation = 0;
+
+    if (modelX < nextCellX)
+    {
+      // Going SOUTH
+
+      orientation = GlobalConstants.Orientation.SOUTH;
+      oppositeOrientation = GlobalConstants.Orientation.NORTH;
+    }
+    else if (modelX > nextCellX)
+    {
+      // Going NORTH
+
+      orientation = GlobalConstants.Orientation.NORTH;
+      oppositeOrientation = GlobalConstants.Orientation.SOUTH;
+    }
+    else if (modelY < nextCellY)
+    {
+      // Going EAST
+
+      orientation = GlobalConstants.Orientation.EAST;
+      oppositeOrientation = GlobalConstants.Orientation.WEST;
+    }
+    else if (modelY > nextCellY)
+    {
+      // Going WEST
+
+      orientation = GlobalConstants.Orientation.WEST;
+      oppositeOrientation = GlobalConstants.Orientation.EAST;
+    }
+
+    //string output = string.Format("Model pos: {0} ", _model.ModelPos);
+
+    //output += string.Format("modelFacing: {0} nextCellSide: {1} ", GlobalConstants.OrientationByAngle[(int)_model.transform.eulerAngles.y], GlobalConstants.OppositeOrientationByAngle[(int)_model.transform.eulerAngles.y]);
+
+    //Debug.Log(output);
+    //PrintCellInfo(nextCellCoord);
+
+    if (!_actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].Walkable 
+      || _actor.AppRef.GeneratedMap.PathfindingMap[modelX, modelY].SidesWalkability[orientation] == false
+      || _actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].SidesWalkability[oppositeOrientation] == false)
     {
       return false;
     }
@@ -372,5 +413,20 @@ public class SearchingForPlayerState : GameObjectState
     else if (dx == -1 && dy == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
     
     return angleEnd;
+  }
+
+  void PrintCellInfo(Int2 coords)
+  {    
+    PathfindingCell cell = _actor.AppRef.GeneratedMap.PathfindingMap[coords.X, coords.Y];
+
+    string output = string.Format("{0} -> walkable: {1} sides: ", coords, cell.Walkable);
+    foreach (var item in cell.SidesWalkability)
+    {
+      output += string.Format("| {0} {1} | ", item.Key, item.Value);
+    }
+
+    output += "\n";
+
+    Debug.Log(output);
   }
 }

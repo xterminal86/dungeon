@@ -10,6 +10,12 @@ public abstract class GameObjectState
   protected ActorBase _actor;
   protected Int2 _oldPlayerPos = new Int2();
 
+  // Avoid starting coroutines in state ctor since changing of states is carried out
+  // via _actor.ChangeState(new SomeState());
+  // Because ctor of SomeState will be called first, coroutine will start immediately before
+  // actual change of state happens, resulting in running of old Run() method for several frames,
+  // which may be not desirable.
+  // Use trigger flag to start coroutine in Run() instead.
   public GameObjectState()
   {    
     //Debug.Log("[GameObjectState] ctor [" + _actor + "]");

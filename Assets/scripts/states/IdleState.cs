@@ -7,14 +7,23 @@ public class IdleState : GameObjectState
   public IdleState(ActorBase actor)
   {
     _actor = actor;
+    _working = false;
 
     _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-
-    JobManager.Instance.StartCoroutine(DelayRoutine(() => 
-      {
-        _actor.ChangeState(new SearchingForPlayerState(_actor));
-      }));
   }  
+
+  bool _working = false;
+  public override void Run()
+  {
+    if (!_working)
+    {
+      _working = true;
+      JobManager.Instance.StartCoroutine(DelayRoutine(() => 
+        {
+          _actor.ChangeState(new SearchingForPlayerState(_actor));
+        }));
+    }
+  }
 
   float _delay = 0.0f;
   IEnumerator DelayRoutine(Callback cb = null)
