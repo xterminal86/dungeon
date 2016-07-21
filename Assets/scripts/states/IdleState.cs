@@ -12,6 +12,12 @@ public class IdleState : GameObjectState
     _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }  
 
+  public override void ResetState()
+  {
+    _working = false;
+    _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+  }
+
   bool _working = false;
   public override void Run()
   {
@@ -19,8 +25,8 @@ public class IdleState : GameObjectState
     {
       _working = true;
       JobManager.Instance.StartCoroutine(DelayRoutine(() => 
-        {
-          _actor.ChangeState(new SearchingForPlayerState(_actor));
+        {          
+          _actor.ChangeState(_actor.SearchingForPlayerStateVar);
         }));
     }
   }

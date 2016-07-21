@@ -68,11 +68,8 @@ public class ModelMover : MonoBehaviour
 	{
     if (GameData.Instance.CurrentGameState != GameData.GameState.RUNNING)
     {
-      if ( !(Actor.ActorState is IdleState) )
-      {
-        StopAllCoroutines();
-        Actor.ChangeState(new IdleState(Actor));
-      }
+      StopAllCoroutines();
+      Actor.ChangeState(Actor.StoppedStateVar);
 
       return;
     }

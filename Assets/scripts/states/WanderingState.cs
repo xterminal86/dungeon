@@ -24,6 +24,12 @@ public class WanderingState : GameObjectState
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
 
+  public override void ResetState()
+  {
+    _working = false;
+    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+  }
+
   Job _mainJob, _stepJob, _rotateJob, _delayJob;
 
   bool _working = false;

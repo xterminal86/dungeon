@@ -9,6 +9,11 @@ public class FormPlayer : MonoBehaviour
 
   public GameObject FormHolder;
 
+  public GameObject AttackBubbleR;
+  public GameObject AttackBubbleL;
+  public Text AttackBubbleTextR;
+  public Text AttackBubbleTextL;
+
   public EquipmentSlot HandEqSlotLeft;
   public EquipmentSlot HandEqSlotRight;
 
@@ -68,8 +73,16 @@ public class FormPlayer : MonoBehaviour
     }
   }
 
+  bool _isLeftSlotWasClicked = false;
+  public bool IsLeftSlotWasClicked
+  {
+    get { return _isLeftSlotWasClicked; }
+  }
+
   public void LeftHandClicked()
   {   
+    _isLeftSlotWasClicked = true;
+
     if (Input.GetMouseButtonDown(0))
     {
       HandEqSlotLeft.ProcessItem();
@@ -77,13 +90,15 @@ public class FormPlayer : MonoBehaviour
       return;
     }
     else if (Input.GetMouseButtonDown(1))
-    {
+    {      
       ProcessPlayerAttack(HandEqSlotLeft.ItemRef);
     }
   }
 
   public void RightHandClicked()
   {
+    _isLeftSlotWasClicked = false;
+
     if (Input.GetMouseButtonDown(0))
     {
       HandEqSlotRight.ProcessItem();
@@ -121,6 +136,17 @@ public class FormPlayer : MonoBehaviour
   {
     GameData.Instance.PlayerCanAttack = false;
 
+    if (_isLeftSlotWasClicked)
+    {      
+      AttackBubbleL.SetActive(true);
+      AttackBubbleTextL.text = "PUNCH";
+    }
+    else
+    {
+      AttackBubbleR.SetActive(true);
+      AttackBubbleTextR.text = "PUNCH";
+    }
+
     LockR.gameObject.SetActive(true);
     LockL.gameObject.SetActive(true);
 
@@ -134,6 +160,9 @@ public class FormPlayer : MonoBehaviour
     }
 
     GameData.Instance.PlayerCanAttack = true;
+
+    AttackBubbleL.SetActive(false);
+    AttackBubbleR.SetActive(false);
 
     LockR.gameObject.SetActive(false);
     LockL.gameObject.SetActive(false);

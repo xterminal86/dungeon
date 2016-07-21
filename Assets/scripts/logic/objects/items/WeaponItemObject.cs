@@ -30,6 +30,20 @@ public class WeaponItemObject : ItemObject
   {
     GameData.Instance.PlayerCanAttack = false;
 
+    int damage = Random.Range(_minDamage, _maxDamage + 1);
+
+    if (fp.IsLeftSlotWasClicked)
+    {
+      fp.AttackBubbleL.SetActive(true);
+      fp.AttackBubbleTextL.text = damage.ToString();
+    }
+    else
+    {
+      fp.AttackBubbleR.SetActive(true);
+      fp.AttackBubbleTextR.text = damage.ToString();
+    }
+  
+
     fp.LockR.gameObject.SetActive(true);
     fp.LockL.gameObject.SetActive(true);
 
@@ -38,6 +52,12 @@ public class WeaponItemObject : ItemObject
     //while (timer < GlobalConstants.AttackCooldown)
     while (timer < _cooldown)
     {
+      if (timer > GlobalConstants.PlayerPunchAttackCooldown)
+      {
+        fp.AttackBubbleL.SetActive(false);
+        fp.AttackBubbleR.SetActive(false);
+      }
+
       timer += Time.smoothDeltaTime;
 
       yield return null;

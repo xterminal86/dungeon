@@ -14,7 +14,7 @@ public class ApproachingPlayerState : GameObjectState
 
   Int2 _currentMapPos = new Int2();
 
-  public ApproachingPlayerState(ActorBase actor) : base()
+  public ApproachingPlayerState(ActorBase actor)
   {
     _actor = actor;
     _model = actor.Model;

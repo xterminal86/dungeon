@@ -27,6 +27,15 @@ public abstract class GameObjectState
     }
   }
 
+  /// <summary>
+  /// Override it in certain states to reset all needed variables to default values,
+  /// so that state becomes clean.
+  /// Usually it's almost the same code as in constructor.
+  /// </summary>
+  public virtual void ResetState()
+  {
+  }
+
   public virtual void Run()
   {
   }

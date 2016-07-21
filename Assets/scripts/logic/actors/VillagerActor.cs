@@ -9,7 +9,10 @@ public class VillagerActor : ActorBase
 {  
   public VillagerActor(ModelMover model, App appRef, InputController inputRef) : base(model, appRef, inputRef)
   {
-    ChangeState(new WanderingState(this));
+    WanderingStateVar = new WanderingState(this);
+    TalkingStateVar = new TalkingState(this);
+
+    ChangeState(WanderingStateVar);
   }
 
   public override void Interact()
@@ -40,7 +43,7 @@ public class VillagerActor : ActorBase
                                         Model.transform.position, true, Model.VoicePitch);
       }
 
-      ChangeState(new TalkingState(this));      
+      ChangeState(TalkingStateVar);      
 
       SetupFormTalking();
     }
@@ -181,7 +184,7 @@ public class VillagerActor : ActorBase
     
     //ActorState.RewindAnimation(GlobalConstants.AnimationTalkName);
 
-    ChangeState(new WanderingState(this));
+    ChangeState(WanderingStateVar);
     
     GameData.Instance.PlayerMoveState = GameData.PlayerMoveStateEnum.NORMAL;
   }

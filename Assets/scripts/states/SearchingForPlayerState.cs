@@ -11,7 +11,7 @@ public class SearchingForPlayerState : GameObjectState
 
   RoadBuilder _roadBuilder;
   ModelMover _model;
-  public SearchingForPlayerState(ActorBase actor) : base()
+  public SearchingForPlayerState(ActorBase actor)
   {
     _actor = actor;
     _model = _actor.Model;
@@ -24,6 +24,19 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
     _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
+  }
+
+  public override void ResetState()
+  {
+    _working = false;
+
+    for (int x = 0; x < _actor.AppRef.GeneratedMapWidth; x++)
+    {
+      for (int y = 0; y < _actor.AppRef.GeneratedMapHeight; y++)
+      {
+        _visitedCells[x, y] = 0;
+      }
+    }
   }
 
   Job _mainJob, _stepJob, _rotateJob, _delayJob; 
@@ -82,21 +95,7 @@ public class SearchingForPlayerState : GameObjectState
       yield return null;
     }
 
-    _actor.ChangeState(new IdleState(_actor));
-
-    /*
-    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-
-    for (int x = 0; x < _actor.AppRef.GeneratedMapWidth; x++)
-    {
-      for (int y = 0; y < _actor.AppRef.GeneratedMapHeight; y++)
-      {
-        _visitedCells[x, y] = 0;
-      }
-    }
-
-    _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine(() => { _working = false; }));
-    */
+    _actor.ChangeState(_actor.IdleStateVar);
 
     yield return null;
   }
@@ -126,7 +125,6 @@ public class SearchingForPlayerState : GameObjectState
       //CanMove(cellCoord);
 
       if (CanMove(cellCoord) && _visitedCells[x, y] != 1)
-      //if (map[x, y].Walkable && _visitedCells[x, y] != 1)
       {
         _cellsAround.Add(cellCoord);
       }

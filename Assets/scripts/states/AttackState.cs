@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class AttackState : GameObjectState 
 {
   float _attackHalfway = 0.0f;
-  public AttackState(ActorBase actor) : base()
+  public AttackState(ActorBase actor)
   {
     _actor = actor;
 

@@ -19,6 +19,16 @@ public class TalkingState : GameObjectState
     _actor.AnimationComponent.CrossFade(GlobalConstants.AnimationIdleName);
   }
 
+  public override void ResetState()
+  {
+    // Rotate actor to face the player
+    Vector3 rotation = Camera.main.transform.eulerAngles;
+    rotation.y = rotation.y - 180;
+
+    _actor.Model.transform.eulerAngles = rotation;
+    _actor.AnimationComponent.CrossFade(GlobalConstants.AnimationIdleName);
+  }
+
   public override void Run()
   {
     if (!_actor.AnimationComponent.IsPlaying(GlobalConstants.AnimationIdleName)

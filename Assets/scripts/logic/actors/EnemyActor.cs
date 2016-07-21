@@ -8,6 +8,9 @@ public class EnemyActor : ActorBase
 
   public EnemyActor(ModelMover model, App appRef, InputController inputRef) : base(model, appRef, inputRef)
   {
-    ChangeState(new SearchingForPlayerState(this)); 
+    SearchingForPlayerStateVar = new SearchingForPlayerState(this);
+    IdleStateVar = new IdleState(this);
+
+    ChangeState(SearchingForPlayerStateVar);
   }
 }
