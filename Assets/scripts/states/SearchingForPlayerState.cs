@@ -47,8 +47,7 @@ public class SearchingForPlayerState : GameObjectState
     if (!_working)
     {
       _working = true;
-      //_mainJob = JobManager.Instance.CreateCoroutine(MoveOnPath());
-      _mainJob = JobManager.Instance.CreateCoroutine(WanderRoutine());
+      _mainJob = new Job(WanderRoutine());
     }
 
     _model.transform.position = _modelPosition;
@@ -75,7 +74,7 @@ public class SearchingForPlayerState : GameObjectState
 
       if ((int)angleStart != (int)angleEnd)
       {
-        _rotateJob = JobManager.Instance.CreateCoroutine(RotateModel(angleEnd));
+        _rotateJob = new Job(RotateModel(angleEnd));
 
         while (!_rotateDone)
         {
@@ -83,7 +82,7 @@ public class SearchingForPlayerState : GameObjectState
         }        
       }
 
-      _stepJob = JobManager.Instance.CreateCoroutine(MoveModel(_cellsAround[index]));
+      _stepJob = new Job(MoveModel(_cellsAround[index]));
 
       while (!_moveDone)
       {
@@ -233,7 +232,7 @@ public class SearchingForPlayerState : GameObjectState
       
       if ((int)angleStart != (int)angleEnd)
       {
-        _rotateJob = JobManager.Instance.CreateCoroutine(RotateModel(angleEnd));
+        _rotateJob = new Job(RotateModel(angleEnd));
         
         while (!_rotateDone)
         {
@@ -243,7 +242,7 @@ public class SearchingForPlayerState : GameObjectState
         _firstStepSound = false;
       }
       
-      _stepJob = JobManager.Instance.CreateCoroutine(MoveModel(_road[0].Coordinate));
+      _stepJob = new Job(MoveModel(_road[0].Coordinate));
       
       while (!_moveDone)
       {
@@ -265,7 +264,7 @@ public class SearchingForPlayerState : GameObjectState
 
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
-    _delayJob = JobManager.Instance.CreateCoroutine(DelayRoutine(() => { _working = false; }));
+    _delayJob = new Job(DelayRoutine(() => { _working = false; }));
 
     yield return null;
   }
