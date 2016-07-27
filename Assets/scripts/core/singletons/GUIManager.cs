@@ -221,6 +221,12 @@ public class GUIManager : MonoSingleton<GUIManager>
   Vector2 _mousePosition = Vector2.zero;
   void Update()
   {
+    if (Input.GetKeyDown(KeyCode.F9)) 
+    {
+      Application.CaptureScreenshot(string.Format("scr-{0}{1}{2}.png", System.DateTime.Now.Hour, System.DateTime.Now.Minute, System.DateTime.Now.Second));
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXTakeScreenshot);
+    }
+
     _mousePosition = Input.mousePosition;
 
     ItemTakenSprite.rectTransform.position = _mousePosition;

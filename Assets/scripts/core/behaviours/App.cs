@@ -139,7 +139,7 @@ public class App : MonoBehaviour
     }
 
     SpawnItems();
-    //SetupCharacters();
+    SetupCharacters();
     SetupMobs();
 
     /*

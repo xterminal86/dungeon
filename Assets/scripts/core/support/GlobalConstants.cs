@@ -80,6 +80,7 @@ public static class GlobalConstants
   public const string SFXPlayerEat = "player-eat";
   public const string SFXFemaleVillagerHuh = "act-huh-f";
   public const string SFXMaleVillagerHuh = "act-huh-m";
+  public const string SFXTakeScreenshot = "act-photo";
 
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
   {
