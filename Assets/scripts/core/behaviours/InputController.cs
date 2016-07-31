@@ -420,9 +420,6 @@ public class InputController : MonoBehaviour
 
     float cond = 0.0f;
 
-    // While difference between current turn angle and target is less
-    // than certain error.
-    //while (Mathf.Abs(turnValue - toAngle) > 0.1f)
     while (cond < 90.0f)
     { 
       //Debug.Log(fromAngle + " " + toAngle + " " + _cameraAngles.y);
@@ -496,7 +493,7 @@ public class InputController : MonoBehaviour
     int dx = (endX - (int)_cameraPos.x) / GlobalConstants.WallScaleFactor;
     int dz = (endZ - (int)_cameraPos.z) / GlobalConstants.WallScaleFactor;
 
-    bool _bobFlag = false;
+    bool bobFlag = false;
     float cond = 0.0f;
     float half = GlobalConstants.WallScaleFactor / 2;
     while (cond < GlobalConstants.WallScaleFactor)
@@ -505,10 +502,10 @@ public class InputController : MonoBehaviour
 
       if (cond > half)
       {
-        _bobFlag = true;
+        bobFlag = true;
       }
 
-      if (!_bobFlag)
+      if (!bobFlag)
       {
         _cameraBob += Time.smoothDeltaTime * GlobalConstants.CameraBobSpeed;
       }
