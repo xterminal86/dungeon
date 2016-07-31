@@ -69,14 +69,14 @@ public class FormItemInfo : MonoBehaviour
 
     // Even if font is monospaced, its size in Text component is not equal
     // to its height. You should experimentally find out height in pixels of the specific font.
-    // In case of Old_Terminal its 15 and only works on Constant Pixel Size canvas scaler
+    // In case of Old_Terminal it's 15 and only works on Constant Pixel Size canvas scaler
     // with scale factor of 1
 
     _sizeDelta.x = Window.sizeDelta.x;
 
     // We should consider the offset from the top of the window where item name is located.
     // Right now it's -45, so we add 45 to the window height
-    // and some more to make space after last line.
+    // and 15 more for one blank line of height.
     _sizeDelta.y = newLines * RowHeight + 60;
 
     Window.sizeDelta = _sizeDelta;

@@ -54,7 +54,7 @@ public class InputController : MonoBehaviour
       ProcessMouse();
     }
 
-    _cameraPos.y += _cameraBob;
+    //_cameraPos.y += _cameraBob;
 
     AppScript.CameraPivot.transform.eulerAngles = _cameraAngles;
     AppScript.CameraPos = _cameraPos;
@@ -372,9 +372,7 @@ public class InputController : MonoBehaviour
   // This resulted in excess degree of about 9 during next rotation. 
   // Repeating the same process fucks up everything in the end.
   //
-  // EDIT: I should have used Mathf.SmoothDamp method, but I didn't know
-  // about it back then. Now everything seems to be OK, but I left old code
-  // in comments just in case.
+  // EDIT: I should have used Mathf.Clamp method, but I didn't think about it back then. Derp.
   IEnumerator CameraTurnRoutine(object arg)
   {
     CameraTurnArgument ca = arg as CameraTurnArgument;
@@ -388,61 +386,68 @@ public class InputController : MonoBehaviour
     int toAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.To]];
 
     // Special case when turning from 0 to -90 aka 270 degrees.
-    // In order not to go all the way from 0 to 270 we replace
-    // certain angles from 270 to -90 - Unity will make it 270 automatically.
-
-    if (fromAngle == 0 && toAngle == 270)
+    // In order to write one clamp condition only and correct clamp min max values,
+    // we change certain angles from 0 to 360
+    if (ca.TurnRight && toAngle == 0)
     {
-      toAngle = -90;
+      toAngle = 360;
     }
-    else if (fromAngle == 270 && toAngle == 0)
+    else if (!ca.TurnRight && toAngle == 270)
     {
-      fromAngle = -90;
+      fromAngle = 360;
     }
 
-    float turnValue = fromAngle;
+    // Compass image itself is pointing to the north when its rotation is 0.
+    // So, in order to match it with our directions angles in GlobalConstants, 
+    // we have to add 90 degrees. That might overshoot 360, so we mod the value by 360.
+    int compassFrom = (fromAngle + 90) % 360;
+    int compassTo = (toAngle + 90) % 360;
 
-    int round = 0;
+    // Same thing as above
+    if (ca.TurnRight && compassTo == 0)
+    {
+      compassTo = 360;
+    }
+    else if (!ca.TurnRight && compassTo == 270)
+    {
+      compassFrom = 360;
+    }
+
+    // To reset possible previous 360 degrees back to zero, 
+    // we set starting angle manually at the start.
+    _cameraAngles.y = fromAngle;
+    _compassSpriteAngles.z = compassFrom;
+
+    float cond = 0.0f;
 
     // While difference between current turn angle and target is less
     // than certain error.
-    while (Mathf.Abs(turnValue - toAngle) > 0.1f)
+    //while (Mathf.Abs(turnValue - toAngle) > 0.1f)
+    while (cond < 90.0f)
     { 
-      //Debug.Log(turnValue + " " + toAngle + " " + Mathf.RoundToInt(turnValue));
+      //Debug.Log(fromAngle + " " + toAngle + " " + _cameraAngles.y);
 
-      turnValue = Mathf.SmoothDamp(turnValue, toAngle, ref turnSpeed, ca.Speed);
-
-      _cameraAngles.y = turnValue;
-      _compassSpriteAngles.z = 90.0f + turnValue;
-
-      // Old code goes below
-
-      /*
       cond += Time.smoothDeltaTime * ca.Speed;
-
-      if (cond + Time.smoothDeltaTime * ca.Speed > 90.0f)
-      {
-        break;
-      }
 
       if (ca.TurnRight)
       {
         _cameraAngles.y += Time.smoothDeltaTime * ca.Speed;
         _compassSpriteAngles.z += Time.smoothDeltaTime * ca.Speed;
+
+        _cameraAngles.y = Mathf.Clamp(_cameraAngles.y, fromAngle, toAngle);
+        _compassSpriteAngles.z = Mathf.Clamp(_compassSpriteAngles.z, compassFrom, compassTo);
       }
       else
       {
         _cameraAngles.y -= Time.smoothDeltaTime * ca.Speed;
         _compassSpriteAngles.z -= Time.smoothDeltaTime * ca.Speed;
+
+        _cameraAngles.y = Mathf.Clamp(_cameraAngles.y, toAngle, fromAngle);
+        _compassSpriteAngles.z = Mathf.Clamp(_compassSpriteAngles.z, compassTo, compassFrom);
       }
-      */
 
       yield return null;
     }
-
-    // Do the adjustment to get rid of result error
-    _cameraAngles.y = toAngle;
-    _compassSpriteAngles.z = 90.0f + toAngle;
 
     AppScript.CameraOrientation = ca.To;
 
@@ -459,37 +464,37 @@ public class InputController : MonoBehaviour
 
     // We move camera game object, so we work in world space here
 
-    int newX = (int)_cameraPos.x;
-    int newZ = (int)_cameraPos.z;
+    int endX = (int)_cameraPos.x;
+    int endZ = (int)_cameraPos.z;
+    int startX = endX;
+    int startZ = endZ;
 
     int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
     int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
 
     if (ca.MoveType == CameraMoveType.FORWARD)
     {
-      if (xComponent != 0) newX += xComponent * GlobalConstants.WallScaleFactor;
-      if (zComponent != 0) newZ += zComponent * GlobalConstants.WallScaleFactor;
+      if (xComponent != 0) endX += xComponent * GlobalConstants.WallScaleFactor;
+      if (zComponent != 0) endZ += zComponent * GlobalConstants.WallScaleFactor;
     }
     else if (ca.MoveType == CameraMoveType.BACKWARD)
     {
-      if (xComponent != 0) newX -= xComponent * GlobalConstants.WallScaleFactor;
-      if (zComponent != 0) newZ -= zComponent * GlobalConstants.WallScaleFactor;
+      if (xComponent != 0) endX -= xComponent * GlobalConstants.WallScaleFactor;
+      if (zComponent != 0) endZ -= zComponent * GlobalConstants.WallScaleFactor;
     }
     else if (ca.MoveType == CameraMoveType.STRAFE_LEFT)
     {
-      if (xComponent != 0) newZ += xComponent * GlobalConstants.WallScaleFactor;
-      if (zComponent != 0) newX -= zComponent * GlobalConstants.WallScaleFactor;
+      if (xComponent != 0) endZ += xComponent * GlobalConstants.WallScaleFactor;
+      if (zComponent != 0) endX -= zComponent * GlobalConstants.WallScaleFactor;
     }
     else if (ca.MoveType == CameraMoveType.STRAFE_RIGHT)
     {
-      if (xComponent != 0) newZ -= xComponent * GlobalConstants.WallScaleFactor;
-      if (zComponent != 0) newX += zComponent * GlobalConstants.WallScaleFactor;
+      if (xComponent != 0) endZ -= xComponent * GlobalConstants.WallScaleFactor;
+      if (zComponent != 0) endX += zComponent * GlobalConstants.WallScaleFactor;
     }
 
-    int dx = (newX - (int)_cameraPos.x) / GlobalConstants.WallScaleFactor;
-    int dz = (newZ - (int)_cameraPos.z) / GlobalConstants.WallScaleFactor;
-
-    _cameraBob = 0.0f;
+    int dx = (endX - (int)_cameraPos.x) / GlobalConstants.WallScaleFactor;
+    int dz = (endZ - (int)_cameraPos.z) / GlobalConstants.WallScaleFactor;
 
     bool _bobFlag = false;
     float cond = 0.0f;
@@ -505,52 +510,61 @@ public class InputController : MonoBehaviour
 
       if (!_bobFlag)
       {
-        _cameraBob = Time.smoothDeltaTime * GlobalConstants.CameraBobSpeed;
+        _cameraBob += Time.smoothDeltaTime * GlobalConstants.CameraBobSpeed;
       }
       else
       {
-        _cameraBob = -Time.smoothDeltaTime * GlobalConstants.CameraBobSpeed;
+        _cameraBob -= Time.smoothDeltaTime * GlobalConstants.CameraBobSpeed;
       }
-
-      /*
-      if (cond + Time.smoothDeltaTime * ca.Speed > GlobalConstants.WallScaleFactor)
-      {
-        break;
-      }
-      */
 
       if (ca.MoveType == CameraMoveType.FORWARD)
       {
-        if (xComponent != 0) _cameraPos.x += xComponent * Time.smoothDeltaTime * ca.Speed;
+        if (xComponent != 0)      _cameraPos.x += xComponent * Time.smoothDeltaTime * ca.Speed;
         else if (zComponent != 0) _cameraPos.z += zComponent * Time.smoothDeltaTime * ca.Speed;
       }
       else if (ca.MoveType == CameraMoveType.BACKWARD)
       {
-        if (xComponent != 0) _cameraPos.x -= xComponent * Time.smoothDeltaTime * ca.Speed;
+        if (xComponent != 0)      _cameraPos.x -= xComponent * Time.smoothDeltaTime * ca.Speed;
         else if (zComponent != 0) _cameraPos.z -= zComponent * Time.smoothDeltaTime * ca.Speed;
       }
       else if (ca.MoveType == CameraMoveType.STRAFE_LEFT)
       {
-        if (xComponent != 0) _cameraPos.z += xComponent * Time.smoothDeltaTime * ca.Speed;
+        if (xComponent != 0)      _cameraPos.z += xComponent * Time.smoothDeltaTime * ca.Speed;
         else if (zComponent != 0) _cameraPos.x -= zComponent * Time.smoothDeltaTime * ca.Speed;
       }
       else if (ca.MoveType == CameraMoveType.STRAFE_RIGHT)
       {
-        if (xComponent != 0) _cameraPos.z -= xComponent * Time.smoothDeltaTime * ca.Speed;
+        if (xComponent != 0)      _cameraPos.z -= xComponent * Time.smoothDeltaTime * ca.Speed;
         else if (zComponent != 0) _cameraPos.x += zComponent * Time.smoothDeltaTime * ca.Speed;
       }
+
+      // Limit values so we don't overshoot and don't have to adjust
+      // values after end of the loop which cause slight jitter.
+      if (startX < endX)
+      {
+        _cameraPos.x = Mathf.Clamp(_cameraPos.x, startX, endX);
+      }
+      else
+      {
+        _cameraPos.x = Mathf.Clamp(_cameraPos.x, endX, startX);
+      }
+
+      if (startZ < endZ)
+      {
+        _cameraPos.z = Mathf.Clamp(_cameraPos.z, startZ, endZ);
+      }
+      else
+      {
+        _cameraPos.z = Mathf.Clamp(_cameraPos.z, endZ, startZ);
+      }
+
+      _cameraBob = Mathf.Clamp(_cameraBob, 0.0f, half);
+
+      _cameraPos.y = _cameraBob;
 
       yield return null;
     }
 
-    _cameraBob = 0.0f;
-
-    _cameraPos.x = newX;
-    // Hardcoded camera pivot Y position - OK, since the actual camera is child of pivot.
-    // If we want to change camera height, we should do this by changing the camera inside the pivot GameObject.
-    _cameraPos.y = 0.0f;  
-    _cameraPos.z = newZ;
-         
     PlayerPreviousMapPos.X = PlayerMapPos.X;
     PlayerPreviousMapPos.Y = PlayerMapPos.Y;
 
@@ -575,9 +589,9 @@ public class InputController : MonoBehaviour
 
     _isProcessing = true;
     
-    int newX = (int)_cameraPos.x;
-    int newZ = (int)_cameraPos.z;
-    
+    int endX = (int)_cameraPos.x;
+    int endZ = (int)_cameraPos.z;
+
     int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
     int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
 
@@ -587,13 +601,6 @@ public class InputController : MonoBehaviour
     while (cond < nudge)
     {
       cond += Time.smoothDeltaTime * ca.Speed;
-
-      /*
-      if (cond + Time.smoothDeltaTime * ca.Speed > nudge)
-      {
-        break;
-      }
-      */
 
       if (ca.MoveType == CameraMoveType.FORWARD)
       {
@@ -650,9 +657,9 @@ public class InputController : MonoBehaviour
       
       yield return null;
     }
-    
-    _cameraPos.x = newX;
-    _cameraPos.z = newZ;
+
+    _cameraPos.x = endX;
+    _cameraPos.z = endZ;
     
     _isProcessing = false;    
   }

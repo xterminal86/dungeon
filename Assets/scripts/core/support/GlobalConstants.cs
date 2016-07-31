@@ -10,9 +10,7 @@ public static class GlobalConstants
   // How much one unit actually is in the world
   public const int WallScaleFactor = 2;
 
-  // Used in Mathf.SmoothDamp, so the less the faster
-  public const float CameraTurnSpeed = 0.05f;
-
+  public const int CameraTurnSpeed = 350;
   public const int CameraMoveSpeed = 4;
   public const int CameraCannotMoveSpeed = 2;
 
@@ -54,7 +52,7 @@ public static class GlobalConstants
 
   // Greeting string
 
-  public const string PlayerGreeting = "Welcome to Dungeon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development.\nUse SPACE to talk with villagers and MOUSE to interact with objects.\n\nxterminal86";
+  public const string PlayerGreeting = "Welcome to Dungeon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development.\nUse SPACE to talk with villagers and MOUSE to interact with objects.\nF9 to make a screenshot.\n\nxterminal86";
   public const string LoremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
   public const string Phrase1 = "- Sonny, when the hell are you wearin', are you from the future or sum'n'?\n- Keep your fucking distance, pal, will ya?!";
   public const string Phrase2 = "- This is delicious!\n- Guess you won't be needin' those tapes I made for ya. Want me to get rid of 'em?\n- Don't be hasty! Not until I see those \"street fighters\" pummeled to dust which should be any moment now... YESH!!! YESH!!!";
