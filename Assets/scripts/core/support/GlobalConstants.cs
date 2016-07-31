@@ -10,7 +10,9 @@ public static class GlobalConstants
   // How much one unit actually is in the world
   public const int WallScaleFactor = 2;
 
-  public const int CameraTurnSpeed = 350;
+  // Used in Mathf.SmoothDamp, so the less the faster
+  public const float CameraTurnSpeed = 0.05f;
+
   public const int CameraMoveSpeed = 4;
   public const int CameraCannotMoveSpeed = 2;
 
@@ -96,12 +98,12 @@ public static class GlobalConstants
     { 3, Orientation.WEST }
   };
 
-  public static Dictionary<Orientation, float> OrientationAngles = new Dictionary<Orientation, float>()
+  public static Dictionary<Orientation, int> OrientationAngles = new Dictionary<Orientation, int>()
   {
-    { Orientation.NORTH, 270.0f },
-    { Orientation.EAST, 0.0f },
-    { Orientation.SOUTH, 90.0f },
-    { Orientation.WEST, 180.0f }
+    { Orientation.NORTH, 270 },
+    { Orientation.EAST, 0 },
+    { Orientation.SOUTH, 90 },
+    { Orientation.WEST, 180 }
   };
 
   public static Dictionary<int, Orientation> OrientationByAngle = new Dictionary<int, Orientation>()

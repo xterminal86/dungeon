@@ -371,15 +371,53 @@ public class InputController : MonoBehaviour
   // just after coroutine is finished (i.e. when rotation is finished).
   // This resulted in excess degree of about 9 during next rotation. 
   // Repeating the same process fucks up everything in the end.
+  //
+  // EDIT: I should have used Mathf.SmoothDamp method, but I didn't know
+  // about it back then. Now everything seems to be OK, but I left old code
+  // in comments just in case.
   IEnumerator CameraTurnRoutine(object arg)
   {
     CameraTurnArgument ca = arg as CameraTurnArgument;
     if (ca == null) yield return null;
+
     _isProcessing = true;
-    float cond = 0.0f;
-    float toAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.To]];
-    while (Mathf.Abs(cond) < 90.0f)
+
+    float turnSpeed = ca.Speed;
+
+    int fromAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.From]];
+    int toAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.To]];
+
+    // Special case when turning from 0 to -90 aka 270 degrees.
+    // In order not to go all the way from 0 to 270 we replace
+    // certain angles from 270 to -90 - Unity will make it 270 automatically.
+
+    if (fromAngle == 0 && toAngle == 270)
     {
+      toAngle = -90;
+    }
+    else if (fromAngle == 270 && toAngle == 0)
+    {
+      fromAngle = -90;
+    }
+
+    float turnValue = fromAngle;
+
+    int round = 0;
+
+    // While difference between current turn angle and target is less
+    // than certain error.
+    while (Mathf.Abs(turnValue - toAngle) > 0.1f)
+    { 
+      //Debug.Log(turnValue + " " + toAngle + " " + Mathf.RoundToInt(turnValue));
+
+      turnValue = Mathf.SmoothDamp(turnValue, toAngle, ref turnSpeed, ca.Speed);
+
+      _cameraAngles.y = turnValue;
+      _compassSpriteAngles.z = 90.0f + turnValue;
+
+      // Old code goes below
+
+      /*
       cond += Time.smoothDeltaTime * ca.Speed;
 
       if (cond + Time.smoothDeltaTime * ca.Speed > 90.0f)
@@ -397,9 +435,12 @@ public class InputController : MonoBehaviour
         _cameraAngles.y -= Time.smoothDeltaTime * ca.Speed;
         _compassSpriteAngles.z -= Time.smoothDeltaTime * ca.Speed;
       }
+      */
+
       yield return null;
     }
 
+    // Do the adjustment to get rid of result error
     _cameraAngles.y = toAngle;
     _compassSpriteAngles.z = 90.0f + toAngle;
 
