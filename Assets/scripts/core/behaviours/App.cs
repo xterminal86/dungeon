@@ -330,19 +330,19 @@ public class App : MonoBehaviour
     Mountains.terrainData.size = terrainSize;
 
     Vector3 terrainPosition = new Vector3(-1 - _terrainAddedWidth, 0, -terrainSize.z - 1);
-    Terrain t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    Instantiate(Mountains, terrainPosition, Quaternion.identity);
     
     terrainPosition = new Vector3(-terrainSize.x - 1, 0, -1 - _terrainAddedWidth);
-    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    Instantiate(Mountains, terrainPosition, Quaternion.identity);
     
     terrainPosition = new Vector3(-1 - _terrainAddedWidth, 0, terrainSize.z - (_terrainAddedWidth * 2 + 1));
-    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    Instantiate(Mountains, terrainPosition, Quaternion.identity);
     
     terrainPosition = new Vector3(terrainSize.x - (_terrainAddedWidth * 2 + 1), 0, -1);
-    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);
+    Instantiate(Mountains, terrainPosition, Quaternion.identity);
 
     terrainPosition = new Vector3(terrainSize.x - (_terrainAddedWidth + 1), 0, -terrainSize.z);
-    t = (Terrain)Instantiate(Mountains, terrainPosition, Quaternion.identity);    
+    Instantiate(Mountains, terrainPosition, Quaternion.identity);    
   }
 
   void BuildMap()

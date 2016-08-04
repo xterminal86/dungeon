@@ -23,18 +23,6 @@ public class FormItemInfo : MonoBehaviour
   Vector2 _sizeDelta = Vector2.zero;
   Vector2 _position = Vector2.zero;
 
-  float _scaleFactor = 1.0f;
-  float _diff = 1.0f;
-  void Awake()
-  {
-    _scaleFactor = Scaler.scaleFactor;
-
-    float w = (float)Screen.width;
-    _diff = w / Scaler.referenceResolution.x;
-
-    //Debug.Log(Window.sizeDelta + " " + _scaleFactor + " " + _diff);
-  }
-
   public void SetWindowTexts(string head, string desc)
   {
     HeadText.text = head;

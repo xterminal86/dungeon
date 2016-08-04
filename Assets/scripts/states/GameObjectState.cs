@@ -79,6 +79,148 @@ public abstract class GameObjectState
     return false;
   }
 
+  protected bool _rotateDone = false;
+  protected IEnumerator RotateModel(float angle)
+  {    
+    _rotateDone = false;
+
+    Vector3 tmpRotation = _actor.Model.transform.rotation.eulerAngles;
+
+    int fromAngle = (int)tmpRotation.y;
+    int toAngle = (int)angle;
+
+    if (fromAngle == 270 && toAngle == 0)
+    {
+      toAngle = 360;
+    }
+    else if (fromAngle == 0 && toAngle == 270)
+    {
+      toAngle = -90;
+    }
+
+    int d = (int)angle - (int)tmpRotation.y;
+
+    // If model has 270 rotation around y and has to rotate to 0, 
+    // we should rotate towards shortest direction, not from 270 to 0 backwards, 
+    // so we introduce special condition.
+    // Same thing when angles are reversed, because we rely on sign variable in tmpRotation.y change.
+    //
+    // TLDR:
+    // Case 1: from = 270, to = 0, we have sign = -1, so we would decrement current rotation from 270 to 0, instead of just going to 0 (i.e. 360).
+    // Case 2: from = 0, to = 270, we have sign = +1, so we would increment current rotation from 0 to 270 - same thing reversed.
+
+    bool specialRotation = ((int)angle == 270 && (int)tmpRotation.y == 0) || ((int)angle == 0 && (int)tmpRotation.y == 270);
+    int cond = specialRotation ? 90 : Mathf.Abs(d);
+
+    float sign = Mathf.Sign(d);
+
+    float counter = 0.0f;
+    while (counter < cond)
+    {
+      counter += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
+
+      if (specialRotation)
+      {
+        tmpRotation.y -= sign * (Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed);
+      }
+      else
+      {
+        tmpRotation.y += sign * (Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed);
+      }
+
+      // Removing jitter caused by manual adjustment
+      // of tmpRotation.y after the while loop (also removed)
+      if (fromAngle > toAngle)
+      {
+        tmpRotation.y = Mathf.Clamp(tmpRotation.y, toAngle, fromAngle);
+      }
+      else
+      {
+        tmpRotation.y = Mathf.Clamp(tmpRotation.y, fromAngle, toAngle);
+      }
+
+      _actor.Model.transform.rotation = Quaternion.Euler(tmpRotation);
+
+      yield return null;
+    }
+
+    _actor.Model.transform.rotation = Quaternion.Euler(tmpRotation);
+
+    _rotateDone = true;
+
+    yield return null;
+  }
+
+  protected Vector3 _modelPosition = Vector3.zero;
+  protected Int2 _currentMapPos = new Int2();
+  protected Int2 _positionForTalk = new Int2();
+  protected bool _moveDone = false;
+  protected bool _firstStepSound = false;
+  protected IEnumerator MoveModel(Int2 newMapPos)
+  {
+    _moveDone = false;
+
+    _currentMapPos.X = _actor.Model.ModelPos.X;
+    _currentMapPos.Y = _actor.Model.ModelPos.Y;
+
+    Int2 oldWorldPos = new Int2(_currentMapPos.X * GlobalConstants.WallScaleFactor, _currentMapPos.Y * GlobalConstants.WallScaleFactor);
+    Int2 newWorldPos = new Int2(newMapPos.X * GlobalConstants.WallScaleFactor, newMapPos.Y * GlobalConstants.WallScaleFactor);
+
+    int dx = newMapPos.X - _currentMapPos.X;
+    int dy = newMapPos.Y - _currentMapPos.Y;
+
+    if (!_firstStepSound)
+    {
+      PlayFootstepSound3D(_actor.Model.ModelPos, _modelPosition);
+      _firstStepSound = true;      
+    }
+
+    while (dx != 0 || dy != 0)
+    {
+      // Constantly moving 3d model
+      _modelPosition.x += dx * (Time.smoothDeltaTime * _actor.Model.WalkingSpeed);
+      _modelPosition.z += dy * (Time.smoothDeltaTime * _actor.Model.WalkingSpeed);
+
+      // We have to calculate map position from 3d coordinates every frame, so we have to perform a division.
+      // In order to properly determine map position when model is less than halfway from the center of the cell,
+      // we use Ceil or Floor.
+      _currentMapPos.X = dx < 0 ? Mathf.CeilToInt(_modelPosition.x / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.x / GlobalConstants.WallScaleFactor);
+      _currentMapPos.Y = dy < 0 ? Mathf.CeilToInt(_modelPosition.z / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
+
+      dx = newMapPos.X - _currentMapPos.X;
+      dy = newMapPos.Y - _currentMapPos.Y;      
+
+      if (oldWorldPos.X > newWorldPos.X)
+      {
+        _modelPosition.x = Mathf.Clamp(_modelPosition.x, newWorldPos.X, oldWorldPos.X);
+      }
+      else
+      {
+        _modelPosition.x = Mathf.Clamp(_modelPosition.x, oldWorldPos.X, newWorldPos.X);
+      }
+
+      if (oldWorldPos.Y > newWorldPos.Y)
+      {
+        _modelPosition.z = Mathf.Clamp(_modelPosition.z, newWorldPos.Y, oldWorldPos.Y);
+      }
+      else
+      {
+        _modelPosition.z = Mathf.Clamp(_modelPosition.z, oldWorldPos.Y, newWorldPos.Y);
+      }
+
+      yield return null;
+    }
+
+    _actor.Model.ModelPos.X = newMapPos.X;
+    _actor.Model.ModelPos.Y = newMapPos.Y;
+
+    _moveDone = true;
+
+    PlayFootstepSound3D(_actor.Model.ModelPos, _modelPosition);
+
+    yield return null;
+  }
+
   // Sometimes when change of animation happens, it gets stuck in previous state
   // regardless of wrap mode and stuff, so we should manually rewind previously
   // playing animation before playing new one, using this method.

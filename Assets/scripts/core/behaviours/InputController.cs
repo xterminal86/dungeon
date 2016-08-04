@@ -311,7 +311,7 @@ public class InputController : MonoBehaviour
       return false;
     }
 
-    char emptyCell = AppScript.GetMapLayoutPoint(newX, newZ);
+    //char emptyCell = AppScript.GetMapLayoutPoint(newX, newZ);
     bool obstacleAhead = false;
         
     Ray ray = new Ray(RaycastPoint.position, new Vector3(xComponent, 0.0f, zComponent));
@@ -379,8 +379,6 @@ public class InputController : MonoBehaviour
     if (ca == null) yield return null;
 
     _isProcessing = true;
-
-    float turnSpeed = ca.Speed;
 
     int fromAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.From]];
     int toAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.To]];

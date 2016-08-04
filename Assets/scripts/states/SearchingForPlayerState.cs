@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class SearchingForPlayerState : GameObjectState 
 {
   bool _working = false;
-  Vector3 _modelPosition = Vector3.zero;
 
   int[,] _visitedCells;
 
@@ -74,12 +73,19 @@ public class SearchingForPlayerState : GameObjectState
 
       if ((int)angleStart != (int)angleEnd)
       {
+        _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
+
         _rotateJob = new Job(RotateModel(angleEnd));
 
         while (!_rotateDone)
         {
           yield return null;
         }        
+      }
+
+      if (!_model.AnimationComponent.IsPlaying(GlobalConstants.AnimationWalkName))
+      {
+        _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);
       }
 
       _stepJob = new Job(MoveModel(_cellsAround[index]));
@@ -105,8 +111,6 @@ public class SearchingForPlayerState : GameObjectState
   {
     _cellsAround.Clear();
 
-    var map = _actor.AppRef.GeneratedMap.PathfindingMap;
-
     Int2 pos = _model.ModelPos;
 
     for (int i = 0; i < 4; i++)
@@ -120,8 +124,6 @@ public class SearchingForPlayerState : GameObjectState
       {
         continue;
       }
-
-      //CanMove(cellCoord);
 
       if (CanMove(cellCoord) && _visitedCells[x, y] != 1)
       {
@@ -266,106 +268,6 @@ public class SearchingForPlayerState : GameObjectState
 
     _delayJob = new Job(DelayRoutine(() => { _working = false; }));
 
-    yield return null;
-  }
-
-  bool _rotateDone = false;
-  IEnumerator RotateModel(float angle)
-  {
-    _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
-    
-    _rotateDone = false;
-    
-    Vector3 tmpRotation = _model.transform.rotation.eulerAngles;
-    
-    int d = (int)angle - (int)tmpRotation.y;
-    
-    // If model has 270 rotation around y and has to rotate to 0, 
-    // we should rotate towards shortest direction, not from 270 to 0 backwards, 
-    // so we introduce special condition.
-    // Same thing when angles are reversed, because we rely on sign variable in tmpRotation.y change.
-    //
-    // TLDR:
-    // Case 1: from = 270, to = 0, we have sign = -1, so we would decrement current rotation from 270 to 0, instead of just going to 0 (i.e. 360).
-    // Case 2: from = 0, to = 270, we have sign = +1, so we would increment current rotation from 0 to 270 - same thing reversed.
-    
-    bool specialRotation = ((int)angle == 270 && (int)tmpRotation.y == 0) || ((int)angle == 0 && (int)tmpRotation.y == 270);
-    int cond = specialRotation ? 90 : Mathf.Abs(d);
-    
-    float sign = Mathf.Sign(d);
-    
-    float counter = 0.0f;
-    while (counter < cond)
-    {
-      counter += Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed;
-      
-      if (specialRotation)
-      {
-        tmpRotation.y -= sign * (Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed);
-      }
-      else
-      {
-        tmpRotation.y += sign * (Time.smoothDeltaTime * GlobalConstants.CharacterRotationSpeed);
-      }
-      
-      _model.transform.rotation = Quaternion.Euler(tmpRotation);
-      
-      yield return null;
-    }
-    
-    tmpRotation.y = angle;
-    _model.transform.rotation = Quaternion.Euler(tmpRotation);
-    
-    _rotateDone = true;
-    
-    yield return null;
-  }
-  
-  bool _firstStepSound = false;
-  bool _moveDone = false;
-  RaycastHit _raycastHit;
-  IEnumerator MoveModel(Int2 newMapPos)
-  {
-    if (!_model.AnimationComponent.IsPlaying(GlobalConstants.AnimationWalkName))
-    {
-      _model.AnimationComponent.Play(GlobalConstants.AnimationWalkName);
-    }
-
-    _moveDone = false;
-    
-    int dx = newMapPos.X - _model.ModelPos.X;
-    int dy = newMapPos.Y - _model.ModelPos.Y;
-
-    if (!_firstStepSound)
-    {
-      PlayFootstepSound3D(_model.ModelPos, _modelPosition);
-      _firstStepSound = true;
-    }
-    
-    while (dx != 0 || dy != 0)
-    {
-      _modelPosition.x += dx * (Time.smoothDeltaTime * _model.WalkingSpeed);
-      _modelPosition.z += dy * (Time.smoothDeltaTime * _model.WalkingSpeed);
-      
-      _model.ModelPos.X = dx < 0 ? Mathf.CeilToInt(_modelPosition.x / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.x / GlobalConstants.WallScaleFactor);
-      _model.ModelPos.Y = dy < 0 ? Mathf.CeilToInt(_modelPosition.z / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
-      
-      dx = newMapPos.X - _model.ModelPos.X;
-      dy = newMapPos.Y - _model.ModelPos.Y;      
-      
-      yield return null;
-    }
-    
-    _modelPosition.x = newMapPos.X * GlobalConstants.WallScaleFactor;
-    _modelPosition.z = newMapPos.Y * GlobalConstants.WallScaleFactor;
-    
-    _model.ModelPos.X = newMapPos.X;
-    _model.ModelPos.Y = newMapPos.Y;
-    
-    _moveDone = true;
-    
-    PlayFootstepSound3D(_model.ModelPos, _modelPosition);
-        
     yield return null;
   }
 

@@ -37,7 +37,6 @@ public class FormPlayer : MonoBehaviour
     _rectTransformSize.Set((int)HealthBar.rectTransform.rect.width, (int)HealthBar.rectTransform.rect.height);
   }
 
-  int _healthWidth = 0, _magicWidth = 0;
   Vector2 _rectTransformSize = Vector2.zero;
   void Update()
   {
@@ -168,9 +167,5 @@ public class FormPlayer : MonoBehaviour
     LockL.gameObject.SetActive(false);
 
     yield return null;
-  }
-
-  void Start()
-  {
   }
 }
