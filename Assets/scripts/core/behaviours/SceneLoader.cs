@@ -16,6 +16,9 @@ public class SceneLoader : MonoBehaviour
     ScreenFader.Instance.Initialize();
     SoundManager.Instance.Initialize();
 
+    // FIXME: remove after test
+    //DateAndTime.Instance.Initialize();
+
     _level = SceneManager.LoadSceneAsync("title");
 
     StartCoroutine(LoadLevelRoutine());

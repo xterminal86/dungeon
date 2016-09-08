@@ -8,43 +8,48 @@ public class DateAndTime : MonoSingleton<DateAndTime>
 {
   public Text TimeText;
 
+  int _inGameTime = 0;
+
+  bool _isDay = true;
+
+  int _nightStart = 0;
+
+  float _timerCondition = 0.0f;
   protected override void Init()
   {
-    base.Init ();
+    base.Init();
+
+    _nightStart = GlobalConstants.InGameDayNightLength - GlobalConstants.InGameNightLength;
+
+    // Assuming, that deltaTime is identical, after one second we will get _timer = (FPS * deltaTime) / FPS.
+    // It should be close to 1.0f.
+    // We would like to update in-game time TicksPerSecond times per second.
+    // To do that we divide 1 by TicksPerSecond to get limit of deltaTime accumulation.
+    _timerCondition = 1.0f / (float)GlobalConstants.TicksPerSecond;
   }
 
   InGameDateTime _inGameDateTime = new InGameDateTime();
 
-  string _inGameTimeAsString = string.Empty;
-
-  int _inGameTimeSeconds = 0;
-
   float _timer = 0.0f;
   void Update()
   {
-    if (_timer > GlobalConstants.InGameSecondTick)
-    {      
-      UpdateInGameTime();
+    if (_timer > _timerCondition)
+    {    
+      _inGameTime++;
       _timer = 0.0f;
+
+      if (_inGameTime > GlobalConstants.InGameDayNightLength)
+      {
+        _inGameTime = 0;
+        _inGameDateTime.IncrementDay();
+      }
+
+      _isDay = (_inGameTime < _nightStart) ? true : false;
     }
 
-    _timer += Time.smoothDeltaTime * GlobalConstants.InGameTimeFlowSpeed;
+    _timer += Time.deltaTime;
 
-    _inGameTimeAsString = string.Format("{0}:{1}:{2}", (_inGameTimeSeconds / 3600) % 24, (_inGameTimeSeconds / 60) % 60, _inGameTimeSeconds % 60); 
-
-    TimeText.text = string.Format("{0}\n{1}\n{2}", _inGameDateTime.ToString(), _inGameTimeAsString, _inGameTimeSeconds);
-  }
-
-  void UpdateInGameTime()
-  {
-    _inGameTimeSeconds++;
-
-    if (_inGameTimeSeconds > GlobalConstants.InGameDayNightLength)
-    {
-      _inGameTimeSeconds = 0;
-
-      _inGameDateTime.IncrementDay();
-    }
+    TimeText.text = string.Format("{0}\n{1} {2}", _inGameDateTime.ToString(), _isDay, _inGameTime);
   }
 }
 
