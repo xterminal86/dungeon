@@ -47,6 +47,24 @@ public static class GlobalConstants
 
   // Speed of attack trail drawing
   public const float AttackTrailSpeed = 20.0f;
+ 
+  // Number of increments after which we count in-game second
+  public const int InGameSecondTick = 1;
+  // How fast we increment
+  public const float InGameTimeFlowSpeed = 4.0f;
+
+  // Length of full day in in-game seconds
+  public const int InGameDayNightLength = 86400;
+
+  // Length of night in in-game seconds
+  public const int InGameNightLength = InGameDayNightLength / 2;
+  public const int InGameDaysInMonth = 30;
+  public const int InGameMonthsInYear = 12;
+
+  public static List<string> InGameMonthsNames = new List<string>()
+  {    
+    "Enas", "Dia", "Tria", "Tessera", "Quintus", "Senio", "Hepta", "Octus", "Ennea", "Decus", "Jusane", "Ardes"
+  };
 
   public static Vector3 DefaultVillageMountainsSize = new Vector3(25, 30, 25);
 

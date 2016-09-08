@@ -83,6 +83,8 @@ public class App : MonoBehaviour
 
   void OnLevelWasLoaded(int level)
   {    
+    DateAndTime.Instance.Initialize();
+
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
     UnityEngine.RenderSettings.fogColor = FogColor;
