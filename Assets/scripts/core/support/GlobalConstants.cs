@@ -54,9 +54,12 @@ public static class GlobalConstants
   // Number of in-game time updates per real life second
   public const int TicksPerSecond = 20;
   // Length of full day in in-game seconds
-  public const int InGameDayNightLength = 1000;
-  // Length of night in in-game seconds
-  public const int InGameNightLength = InGameDayNightLength / 4;
+  public const int InGameDayNightLength = 50000;
+  // Time of night start in in-game seconds (it's actually percentage from InGameDayNightLength)
+  public const int InGameNightStartSeconds = (int)(0.55f * (float)InGameDayNightLength);
+  // Time of dusk and dawn start in in-game seconds
+  public const int InGameDuskStartSeconds = (int)(0.45f * (float)InGameDayNightLength);
+  public const int InGameDawnEndSeconds = (int)(0.10f * (float)InGameDayNightLength);
 
   // For in-game calendar
   public const int InGameDaysInMonth = 30;

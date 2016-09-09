@@ -8,18 +8,18 @@ public class DateAndTime : MonoSingleton<DateAndTime>
 {
   public Text TimeText;
 
-  int _inGameTime = 0;
+  int _inGameTime = GlobalConstants.InGameDawnEndSeconds;
+  public int InGameTime
+  {
+    get { return _inGameTime; }
+  }
 
-  bool _isDay = true;
-
-  int _nightStart = 0;
+  string _daytime = string.Empty;
 
   float _timerCondition = 0.0f;
   protected override void Init()
   {
     base.Init();
-
-    _nightStart = GlobalConstants.InGameDayNightLength - GlobalConstants.InGameNightLength;
 
     // Assuming, that deltaTime is identical, after one second we will get _timer = (FPS * deltaTime) / FPS.
     // It should be close to 1.0f.
@@ -44,12 +44,32 @@ public class DateAndTime : MonoSingleton<DateAndTime>
         _inGameDateTime.IncrementDay();
       }
 
-      _isDay = (_inGameTime < _nightStart) ? true : false;
+      UpdateDaytimeString();
     }
 
     _timer += Time.deltaTime;
 
-    TimeText.text = string.Format("{0}\n{1} {2}", _inGameDateTime.ToString(), _isDay, _inGameTime);
+    TimeText.text = string.Format("{0}\n{1} ({2})", _inGameDateTime.ToString(), _inGameTime, _daytime);
+  }
+
+  void UpdateDaytimeString()
+  {
+    if (InGameTime < GlobalConstants.InGameDawnEndSeconds)
+    {
+      _daytime = "Dawn";
+    }
+    else if (InGameTime > GlobalConstants.InGameDawnEndSeconds && InGameTime < GlobalConstants.InGameDuskStartSeconds)
+    {
+      _daytime = "Daytime";
+    }
+    else if (InGameTime > GlobalConstants.InGameDuskStartSeconds && InGameTime < GlobalConstants.InGameNightStartSeconds)
+    {
+      _daytime = "Dusk";
+    }
+    else if (InGameTime > GlobalConstants.InGameNightStartSeconds)
+    {
+      _daytime = "Night";
+    }
   }
 }
 

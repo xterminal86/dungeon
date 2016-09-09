@@ -81,18 +81,21 @@ public class App : MonoBehaviour
     get { return _generatedMap; }
   }
 
+  Color _fogColor = Color.black;
   void OnLevelWasLoaded(int level)
   {    
     DateAndTime.Instance.Initialize();
 
+    _fogColor = FogColor;
+
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
-    UnityEngine.RenderSettings.fogColor = FogColor;
+    UnityEngine.RenderSettings.fogColor = _fogColor;
     UnityEngine.RenderSettings.fogDensity = FogDensity;
     UnityEngine.RenderSettings.fogStartDistance = Camera.main.farClipPlane - LinearFogWidth * 2;
     UnityEngine.RenderSettings.fogEndDistance = Camera.main.farClipPlane - LinearFogWidth;
 
-    Camera.main.backgroundColor = FogColor;
+    Camera.main.backgroundColor = _fogColor;
 
     _cameraPos = CameraPivot.transform.position;
 
@@ -1079,6 +1082,28 @@ public class App : MonoBehaviour
     }
 
     ScreenFader.Instance.FadeIn(() => { SceneManager.LoadScene("title"); });
+  }
+
+  void Update()
+  {
+    if (DateAndTime.Instance.InGameTime > GlobalConstants.InGameDuskStartSeconds)
+    {
+      _fogColor.r -= 0.01f;
+      _fogColor.g -= 0.01f;
+      _fogColor.b -= 0.01f;
+    }
+    else if (DateAndTime.Instance.InGameTime < GlobalConstants.InGameDawnEndSeconds)
+    {
+      _fogColor.r += 0.01f;
+      _fogColor.g += 0.01f;
+      _fogColor.b += 0.01f;
+    }
+
+    _fogColor.r = Mathf.Clamp(_fogColor.r, 0.0f, FogColor.r);
+    _fogColor.g = Mathf.Clamp(_fogColor.g, 0.0f, FogColor.g);
+    _fogColor.b = Mathf.Clamp(_fogColor.b, 0.0f, FogColor.b);
+
+    UnityEngine.RenderSettings.fogColor = _fogColor;
   }
 
   public enum MapFilename
