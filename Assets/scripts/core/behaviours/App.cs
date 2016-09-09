@@ -15,6 +15,9 @@ public class App : MonoBehaviour
   public InputController InputControllerScript;
 
   public GameObject TestMob;
+  public SunController Sun;
+
+  public ParticleSystem Stars;
 
   [HideInInspector]
   public List<GameObject> Characters;
@@ -81,12 +84,15 @@ public class App : MonoBehaviour
     get { return _generatedMap; }
   }
 
+  float _fogColorDelta = 0.0f;
+
   Color _fogColor = Color.black;
   void OnLevelWasLoaded(int level)
   {    
     DateAndTime.Instance.Initialize();
 
     _fogColor = FogColor;
+    _fogColorDelta = 1.0f / (GlobalConstants.InGameNightStartSeconds - GlobalConstants.InGameDuskStartSeconds);
 
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
@@ -181,6 +187,9 @@ public class App : MonoBehaviour
     SoundManager.Instance.MapLoadingFinishedHandler();
 
     GUIManager.Instance.SetupGameForms();
+
+    Vector3 starsPos = new Vector3((GeneratedMapWidth / 2) * GlobalConstants.WallScaleFactor, 0.0f, (GeneratedMapHeight / 2) * GlobalConstants.WallScaleFactor);
+    Stars.transform.position = starsPos;
   }
 
   // TODO: In the future move all item names from items-db.xml somewhere
@@ -1084,19 +1093,29 @@ public class App : MonoBehaviour
     ScreenFader.Instance.FadeIn(() => { SceneManager.LoadScene("title"); });
   }
 
+  Vector3 _starsRotation = Vector3.zero;
   void Update()
   {
-    if (DateAndTime.Instance.InGameTime > GlobalConstants.InGameDuskStartSeconds)
+    if (DateAndTime.Instance.WasTick)
     {
-      _fogColor.r -= 0.01f;
-      _fogColor.g -= 0.01f;
-      _fogColor.b -= 0.01f;
-    }
-    else if (DateAndTime.Instance.InGameTime < GlobalConstants.InGameDawnEndSeconds)
-    {
-      _fogColor.r += 0.01f;
-      _fogColor.g += 0.01f;
-      _fogColor.b += 0.01f;
+      if (DateAndTime.Instance.InGameTime > GlobalConstants.InGameDuskStartSeconds)
+      {
+        _fogColor.r -= _fogColorDelta;
+        _fogColor.g -= _fogColorDelta;
+        _fogColor.b -= _fogColorDelta;
+      }
+      else if (DateAndTime.Instance.InGameTime < GlobalConstants.InGameDawnEndSeconds)
+      {
+        _fogColor.r += _fogColorDelta;
+        _fogColor.g += _fogColorDelta;
+        _fogColor.b += _fogColorDelta;
+      }
+
+      _starsRotation.x = 0.0f;
+      _starsRotation.y += (Sun.SunMoveDelta / 4.0f);
+      _starsRotation.z = 0.0f;
+
+      Stars.transform.eulerAngles = _starsRotation;
     }
 
     _fogColor.r = Mathf.Clamp(_fogColor.r, 0.0f, FogColor.r);
@@ -1104,6 +1123,15 @@ public class App : MonoBehaviour
     _fogColor.b = Mathf.Clamp(_fogColor.b, 0.0f, FogColor.b);
 
     UnityEngine.RenderSettings.fogColor = _fogColor;
+
+    if (DateAndTime.Instance.InGameTime > GlobalConstants.InGameNightStartSeconds && !Stars.gameObject.activeSelf)
+    {
+      Stars.gameObject.SetActive(true);
+    }
+    else if (DateAndTime.Instance.InGameTime < GlobalConstants.InGameDawnEndSeconds && Stars.gameObject.activeSelf)
+    {
+      Stars.gameObject.SetActive(false);
+    }
   }
 
   public enum MapFilename

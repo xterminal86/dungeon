@@ -30,11 +30,21 @@ public class DateAndTime : MonoSingleton<DateAndTime>
 
   InGameDateTime _inGameDateTime = new InGameDateTime();
 
+  bool _wasTick = false;
+  public bool WasTick
+  {
+    get { return _wasTick; }
+  }
+
   float _timer = 0.0f;
   void Update()
   {
+    _wasTick = false;
+
     if (_timer > _timerCondition)
     {    
+      _wasTick = true;
+
       _inGameTime++;
       _timer = 0.0f;
 
