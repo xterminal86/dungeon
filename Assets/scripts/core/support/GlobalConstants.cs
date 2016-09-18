@@ -76,8 +76,9 @@ public static class GlobalConstants
 
   public const string PlayerGreeting = "Welcome to Dungeon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development.\nUse SPACE to talk with villagers and MOUSE to interact with objects.\nF9 to make a screenshot.\n\nxterminal86";
   public const string LoremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-  public const string Phrase1 = "- Sonny, when the hell are you wearin', are you from the future or sum'n'?\n- Keep your fucking distance, pal, will ya?!";
-  public const string Phrase2 = "- This is delicious!\n- Guess you won't be needin' those tapes I made for ya. You want me to get rid of 'em?\n- Don't be hasty! Not until I see those \"street fighters\" pummeled to dust which should be any moment now... YESH!!! YESH!!!";
+  public const string ClothArmorDescription = "- Sonny, when the hell are you wearin', are you from the future or sum'n'?\n- Keep your fucking distance, pal, will ya?!";
+  public const string BreadDescription = "- This is delicious!\n- Guess you won't be needin' those tapes I made for ya. You want me to get rid of 'em?\n- Don't be hasty! Not until I see those \"street fighters\" pummeled to dust which should be any moment now... YESH!!! YESH!!!";
+  public const string AxeDescription = "- You have my sword.\n- And you have my bow!\n- And my ax!";
 
   // Model Animation Names
 
@@ -314,6 +315,7 @@ public static class GlobalConstants
     ROOF_COBBLESTONE_CLOSING,
     WALL_THIN_WOODEN,
     WALL_THIN_WOODEN_WINDOW,
+    WALL_SUPPORT_WOODEN,
     TREE_BIRCH,
     FENCE
   }
@@ -333,8 +335,11 @@ public static class GlobalConstants
     { StaticPrefabsEnum.ROOF_COBBLESTONE_LINE, "roof-cobblestone-line" },
     { StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, "roof-cobblestone-corner" },
     { StaticPrefabsEnum.ROOF_COBBLESTONE_CLOSING, "roof-cobblestone-closing" },
-    { StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-thin-wooden" },
-    { StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-thin-wooden-window" },
+    //{ StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-thin-wooden" },
+    { StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-border-wooden" },
+    //{ StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-thin-wooden-window" },
+    { StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-border-wooden-window" },
+    { StaticPrefabsEnum.WALL_SUPPORT_WOODEN, "wall-support-wooden" },
     { StaticPrefabsEnum.FENCE, "block-fence" }
   };
 

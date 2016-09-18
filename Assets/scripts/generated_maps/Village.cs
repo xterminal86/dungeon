@@ -118,7 +118,7 @@ public class Village : GeneratedMap
 
         foreach (var item in road)
         { 
-          if (!FindBlock(item.Coordinate, _map[item.Coordinate.X, item.Coordinate.Y].Blocks))          
+          if (!FindBlock(item.Coordinate, 0, _map[item.Coordinate.X, item.Coordinate.Y].Blocks))          
           {
             b = CreateBlock(item.Coordinate.X, item.Coordinate.Y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS);
             b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.STONE;          
@@ -131,11 +131,11 @@ public class Village : GeneratedMap
     }    
   }
 
-  bool FindBlock(Int2 coords, List<SerializableBlock> listToSearch)
+  bool FindBlock(Int2 coords, int layer, List<SerializableBlock> listToSearch)
   {
     foreach (var item in listToSearch)
     {
-      if (item.X == coords.X && item.Y == coords.Y)
+      if (item.X == coords.X && item.Y == coords.Y && layer == item.Layer)
       {
         return true;
       }
@@ -323,42 +323,78 @@ public class Village : GeneratedMap
     int startY = (int)cellPos.y;
     int endY = (int)cellPos.y + roomWidth - 1;
 
-    SerializableBlock blockLeft, blockRight;
+    // Placing support pillars in the corners of a room.
+    //
+    // Our pillar is modeled to be in the corner with respect to walls' rotation:
+    // by default it goes to the right of the wall with given rotation, i.e.
+    // when facing north pillar is in the east corner, whenn facing east pillar is in the south corner and so on.
+
+    for (int layer = 0; layer < 2; layer++)
+    {
+      SerializableBlock support1 = CreateBlock(startX, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_SUPPORT_WOODEN, (int)GlobalConstants.Orientation.WEST);
+      SerializableBlock support2 = CreateBlock(startX, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_SUPPORT_WOODEN, (int)GlobalConstants.Orientation.NORTH);
+      SerializableBlock support3 = CreateBlock(endX, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_SUPPORT_WOODEN, (int)GlobalConstants.Orientation.SOUTH);
+      SerializableBlock support4 = CreateBlock(endX, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_SUPPORT_WOODEN, (int)GlobalConstants.Orientation.EAST);
+
+      _map[support1.X, support1.Y].Blocks.Add(support1);        
+      _map[support2.X, support2.Y].Blocks.Add(support2);        
+      _map[support3.X, support3.Y].Blocks.Add(support3);        
+      _map[support4.X, support4.Y].Blocks.Add(support4);        
+    }
 
     // Left and right walls
     for (int i = startX; i <= endX; i++) 
     {
       for (int layer = 0; layer < 2; layer++)
       { 
+        /*
         if (i == startX || i == endX)
         {
-          blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_WOODEN_LOG);        
-          blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_WOODEN_LOG);
+          //SerializableBlock blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_WOODEN_LOG);        
+          SerializableBlock blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.WEST);
+          //SerializableBlock blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.BLOCK_WOODEN_LOG);
+          SerializableBlock blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.EAST);
 
-          _pathfindingMap[i, startY].Walkable = false;
-          _pathfindingMap[i, endY].Walkable = false;
+          //_pathfindingMap[i, startY].Walkable = false;
+          //_pathfindingMap[i, endY].Walkable = false;
+
+          _map[blockLeft.X, blockLeft.Y].Blocks.Add(blockLeft);
+          _map[blockRight.X, blockRight.Y].Blocks.Add(blockRight);        
         }
         else
         {                
-          blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.WEST);
-          blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.EAST);
+          SerializableBlock blockLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.WEST);
+          SerializableBlock blockRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.EAST);
 
           _pathfindingMap[blockLeft.X, blockLeft.Y].SidesWalkability[GlobalConstants.Orientation.WEST] = false;
           _pathfindingMap[blockRight.X, blockRight.Y].SidesWalkability[GlobalConstants.Orientation.EAST] = false;
+
+          _map[blockLeft.X, blockLeft.Y].Blocks.Add(blockLeft);
+          _map[blockRight.X, blockRight.Y].Blocks.Add(blockRight);
+        }
+        */
+
+        SerializableBlock wallLeft = CreateBlock(i, startY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.WEST);
+        SerializableBlock wallRight = CreateBlock(i, endY, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.EAST);
+
+        if (layer == 0)
+        {
+          _pathfindingMap[wallLeft.X, wallLeft.Y].SidesWalkability[GlobalConstants.Orientation.WEST] = false;
+          _pathfindingMap[wallRight.X, wallRight.Y].SidesWalkability[GlobalConstants.Orientation.EAST] = false;
         }
 
-        _map[blockLeft.X, blockLeft.Y].Blocks.Add(blockLeft);
-        _map[blockRight.X, blockRight.Y].Blocks.Add(blockRight);        
+        _map[wallLeft.X, wallLeft.Y].Blocks.Add(wallLeft);
+        _map[wallRight.X, wallRight.Y].Blocks.Add(wallRight);
       }
     }
 
     // Up and down walls
-    for (int i = startY + 1; i <= endY - 1; i++) 
+    for (int i = startY; i <= endY; i++) 
     {
       for (int layer = 0; layer < 2; layer++)
       { 
-        SerializableBlock blockUp = CreateBlock(startX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.NORTH);
-        SerializableBlock blockDown = CreateBlock(endX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.SOUTH);
+        SerializableBlock wallUp = CreateBlock(startX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.NORTH);
+        SerializableBlock wallDown = CreateBlock(endX, i, layer, GlobalConstants.StaticPrefabsEnum.WALL_THIN_WOODEN, (int)GlobalConstants.Orientation.SOUTH);
 
         if (layer == 0)
         {
@@ -366,8 +402,8 @@ public class Village : GeneratedMap
           _pathfindingMap[endX, i].SidesWalkability[GlobalConstants.Orientation.SOUTH] = false;
         }
 
-        _map[blockUp.X, blockUp.Y].Blocks.Add(blockUp);
-        _map[blockDown.X, blockDown.Y].Blocks.Add(blockDown);
+        _map[wallUp.X, wallUp.Y].Blocks.Add(wallUp);
+        _map[wallDown.X, wallDown.Y].Blocks.Add(wallDown);
       }
     }
   }
@@ -392,19 +428,19 @@ public class Village : GeneratedMap
 
   void PlaceRoof(Vector2 cellPos, int roomWidth, int roomHeight)
   {
+    /*
     int startX = (int)cellPos.x;
     int endX = (int)cellPos.x + roomHeight - 1;
     int startY = (int)cellPos.y;
     int endY = (int)cellPos.y + roomWidth - 1;
+    */
 
-    /*
     // Roofs with overhang
     
     int startX = (int)cellPos.x - 1;
     int endX = (int)cellPos.x + roomHeight;
     int startY = (int)cellPos.y - 1;
     int endY = (int)cellPos.y + roomWidth;
-    */
 
     int layer = 2;
 
@@ -785,7 +821,7 @@ public class Village : GeneratedMap
 
     foreach (var item in road)
     {
-      if (!FindBlock(item.Coordinate, _map[item.Coordinate.X, item.Coordinate.Y].Blocks))
+      if (!FindBlock(item.Coordinate, 0, _map[item.Coordinate.X, item.Coordinate.Y].Blocks))
       {
         var b = CreateBlock(item.Coordinate.X, item.Coordinate.Y, 0, GlobalConstants.StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS);
         b.FootstepSoundType = (int)GlobalConstants.FootstepSoundType.STONE;

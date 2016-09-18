@@ -198,16 +198,16 @@ public class App : MonoBehaviour
     var io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false, "Loaf of Bread", GlobalConstants.Phrase2);
+    io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false, "Loaf of Bread", GlobalConstants.BreadDescription);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
     io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Long Sword", false, "Iron Sword", GlobalConstants.LoremIpsum);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    io = SpawnItem(GlobalConstants.WorldItemType.ARMOR_CHEST, "Cloth Armor", false, "Green Cloth Armor", GlobalConstants.Phrase1);
+    io = SpawnItem(GlobalConstants.WorldItemType.ARMOR_CHEST, "Cloth Armor", false, "Green Cloth Armor", GlobalConstants.ClothArmorDescription);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
-    io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Battleaxe", false, "Battle Axe", GlobalConstants.LoremIpsum + GlobalConstants.LoremIpsum);
+    io = SpawnItem(GlobalConstants.WorldItemType.WEAPON_MELEE, "Battleaxe", false, "Battle Axe", GlobalConstants.AxeDescription);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
   }
  
