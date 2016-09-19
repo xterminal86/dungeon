@@ -359,7 +359,7 @@ public static class GlobalConstants
     { ObjectPrefabsEnum.DOOR_IRON, "door-iron" },
     { ObjectPrefabsEnum.DOOR_PORTCULLIS, "door-portcullis" },
     { ObjectPrefabsEnum.DOOR_STONE, "door-stone" },
-    { ObjectPrefabsEnum.DOOR_WOODEN, "door-wooden" },
+    { ObjectPrefabsEnum.DOOR_WOODEN, "door-wooden-border" },
     { ObjectPrefabsEnum.BUTTON, "button" },
     { ObjectPrefabsEnum.LEVER, "lever" },
     { ObjectPrefabsEnum.VILLAGE_SIGN, "sign-village" }
