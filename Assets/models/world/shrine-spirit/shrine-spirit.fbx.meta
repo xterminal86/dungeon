@@ -13,6 +13,8 @@ ModelImporter:
     100010: Orb
     100012: //RootNode
     100014: IconFrame
+    100016: CandleLeft
+    100018: CandleRight
     400000: Altar
     400002: Bowl
     400004: CandleL
@@ -21,6 +23,8 @@ ModelImporter:
     400010: Orb
     400012: //RootNode
     400014: IconFrame
+    400016: CandleLeft
+    400018: CandleRight
     2300000: Altar
     2300002: Bowl
     2300004: CandleL
@@ -28,6 +32,8 @@ ModelImporter:
     2300008: Icon
     2300010: Orb
     2300012: IconFrame
+    2300014: CandleLeft
+    2300016: CandleRight
     3300000: Altar
     3300002: Bowl
     3300004: CandleL
@@ -35,6 +41,8 @@ ModelImporter:
     3300008: Icon
     3300010: Orb
     3300012: IconFrame
+    3300014: CandleLeft
+    3300016: CandleRight
     4300000: Bowl
     4300002: CandleL
     4300004: CandleR
@@ -42,8 +50,16 @@ ModelImporter:
     4300008: Altar
     4300010: Icon
     4300012: IconFrame
+    4300014: CandleLeft
+    4300016: CandleRight
+    7400000: OrbFloat
+    7400002: OrbRest
+    7400004: Orb|OrbFloat
+    7400006: Orb|OrbRest
+    9500000: //RootNode
+    11100000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -62,7 +78,95 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: OrbFloat
+      takeName: OrbFloat
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Altar
+        weight: 1
+      - path: Bowl
+        weight: 1
+      - path: CandleLeft
+        weight: 1
+      - path: CandleRight
+        weight: 1
+      - path: Icon
+        weight: 1
+      - path: IconFrame
+        weight: 1
+      - path: Orb
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: OrbRest
+      takeName: OrbRest
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Altar
+        weight: 1
+      - path: Bowl
+        weight: 1
+      - path: CandleLeft
+        weight: 1
+      - path: CandleRight
+        weight: 1
+      - path: Icon
+        weight: 1
+      - path: IconFrame
+        weight: 1
+      - path: Orb
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -85,7 +189,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 0
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
@@ -100,7 +204,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 1
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
