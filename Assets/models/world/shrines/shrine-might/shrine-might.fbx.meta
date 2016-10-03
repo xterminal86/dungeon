@@ -1,0 +1,202 @@
+fileFormatVersion: 2
+guid: 85e9383ec8d26dd439fac63f6205aad1
+timeCreated: 1475520433
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Altar
+    100002: Bowl
+    100004: CandleLeft
+    100006: CandleRight
+    100008: Icon
+    100010: IconFrame
+    100012: Orb
+    100014: //RootNode
+    400000: Altar
+    400002: Bowl
+    400004: CandleLeft
+    400006: CandleRight
+    400008: Icon
+    400010: IconFrame
+    400012: Orb
+    400014: //RootNode
+    2300000: Altar
+    2300002: Bowl
+    2300004: CandleLeft
+    2300006: CandleRight
+    2300008: Icon
+    2300010: IconFrame
+    2300012: Orb
+    3300000: Altar
+    3300002: Bowl
+    3300004: CandleLeft
+    3300006: CandleRight
+    3300008: Icon
+    3300010: IconFrame
+    3300012: Orb
+    4300000: CandleLeft
+    4300002: CandleRight
+    4300004: Icon
+    4300006: Bowl
+    4300008: Orb
+    4300010: Altar
+    4300012: IconFrame
+    7400000: OrbRest
+    7400002: OrbFloat
+    7400004: Orb|OrbFloat
+    7400006: Orb|OrbRest
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: OrbRest
+      takeName: OrbRest
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Altar
+        weight: 1
+      - path: Bowl
+        weight: 1
+      - path: CandleLeft
+        weight: 1
+      - path: CandleRight
+        weight: 1
+      - path: Icon
+        weight: 1
+      - path: IconFrame
+        weight: 1
+      - path: Orb
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: OrbFloat
+      takeName: OrbFloat
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Altar
+        weight: 1
+      - path: Bowl
+        weight: 1
+      - path: CandleLeft
+        weight: 1
+      - path: CandleRight
+        weight: 1
+      - path: Icon
+        weight: 1
+      - path: IconFrame
+        weight: 1
+      - path: Orb
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
