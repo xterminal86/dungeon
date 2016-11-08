@@ -1111,7 +1111,7 @@ public class App : MonoBehaviour
         _fogColor.b += _fogColorDelta;
       }
 
-      _starsRotation.x = 0.0f;
+      _starsRotation.x += (Sun.SunMoveDelta / 8.0f);
       _starsRotation.y += (Sun.SunMoveDelta / 4.0f);
       _starsRotation.z = 0.0f;
 

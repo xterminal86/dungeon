@@ -1,4 +1,6 @@
-﻿ Shader "RenderFX/Skybox With Fog" 
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
+ Shader "RenderFX/Skybox With Fog" 
  {
 	 Properties 
 	 {
@@ -40,7 +42,7 @@
 	         v2f o;
 	         o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 	         o.texcoord = v.texcoord;
-	         o.dir = mul(_Object2World, v.vertex);
+	         o.dir = mul(unity_ObjectToWorld, v.vertex);
 	         return o;
 	     }
 	     

@@ -24,14 +24,26 @@ public class SunController : MonoBehaviour
   void Start()
   {
     _sunMoveDelta = 360.0f / GlobalConstants.InGameDayNightLength;
+
+    // Procedural skybox is tied internally to directional light angle,
+    // so complete darkness occures when light is around 340 (-20) degrees around X axis.
+    // If light goes below the ground, shadows start to "detach" from objects, so
+    // we need to fade out shadows before light goes below 0.
+    // That's why we add some more to the shadow strength delta during dusk.
+    // The dawn looks OK.
+
     _shadowsStrengthNightDelta = 1.0f / (GlobalConstants.InGameNightStartSeconds - GlobalConstants.InGameDuskStartSeconds);
+    _shadowsStrengthNightDelta += _shadowsStrengthNightDelta / 1.5f;
+
     _shadowsStrengthDawnDelta = 1.0f / GlobalConstants.InGameDawnEndSeconds;
+
     _sunIntensityDuskDelta = 1.0f / (GlobalConstants.InGameNightStartSeconds - GlobalConstants.InGameDuskStartSeconds);
+    _sunIntensityDuskDelta += _sunIntensityDuskDelta / 2.0f;
+
+    _sunIntensityDawnDelta = 1.0f / GlobalConstants.InGameDawnEndSeconds;
 
     // Minimum ambient light is 0.2, maximum is 0.5
     _ambientIntensityDelta = 0.3f / (GlobalConstants.InGameNightStartSeconds - GlobalConstants.InGameDuskStartSeconds);
-
-    _sunIntensityDawnDelta = 1.0f / GlobalConstants.InGameDawnEndSeconds;
 
     _cameraAngles = SunTransform.eulerAngles;
   }

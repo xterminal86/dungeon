@@ -30,6 +30,10 @@ public class DateAndTime : MonoSingleton<DateAndTime>
 
   InGameDateTime _inGameDateTime = new InGameDateTime();
 
+  // If we use time in Update() of SunController and here,
+  // it will become unsynchronized. That's why we make one in-game
+  // clock for synchronization.
+
   bool _wasTick = false;
   public bool WasTick
   {
