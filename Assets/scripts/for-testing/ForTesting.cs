@@ -11,6 +11,6 @@ public class ForTesting : MonoBehaviour
   {
     _valueToChange = Mathf.SmoothDamp(_valueToChange, 1.0f, ref _velocity, Mathf.Infinity, 0.1f);
 
-    Debug.Log(_valueToChange + " " + _velocity);	
+    //Debug.Log(_valueToChange + " " + _velocity);	
 	}
 }

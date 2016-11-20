@@ -28,7 +28,17 @@ public class TitleScreen : MonoBehaviour
     GUIManager.Instance.TitleScreenButtonsHolder.SetActive(true);
   }
 
-  void OnLevelWasLoaded(int level)
+  void OnEnable()
+  {
+    SceneManager.sceneLoaded += SceneLoadedHandler;
+  }
+
+  void OnDisable()
+  {
+    SceneManager.sceneLoaded -= SceneLoadedHandler;
+  }
+
+  void SceneLoadedHandler(Scene scene, LoadSceneMode mode)
   {
     ScreenFader.Instance.FadeIn();
     TorchSound.Play();

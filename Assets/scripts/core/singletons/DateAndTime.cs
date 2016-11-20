@@ -8,7 +8,7 @@ public class DateAndTime : MonoSingleton<DateAndTime>
 {
   public Text TimeText;
 
-  int _inGameTime = GlobalConstants.InGameDawnEndSeconds;
+  int _inGameTime = 0;
   public int InGameTime
   {
     get { return _inGameTime; }
@@ -68,19 +68,23 @@ public class DateAndTime : MonoSingleton<DateAndTime>
 
   void UpdateDaytimeString()
   {
-    if (InGameTime < GlobalConstants.InGameDawnEndSeconds)
+    //if (InGameTime < GlobalConstants.InGameDawnEndSeconds)
+    if (InGameTime > GlobalConstants.DawnStartTime)
     {
       _daytime = "Dawn";
     }
-    else if (InGameTime > GlobalConstants.InGameDawnEndSeconds && InGameTime < GlobalConstants.InGameDuskStartSeconds)
+    //else if (InGameTime > GlobalConstants.InGameDawnEndSeconds && InGameTime < GlobalConstants.InGameDuskStartSeconds)
+    else if (InGameTime < GlobalConstants.DuskStartTime)
     {
       _daytime = "Daytime";
     }
-    else if (InGameTime > GlobalConstants.InGameDuskStartSeconds && InGameTime < GlobalConstants.InGameNightStartSeconds)
+    //else if (InGameTime > GlobalConstants.InGameDuskStartSeconds && InGameTime < GlobalConstants.InGameNightStartSeconds)
+    else if (InGameTime > GlobalConstants.DuskStartTime && InGameTime < GlobalConstants.NightStartTime)
     {
       _daytime = "Dusk";
     }
-    else if (InGameTime > GlobalConstants.InGameNightStartSeconds)
+    //else if (InGameTime > GlobalConstants.InGameNightStartSeconds)
+    else if (InGameTime > GlobalConstants.NightStartTime && InGameTime < GlobalConstants.DawnStartTime)
     {
       _daytime = "Night";
     }

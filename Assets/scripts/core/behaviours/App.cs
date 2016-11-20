@@ -86,8 +86,18 @@ public class App : MonoBehaviour
 
   float _fogColorDelta = 0.0f;
 
+  void OnEnable()
+  {
+    SceneManager.sceneLoaded += SceneLoadedHandler;
+  }
+
+  void OnDisable()
+  {
+    SceneManager.sceneLoaded -= SceneLoadedHandler;
+  }
+
   Color _fogColor = Color.black;
-  void OnLevelWasLoaded(int level)
+  void SceneLoadedHandler(Scene scene, LoadSceneMode mode)
   {    
     DateAndTime.Instance.Initialize();
 

@@ -21,9 +21,17 @@ public class SunController : MonoBehaviour
   float _sunIntensityDuskDelta = 0.0f;
   float _sunIntensityDawnDelta = 0.0f;
   float _ambientIntensityDelta = 0.0f;
+
+  float _sunDayDelta = 0.0f;
+  float _sunDawnDuskDelta = 0.0f;
+  float _sunNightDelta = 0.0f;
   void Start()
   {
     _sunMoveDelta = 360.0f / GlobalConstants.InGameDayNightLength;
+
+    _sunDayDelta = 180.0f / GlobalConstants.DuskStartTime;
+    _sunDawnDuskDelta = 25.0f / GlobalConstants.DawnDuskLenght;
+    _sunNightDelta = 130.0f / GlobalConstants.NightStartTime;
 
     // Procedural skybox is tied internally to directional light angle,
     // so complete darkness occures when light is around 340 (-20) degrees around X axis.
@@ -48,14 +56,38 @@ public class SunController : MonoBehaviour
     _cameraAngles = SunTransform.eulerAngles;
   }
 
+  float _sunDelta = 0.0f;
+  void CheckSunDelta()
+  {
+    if (DateAndTime.Instance.InGameTime > GlobalConstants.DawnStartTime 
+    || (DateAndTime.Instance.InGameTime > GlobalConstants.DuskStartTime && DateAndTime.Instance.InGameTime < GlobalConstants.NightStartTime))
+    {
+      _sunDelta = _sunDawnDuskDelta;
+    }
+    else if (DateAndTime.Instance.InGameTime < GlobalConstants.DuskStartTime)
+    {
+      _sunDelta = _sunDayDelta;
+    }
+    else if (DateAndTime.Instance.InGameTime > GlobalConstants.NightStartTime 
+           && DateAndTime.Instance.InGameTime < GlobalConstants.DawnStartTime)
+    {
+      _sunDelta = _sunNightDelta;
+    }
+  }
+
   void Update()
   {
-    _cameraAngles.x = 180.0f - _sunMoveDelta * DateAndTime.Instance.InGameTime;
+    CheckSunDelta();
+
+    _cameraAngles.x = _sunDelta * DateAndTime.Instance.InGameTime;
+    //_cameraAngles.x -= _sunMoveDelta * Time.deltaTime;
     _cameraAngles.y = 0.0f;
     _cameraAngles.z = 0.0f;
 
     if (DateAndTime.Instance.WasTick)
     {
+      //_cameraAngles.x = 180.0f - _sunMoveDelta * DateAndTime.Instance.InGameTime;
+
       if (DateAndTime.Instance.InGameTime > GlobalConstants.InGameDuskStartSeconds)
       {
         LightComponent.intensity -= _sunIntensityDuskDelta;
