@@ -12,9 +12,14 @@ public class DateAndTime : MonoSingleton<DateAndTime>
   public int InGameTime
   {
     get { return _inGameTime; }
+    set { _inGameTime = value; }
   }
 
-  string _daytime = string.Empty;
+  string _daytimeString = string.Empty;
+  public string DaytimeString
+  {
+    get { return _daytimeString; }
+  }
 
   float _timerCondition = 0.0f;
   protected override void Init()
@@ -63,30 +68,30 @@ public class DateAndTime : MonoSingleton<DateAndTime>
 
     _timer += Time.deltaTime;
 
-    TimeText.text = string.Format("{0}\n{1} ({2})", _inGameDateTime.ToString(), _inGameTime, _daytime);
+    TimeText.text = string.Format("{0}\n{1} ({2})", _inGameDateTime.ToString(), _inGameTime, _daytimeString);
   }
 
   void UpdateDaytimeString()
   {
     //if (InGameTime < GlobalConstants.InGameDawnEndSeconds)
-    if (InGameTime > GlobalConstants.DawnStartTime)
+    if (InGameTime > GlobalConstants.DawnStartTime && InGameTime < GlobalConstants.DawnEndTime)
     {
-      _daytime = "Dawn";
+      _daytimeString = "Dawn";
     }
     //else if (InGameTime > GlobalConstants.InGameDawnEndSeconds && InGameTime < GlobalConstants.InGameDuskStartSeconds)
-    else if (InGameTime < GlobalConstants.DuskStartTime)
+    else if (InGameTime > GlobalConstants.DawnStartTime && InGameTime < GlobalConstants.DuskStartTime)
     {
-      _daytime = "Daytime";
+      _daytimeString = "Daytime";
     }
     //else if (InGameTime > GlobalConstants.InGameDuskStartSeconds && InGameTime < GlobalConstants.InGameNightStartSeconds)
-    else if (InGameTime > GlobalConstants.DuskStartTime && InGameTime < GlobalConstants.NightStartTime)
+    else if (InGameTime > GlobalConstants.DuskStartTime && InGameTime < GlobalConstants.DuskEndTime)
     {
-      _daytime = "Dusk";
+      _daytimeString = "Dusk";
     }
     //else if (InGameTime > GlobalConstants.InGameNightStartSeconds)
-    else if (InGameTime > GlobalConstants.NightStartTime && InGameTime < GlobalConstants.DawnStartTime)
+    else if (InGameTime > GlobalConstants.DuskEndTime)
     {
-      _daytime = "Night";
+      _daytimeString = "Night";
     }
   }
 }

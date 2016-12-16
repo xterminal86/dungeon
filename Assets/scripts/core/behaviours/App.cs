@@ -67,6 +67,8 @@ public class App : MonoBehaviour
   [Range(1.0f, 100.0f)]
   public float LinearFogWidth = 1.0f;
 
+  float _fogDensity = 0.0f;
+
   int _generatedMapWidth = 50, _generatedMapHeight = 50;
   public int GeneratedMapWidth
   {
@@ -84,8 +86,6 @@ public class App : MonoBehaviour
     get { return _generatedMap; }
   }
 
-  float _fogColorDelta = 0.0f;
-
   void OnEnable()
   {
     SceneManager.sceneLoaded += SceneLoadedHandler;
@@ -96,18 +96,55 @@ public class App : MonoBehaviour
     SceneManager.sceneLoaded -= SceneLoadedHandler;
   }
 
+  ParticleSystemRenderer _starsRenderer;
+  void Start()
+  {
+    _starsRotation = Stars.transform.localEulerAngles;
+
+    _starsRenderer = Stars.GetComponent<ParticleSystemRenderer>();
+  }
+
+  float _fogDensityDelta = 0.0f;
+  void AdjustFogDensityForTime()
+  {
+    _fogDensityDelta = FogDensity / (GlobalConstants.DawnEndTime - GlobalConstants.DawnStartTime);
+
+    int igt = DateAndTime.Instance.InGameTime;
+
+    if (igt > GlobalConstants.DawnEndTime && igt < GlobalConstants.DuskStartTime)
+    {
+      _fogDensity = 0.0f;
+    }
+    else if (igt > GlobalConstants.DuskEndTime)
+    {
+      _fogDensity = FogDensity;
+    }
+    else if (igt >= GlobalConstants.DawnStartTime && igt <= GlobalConstants.DawnEndTime)
+    {
+      _fogDensity = FogDensity - _fogDensityDelta * igt;
+    }
+    else if (igt >= GlobalConstants.DuskStartTime && igt <= GlobalConstants.DuskEndTime)
+    {
+      int normalizedTime = igt - GlobalConstants.DuskStartTime;
+      _fogDensity = _fogDensityDelta * normalizedTime;
+    }
+  }
+
   Color _fogColor = Color.black;
   void SceneLoadedHandler(Scene scene, LoadSceneMode mode)
   {    
     DateAndTime.Instance.Initialize();
 
+    DateAndTime.Instance.InGameTime = GlobalConstants.DawnEndTime;
+
+    AdjustFogDensityForTime();
+
     _fogColor = FogColor;
-    _fogColorDelta = 1.0f / (GlobalConstants.InGameNightStartSeconds - GlobalConstants.InGameDuskStartSeconds);
 
     UnityEngine.RenderSettings.fog = EnableFog;
     UnityEngine.RenderSettings.fogMode = Type;
     UnityEngine.RenderSettings.fogColor = _fogColor;
-    UnityEngine.RenderSettings.fogDensity = FogDensity;
+    UnityEngine.RenderSettings.fogDensity = _fogDensity;
     UnityEngine.RenderSettings.fogStartDistance = Camera.main.farClipPlane - LinearFogWidth * 2;
     UnityEngine.RenderSettings.fogEndDistance = Camera.main.farClipPlane - LinearFogWidth;
 
@@ -199,7 +236,7 @@ public class App : MonoBehaviour
     GUIManager.Instance.SetupGameForms();
 
     Vector3 starsPos = new Vector3((GeneratedMapWidth / 2) * GlobalConstants.WallScaleFactor, 0.0f, (GeneratedMapHeight / 2) * GlobalConstants.WallScaleFactor);
-    Stars.transform.position = starsPos;
+    Stars.transform.localPosition = starsPos;
   }
 
   // TODO: In the future move all item names from items-db.xml somewhere
@@ -1103,42 +1140,70 @@ public class App : MonoBehaviour
     ScreenFader.Instance.FadeIn(() => { SceneManager.LoadScene("title"); });
   }
 
+  Color _starsColor = Color.white;
   Vector3 _starsRotation = Vector3.zero;
   void Update()
   {
     if (DateAndTime.Instance.WasTick)
     {
-      if (DateAndTime.Instance.InGameTime > GlobalConstants.InGameDuskStartSeconds)
+      if (DateAndTime.Instance.InGameTime >= GlobalConstants.DuskStartTime && DateAndTime.Instance.InGameTime <= GlobalConstants.DuskEndTime)
       {
-        _fogColor.r -= _fogColorDelta;
-        _fogColor.g -= _fogColorDelta;
-        _fogColor.b -= _fogColorDelta;
+        _starsColor.r += Sun.DayNightFadeDelta;
+        _starsColor.g += Sun.DayNightFadeDelta;
+        _starsColor.b += Sun.DayNightFadeDelta;
+        _starsColor.a += Sun.DayNightFadeDelta;
+
+        _fogDensity += _fogDensityDelta;
+
+        _fogColor.r -= Sun.DayNightFadeDelta;
+        _fogColor.g -= Sun.DayNightFadeDelta;
+        _fogColor.b -= Sun.DayNightFadeDelta;
       }
-      else if (DateAndTime.Instance.InGameTime < GlobalConstants.InGameDawnEndSeconds)
+      else if (DateAndTime.Instance.InGameTime >= GlobalConstants.DawnStartTime && DateAndTime.Instance.InGameTime <= GlobalConstants.DawnEndTime)
       {
-        _fogColor.r += _fogColorDelta;
-        _fogColor.g += _fogColorDelta;
-        _fogColor.b += _fogColorDelta;
+        _starsColor.r -= Sun.DayNightFadeDelta;
+        _starsColor.g -= Sun.DayNightFadeDelta;
+        _starsColor.b -= Sun.DayNightFadeDelta;
+        _starsColor.a -= Sun.DayNightFadeDelta;
+
+        _fogDensity -= _fogDensityDelta;
+
+        _fogColor.r += Sun.DayNightFadeDelta;
+        _fogColor.g += Sun.DayNightFadeDelta;
+        _fogColor.b += Sun.DayNightFadeDelta;
       }
 
-      _starsRotation.x += (Sun.SunMoveDelta / 8.0f);
-      _starsRotation.y += (Sun.SunMoveDelta / 4.0f);
-      _starsRotation.z = 0.0f;
+      //_starsRotation.x += (Sun.SunMoveDelta / 4.0f);
+      //_starsRotation.y += (Sun.SunMoveDelta / 4.0f);
+      _starsRotation.z += (Sun.SunMoveDelta / 4.0f);
 
-      Stars.transform.eulerAngles = _starsRotation;
+      Stars.transform.localEulerAngles = _starsRotation;
     }
 
     _fogColor.r = Mathf.Clamp(_fogColor.r, 0.0f, FogColor.r);
     _fogColor.g = Mathf.Clamp(_fogColor.g, 0.0f, FogColor.g);
     _fogColor.b = Mathf.Clamp(_fogColor.b, 0.0f, FogColor.b);
 
-    UnityEngine.RenderSettings.fogColor = _fogColor;
+    _fogDensity = Mathf.Clamp(_fogDensity, 0.0f, FogDensity);
 
-    if (DateAndTime.Instance.InGameTime > GlobalConstants.InGameNightStartSeconds && !Stars.gameObject.activeSelf)
+    _starsColor.r = Mathf.Clamp(_starsColor.r, 0.0f, 1.0f);
+    _starsColor.g = Mathf.Clamp(_starsColor.g, 0.0f, 1.0f);
+    _starsColor.b = Mathf.Clamp(_starsColor.b, 0.0f, 1.0f);
+    _starsColor.a = Mathf.Clamp(_starsColor.a, 0.0f, 1.0f);
+
+    _starsRenderer.material.SetColor("_TintColor", _starsColor);
+    //var psMain = Stars.main;
+    //psMain.startColor = _starsColor;
+
+    UnityEngine.RenderSettings.fogDensity = _fogDensity;
+
+    //UnityEngine.RenderSettings.fogColor = _fogColor;
+
+    if (DateAndTime.Instance.DaytimeString == "Dusk" && !Stars.gameObject.activeSelf)
     {
       Stars.gameObject.SetActive(true);
     }
-    else if (DateAndTime.Instance.InGameTime < GlobalConstants.InGameDawnEndSeconds && Stars.gameObject.activeSelf)
+    else if (DateAndTime.Instance.DaytimeString == "Daytime" && Stars.gameObject.activeSelf)
     {
       Stars.gameObject.SetActive(false);
     }
