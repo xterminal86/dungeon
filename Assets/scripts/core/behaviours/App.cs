@@ -235,8 +235,8 @@ public class App : MonoBehaviour
 
     GUIManager.Instance.SetupGameForms();
 
-    Vector3 starsPos = new Vector3((GeneratedMapWidth / 2) * GlobalConstants.WallScaleFactor, 0.0f, (GeneratedMapHeight / 2) * GlobalConstants.WallScaleFactor);
-    Stars.transform.localPosition = starsPos;
+    //Vector3 starsPos = new Vector3((GeneratedMapWidth / 2) * GlobalConstants.WallScaleFactor, 0.0f, (GeneratedMapHeight / 2) * GlobalConstants.WallScaleFactor);
+    //Stars.transform.localPosition = starsPos;
   }
 
   // TODO: In the future move all item names from items-db.xml somewhere
