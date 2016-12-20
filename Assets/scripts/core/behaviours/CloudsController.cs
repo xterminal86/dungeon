@@ -19,22 +19,46 @@ public class CloudsController : MonoBehaviour
 
   public int MapSize = 50;
 
+  public Color CloudColor = Color.white;
+
   // Maximum width and height of the cloud (should be odd)
   const int _size = 29;
 
   int[,] _cloud = new int[_size, _size];
 
+  // Starting array coordinate (_startIndex, _startIndex)
   int _startIndex = 0;
 
   Vector2 _cloudFloatSpeedRange = new Vector2(0.1f, 1.0f);
 
+  // Used in cloud generation algorithm to look around block by adding corresponding component of this vector
   List<Vector2> _cloudPositions = new List<Vector2>()
   {
     new Vector2(1, 0), new Vector2(-1, 0), new Vector2(0, 1), new Vector2(0, -1)
   };
     
+  Texture2D _cloudTexture;
+  Material _cloudMaterial;
 	void Start () 
 	{    
+    _cloudTexture = new Texture2D(128, 128, TextureFormat.ARGB32, false);
+
+    for (int x = 0; x < _cloudTexture.width; x++)
+    {
+      for (int y = 0; y < _cloudTexture.height; y++)
+      {
+        _cloudTexture.SetPixel(x, y, new Color(CloudColor.r, CloudColor.g, CloudColor.b, CloudColor.a));
+      }
+    }
+
+    _cloudTexture.Apply();
+
+    _cloudMaterial = new Material(Shader.Find("Unlit/Transparent"));
+
+    _cloudMaterial.SetTexture("_MainTex", _cloudTexture);
+
+    // Generation starts here
+
     for (int i = 0; i < MaximumNumberOfClouds; i++)    
     {      
       System.Array.Clear(_cloud, 0, _size * _size);
@@ -44,6 +68,7 @@ public class CloudsController : MonoBehaviour
       FormCloud(_startIndex, _startIndex);
 
       // FIXME: single hole is just one case. There might be two, three and more neighbouring holes as well.
+      // Either fix it or beat it.
 
       //CloseHoles();
 
@@ -51,6 +76,8 @@ public class CloudsController : MonoBehaviour
 
       InstantiateCloud();
     }
+
+    // Spread clouds across the map
 
     SpreadClouds();
 	}
@@ -167,6 +194,16 @@ public class CloudsController : MonoBehaviour
     Debug.Log(output);
   }
 
+  void SetMaterial(GameObject go)
+  {
+    var renderers = go.GetComponentsInChildren<MeshRenderer>();
+
+    for (int i = 0; i < renderers.Length; i++)
+    {
+      renderers[i].material = _cloudMaterial;
+    }
+  }
+
   List<float> _cloudsSpeeds = new List<float>();
   List<GameObject> _cloudsList = new List<GameObject>();
 
@@ -185,6 +222,8 @@ public class CloudsController : MonoBehaviour
         {
           GameObject cloudBlock = (GameObject)Instantiate(CloudInner, new Vector3(x, 0.0f, y), Quaternion.identity);
           cloudBlock.transform.SetParent(_cloudHolder.transform, false);
+
+          SetMaterial(cloudBlock);
         }
       }
     }
@@ -226,6 +265,8 @@ public class CloudsController : MonoBehaviour
         {
           cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.identity);
           cloudOuter.transform.SetParent(_cloudHolder.transform, false);
+
+          SetMaterial(cloudOuter);
         }
 
         // Up
@@ -234,6 +275,8 @@ public class CloudsController : MonoBehaviour
         {
           cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(90.0f, Vector3.up));
           cloudOuter.transform.SetParent(_cloudHolder.transform, false);
+
+          SetMaterial(cloudOuter);
         }
 
         // Right
@@ -242,6 +285,8 @@ public class CloudsController : MonoBehaviour
         {
           cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(180.0f, Vector3.up));
           cloudOuter.transform.SetParent(_cloudHolder.transform, false);
+
+          SetMaterial(cloudOuter);
         }
 
         // Down
@@ -250,6 +295,8 @@ public class CloudsController : MonoBehaviour
         {
           cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(270.0f, Vector3.up));
           cloudOuter.transform.SetParent(_cloudHolder.transform, false);
+
+          SetMaterial(cloudOuter);
         }
       }
     }
@@ -273,24 +320,32 @@ public class CloudsController : MonoBehaviour
     {
       cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.identity);
       cloudOuter.transform.SetParent(_cloudHolder.transform, false);
+
+      SetMaterial(cloudOuter);
     }
 
     if (hy >= _size)
     {
       cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(180.0f, Vector3.up));
       cloudOuter.transform.SetParent(_cloudHolder.transform, false);
+
+      SetMaterial(cloudOuter);
     }
 
     if (lx < 0)
     {
       cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(90.0f, Vector3.up));
       cloudOuter.transform.SetParent(_cloudHolder.transform, false);
+
+      SetMaterial(cloudOuter);
     }
 
     if (hx >= _size)
     {
       cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(270.0f, Vector3.up));
       cloudOuter.transform.SetParent(_cloudHolder.transform, false);
+
+      SetMaterial(cloudOuter);
     }
   }
 
