@@ -15,12 +15,18 @@ public class CloudsController : MonoBehaviour
 
   public int MaximumNumberOfClouds = 10;
 
-  // Maximum width and height of the cloud
-  const int _size = 15;
+  public float CloudsHeight = 4.0f;
+
+  public int MapSize = 50;
+
+  // Maximum width and height of the cloud (should be odd)
+  const int _size = 29;
 
   int[,] _cloud = new int[_size, _size];
 
   int _startIndex = 0;
+
+  Vector2 _cloudFloatSpeedRange = new Vector2(0.1f, 1.0f);
 
   List<Vector2> _cloudPositions = new List<Vector2>()
   {
@@ -28,16 +34,60 @@ public class CloudsController : MonoBehaviour
   };
     
 	void Start () 
-	{
-    _startIndex = (_size + 1) / 2;
+	{    
+    for (int i = 0; i < MaximumNumberOfClouds; i++)    
+    {      
+      System.Array.Clear(_cloud, 0, _size * _size);
 
-    FormCloud(_startIndex, _startIndex);
+      _startIndex = (_size + 1) / 2;
 
-    CloseHoles();
+      FormCloud(_startIndex, _startIndex);
 
-    //PrintClouds();
-    InstantiateClouds();
+      // FIXME: single hole is just one case. There might be two, three and more neighbouring holes as well.
+
+      //CloseHoles();
+
+      //PrintClouds();
+
+      InstantiateCloud();
+    }
+
+    SpreadClouds();
 	}
+
+  float _cloudOffsetMaxMultiplier = 1.0f;
+    
+  float[] _cloudRotationAngles = { 0.0f, 90.0f, 180.0f, 270.0f };    
+  void SpreadClouds()
+  {    
+    Vector3 pos = Vector3.zero;
+    Vector3 rotation = Vector3.zero;
+
+    foreach (var cloud in _cloudsList)
+    {
+      pos = Vector3.zero;
+      rotation = Vector3.zero;
+
+      _cloudOffsetMaxMultiplier = (MapSize * GlobalConstants.WallScaleFactor) / _size;
+
+      float deltaMultiplierX = Random.Range(1.0f, _cloudOffsetMaxMultiplier);
+      float deltaMultiplierZ = Random.Range(1.0f, _cloudOffsetMaxMultiplier);
+
+      int rotationIndex = Random.Range(0, _cloudRotationAngles.Length);
+
+      float newX = -MapSize * GlobalConstants.WallScaleFactor + deltaMultiplierX * (_size * 2);
+      float newZ = -MapSize * GlobalConstants.WallScaleFactor + deltaMultiplierZ * (_size * 2);
+
+      rotation.y = _cloudRotationAngles[rotationIndex];
+
+      float cloudsHeightOffset = Random.Range(-4.0f, 4.0f);
+
+      pos.Set(newX, CloudsHeight + cloudsHeightOffset, newZ);
+
+      cloud.transform.localPosition = pos;
+      cloud.transform.localEulerAngles = rotation;
+    }
+  }
 
   void CloseHoles()
   {
@@ -63,9 +113,13 @@ public class CloudsController : MonoBehaviour
           continue;
         }
 
-        if (_cloud[x, y] == 0 && _cloud[x, ly] == 1 && _cloud[lx, y] == 1 && _cloud[x, hy] == 1 && _cloud[hx, y] == 1)
+        if (_cloud[x, y] == 0)
         {
-          _cloud[x, y] = 1;
+          // Just a hole block
+          if (_cloud[x, ly] == 1 && _cloud[lx, y] == 1 && _cloud[x, hy] == 1 && _cloud[hx, y] == 1)
+          {
+            _cloud[x, y] = 1;
+          }
         }
       }
     }
@@ -86,7 +140,7 @@ public class CloudsController : MonoBehaviour
       int success = Random.Range(0, 100);
 
       if (success < _nextProbability)
-      {
+      {  
         FormCloud(posX + (int)_cloudPositions[i].x, posY + (int)_cloudPositions[i].y);
 
         _nextProbability -= 5;
@@ -113,10 +167,13 @@ public class CloudsController : MonoBehaviour
     Debug.Log(output);
   }
 
+  List<float> _cloudsSpeeds = new List<float>();
+  List<GameObject> _cloudsList = new List<GameObject>();
+
   GameObject _cloudHolder;
-  void InstantiateClouds()
-  {    
-    _cloudHolder = (GameObject)Instantiate(CloudHolder);
+  void InstantiateCloud()
+  { 
+    _cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(0.0f, CloudsHeight, 0.0f), Quaternion.identity);
 
     // Form cloud
 
@@ -196,6 +253,11 @@ public class CloudsController : MonoBehaviour
         }
       }
     }
+
+    float floatSpeed = Random.Range(_cloudFloatSpeedRange.x, _cloudFloatSpeedRange.y);
+
+    _cloudsSpeeds.Add(floatSpeed);
+    _cloudsList.Add(_cloudHolder);
   }
 
   void CloseEdgeCloudBlock(int x, int y)
@@ -232,8 +294,43 @@ public class CloudsController : MonoBehaviour
     }
   }
 
+  Vector3 _cloudPos = Vector3.zero;
 	void Update () 
 	{
-		
-	}
+    for (int i = 0; i < _cloudsList.Count; i++)
+    { 
+      if (_cloudsList[i].transform.localPosition.x > MapSize * GlobalConstants.WallScaleFactor + _size)
+      {
+        ResetCloudPosition(i);
+      }
+
+      _cloudPos = _cloudsList[i].transform.localPosition;
+      _cloudPos.x += _cloudsSpeeds[i] * Time.deltaTime;
+      _cloudsList[i].transform.localPosition = _cloudPos;
+    }
+	}  
+
+  Vector3 _newCloudPos = Vector3.zero;
+  Vector3 _newCloudRotation = Vector3.zero;
+  void ResetCloudPosition(int cloudIndex)
+  {
+    _newCloudPos = Vector3.zero;
+    _newCloudRotation = Vector3.zero;
+
+    float deltaMultiplierZ = Random.Range(1.0f, _cloudOffsetMaxMultiplier);
+
+    int rotationIndex = Random.Range(0, _cloudRotationAngles.Length);
+
+    _newCloudRotation.y = _cloudRotationAngles[rotationIndex];
+
+    float cloudsHeightOffset = Random.Range(-4.0f, 4.0f);
+    float newZ = -MapSize * GlobalConstants.WallScaleFactor + deltaMultiplierZ * (_size * 2);
+
+    _newCloudPos.Set(-MapSize * GlobalConstants.WallScaleFactor - _size, CloudsHeight + cloudsHeightOffset, newZ);
+
+    _cloudsList[cloudIndex].transform.localPosition = _newCloudPos;
+    _cloudsList[cloudIndex].transform.localEulerAngles = _newCloudRotation;
+
+    _cloudsSpeeds[cloudIndex] = Random.Range(_cloudFloatSpeedRange.x, _cloudFloatSpeedRange.y);
+  }
 }
