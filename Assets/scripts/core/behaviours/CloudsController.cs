@@ -13,6 +13,8 @@ public class CloudsController : MonoBehaviour
   // Empty object to hold our formed cloud structure for easy manipulation
   public GameObject CloudHolder;
 
+  public GameObject CloudBlock;
+
   public int MaximumNumberOfClouds = 10;
 
   public float CloudsHeight = 4.0f;
@@ -57,6 +59,42 @@ public class CloudsController : MonoBehaviour
 
     _cloudMaterial.SetTexture("_MainTex", _cloudTexture);
 
+    //GenerateClouds();
+    GenerateCloudsScaled();
+
+    // Spread clouds across the map
+
+    SpreadClouds();
+	}
+
+  void GenerateCloudsScaled()
+  {
+    for (int i = 0; i < MaximumNumberOfClouds; i++)
+    {
+      _cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(0.0f, CloudsHeight, 0.0f), Quaternion.identity);
+
+      int cloudSize = Random.Range(5, _size);
+      int cloudSizeOffsetX = Random.Range(-3, 3);
+      int cloudSizeOffsetY = Random.Range(-3, 3);
+
+      GameObject cloud = (GameObject)Instantiate(CloudBlock, new Vector3(0.0f, CloudsHeight, 0.0f), Quaternion.identity);
+      Vector3 scale = cloud.transform.localScale;
+      scale.x = cloudSize + cloudSizeOffsetX;
+      scale.z = cloudSize + cloudSizeOffsetY;
+      cloud.transform.localScale = scale;
+
+      cloud.transform.SetParent(_cloudHolder.transform, false);
+      SetMaterial(cloud);
+
+      float floatSpeed = Random.Range(_cloudFloatSpeedRange.x, _cloudFloatSpeedRange.y);
+
+      _cloudsSpeeds.Add(floatSpeed);
+      _cloudsList.Add(_cloudHolder);
+    }
+  }
+
+  void GenerateClouds()
+  {
     // Generation starts here
 
     for (int i = 0; i < MaximumNumberOfClouds; i++)    
@@ -76,11 +114,7 @@ public class CloudsController : MonoBehaviour
 
       InstantiateCloud();
     }
-
-    // Spread clouds across the map
-
-    SpreadClouds();
-	}
+  }
 
   float _cloudOffsetMaxMultiplier = 1.0f;
     
