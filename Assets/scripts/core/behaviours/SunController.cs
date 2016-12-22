@@ -17,6 +17,10 @@ public class SunController : MonoBehaviour
     get { return _sunMoveDelta; }
   }
 
+  Vector2 _atmosphereThickness = new Vector2(0.0f, 1.5f);
+
+  float _atmosphereThicknessDelta = 0.0f;
+
   float _dayNightFadeDelta = 0.0f;
   public float DayNightFadeDelta
   {
@@ -31,6 +35,7 @@ public class SunController : MonoBehaviour
     _sunMoveDelta = 360.0f / GlobalConstants.InGameDayNightLength;
 
     _dayNightFadeDelta = 1.0f / (GlobalConstants.DawnEndTime - GlobalConstants.DawnStartTime);
+    _atmosphereThicknessDelta = _atmosphereThickness.y / (GlobalConstants.DawnEndTime - GlobalConstants.DawnStartTime);
 
     _cameraAngles = SunTransform.eulerAngles;
 
@@ -46,26 +51,26 @@ public class SunController : MonoBehaviour
     if (igt > GlobalConstants.DawnEndTime && igt < GlobalConstants.DuskStartTime)
     {
       LightComponent.shadowStrength = 1.0f;
-      _skyboxAtmosphereThickness = 1.0f;
+      _skyboxAtmosphereThickness = _atmosphereThickness.y;
       LightComponent.intensity = 1.0f;
     }
     else if (igt > GlobalConstants.DuskEndTime)
     {
       LightComponent.shadowStrength = 0.0f;
-      _skyboxAtmosphereThickness = 0.0f;
+      _skyboxAtmosphereThickness = _atmosphereThickness.x;
       LightComponent.intensity = 0.0f;
     }
     else if (igt >= GlobalConstants.DawnStartTime && igt <= GlobalConstants.DawnEndTime)
     {
       LightComponent.shadowStrength = _dayNightFadeDelta * igt;
-      _skyboxAtmosphereThickness = _dayNightFadeDelta * igt;
+      _skyboxAtmosphereThickness = _atmosphereThicknessDelta * igt;
       LightComponent.intensity = _dayNightFadeDelta * igt;
     }
     else if (igt >= GlobalConstants.DuskStartTime && igt <= GlobalConstants.DuskEndTime)
     {
       int normalizedTime = igt - GlobalConstants.DuskStartTime;
       LightComponent.shadowStrength = _dayNightFadeDelta * normalizedTime;
-      _skyboxAtmosphereThickness = _dayNightFadeDelta * normalizedTime;
+      _skyboxAtmosphereThickness = _atmosphereThicknessDelta * normalizedTime;
       LightComponent.intensity = _dayNightFadeDelta * normalizedTime;
     }
   }
@@ -84,19 +89,19 @@ public class SunController : MonoBehaviour
       if (DateAndTime.Instance.InGameTime > GlobalConstants.DawnStartTime && DateAndTime.Instance.InGameTime < GlobalConstants.DawnEndTime)
       {
         LightComponent.shadowStrength += _dayNightFadeDelta;
-        _skyboxAtmosphereThickness += _dayNightFadeDelta;
+        _skyboxAtmosphereThickness += _atmosphereThicknessDelta;
         LightComponent.intensity += _dayNightFadeDelta;
       }
       else if (DateAndTime.Instance.InGameTime > GlobalConstants.DuskStartTime && DateAndTime.Instance.InGameTime < GlobalConstants.DuskEndTime)
       {
         LightComponent.shadowStrength -= _dayNightFadeDelta;
-        _skyboxAtmosphereThickness -= _dayNightFadeDelta;
+        _skyboxAtmosphereThickness -= _atmosphereThicknessDelta;
         LightComponent.intensity -= _dayNightFadeDelta;
         //RenderSettings.ambientIntensity += _ambientIntensityDelta;
       }
     }
 
-    _skyboxAtmosphereThickness = Mathf.Clamp(_skyboxAtmosphereThickness, 0.0f, 1.0f);
+    _skyboxAtmosphereThickness = Mathf.Clamp(_skyboxAtmosphereThickness, _atmosphereThickness.x, _atmosphereThickness.y);
 
     SkyboxShader.material.SetFloat("_AtmosphereThickness", _skyboxAtmosphereThickness);
     LightComponent.intensity = Mathf.Clamp(LightComponent.intensity, 0.0f, 1.0f);
