@@ -8,14 +8,17 @@ public class InputController : MonoBehaviour
 { 
   public App AppScript;
 
-  public Transform RaycastPoint;
+  // Origin of raycast ray for checking move availability status.
+  // Goes from center of the tile that player (camera) currently occupies .
+  //
+  // Camera itself is moved back a little from center of the tile as a child transform, so
+  // when player rotates, the camera also rotates automatically as a child.
+  public Transform CanMoveRayOrigin;
 
   public Int2 PlayerMapPos = new Int2();
   public Int2 PlayerPreviousMapPos = new Int2();
 
   public GameObject TrailPrefab;
-
-  Vector3 _centerOfScreen = new Vector3(Screen.width / 2, Screen.height / 2, 0.0f);
 
   float _raycastDistance = GlobalConstants.WallScaleFactor + GlobalConstants.WallScaleFactor / 2;
 
@@ -97,13 +100,14 @@ public class InputController : MonoBehaviour
       _doMove = true;
     }
     else if (Input.GetKeyDown(KeyCode.Space))
-    {
-      Ray ray = Camera.main.ScreenPointToRay(_centerOfScreen);
+    {      
+      // Cast a ray forward from camera's (player) world position
+      Ray ray = new Ray(Camera.main.transform.position, GetCameraForwardVector());
+
+      //Debug.DrawRay(ray.origin, ray.direction * GlobalConstants.WallScaleFactor, Color.red, 10.0f);
 
       if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, _raycastDistance))
-      {
-        //Debug.DrawRay(ray.origin, ray.direction * _raycastDistance, Color.yellow, 10.0f, false);
-
+      {        
         if (_raycastHit.collider != null)
         {
           ModelMover mm = _raycastHit.collider.gameObject.GetComponent<ModelMover>();
@@ -314,7 +318,8 @@ public class InputController : MonoBehaviour
     //char emptyCell = AppScript.GetMapLayoutPoint(newX, newZ);
     bool obstacleAhead = false;
         
-    Ray ray = new Ray(RaycastPoint.position, new Vector3(xComponent, 0.0f, zComponent));
+    // Construct a ray from center of the tile with direction that depends on movement type
+    Ray ray = new Ray(CanMoveRayOrigin.position, new Vector3(xComponent, 0.0f, zComponent));
 
     Vector3 tmp = ray.direction;
 
@@ -339,6 +344,8 @@ public class InputController : MonoBehaviour
       ray.direction = tmp;
     }
         
+    //Debug.DrawRay(ray.origin, ray.direction * GlobalConstants.WallScaleFactor, Color.yellow, 10.0f);
+
     RaycastHit hit;      
     if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
     {
