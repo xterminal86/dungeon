@@ -6,129 +6,81 @@ using System.Collections.Generic;
 public class FormItemInfo : MonoBehaviour 
 {
   public RectTransform Window;
+  public CanvasScaler Scaler;
 
   public Text HeadText;
   public Text DescriptionText;
 
-  // This is resize according to the head window width to properly position anchored description text
-  public RectTransform DescriptionTextHolderWindow;
+  // You should experimentally find these out:
+  // MaxLettersInRow are simply number of characters that fits in line before text starts to wrap.
+  // RowHeight is the height in pixels of one line of text (see comments in SetWindowTexts())
+  //
+  // Probably works the best on monospaced fonts only.
 
-  // Border and background holder
-  public RectTransform TextWindow;
+  public int MaxLettersInRow;
+  public int RowHeight;
 
-  // Minimal width of description window (hard-coded)
-  // If head text is too long, width will dynamically change accordingly.
-  int _windowMinWidth = 400;
+  Vector2 _sizeDelta = Vector2.zero;
+  Vector2 _position = Vector2.zero;
 
-  // Should be found out manually for every font size value
-  float _headLetterWidth = 12.0f;
-  float _headLetterHeight = 28.4f;
-
-  // Inner indent of text from both sides of window border to compensate for it
-  int _headTextPadding = 20;
-  int _descriptionTextPadding = 20;
-
-  // Should be found out manually for every font size value
-  float _descriptionLetterWidth = 7.45f;
-  float _descriptionLetterHeight = 16.4f;
-
-  public void SetWindowTexts(string headText, string descriptionText)
+  public void SetWindowTexts(string head, string desc)
   {
-    HeadText.text = headText;
-    DescriptionText.text = descriptionText;
+    HeadText.text = head;
+    DescriptionText.text = desc;
 
-    // Calculate pixel width of head GUI text element
-    float headTextwidth = (float)headText.Length * _headLetterWidth;
+    int newLines = 0;
+    int rows = 0;
 
-    Vector2 size = new Vector2(headTextwidth, _headLetterHeight);
-    HeadText.rectTransform.sizeDelta = size;
-
-    float windowWidth = _windowMinWidth + _headTextPadding;
-
-    // If head text is longer than minimum window width, calculate new window width
-    if (headTextwidth > _windowMinWidth)
-    {     
-      windowWidth = headTextwidth + _headTextPadding;
-    }
-
-    size.x = windowWidth;
-
-    // It's important to set size of this parent transform
-    // for child description text to be positioned correctly.
-    // DescriptionTextHolderWindow is anchored to top, while the text itself is anchored to upper left corner.
-    DescriptionTextHolderWindow.sizeDelta = size;
-
-    // Calculate GUI text element pixel width (compensate for horizontal padding for text itself and head text)
-    float descriptionTextWidth = windowWidth - _headTextPadding - _descriptionTextPadding;
-
-    //Debug.Log("Description Text GUI width : " + descriptionTextWidth);
-
-    // Compensate for head height and descritption text initial offset
-    float windowHeight = 50.0f;
-
-    int totalLines = 0;
-
-    string[] lines = descriptionText.Split('\n');
-    for (int i = 0; i < lines.Length; i++)
+    string[] splitString = desc.Split('\n');
+    for (int i = 0; i < splitString.Length; i++)
     {
-      //Debug.Log("Split line " + i + " length : " + lines[i].Length);
-
-      float lineWidth = (float)lines[i].Length * _descriptionLetterWidth;
-
-      //Debug.Log("Line width : " + lineWidth);
-
-      int linesNumber = (int)(lineWidth / descriptionTextWidth);
-
-      if (linesNumber != 0)
+      if (splitString[i].Length == 0)
       {
-        // We cannot do a "+ 1" here because there might be a situation, when text is
-        // exactly equal to the line width before wrapping occurs. In such case linesNumber will be 1,
-        // and additional + 1 will fuck newline counter up.
-        totalLines += linesNumber;
-
-        // If line will be wrapped to one and a half, linesNumber will return 1, so we will lose
-        // actual end of line. To compensate this the following is written.
-        // Second condition compensates newline for only one element of string.Split().
-        if (linesNumber == 1 || lines.Length == 1 || (linesNumber > 1 && i == lines.Length - 1 && lines.Length != 1))
-        {
-          totalLines++;
-        }
-      }
+        newLines++;
+      } 
       else
-      {
-        totalLines++;
+      {        
+        rows = (splitString[i].Length / MaxLettersInRow);
+
+        // If our line of text is equal to MaxLettersInRow, we shouldn't add new line
+        // since such text fits.
+        if (splitString[i].Length != MaxLettersInRow)
+        {
+          rows++;
+        }
+
+        newLines += rows;
       }
     }
 
-    //Debug.Log("Total lines : " + totalLines);
+    //Debug.Log("new lines: " + newLines + " | rows: " + rows);
 
-    // Add some additional padding at the end
-    windowHeight += _descriptionLetterHeight * totalLines + 5.0f;
+    // Even if font is monospaced, its size in Text component is not equal
+    // to its height. You should experimentally find out height in pixels of the specific font.
+    // In case of Old_Terminal it's 15 and only works on Constant Pixel Size canvas scaler
+    // with scale factor of 1
 
-    size.y = windowHeight;
+    _sizeDelta.x = Window.sizeDelta.x;
 
-    TextWindow.sizeDelta = size;
+    // We should consider the offset from the top of the window where item name is located.
+    // Right now it's -45, so we add 45 to the window height
+    // and 15 more for one blank line of height.
+    _sizeDelta.y = newLines * RowHeight + 60;
 
-    size.x = descriptionTextWidth;
-    size.y = totalLines * _descriptionLetterHeight;
-
-    DescriptionText.rectTransform.sizeDelta = size;
-
+    Window.sizeDelta = _sizeDelta;
+            
     Window.gameObject.SetActive(true);
-    Cursor.visible = false;
   }
 
   public void HideWindow()
   {
     Window.gameObject.SetActive(false);
-    Cursor.visible = true;
   }
 
-  Vector2 _position = Vector2.zero;
   void Update()
   {
     _position = Input.mousePosition;
-    _position.x -= (TextWindow.sizeDelta.x / 4);
+    _position.x -= (Window.sizeDelta.x / 2);
 
     Window.position = _position;
   }
