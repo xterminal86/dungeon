@@ -397,6 +397,12 @@ public static class GlobalConstants
     { "weapon-melee", WorldItemType.WEAPON_MELEE },
     { "weapon-ranged", WorldItemType.WEAPON_RANGED },
   };
+
+  public static Dictionary<int, string> BlockPrefabById = new Dictionary<int, string>() 
+  {
+    { 1, "block-grass" },
+    { 2, "block-water" }
+  };
 }
 
 public class VillagerInfo
@@ -417,6 +423,18 @@ public class VillagerInfo
     }
 
     return result;
+  }
+};
+
+public class BlockEntity
+{
+  public int BlockId = 0;
+  public string BlockName = string.Empty;
+  public Vector3 Coordinates = Vector3.zero;
+
+  public BlockEntity()
+  {
+
   }
 };
 
