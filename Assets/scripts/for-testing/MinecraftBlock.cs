@@ -15,8 +15,7 @@ public class MinecraftBlock : MonoBehaviour
 
   public Material TextureMaterial;
 
-  // Minecraft water animation texture is just two vertical sheets of 16x16 frames
-  public int Frames = 64;
+  public int Frames = 32;
 
   void Start()
   {
@@ -29,7 +28,7 @@ public class MinecraftBlock : MonoBehaviour
 
   Vector2 _offset = Vector2.zero;
 
-  const int _refreshRate = 15;
+  const int _refreshRate = 20;
   float _timerLimit = 1.0f / _refreshRate;
   float _timer = 0.0f;
   int _framesPassed = 0;
@@ -46,23 +45,14 @@ public class MinecraftBlock : MonoBehaviour
     {
       _timer = 0.0f;
 
-      _offset.y = _textureAnimationDelta * _framesPassed;
+      _framesPassed++;
 
-      if (_framesPassed >= Frames)
+      if (_framesPassed > Frames - 1)
       {
         _framesPassed = 0;
       }
 
-      if (_framesPassed > Frames / 2)
-      {
-        _offset.x = 0.5f;
-      }
-      else
-      {
-        _offset.x = 0.0f;
-      }
-
-      _framesPassed++;
+      _offset.y = _textureAnimationDelta * _framesPassed;
 
       TextureMaterial.SetTextureOffset("_MainTex", _offset);
     }

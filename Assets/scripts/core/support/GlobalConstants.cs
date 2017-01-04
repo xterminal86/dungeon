@@ -430,7 +430,9 @@ public class BlockEntity
 {
   public int BlockId = 0;
   public string BlockName = string.Empty;
-  public Vector3 Coordinates = Vector3.zero;
+  public Vector3 ArrayCoordinates = Vector3.zero;
+  public Vector3 WorldCoordinates = Vector3.zero;
+  public bool IsLiquid = false;
 
   public BlockEntity()
   {
