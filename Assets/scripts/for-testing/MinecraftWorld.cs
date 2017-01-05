@@ -78,10 +78,17 @@ public class MinecraftWorld : MonoBehaviour
           float wy = _world[x, y, z].WorldCoordinates.y;
           float wz = _world[x, y, z].WorldCoordinates.z;
 
+          if (_world[x, y, z].IsLiquid)
+          {
+            _world[x, y, z].WorldCoordinates.Set(wx, wy - 0.3f, wz);
+          }
+
+          /*
           if (y + 1 <= _worldSize - 1 && _world[x, y, z].IsLiquid && (!_world[x, y + 1, z].IsLiquid || _world[x, y + 1, z].BlockId == 0))
           {            
             _world[x, y, z].WorldCoordinates.Set(wx, wy - 0.3f, wz);
           }
+          */
 
           GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_world[x, y, z].BlockId]);
 
@@ -123,13 +130,26 @@ public class MinecraftWorld : MonoBehaviour
       // Check for map size limits
       if (nx != x && nx >= 0 && nx <= _worldSize - 1)
       {
+        // Disable shadow receiving if submerged
+        if (!_world[x, y, z].IsLiquid && _world[nx, y, z].IsLiquid)
+        {
+          if ((int)_arrayCoordinatesAdds[side][0] == -1)
+          {
+            block.LeftQuadRenderer.receiveShadows = false;
+          }
+          else if ((int)_arrayCoordinatesAdds[side][0] == 1)
+          {
+            block.RightQuadRenderer.receiveShadows = false;
+          }
+        }
+        
         // Hide corresponding side of the current block if:
         //
         // 1) Current block is solid and neighbouring block is solid
         // 2) Current block is liquid and neighbouring block is liquid
         // 3) Current block is liquid and neighbouring block is solid
 
-        if ((!_world[x, y, z].IsLiquid && !_world[nx, y, z].IsLiquid)
+        if ((!_world[x, y, z].IsLiquid && !_world[nx, y, z].IsLiquid && _world[nx, y, z].BlockId != 0)
           || (_world[x, y, z].IsLiquid &&  _world[nx, y, z].IsLiquid)
           || (_world[x, y, z].IsLiquid && !_world[nx, y, z].IsLiquid))
         {
@@ -146,7 +166,20 @@ public class MinecraftWorld : MonoBehaviour
 
       if (nz != z && nz >= 0 && nz <= _worldSize - 1)
       {
-        if ((!_world[x, y, z].IsLiquid && !_world[x, y, nz].IsLiquid)
+        // Disable shadow casting if submerged
+        if (!_world[x, y, z].IsLiquid && _world[x, y, nz].IsLiquid)
+        {
+          if ((int)_arrayCoordinatesAdds[side][2] == -1)
+          {
+            block.ForwardQuadRenderer.receiveShadows = false;
+          }
+          else if ((int)_arrayCoordinatesAdds[side][2] == 1)
+          {
+            block.BackQuadRenderer.receiveShadows = false;
+          }
+        }
+
+        if ((!_world[x, y, z].IsLiquid && !_world[x, y, nz].IsLiquid && _world[x, y, nz].BlockId !=0)
           || (_world[x, y, z].IsLiquid && _world[x, y, nz].IsLiquid)
           || (_world[x, y, z].IsLiquid && !_world[x, y, nz].IsLiquid))
         {
@@ -162,13 +195,25 @@ public class MinecraftWorld : MonoBehaviour
       }
 
       if (ny != y && ny >= 0 && ny <= _worldSize - 1)
-      {
-        if ((!_world[x, y, z].IsLiquid && !_world[x, ny, z].IsLiquid && _world[x, ny, z].BlockId != 0)
-          || (_world[x, y, z].IsLiquid && _world[x, ny, z].IsLiquid)
-          || (_world[x, y, z].IsLiquid && !_world[x, ny, z].IsLiquid && _world[x, ny, z].BlockId != 0))
+      {        
+        // Disable shadow casting if submerged
+        if (!_world[x, y, z].IsLiquid && _world[x, ny, z].IsLiquid)
         {
           if ((int)_arrayCoordinatesAdds[side][1] == -1)
           {
+            block.DownQuadRenderer.receiveShadows = false;
+          }
+          else if ((int)_arrayCoordinatesAdds[side][1] == 1)
+          {
+            block.UpQuadRenderer.receiveShadows = false;
+          }
+        }
+
+        if ((!_world[x, y, z].IsLiquid && !_world[x, ny, z].IsLiquid && _world[x, ny, z].BlockId != 0)
+          || (_world[x, y, z].IsLiquid && _world[x, ny, z].IsLiquid))
+        {
+          if ((int)_arrayCoordinatesAdds[side][1] == -1)
+          {            
             block.DownQuad.gameObject.SetActive(false);
           }
           else if ((int)_arrayCoordinatesAdds[side][1] == 1)
@@ -178,69 +223,5 @@ public class MinecraftWorld : MonoBehaviour
         }
       }
     }
-
-    /*
-    int x = (int)coordinates.x;
-    int y = (int)coordinates.y;
-    int z = (int)coordinates.z;
-
-    int hx = x + 1;
-    int lx = x - 1;
-    int hy = y + 1;
-    int ly = y - 1;
-    int hz = z + 1;
-    int lz = z - 1;
-
-    // Hide corresponding block quad if it is obstructed by another block
-    // Don't do it if obstructing block is a liquid one since it's transparent.
-
-    if (lx >= 0 && lx <= _worldSize - 1)
-    {      
-      if (_world[lx, y, z].BlockId != 0 && (_world[x, y, z].IsLiquid && (_world[lx, y, z].IsLiquid || !_world[lx, y, z].IsLiquid)))
-      {
-        block.LeftQuad.gameObject.SetActive(false);
-      }
-    }
-
-    if (hx >= 0 && hx <= _worldSize - 1)
-    {      
-      if (_world[hx, y, z].BlockId != 0 && (_world[x, y, z].IsLiquid && (_world[hx, y, z].IsLiquid || !_world[hx, y, z].IsLiquid)))
-      {
-        block.RightQuad.gameObject.SetActive(false);
-      }
-    }
-
-    if (lz >= 0 && lz <= _worldSize - 1)
-    {
-      if (_world[x, y, lz].BlockId != 0 && (_world[x, y, z].IsLiquid && (_world[x, y, lz].IsLiquid || !_world[x, y, lz].IsLiquid)))
-      {
-        block.ForwardQuad.gameObject.SetActive(false);
-      }
-    }
-
-    if (hz >= 0 && hz <= _worldSize - 1)
-    {
-      if (_world[x, y, hz].BlockId != 0 && (_world[x, y, z].IsLiquid && (_world[x, y, hz].IsLiquid || !_world[x, y, hz].IsLiquid)))
-      {
-        block.BackQuad.gameObject.SetActive(false);
-      }
-    }
-
-    if (ly >= 0 && ly <= _worldSize - 1)
-    {      
-      if (_world[x, ly, z].BlockId != 0 && (_world[x, y, z].IsLiquid && (_world[x, ly, z].IsLiquid || !_world[x, ly, z].IsLiquid)))
-      {
-        block.UpQuad.gameObject.SetActive(false);
-      }
-    }
-
-    if (hy >= 0 && hy <= _worldSize - 1)
-    {      
-      if (_world[x, hy, z].BlockId != 0 && (_world[x, y, z].IsLiquid && (_world[x, hy, z].IsLiquid || !_world[x, hy, z].IsLiquid)))
-      {
-        block.DownQuad.gameObject.SetActive(false);
-      }
-    }
-    */
   }
 }
