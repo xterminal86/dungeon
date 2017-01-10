@@ -12,17 +12,17 @@
 #...........D.............#
 ###########################
 </LAYOUT>
-<MUSIC track="music-dungeon1" />
+<MUSIC track="amb-hum" />
 <FOG density="0.1" />
 <START x="1" y="1" facing="0" />
-<BLOCKRANGE xStart="0" yStart="0" xEnd="0" yEnd="26" layer="0" prefab="block-tiles" facing="0" />	
-	<BLOCKRANGE xStart="0" yStart="0" xEnd="0" yEnd="26" layer="1" prefab="block-tiles" facing="0" />	
-<BLOCKRANGE xStart="0" yStart="0" xEnd="9" yEnd="0" layer="0" prefab="block-tiles" facing="0" />	
-	<BLOCKRANGE xStart="0" yStart="0" xEnd="9" yEnd="0" layer="1" prefab="block-tiles" facing="0" />	
-<BLOCKRANGE xStart="9" yStart="0" xEnd="9" yEnd="26" layer="0" prefab="block-tiles" facing="0" />
-	<BLOCKRANGE xStart="9" yStart="0" xEnd="9" yEnd="26" layer="1" prefab="block-tiles" facing="0" />
-<BLOCKRANGE xStart="0" yStart="26" xEnd="9" yEnd="26" layer="0" prefab="block-tiles" facing="0" />		
-	<BLOCKRANGE xStart="0" yStart="26" xEnd="9" yEnd="26" layer="1" prefab="block-tiles" facing="0" />		
+<BLOCKRANGE xStart="0" yStart="0" xEnd="0" yEnd="26" layer="0" prefab="block-dungeon-tiles" facing="0" />	
+	<BLOCKRANGE xStart="0" yStart="0" xEnd="0" yEnd="26" layer="1" prefab="block-dungeon-tiles" facing="0" />	
+<BLOCKRANGE xStart="0" yStart="0" xEnd="9" yEnd="0" layer="0" prefab="block-dungeon-tiles" facing="0" />	
+	<BLOCKRANGE xStart="0" yStart="0" xEnd="9" yEnd="0" layer="1" prefab="block-dungeon-tiles" facing="0" />	
+<BLOCKRANGE xStart="9" yStart="0" xEnd="9" yEnd="26" layer="0" prefab="block-dungeon-tiles" facing="0" />
+	<BLOCKRANGE xStart="9" yStart="0" xEnd="9" yEnd="26" layer="1" prefab="block-dungeon-tiles" facing="0" />
+<BLOCKRANGE xStart="0" yStart="26" xEnd="9" yEnd="26" layer="0" prefab="block-dungeon-tiles" facing="0" />		
+	<BLOCKRANGE xStart="0" yStart="26" xEnd="9" yEnd="26" layer="1" prefab="block-dungeon-tiles" facing="0" />		
 <BLOCKRANGE xStart="1" yStart="1" xEnd="8" yEnd="25" layer="2" prefab="floor-bricks-big" facing="0" flip="true" />
 <BLOCKRANGE xStart="1" yStart="1" xEnd="8" yEnd="25" layer="0" prefab="floor-bricks-small" facing="0" />
 <BLOCK x="3" y="17" layer="0" prefab="wall-column-tiles" />	
@@ -49,30 +49,30 @@
 	<BLOCK x="7" y="21" layer="1" prefab="wall-column-tiles" />	
 <BLOCK x="7" y="23" layer="0" prefab="wall-column-tiles" />	
 	<BLOCK x="7" y="23" layer="1" prefab="wall-column-tiles" />
-<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="6" layer="0" prefab="block-tiles" facing="0" />	
-	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="6" layer="1" prefab="block-tiles" facing="0" />	
-<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="6" layer="0" prefab="block-tiles" facing="0" />	
-	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="6" layer="1" prefab="block-tiles" facing="0" />	
-<BLOCK x="4" y="2" layer="0" prefab="block-tiles" />
-	<BLOCK x="4" y="2" layer="1" prefab="block-tiles" />
-<BLOCK x="5" y="2" layer="0" prefab="block-tiles" />
-	<BLOCK x="5" y="2" layer="1" prefab="block-tiles" />
-<BLOCK x="6" y="2" layer="0" prefab="block-tiles" />
-	<BLOCK x="6" y="2" layer="1" prefab="block-tiles" />
-<BLOCK x="4" y="6" layer="0" prefab="block-tiles" />
-	<BLOCK x="4" y="6" layer="1" prefab="block-tiles" />
-<BLOCK x="6" y="6" layer="0" prefab="block-tiles" />
-	<BLOCK x="6" y="6" layer="1" prefab="block-tiles" />
-<BLOCK x="4" y="8" layer="0" prefab="block-tiles" />
-	<BLOCK x="4" y="8" layer="1" prefab="block-tiles" />
-<BLOCK x="6" y="8" layer="0" prefab="block-tiles" />
-	<BLOCK x="6" y="8" layer="1" prefab="block-tiles" />
-<BLOCKRANGE xStart="3" yStart="8" xEnd="3" yEnd="12" layer="0" prefab="block-tiles" facing="0" />	
-	<BLOCKRANGE xStart="3" yStart="8" xEnd="3" yEnd="12" layer="1" prefab="block-tiles" facing="0" />	
-<BLOCKRANGE xStart="7" yStart="8" xEnd="7" yEnd="12" layer="0" prefab="block-tiles" facing="0" />	
-	<BLOCKRANGE xStart="7" yStart="8" xEnd="7" yEnd="12" layer="1" prefab="block-tiles" facing="0" />
-<BLOCKRANGE xStart="4" yStart="12" xEnd="6" yEnd="12" layer="0" prefab="block-tiles" facing="0" />	
-	<BLOCKRANGE xStart="4" yStart="12" xEnd="6" yEnd="12" layer="1" prefab="block-tiles" facing="0" />
+<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="6" layer="0" prefab="block-dungeon-tiles" facing="0" />	
+	<BLOCKRANGE xStart="3" yStart="2" xEnd="3" yEnd="6" layer="1" prefab="block-dungeon-tiles" facing="0" />	
+<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="6" layer="0" prefab="block-dungeon-tiles" facing="0" />	
+	<BLOCKRANGE xStart="7" yStart="2" xEnd="7" yEnd="6" layer="1" prefab="block-dungeon-tiles" facing="0" />	
+<BLOCK x="4" y="2" layer="0" prefab="block-dungeon-tiles" />
+	<BLOCK x="4" y="2" layer="1" prefab="block-dungeon-tiles" />
+<BLOCK x="5" y="2" layer="0" prefab="block-dungeon-tiles" />
+	<BLOCK x="5" y="2" layer="1" prefab="block-dungeon-tiles" />
+<BLOCK x="6" y="2" layer="0" prefab="block-dungeon-tiles" />
+	<BLOCK x="6" y="2" layer="1" prefab="block-dungeon-tiles" />
+<BLOCK x="4" y="6" layer="0" prefab="block-dungeon-tiles" />
+	<BLOCK x="4" y="6" layer="1" prefab="block-dungeon-tiles" />
+<BLOCK x="6" y="6" layer="0" prefab="block-dungeon-tiles" />
+	<BLOCK x="6" y="6" layer="1" prefab="block-dungeon-tiles" />
+<BLOCK x="4" y="8" layer="0" prefab="block-dungeon-tiles" />
+	<BLOCK x="4" y="8" layer="1" prefab="block-dungeon-tiles" />
+<BLOCK x="6" y="8" layer="0" prefab="block-dungeon-tiles" />
+	<BLOCK x="6" y="8" layer="1" prefab="block-dungeon-tiles" />
+<BLOCKRANGE xStart="3" yStart="8" xEnd="3" yEnd="12" layer="0" prefab="block-dungeon-tiles" facing="0" />	
+	<BLOCKRANGE xStart="3" yStart="8" xEnd="3" yEnd="12" layer="1" prefab="block-dungeon-tiles" facing="0" />	
+<BLOCKRANGE xStart="7" yStart="8" xEnd="7" yEnd="12" layer="0" prefab="block-dungeon-tiles" facing="0" />	
+	<BLOCKRANGE xStart="7" yStart="8" xEnd="7" yEnd="12" layer="1" prefab="block-dungeon-tiles" facing="0" />
+<BLOCKRANGE xStart="4" yStart="12" xEnd="6" yEnd="12" layer="0" prefab="block-dungeon-tiles" facing="0" />	
+	<BLOCKRANGE xStart="4" yStart="12" xEnd="6" yEnd="12" layer="1" prefab="block-dungeon-tiles" facing="0" />
 <OBJECT x="3" y="1" layer="0" prefab="door-iron" class="door-controllable" facing="0" doorSound="openable" openSpeed="2" closeSpeed="3" id="door-iron1" />
 	<BLOCK x="3" y="1" layer="1" prefab="wall-half-tiles" facing="0" />
 	<OBJECT x="2" y="0" layer="0" prefab="button" class="button" control="door-iron1" facing="1" />
