@@ -185,6 +185,8 @@ public class App : MonoBehaviour
       case MapFilename.GEN_VILLAGE:
         _generatedMap = new Village(_generatedMapWidth, _generatedMapHeight);
         break;
+      case MapFilename.DARWIN_VILLAGE:
+        break;
       default:
         LoadMap("Assets/maps/test_map.xml");
         break;
@@ -381,7 +383,7 @@ public class App : MonoBehaviour
     }
   }
     
-    int _terrainAddedWidth = 10;
+  int _terrainAddedWidth = 10;
   void MakeMountains()
   {    
     Vector3 terrainSize = new Vector3((_generatedMapWidth + _terrainAddedWidth) * GlobalConstants.WallScaleFactor, 
@@ -1219,6 +1221,7 @@ public class App : MonoBehaviour
     GROWING_TREE,
     TOWN,
     DUNGEON1,
-    GEN_VILLAGE
+    GEN_VILLAGE,
+    DARWIN_VILLAGE
   }
 }

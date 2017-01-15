@@ -83,13 +83,6 @@ public class MinecraftWorld : MonoBehaviour
             _world[x, y, z].WorldCoordinates.Set(wx, wy - 0.3f, wz);
           }
 
-          /*
-          if (y + 1 <= _worldSize - 1 && _world[x, y, z].IsLiquid && (!_world[x, y + 1, z].IsLiquid || _world[x, y + 1, z].BlockId == 0))
-          {            
-            _world[x, y, z].WorldCoordinates.Set(wx, wy - 0.3f, wz);
-          }
-          */
-
           GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_world[x, y, z].BlockId]);
 
           if (prefab != null)

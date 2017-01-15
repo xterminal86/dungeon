@@ -6,39 +6,41 @@ public class SkyboxNight : MonoBehaviour
 {  
   Material _skyboxMaterial;
 
-  string[] _skyboxTextures = new string[] {"_FrontTex", "_BackTex", "_LeftTex", "_RightTex", "_UpTex", "_DownTex"}; // The skybox textures names
+  // The skybox textures names
+  string[] _skyboxTextures = new string[] {"_FrontTex", "_BackTex", "_LeftTex", "_RightTex", "_UpTex", "_DownTex"};
 
   void Start()
   {
     // Based on https://learninggeekblog.wordpress.com/2014/02/11/procedurally-generate-a-night-skybox/
 
-    Texture2D texture = new Texture2D(1024, 1024, TextureFormat.ARGB32, false); // Create a new 1024x1024 texture ARGB32 (32 bit with alpha) and no mipmaps
+    // Create a new 1024x1024 texture ARGB32 (32 bit with alpha) and no mipmaps
+    Texture2D texture = new Texture2D(1024, 1024, TextureFormat.ARGB32, false);
 
-    _skyboxMaterial = new Material(Shader.Find("Mobile/Skybox")); // Create a new material for the skybox.
+    // Create a new material for the skybox.
+    _skyboxMaterial = new Material(Shader.Find("Mobile/Skybox"));
 
-    Color color; // Color that will be set for each pixel
+    // Color that will be set for each pixel
+    Color color; 
 
-    // Loop horizontally on all pixel
     for (int x = 0; x < texture.width; x++)
-    {
-      // Loop vertically on all pixel
+    {      
       for (int y = 0; y < texture.height; y++)
       {
-        float randomValue = Random.Range(0.0f, 1.0f); // Random value between 0 and 1
-        if (randomValue < 0.001f) // 0.1% Of the pixel are set to a grey/white pixel with varying transparency
-        {
-          //float colorValue = Random.Range(0.6f, 1.0f); //Random value to use as RGB value for color
+        float randomValue = Random.Range(0.0f, 1.0f);
+        if (randomValue < 0.001f)
+        {          
           float colorValue = 1.0f;
-          color = new Color(colorValue, colorValue, colorValue, Random.Range(0.5f, 0.9f)); // Set the pixel to a white/grey color with variying transparency
-          texture.SetPixel(x, y, color); // Set the pixel at (x,y) coordinate as the Color in color
+          color = new Color(colorValue, colorValue, colorValue, Random.Range(0.5f, 0.9f));
+          texture.SetPixel(x, y, color);
         }
-        else if (randomValue < 0.0015f && x > 0 && y > 0) // 0.05% Of the pixels that aren't on the first row/column
+        // 0.15% Of the pixels that aren't on the first row/column
+        else if (randomValue < 0.0015f && x > 0 && y > 0)
         {
-          //float colorValue = Random.Range(0.85f, 1.0f); //Random value to use as RGB value for color
           float colorValue = 1.0f;
-          color = new Color(colorValue, colorValue, 1.0f, Random.Range(0.6f, 0.9f)); // Set the pixel to a yellowish color with variying transparency
+          color = new Color(colorValue, colorValue, 1.0f, Random.Range(0.6f, 0.9f));
 
-          // Set a square of 4 pixels to the current color. The 3 other pixel have been stepped on earlier so their color won't be modified afterward
+          // Set a square of 4 pixels to the current color. 
+          // The 3 other pixel have been stepped on earlier so their color won't be modified afterward
           texture.SetPixel(x, y, color);
           texture.SetPixel(x - 1, y, color);
           texture.SetPixel(x, y - 1, color);
@@ -46,7 +48,8 @@ public class SkyboxNight : MonoBehaviour
         }
         else
         {
-          texture.SetPixel(x, y, Color.black); // Set the pixel as black for the default background color
+          // Set the pixel as black for the default background color
+          texture.SetPixel(x, y, Color.black); 
         }
       }
     }
@@ -68,6 +71,13 @@ public class SkyboxNight : MonoBehaviour
   Vector2 _textureOffset = Vector2.zero;
   void Update()
   {
+    if (Input.GetKeyDown(KeyCode.F9))
+    {
+      Application.CaptureScreenshot(string.Format("scr-{0}{1}{2}.png", System.DateTime.Now.Hour, System.DateTime.Now.Minute, System.DateTime.Now.Second));
+    }
+
+    // Animate texture
+
     /*
     //_textureOffset.x += Time.deltaTime * 0.1f;
     _textureOffset.y += Time.deltaTime * 0.1f;
