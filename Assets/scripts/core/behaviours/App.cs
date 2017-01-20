@@ -186,6 +186,7 @@ public class App : MonoBehaviour
         _generatedMap = new Village(_generatedMapWidth, _generatedMapHeight);
         break;
       case MapFilename.DARWIN_VILLAGE:
+        _generatedMap = new DarwinVillage(_generatedMapWidth, _generatedMapHeight);
         break;
       default:
         LoadMap("Assets/maps/test_map.xml");

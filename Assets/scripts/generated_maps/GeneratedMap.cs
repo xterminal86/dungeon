@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class GeneratedMap
 {
+  // Max number of idle iterations to prevent accidental infinite loops in various generation algorithms
   protected const int _maxIdleIterations = 1000;
 
   protected int _mapWidth, _mapHeight;

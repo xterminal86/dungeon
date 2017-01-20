@@ -5,8 +5,9 @@ using System.Collections.Generic;
 
 public class SceneLoader : MonoBehaviour 
 {
-  AsyncOperation _level;
-	void Start() 
+  public bool SkipTitleScreen = false;
+
+  void Start() 
 	{ 
     GameData.Instance.Initialize();
     GUIManager.Instance.Initialize();
@@ -16,21 +17,14 @@ public class SceneLoader : MonoBehaviour
     ScreenFader.Instance.Initialize();
     SoundManager.Instance.Initialize();
 
-    // FIXME: remove after test
-    //DateAndTime.Instance.Initialize();
-
-    _level = SceneManager.LoadSceneAsync("title");
-
-    StartCoroutine(LoadLevelRoutine());
-	}
-
-  IEnumerator LoadLevelRoutine()
-  {
-    while (!_level.isDone)
+    if (SkipTitleScreen)
     {
-      yield return null;
+      GameData.Instance.PlayerCharacterVariable.ResetToDefault();
+      ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("main"); });
     }
-
-    yield return null;
-  }
+    else
+    {
+      ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("title"); });
+    }
+	}
 }
