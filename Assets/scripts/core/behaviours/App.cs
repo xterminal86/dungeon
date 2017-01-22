@@ -130,6 +130,9 @@ public class App : MonoBehaviour
     }
   }
 
+  // FIXME: refactor!!!
+  DarwinVillage _newLevelClass;
+
   Color _fogColor = Color.black;
   void SceneLoadedHandler(Scene scene, LoadSceneMode mode)
   {    
@@ -151,8 +154,6 @@ public class App : MonoBehaviour
     Camera.main.backgroundColor = _fogColor;
 
     _cameraPos = CameraPivot.transform.position;
-
-    MakeMountains();
 
     switch (MapFilenameField)
     {
@@ -186,7 +187,7 @@ public class App : MonoBehaviour
         _generatedMap = new Village(_generatedMapWidth, _generatedMapHeight);
         break;
       case MapFilename.DARWIN_VILLAGE:
-        _generatedMap = new DarwinVillage(_generatedMapWidth, _generatedMapHeight);
+        _newLevelClass = new DarwinVillage(_generatedMapWidth, 255, _generatedMapHeight);
         break;
       default:
         LoadMap("Assets/maps/test_map.xml");
@@ -197,11 +198,15 @@ public class App : MonoBehaviour
     {
       _generatedMap.Generate();
       BuildMap();
-    }
+      SpawnItems();
 
-    SpawnItems();
-    SetupCharacters();
-    SetupMobs();
+      if (MapFilenameField == MapFilename.GEN_VILLAGE)
+      {
+        MakeMountains();
+        SetupCharacters();
+        SetupMobs();
+      }
+    }
 
     /*
     string output = string.Empty;

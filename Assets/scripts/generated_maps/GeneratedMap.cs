@@ -35,6 +35,7 @@ public class GeneratedMap
     get { return _unoccupiedCells; }
   }
 
+  // FIXME: implement (use Unity Audio Mixer?) crossfading of stereo ambient tracks
   protected string _musicTrack = string.Empty;
   public string MusicTrack
   {

@@ -9,7 +9,7 @@ public class InputController : MonoBehaviour
   public App AppScript;
 
   // Origin of raycast ray for checking move availability status.
-  // Goes from center of the tile that player (camera) currently occupies .
+  // Goes from center of the tile that player (camera) currently occupies (same height as the camera).
   //
   // Camera itself is moved back a little from center of the tile as a child transform, so
   // when player rotates, the camera also rotates automatically as a child.

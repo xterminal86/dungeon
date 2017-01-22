@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DarwinVillage : GeneratedMap 
+public class DarwinVillage
 {
-  public DarwinVillage(int width, int height) : base(width, height)
+  public DarwinVillage(int x, int y, int z)
   {    
   }
 
-  public override void Generate()
+  public void Generate()
   {    
   }
 }

@@ -50,7 +50,7 @@ public class ModelMover : MonoBehaviour
       WalkingSpeed = (length / speed) * GlobalConstants.WallScaleFactor;
 
       // TODO: The smaller the model, the faster the animation. Kind of hack about transform.localScale.
-      // Footsteps sounds doesn't coincide with speed, but would be great to implement.
+      // Footsteps sounds don't coincide with speed, but would be great to implement.
       _animationComponent[GlobalConstants.AnimationWalkName].speed = transform.localScale.x < 0.5f ? GlobalConstants.WallScaleFactor * 4 : GlobalConstants.WallScaleFactor * 2;
       //_animationComponent[GlobalConstants.AnimationWalkName].speed = GlobalConstants.WallScaleFactor * 2;
 
