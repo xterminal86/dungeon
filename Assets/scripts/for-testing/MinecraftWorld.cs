@@ -6,7 +6,7 @@ public class MinecraftWorld : MonoBehaviour
 {
   BlockEntity[,,] _world;
 
-  int _worldSize = 10;
+  int _worldSize = 30;
   	
 	void Start () 
 	{
@@ -28,9 +28,38 @@ public class MinecraftWorld : MonoBehaviour
       }
     }
 
-    CreateWorld();
+    CreateHills();
+    //CreateWorld();
     InstantiateWorld();
 	}
+
+  // Should be odd
+  int _maxHillsHeight = 21;
+  void CreateHills()
+  {    
+    int[] heights = new int[(_maxHillsHeight - 1) / 2];
+
+    int h = 1;
+    for (int i = 0; i <= heights.Length; i++)
+    {
+      heights[i] = h;
+
+      h += 2;
+    }
+
+    int ind = Random.Range(0, heights.Length);
+    MakeHill(10, 10, heights[ind]);
+  }
+
+  void MakeHill(int x, int y, int height)
+  {
+    int areaVal = (height - 1) / 2;
+
+    int lx = x - areaVal;
+    int hx = x + areaVal;
+    int ly = y - areaVal;
+    int hy = y + areaVal;
+  }
 
   void CreateWorld()
   {
