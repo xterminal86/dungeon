@@ -310,7 +310,8 @@ public class InputController : MonoBehaviour
     }
 
     // Check bounds
-    if (newX < 0 || newX > AppScript.MapRows - 1 || newZ < 0 || newZ > AppScript.MapColumns - 1)
+    //if (newX < 0 || newX > AppScript.MapRows - 1 || newZ < 0 || newZ > AppScript.MapColumns - 1)
+    if (newX < 0 || newX > AppScript.NewLevelClass.MapX - 1 || newZ < 0 || newZ > AppScript.NewLevelClass.MapZ - 1)
     {
       return false;
     }
@@ -462,6 +463,8 @@ public class InputController : MonoBehaviour
     CameraMoveArgument ca = arg as CameraMoveArgument;
     if (ca == null) yield return null;
    
+    Vector3 cameraPosCached = new Vector3(_cameraPos.x, _cameraPos.y, _cameraPos.z);
+
     _isProcessing = true;
 
     // We move camera game object, so we work in world space here
@@ -562,7 +565,7 @@ public class InputController : MonoBehaviour
 
       _cameraBob = Mathf.Clamp(_cameraBob, 0.0f, half);
 
-      _cameraPos.y = _cameraBob;
+      _cameraPos.y = cameraPosCached.y + _cameraBob;
 
       yield return null;
     }
@@ -573,9 +576,11 @@ public class InputController : MonoBehaviour
     PlayerMapPos.X += dx;
     PlayerMapPos.Y += dz;
         
-    if (AppScript.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y] != -1)
+    //if (AppScript.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y] != -1)
+    if (AppScript.NewLevelClass.Level[PlayerMapPos.X, 16, PlayerMapPos.Y].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
     {
-      SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)AppScript.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y]);
+      SoundManager.Instance.PlayFootstepSoundPlayer(AppScript.NewLevelClass.Level[PlayerMapPos.X, 16, PlayerMapPos.Y].FootstepSound);
+      //SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)AppScript.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y]);
       //SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y], App.Instance.CameraPos);
     }
 

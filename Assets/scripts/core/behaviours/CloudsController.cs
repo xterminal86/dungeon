@@ -17,8 +17,6 @@ public class CloudsController : MonoBehaviour
 
   public int MaximumNumberOfClouds = 10;
 
-  public float CloudsHeight = 4.0f;
-
   public Color CloudColor = Color.white;
 
   // Maximum width and height of the cloud (should be odd)
@@ -45,12 +43,18 @@ public class CloudsController : MonoBehaviour
     
   Texture2D _cloudTexture;
   Material _cloudMaterial;
-	void Start () 
+	void Start() 
 	{    
     if (MaxCloudSize % 2 == 0)
     {
       MaxCloudSize++;
     }
+	}
+
+  float _cloudsHeight = 4.0f;
+  public void Generate(float cloudsHeight)
+  {
+    _cloudsHeight = cloudsHeight;
 
     _cloud = new int[MaxCloudSize, MaxCloudSize];
 
@@ -75,19 +79,19 @@ public class CloudsController : MonoBehaviour
 
     // Spread clouds across the map
     SpreadClouds();
-	}
+  }
 
   void GenerateCloudsScaled()
   {
     for (int i = 0; i < MaximumNumberOfClouds; i++)
     {
-      _cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(0.0f, CloudsHeight, 0.0f), Quaternion.identity);
+      _cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(0.0f, _cloudsHeight, 0.0f), Quaternion.identity);
 
       int cloudSize = Random.Range(5, MaxCloudSize);
       int cloudSizeAddon = Random.Range(1, cloudSize / 2);
       int condition = Random.Range(0, 2);
 
-      GameObject cloud = (GameObject)Instantiate(CloudBlock, new Vector3(0.0f, CloudsHeight, 0.0f), Quaternion.identity);
+      GameObject cloud = (GameObject)Instantiate(CloudBlock, new Vector3(0.0f, _cloudsHeight, 0.0f), Quaternion.identity);
       Vector3 scale = cloud.transform.localScale;
 
       scale.x = cloudSize;
@@ -160,7 +164,7 @@ public class CloudsController : MonoBehaviour
 
       float cloudsHeightOffset = Random.Range(-4.0f, 4.0f);
 
-      pos.Set(CloudsWorldOrigin.x + newX, CloudsHeight + cloudsHeightOffset, CloudsWorldOrigin.y + newZ);
+      pos.Set(CloudsWorldOrigin.x + newX, _cloudsHeight + cloudsHeightOffset, CloudsWorldOrigin.y + newZ);
 
       cloud.transform.localPosition = pos;
       cloud.transform.localEulerAngles = rotation;
@@ -261,7 +265,7 @@ public class CloudsController : MonoBehaviour
   GameObject _cloudHolder;
   void InstantiateCloud()
   { 
-    _cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(CloudsWorldOrigin.x, CloudsHeight, CloudsWorldOrigin.y), Quaternion.identity);
+    _cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(CloudsWorldOrigin.x, _cloudsHeight, CloudsWorldOrigin.y), Quaternion.identity);
 
     // Form cloud
 
@@ -430,7 +434,7 @@ public class CloudsController : MonoBehaviour
     float cloudsHeightOffset = Random.Range(-4.0f, 4.0f);
     int newZ = Random.Range(-(int)CloudsSpreadRadius, (int)CloudsSpreadRadius);
 
-    _newCloudPos.Set(CloudsWorldOrigin.x - CloudsSpreadRadius - MaxCloudSize, CloudsHeight + cloudsHeightOffset, CloudsWorldOrigin.y + newZ);
+    _newCloudPos.Set(CloudsWorldOrigin.x - CloudsSpreadRadius - MaxCloudSize, _cloudsHeight + cloudsHeightOffset, CloudsWorldOrigin.y + newZ);
 
     _cloudsList[cloudIndex].transform.localPosition = _newCloudPos;
     _cloudsList[cloudIndex].transform.localEulerAngles = _newCloudRotation;

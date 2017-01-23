@@ -19,6 +19,8 @@ public class App : MonoBehaviour
 
   public ParticleSystem Stars;
 
+  public CloudsController CloudsControllerScript;
+
   [HideInInspector]
   public List<GameObject> Characters;
 
@@ -132,6 +134,12 @@ public class App : MonoBehaviour
 
   // FIXME: refactor!!!
   DarwinVillage _newLevelClass;
+  public DarwinVillage NewLevelClass
+  {
+    get { return _newLevelClass; }
+  }
+
+  Vector3 _villageLevelSize = new Vector3(60, 32, 60);
 
   Color _fogColor = Color.black;
   void SceneLoadedHandler(Scene scene, LoadSceneMode mode)
@@ -187,7 +195,12 @@ public class App : MonoBehaviour
         _generatedMap = new Village(_generatedMapWidth, _generatedMapHeight);
         break;
       case MapFilename.DARWIN_VILLAGE:
-        _newLevelClass = new DarwinVillage(_generatedMapWidth, 255, _generatedMapHeight);
+        _newLevelClass = new DarwinVillage((int)_villageLevelSize.x, 
+                                           (int)_villageLevelSize.y, 
+                                           (int)_villageLevelSize.z);
+        _newLevelClass.Generate();
+        BuildMapNew();
+        CloudsControllerScript.Generate(_villageLevelSize.y * GlobalConstants.WallScaleFactor);
         break;
       default:
         LoadMap("Assets/maps/test_map.xml");
@@ -414,13 +427,43 @@ public class App : MonoBehaviour
     Instantiate(Mountains, terrainPosition, Quaternion.identity);    
   }
 
+  void BuildMapNew()
+  {
+    for (int y = 0; y < _newLevelClass.MapY; y++)
+    {
+      for (int x = 0; x < _newLevelClass.MapX; x++)
+      {
+        for (int z = 0; z < _newLevelClass.MapZ; z++)
+        {
+          if (_newLevelClass.Level[x, y, z].BlockId == 0)
+          {
+            continue;
+          }
+
+          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_newLevelClass.Level[x, y, z].BlockId]);
+
+          if (prefab != null)
+          {
+            GameObject block = (GameObject)Instantiate(prefab, _newLevelClass.Level[x, y, z].WorldCoordinates, Quaternion.identity);
+            block.transform.parent = ObjectsInstancesTransform.transform;
+
+            MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
+
+            Utils.HideLevelBlockSides(blockScript, _newLevelClass.Level[x, y, z].ArrayCoordinates, _newLevelClass);
+          }
+        }
+      }
+    }
+
+    SetupCamera((int)_newLevelClass.CameraPos.x, (int)_newLevelClass.CameraPos.y, (int)_newLevelClass.CameraPos.z, 2);
+  }
+
   void BuildMap()
   {
     _mapColumns = _generatedMapWidth;
     _mapRows = _generatedMapHeight;
 
     _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
-
 
     for (int x = 0; x < _generatedMapHeight; x++)
     {
@@ -443,7 +486,7 @@ public class App : MonoBehaviour
       }
     }
     
-    SetupCamera(_generatedMap.CameraPos.X, _generatedMap.CameraPos.Y, _generatedMap.CameraPos.Facing);
+    SetupCamera(_generatedMap.CameraPos.X, 0, _generatedMap.CameraPos.Y, _generatedMap.CameraPos.Facing);
 
     SoundManager.Instance.PlayMusicTrack(_generatedMap.MusicTrack);    
   }   
@@ -514,7 +557,7 @@ public class App : MonoBehaviour
           int x = int.Parse(node.Attributes["x"].InnerText);
           int y = int.Parse(node.Attributes["y"].InnerText);
           int facing = int.Parse(node.Attributes["facing"].InnerText);
-          SetupCamera(x, y, facing);
+          SetupCamera(x, 0, y, facing);
           break;
       case "FOG":
           float density = float.Parse(node.Attributes["density"].InnerText);
@@ -560,7 +603,7 @@ public class App : MonoBehaviour
     _floorSoundTypeByPosition = new int[_mapRows, _mapColumns];
     _mapLayout = new char[_mapRows, _mapColumns];
 
-    SetupCamera(sc.CameraPos.X, sc.CameraPos.Y, sc.CameraPos.Facing);
+    SetupCamera(sc.CameraPos.X, 0, sc.CameraPos.Y, sc.CameraPos.Facing);
 
     string musicTrack = sc.MusicTrack;
 
@@ -1112,21 +1155,22 @@ public class App : MonoBehaviour
     bmo.MapObjectInstance.Facing = so.Facing;
   }
 
-  void SetupCamera(int x, int y, int facing)
+  void SetupCamera(int x, int y, int z, int facing)
   {
     CameraOrientation = facing;
     GlobalConstants.Orientation o = GlobalConstants.OrientationsMap[CameraOrientation];
     _cameraPos.x = x * GlobalConstants.WallScaleFactor;
-    _cameraPos.z = y * GlobalConstants.WallScaleFactor;
+    _cameraPos.y = y * GlobalConstants.WallScaleFactor;
+    _cameraPos.z = z * GlobalConstants.WallScaleFactor;
     CameraPivot.transform.position = _cameraPos;
     CameraPivot.transform.Rotate(Vector3.up, GlobalConstants.OrientationAngles[o]);
     _cameraAngles = CameraPivot.transform.eulerAngles;
 
     InputControllerScript.PlayerMapPos.X = x;
-    InputControllerScript.PlayerMapPos.Y = y;
+    InputControllerScript.PlayerMapPos.Y = z;
 
     InputControllerScript.PlayerPreviousMapPos.X = x;
-    InputControllerScript.PlayerPreviousMapPos.Y = y;
+    InputControllerScript.PlayerPreviousMapPos.Y = z;
   }
 
   void GameOverHandler()

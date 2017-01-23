@@ -398,6 +398,8 @@ public static class GlobalConstants
     { "weapon-ranged", WorldItemType.WEAPON_RANGED },
   };
 
+  // Minecraft-style blocks prefab names by id
+  // Id 0 is air block - not instantiated but used in calculations (e. g. in HideSides())
   public static Dictionary<int, string> BlockPrefabById = new Dictionary<int, string>() 
   {
     { 1, "block-grass" },
@@ -433,6 +435,7 @@ public class BlockEntity
   public Vector3 ArrayCoordinates = Vector3.zero;
   public Vector3 WorldCoordinates = Vector3.zero;
   public bool IsLiquid = false;
+  public GlobalConstants.FootstepSoundType FootstepSound = GlobalConstants.FootstepSoundType.DUMMY;
 
   public BlockEntity()
   {

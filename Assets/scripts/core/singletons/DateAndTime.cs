@@ -21,6 +21,8 @@ public class DateAndTime : MonoSingleton<DateAndTime>
     get { return _daytimeString; }
   }
 
+  public bool FreezeTime = false;
+
   float _timerCondition = 0.0f;
   protected override void Init()
   {
@@ -48,6 +50,11 @@ public class DateAndTime : MonoSingleton<DateAndTime>
   float _timer = 0.0f;
   void Update()
   {
+    if (FreezeTime)
+    {
+      return;
+    }
+
     _wasTick = false;
 
     if (_timer > _timerCondition)
