@@ -435,6 +435,7 @@ public class BlockEntity
   public Vector3 ArrayCoordinates = Vector3.zero;
   public Vector3 WorldCoordinates = Vector3.zero;
   public bool IsLiquid = false;
+  public bool SkipInstantiation = false;
   public GlobalConstants.FootstepSoundType FootstepSound = GlobalConstants.FootstepSoundType.DUMMY;
 
   public BlockEntity()

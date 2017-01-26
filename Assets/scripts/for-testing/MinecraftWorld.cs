@@ -6,7 +6,7 @@ public class MinecraftWorld : MonoBehaviour
 {
   BlockEntity[,,] _world;
 
-  int _worldSize = 30;
+  int _worldSize = 60;
   	
 	void Start () 
 	{
@@ -37,28 +37,62 @@ public class MinecraftWorld : MonoBehaviour
   int _maxHillsHeight = 21;
   void CreateHills()
   {    
-    int[] heights = new int[(_maxHillsHeight - 1) / 2];
+    int[] heights = new int[(_maxHillsHeight - 1) / 2 + 1];
 
     int h = 1;
-    for (int i = 0; i <= heights.Length; i++)
+    for (int i = 0; i < heights.Length; i++)
     {
       heights[i] = h;
-
       h += 2;
     }
 
     int ind = Random.Range(0, heights.Length);
-    MakeHill(10, 10, heights[ind]);
+    //MakeHill(10, 10, heights[ind]);
+    MakeHill(20, 20, 11);
+    DiscardHiddenBlocks(9, 31, 9, 31);
   }
 
   void MakeHill(int x, int y, int height)
   {
-    int areaVal = (height - 1) / 2;
+    int lx = x - 1;
+    int ly = y - 1;
+    int hx = x + 1;
+    int hy = y + 1;
 
-    int lx = x - areaVal;
-    int hx = x + areaVal;
-    int ly = y - areaVal;
-    int hy = y + areaVal;
+    if (height == 0 || lx < 0 || ly < 0 || hx >= _worldSize - 1 || hy >= _worldSize - 1)
+    {
+      return;
+    }
+
+    if (_world[x, height, y].BlockId == 0)
+    {
+      _world[x, height, y].BlockId = 1;
+    }
+      
+    if (_world[lx, height, y].BlockId == 0)
+    {
+      _world[lx, height, y].BlockId = 1;
+    }
+
+    if (_world[x, height, ly].BlockId == 0)
+    {
+      _world[x, height, ly].BlockId = 1;
+    }
+
+    if (_world[hx, height, y].BlockId == 0)
+    {
+      _world[hx, height, y].BlockId = 1;
+    }
+
+    if (_world[x, height, hy].BlockId == 0)
+    {
+      _world[x, height, hy].BlockId = 1;
+    }
+
+    MakeHill(lx, y, height - 1);
+    MakeHill(hx, y, height - 1);
+    MakeHill(x, ly, height - 1);
+    MakeHill(x, hy, height - 1);
   }
 
   void CreateWorld()
@@ -90,6 +124,55 @@ public class MinecraftWorld : MonoBehaviour
     }
   }
 
+  /// <summary>
+  /// Sets no-instantiate flag on blocks that are surrounded on all 6 sides.
+  /// Works for all map height on a given area.
+  /// </summary>
+  /// <param name="areaStartX">Area start x.</param>
+  /// <param name="areaEndX">Area end x.</param>
+  /// <param name="areaStartZ">Area start z.</param>
+  /// <param name="areaEndZ">Area end z.</param>
+  void DiscardHiddenBlocks(int areaStartX, int areaEndX, int areaStartZ, int areaEndZ)
+  {
+    int lx, ly, lz, hx, hy, hz = 0;
+
+    for (int y = 1; y < _worldSize - 1; y++)
+    {
+      ly = y - 1;
+      hy = y + 1;
+
+      for (int x = areaStartX; x < areaEndX; x++)
+      {
+        lx = x - 1;
+        hx = x + 1;
+
+        for (int z = areaStartZ; z < areaEndZ; z++)
+        {          
+          // Skip if current block is air block
+          if (_world[x, y, z].BlockId == 0)
+          {
+            continue;
+          }
+
+          lz = z - 1;
+          hz = z + 1;
+
+          // We cannot replace BlockId directly, since then on next loop iteration
+          // the condition will fail.
+          if (_world[lx, y, z].BlockId != 0 && !_world[lx, y, z].IsLiquid 
+           && _world[hx, y, z].BlockId != 0 && !_world[hx, y, z].IsLiquid
+           && _world[x, ly, z].BlockId != 0 && !_world[x, ly, z].IsLiquid
+           && _world[x, hy, z].BlockId != 0 && !_world[x, hy, z].IsLiquid
+           && _world[x, y, lz].BlockId != 0 && !_world[x, y, lz].IsLiquid 
+           && _world[x, y, hz].BlockId != 0 && !_world[x, y, hz].IsLiquid)
+          {
+            _world[x, y, z].SkipInstantiation = true;
+          }
+        }
+      }
+    }
+  }
+
   void InstantiateWorld()
   { 
     for (int y = 0; y < _worldSize; y++)
@@ -98,7 +181,7 @@ public class MinecraftWorld : MonoBehaviour
       {
         for (int z = 0; z < _worldSize; z++)
         {
-          if (_world[x, y, z].BlockId == 0)
+          if (_world[x, y, z].BlockId == 0 || _world[x, y, z].SkipInstantiation)
           {
             continue;
           }
