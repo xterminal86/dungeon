@@ -24,6 +24,8 @@ public class PrefabsManager : MonoSingleton<PrefabsManager>
       }
     }
 
+    Debug.LogWarning("Could not find prefab " + name);
+
     return null;
   }
 }

@@ -19,7 +19,7 @@ public class MinecraftBlock : MonoBehaviour
 
   public bool ColliderOn = false;
 
-  public Material TextureMaterial;
+  public Material AnimatedTextureMaterial;
 
   public int Frames = 32;
 
@@ -40,7 +40,7 @@ public class MinecraftBlock : MonoBehaviour
   int _framesPassed = 0;
   void Update () 
   {
-    if (TextureMaterial == null)
+    if (AnimatedTextureMaterial == null)
     {
       return;
     }
@@ -60,7 +60,7 @@ public class MinecraftBlock : MonoBehaviour
 
       _offset.y = _textureAnimationDelta * _framesPassed;
 
-      TextureMaterial.SetTextureOffset("_MainTex", _offset);
+      AnimatedTextureMaterial.SetTextureOffset("_MainTex", _offset);
     }
   }
 }

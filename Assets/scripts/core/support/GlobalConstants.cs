@@ -398,12 +398,23 @@ public static class GlobalConstants
     { "weapon-ranged", WorldItemType.WEAPON_RANGED },
   };
 
+  public enum BlockType
+  {
+    AIR = 0,
+    GRASS,
+    WATER,
+    STONE,
+    DIRT
+  }
+
   // Minecraft-style blocks prefab names by id
   // Id 0 is air block - not instantiated but used in calculations (e. g. in HideSides())
-  public static Dictionary<int, string> BlockPrefabById = new Dictionary<int, string>() 
+  public static Dictionary<BlockType, string> BlockPrefabById = new Dictionary<BlockType, string>() 
   {
-    { 1, "block-grass" },
-    { 2, "block-water" }
+    { BlockType.GRASS, "block-grass" },
+    { BlockType.WATER, "block-water" },
+    { BlockType.STONE, "block-stone" },
+    { BlockType.DIRT, "block-dirt" }
   };
 }
 
@@ -430,7 +441,7 @@ public class VillagerInfo
 
 public class BlockEntity
 {
-  public int BlockId = 0;
+  public GlobalConstants.BlockType BlockType = GlobalConstants.BlockType.AIR;
   public string BlockName = string.Empty;
   public Vector3 ArrayCoordinates = Vector3.zero;
   public Vector3 WorldCoordinates = Vector3.zero;

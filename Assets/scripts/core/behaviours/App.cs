@@ -435,12 +435,12 @@ public class App : MonoBehaviour
       {
         for (int z = 0; z < _newLevelClass.MapZ; z++)
         {
-          if (_newLevelClass.Level[x, y, z].BlockId == 0)
+          if (_newLevelClass.Level[x, y, z].BlockType == GlobalConstants.BlockType.AIR)
           {
             continue;
           }
 
-          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_newLevelClass.Level[x, y, z].BlockId]);
+          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_newLevelClass.Level[x, y, z].BlockType]);
 
           if (prefab != null)
           {

@@ -54,7 +54,7 @@ public class DarwinVillage
         for (int z = 0; z < _mapZ; z++)
         {
           _level[x, y, z] = new BlockEntity();
-          _level[x, y, z].BlockId = 0;
+          _level[x, y, z].BlockType = GlobalConstants.BlockType.AIR;
           _level[x, y, z].ArrayCoordinates.Set(x, y, z);
           _level[x, y, z].WorldCoordinates.Set(x * GlobalConstants.WallScaleFactor, y * GlobalConstants.WallScaleFactor, z * GlobalConstants.WallScaleFactor);
         }
@@ -72,7 +72,7 @@ public class DarwinVillage
     {
       for (int z = 0; z < _mapZ; z++)
       {
-        _level[x, posY, z].BlockId = 1;
+        _level[x, posY, z].BlockType = GlobalConstants.BlockType.GRASS;
         _level[x, posY, z].WorldCoordinates.Set(x * GlobalConstants.WallScaleFactor, 
                                              posY * GlobalConstants.WallScaleFactor, 
                                                 z * GlobalConstants.WallScaleFactor);

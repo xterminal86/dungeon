@@ -31,6 +31,12 @@ public static class Utils
     }
   }
 
+  /// <summary>
+  /// Hide appropriate sides of a block to prevent side doubling and lighting artifacts.
+  /// </summary>
+  /// <param name="block">Block to operate on</param>
+  /// <param name="coordinates">Block coordinates</param>
+  /// <param name="level">Level class reference</param>
   public static void HideLevelBlockSides(MinecraftBlock block, Vector3 coordinates, DarwinVillage level)
   {
     Vector3[] arrayCoordinatesAdds = new Vector3[6] 
@@ -75,7 +81,7 @@ public static class Utils
         // 2) Current block is liquid and neighbouring block is liquid
         // 3) Current block is liquid and neighbouring block is solid
 
-        if ((!level.Level[x, y, z].IsLiquid && !level.Level[nx, y, z].IsLiquid && level.Level[nx, y, z].BlockId != 0)
+        if ((!level.Level[x, y, z].IsLiquid && !level.Level[nx, y, z].IsLiquid && level.Level[nx, y, z].BlockType != GlobalConstants.BlockType.AIR)
           || (level.Level[x, y, z].IsLiquid &&  level.Level[nx, y, z].IsLiquid)
           || (level.Level[x, y, z].IsLiquid && !level.Level[nx, y, z].IsLiquid))
         {
@@ -105,7 +111,7 @@ public static class Utils
           }
         }
 
-        if ((!level.Level[x, y, z].IsLiquid && !level.Level[x, y, nz].IsLiquid && level.Level[x, y, nz].BlockId !=0)
+        if ((!level.Level[x, y, z].IsLiquid && !level.Level[x, y, nz].IsLiquid && level.Level[x, y, nz].BlockType != GlobalConstants.BlockType.AIR)
           || (level.Level[x, y, z].IsLiquid && level.Level[x, y, nz].IsLiquid)
           || (level.Level[x, y, z].IsLiquid && !level.Level[x, y, nz].IsLiquid))
         {
@@ -135,7 +141,7 @@ public static class Utils
           }
         }
 
-        if ((!level.Level[x, y, z].IsLiquid && !level.Level[x, ny, z].IsLiquid && level.Level[x, ny, z].BlockId != 0)
+        if ((!level.Level[x, y, z].IsLiquid && !level.Level[x, ny, z].IsLiquid && level.Level[x, ny, z].BlockType != GlobalConstants.BlockType.AIR)
           || (level.Level[x, y, z].IsLiquid && level.Level[x, ny, z].IsLiquid))
         {
           if ((int)arrayCoordinatesAdds[side][1] == -1)

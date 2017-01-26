@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MinecraftWorld : MonoBehaviour 
 {
+  public Transform WorldHolder;
+
   BlockEntity[,,] _world;
 
   int _worldSize = 60;
@@ -21,7 +23,7 @@ public class MinecraftWorld : MonoBehaviour
         for (int z = 0; z < _worldSize; z++)
         {
           _world[x, y, z] = new BlockEntity();
-          _world[x, y, z].BlockId = 0;
+          _world[x, y, z].BlockType = GlobalConstants.BlockType.AIR;
           _world[x, y, z].ArrayCoordinates.Set(x, y, z);
           _world[x, y, z].WorldCoordinates.Set(x * GlobalConstants.WallScaleFactor, y * GlobalConstants.WallScaleFactor, z * GlobalConstants.WallScaleFactor);
         }
@@ -46,53 +48,117 @@ public class MinecraftWorld : MonoBehaviour
       h += 2;
     }
 
-    int ind = Random.Range(0, heights.Length);
-    //MakeHill(10, 10, heights[ind]);
-    MakeHill(20, 20, 11);
-    DiscardHiddenBlocks(9, 31, 9, 31);
+    for (int i = 0; i < 20; i++)
+    {
+      int ind = Random.Range(0, heights.Length);
+
+      h = heights[ind];
+
+      int x = Random.Range(10, _worldSize - 10);
+      int z = Random.Range(10, _worldSize - 10);
+
+      MakeHillLayered(x, z, h);
+
+      /*
+      int choice = Random.Range(0, 2);
+
+      if (choice == 0)
+      {
+        MakeHillQbert(x, z, h);
+      }
+      else
+      {
+        MakeHillLayered(x, z, h);
+      }
+      */
+    }
+
+    DiscardHiddenBlocks(1, _worldSize - 1, 1, _worldSize - 1);
   }
 
-  void MakeHill(int x, int y, int height)
+  void MakeHillQbert(int x, int y, int height)
   {
     int lx = x - 1;
     int ly = y - 1;
     int hx = x + 1;
     int hy = y + 1;
 
-    if (height == 0 || lx < 0 || ly < 0 || hx >= _worldSize - 1 || hy >= _worldSize - 1)
+    if (height < 0 || lx < 0 || ly < 0 || hx >= _worldSize - 1 || hy >= _worldSize - 1)
     {
       return;
     }
 
-    if (_world[x, height, y].BlockId == 0)
+    if (_world[x, height, y].BlockType == GlobalConstants.BlockType.AIR)
     {
-      _world[x, height, y].BlockId = 1;
+      _world[x, height, y].BlockType = GlobalConstants.BlockType.GRASS;
     }
       
-    if (_world[lx, height, y].BlockId == 0)
+    if (_world[lx, height, y].BlockType == GlobalConstants.BlockType.AIR)
     {
-      _world[lx, height, y].BlockId = 1;
+      _world[lx, height, y].BlockType = GlobalConstants.BlockType.GRASS;
     }
 
-    if (_world[x, height, ly].BlockId == 0)
+    if (_world[x, height, ly].BlockType == GlobalConstants.BlockType.AIR)
     {
-      _world[x, height, ly].BlockId = 1;
+      _world[x, height, ly].BlockType = GlobalConstants.BlockType.GRASS;
     }
 
-    if (_world[hx, height, y].BlockId == 0)
+    if (_world[hx, height, y].BlockType == GlobalConstants.BlockType.AIR)
     {
-      _world[hx, height, y].BlockId = 1;
+      _world[hx, height, y].BlockType = GlobalConstants.BlockType.GRASS;
     }
 
-    if (_world[x, height, hy].BlockId == 0)
+    if (_world[x, height, hy].BlockType == GlobalConstants.BlockType.AIR)
     {
-      _world[x, height, hy].BlockId = 1;
+      _world[x, height, hy].BlockType = GlobalConstants.BlockType.GRASS;
     }
 
-    MakeHill(lx, y, height - 1);
-    MakeHill(hx, y, height - 1);
-    MakeHill(x, ly, height - 1);
-    MakeHill(x, hy, height - 1);
+    MakeHillQbert(lx, y, height - 1);
+    MakeHillQbert(hx, y, height - 1);
+    MakeHillQbert(x, ly, height - 1);
+    MakeHillQbert(x, hy, height - 1);
+  }
+
+  void MakeHillLayered(int x, int y, int height)
+  {
+    int lx = x - height;
+    int ly = y - height;
+    int hx = x + height;
+    int hy = y + height;
+
+    lx = Mathf.Clamp(lx, 0, _worldSize - 1);
+    ly = Mathf.Clamp(ly, 0, _worldSize - 1);
+    hx = Mathf.Clamp(hx, 0, _worldSize - 1);
+    hy = Mathf.Clamp(hy, 0, _worldSize - 1);
+
+    for (int h = 0; h < height; h++)
+    {
+      for (int ax = lx + h; ax <= hx - h; ax++)
+      {
+        for (int ay = ly + h; ay <= hy - h; ay++)
+        {
+          _world[ax, h, ay].BlockType = GlobalConstants.BlockType.GRASS;
+
+          /*
+          if (_world[ax, h, ay].BlockId == 0)
+          {
+            if (h > 5 && h <= 10)
+            {
+              _world[ax, h, ay].BlockId = 4;
+            }
+            else if (h > 10)
+            {
+              _world[ax, h, ay].BlockId = 3;
+            }
+            else
+            {
+              _world[ax, h, ay].BlockId = 1;
+            }
+          }
+          */
+        }
+      }
+    }
   }
 
   void CreateWorld()
@@ -101,14 +167,14 @@ public class MinecraftWorld : MonoBehaviour
     {
       for (int z = 0; z < _worldSize; z++)
       {
-        int id = Random.Range(1, 3);
+        int id = Random.Range(1, GlobalConstants.BlockPrefabById.Count);
 
         if (id == 2)
         {
           _world[x, 0, z].IsLiquid = true;
         }
 
-        _world[x, 0, z].BlockId = id;
+        _world[x, 0, z].BlockType = (GlobalConstants.BlockType)id;
         _world[x, 0, z].WorldCoordinates.Set(x * GlobalConstants.WallScaleFactor, 0.0f, z * GlobalConstants.WallScaleFactor);
 
         id = Random.Range(1, 3);
@@ -118,7 +184,7 @@ public class MinecraftWorld : MonoBehaviour
           _world[x, 1, z].IsLiquid = true;
         }
 
-        _world[x, 1, z].BlockId = id;
+        _world[x, 1, z].BlockType = (GlobalConstants.BlockType)id;
         _world[x, 1, z].WorldCoordinates.Set(x * GlobalConstants.WallScaleFactor, GlobalConstants.WallScaleFactor, z * GlobalConstants.WallScaleFactor);
       }
     }
@@ -134,6 +200,11 @@ public class MinecraftWorld : MonoBehaviour
   /// <param name="areaEndZ">Area end z.</param>
   void DiscardHiddenBlocks(int areaStartX, int areaEndX, int areaStartZ, int areaEndZ)
   {
+    areaStartX = Mathf.Clamp(areaStartX, 0, _worldSize - 1);
+    areaEndX = Mathf.Clamp(areaEndX, 0, _worldSize - 1);
+    areaStartZ = Mathf.Clamp(areaStartZ, 0, _worldSize - 1);
+    areaEndZ = Mathf.Clamp(areaEndZ, 0, _worldSize - 1);
+
     int lx, ly, lz, hx, hy, hz = 0;
 
     for (int y = 1; y < _worldSize - 1; y++)
@@ -149,7 +220,7 @@ public class MinecraftWorld : MonoBehaviour
         for (int z = areaStartZ; z < areaEndZ; z++)
         {          
           // Skip if current block is air block
-          if (_world[x, y, z].BlockId == 0)
+          if (_world[x, y, z].BlockType == GlobalConstants.BlockType.AIR)
           {
             continue;
           }
@@ -159,12 +230,12 @@ public class MinecraftWorld : MonoBehaviour
 
           // We cannot replace BlockId directly, since then on next loop iteration
           // the condition will fail.
-          if (_world[lx, y, z].BlockId != 0 && !_world[lx, y, z].IsLiquid 
-           && _world[hx, y, z].BlockId != 0 && !_world[hx, y, z].IsLiquid
-           && _world[x, ly, z].BlockId != 0 && !_world[x, ly, z].IsLiquid
-           && _world[x, hy, z].BlockId != 0 && !_world[x, hy, z].IsLiquid
-           && _world[x, y, lz].BlockId != 0 && !_world[x, y, lz].IsLiquid 
-           && _world[x, y, hz].BlockId != 0 && !_world[x, y, hz].IsLiquid)
+          if (_world[lx, y, z].BlockType != GlobalConstants.BlockType.AIR && !_world[lx, y, z].IsLiquid 
+           && _world[hx, y, z].BlockType != GlobalConstants.BlockType.AIR && !_world[hx, y, z].IsLiquid
+           && _world[x, ly, z].BlockType != GlobalConstants.BlockType.AIR && !_world[x, ly, z].IsLiquid
+           && _world[x, hy, z].BlockType != GlobalConstants.BlockType.AIR && !_world[x, hy, z].IsLiquid
+           && _world[x, y, lz].BlockType != GlobalConstants.BlockType.AIR && !_world[x, y, lz].IsLiquid 
+           && _world[x, y, hz].BlockType != GlobalConstants.BlockType.AIR && !_world[x, y, hz].IsLiquid)
           {
             _world[x, y, z].SkipInstantiation = true;
           }
@@ -181,7 +252,7 @@ public class MinecraftWorld : MonoBehaviour
       {
         for (int z = 0; z < _worldSize; z++)
         {
-          if (_world[x, y, z].BlockId == 0 || _world[x, y, z].SkipInstantiation)
+          if (_world[x, y, z].BlockType == GlobalConstants.BlockType.AIR || _world[x, y, z].SkipInstantiation)
           {
             continue;
           }
@@ -195,11 +266,13 @@ public class MinecraftWorld : MonoBehaviour
             _world[x, y, z].WorldCoordinates.Set(wx, wy - 0.3f, wz);
           }
 
-          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_world[x, y, z].BlockId]);
+          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_world[x, y, z].BlockType]);
 
           if (prefab != null)
           {
-            GameObject block = (GameObject)Instantiate(prefab,_world[x, y, z].WorldCoordinates, Quaternion.identity);
+            GameObject block = (GameObject)Instantiate(prefab, _world[x, y, z].WorldCoordinates, Quaternion.identity);
+
+            block.transform.SetParent(WorldHolder);
 
             MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
 
@@ -254,7 +327,7 @@ public class MinecraftWorld : MonoBehaviour
         // 2) Current block is liquid and neighbouring block is liquid
         // 3) Current block is liquid and neighbouring block is solid
 
-        if ((!_world[x, y, z].IsLiquid && !_world[nx, y, z].IsLiquid && _world[nx, y, z].BlockId != 0)
+        if ((!_world[x, y, z].IsLiquid && !_world[nx, y, z].IsLiquid && _world[nx, y, z].BlockType != GlobalConstants.BlockType.AIR)
           || (_world[x, y, z].IsLiquid &&  _world[nx, y, z].IsLiquid)
           || (_world[x, y, z].IsLiquid && !_world[nx, y, z].IsLiquid))
         {
@@ -284,7 +357,7 @@ public class MinecraftWorld : MonoBehaviour
           }
         }
 
-        if ((!_world[x, y, z].IsLiquid && !_world[x, y, nz].IsLiquid && _world[x, y, nz].BlockId !=0)
+        if ((!_world[x, y, z].IsLiquid && !_world[x, y, nz].IsLiquid && _world[x, y, nz].BlockType != GlobalConstants.BlockType.AIR)
           || (_world[x, y, z].IsLiquid && _world[x, y, nz].IsLiquid)
           || (_world[x, y, z].IsLiquid && !_world[x, y, nz].IsLiquid))
         {
@@ -314,7 +387,7 @@ public class MinecraftWorld : MonoBehaviour
           }
         }
 
-        if ((!_world[x, y, z].IsLiquid && !_world[x, ny, z].IsLiquid && _world[x, ny, z].BlockId != 0)
+        if ((!_world[x, y, z].IsLiquid && !_world[x, ny, z].IsLiquid && _world[x, ny, z].BlockType != GlobalConstants.BlockType.AIR)
           || (_world[x, y, z].IsLiquid && _world[x, ny, z].IsLiquid))
         {
           if ((int)_arrayCoordinatesAdds[side][1] == -1)
