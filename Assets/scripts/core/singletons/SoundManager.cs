@@ -145,6 +145,10 @@ public class SoundManager : MonoSingleton<SoundManager>
       PlaySound(GlobalConstants.FootstepsListByType[type][which], 0.1f);
       _lastPlayedSoundOfPlayer = which;
     }
+    else
+    {
+      Debug.LogWarning("No key " + type + " in FootstepsListByType!");
+    }
   }
 
   public void PlayFootstepSound(string gameObjectName, GlobalConstants.FootstepSoundType type, Vector3 position, bool is3D = true)
@@ -166,6 +170,10 @@ public class SoundManager : MonoSingleton<SoundManager>
       PlaySound(GlobalConstants.Footsteps3dListByType[type][which], position, is3D);
 
       LastPlayedSoundOfChar[hash] = which;
+    }
+    else
+    {
+      Debug.LogWarning("No key " + type + " in Footsteps3dListByType!");
     }
   }  
 

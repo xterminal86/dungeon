@@ -37,7 +37,7 @@ public static class Utils
   /// <param name="block">Block to operate on</param>
   /// <param name="coordinates">Block coordinates</param>
   /// <param name="level">Level class reference</param>
-  public static void HideLevelBlockSides(MinecraftBlock block, Vector3 coordinates, DarwinVillage level)
+  public static void HideLevelBlockSides(MinecraftBlock block, Vector3 coordinates, LevelBase level)
   {
     Vector3[] arrayCoordinatesAdds = new Vector3[6] 
     { 

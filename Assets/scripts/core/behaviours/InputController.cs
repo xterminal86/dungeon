@@ -577,9 +577,9 @@ public class InputController : MonoBehaviour
     PlayerMapPos.Y += dz;
         
     //if (AppScript.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y] != -1)
-    if (AppScript.NewLevelClass.Level[PlayerMapPos.X, 16, PlayerMapPos.Y].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
+    if (AppScript.NewLevelClass.Level[PlayerMapPos.X, 20, PlayerMapPos.Y].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
     {
-      SoundManager.Instance.PlayFootstepSoundPlayer(AppScript.NewLevelClass.Level[PlayerMapPos.X, 16, PlayerMapPos.Y].FootstepSound);
+      SoundManager.Instance.PlayFootstepSoundPlayer(AppScript.NewLevelClass.Level[PlayerMapPos.X, 20, PlayerMapPos.Y].FootstepSound);
       //SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)AppScript.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y]);
       //SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y], App.Instance.CameraPos);
     }

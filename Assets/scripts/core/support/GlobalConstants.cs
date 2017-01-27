@@ -441,7 +441,17 @@ public class VillagerInfo
 
 public class BlockEntity
 {
-  public GlobalConstants.BlockType BlockType = GlobalConstants.BlockType.AIR;
+  GlobalConstants.BlockType _blockType = GlobalConstants.BlockType.AIR;
+  public GlobalConstants.BlockType BlockType
+  {
+    get { return _blockType; }
+    set
+    {
+      _blockType = value;
+      SetFootstepSound();
+    }
+  }
+
   public string BlockName = string.Empty;
   public Vector3 ArrayCoordinates = Vector3.zero;
   public Vector3 WorldCoordinates = Vector3.zero;
@@ -451,7 +461,23 @@ public class BlockEntity
 
   public BlockEntity()
   {
+  }
 
+  public void SetFootstepSound()
+  {
+    switch (BlockType)
+    {
+      case GlobalConstants.BlockType.GRASS:
+        FootstepSound = GlobalConstants.FootstepSoundType.GRASS;
+        break;
+
+      case GlobalConstants.BlockType.DIRT:
+        FootstepSound = GlobalConstants.FootstepSoundType.DIRT;
+        break;
+
+      default:        
+        break;        
+    }
   }
 };
 

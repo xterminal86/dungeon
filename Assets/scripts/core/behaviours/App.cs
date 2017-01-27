@@ -132,20 +132,17 @@ public class App : MonoBehaviour
     }
   }
 
-  // FIXME: refactor!!!
-  DarwinVillage _newLevelClass;
-  public DarwinVillage NewLevelClass
+  LevelBase _newLevelClass;
+  public LevelBase NewLevelClass
   {
     get { return _newLevelClass; }
   }
 
-  Vector3 _villageLevelSize = new Vector3(60, 32, 60);
+  Vector3 _villageLevelSize = new Vector3(80, 40, 80);
 
   Color _fogColor = Color.black;
   void SceneLoadedHandler(Scene scene, LoadSceneMode mode)
-  {    
-    DateAndTime.Instance.Initialize();
-
+  { 
     DateAndTime.Instance.InGameTime = GlobalConstants.DawnEndTime;
 
     AdjustFogDensityForTime();
@@ -435,7 +432,7 @@ public class App : MonoBehaviour
       {
         for (int z = 0; z < _newLevelClass.MapZ; z++)
         {
-          if (_newLevelClass.Level[x, y, z].BlockType == GlobalConstants.BlockType.AIR)
+          if (_newLevelClass.Level[x, y, z].BlockType == GlobalConstants.BlockType.AIR || _newLevelClass.Level[x, y, z].SkipInstantiation)
           {
             continue;
           }
