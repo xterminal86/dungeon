@@ -452,7 +452,7 @@ public class App : MonoBehaviour
       }
     }
 
-    SetupCamera((int)_newLevelClass.CameraPos.x, (int)_newLevelClass.CameraPos.y, (int)_newLevelClass.CameraPos.z, 2);
+    SetupCamera((int)_newLevelClass.PlayerPos.X, (int)_newLevelClass.PlayerPos.Y, (int)_newLevelClass.PlayerPos.Z, 2);
   }
 
   void BuildMap()
@@ -1164,10 +1164,12 @@ public class App : MonoBehaviour
     _cameraAngles = CameraPivot.transform.eulerAngles;
 
     InputControllerScript.PlayerMapPos.X = x;
-    InputControllerScript.PlayerMapPos.Y = z;
+    InputControllerScript.PlayerMapPos.Y = y;
+    InputControllerScript.PlayerMapPos.Z = z;
 
     InputControllerScript.PlayerPreviousMapPos.X = x;
-    InputControllerScript.PlayerPreviousMapPos.Y = z;
+    InputControllerScript.PlayerPreviousMapPos.Y = y;
+    InputControllerScript.PlayerPreviousMapPos.Z = z;
   }
 
   void GameOverHandler()

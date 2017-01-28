@@ -65,7 +65,8 @@ public class AttackState : GameObjectState
   {
     float d = Vector3.Distance(_actor.Model.transform.position, _actor.AppRef.CameraPos);
 
-    return (Utils.BlockDistance(_actor.Model.ModelPos, _actor.InputRef.PlayerMapPos) == 1 && (int)d <= GlobalConstants.WallScaleFactor);    
+    // FIXME: see ApproachingPlayerState.cs:56
+    return (Utils.BlockDistance(_actor.Model.ModelPos, new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z)) == 1 && (int)d <= GlobalConstants.WallScaleFactor);    
   }
 
   bool HasWall(Int2 actorPos)

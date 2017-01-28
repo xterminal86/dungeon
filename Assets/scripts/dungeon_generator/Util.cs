@@ -79,6 +79,71 @@ public class RoomBounds
   }
 }
 
+public class Int3
+{
+  int _x = 0;
+  int _y = 0;
+  int _z = 0;
+
+  public Int3()
+  {
+    _x = 0;
+    _y = 0;
+    _z = 0;
+  }
+
+  public Int3(int x, int y, int z)
+  {
+    _x = x;
+    _y = y;
+    _z = z;
+  }
+
+  public Int3(float x, float y, float z)
+  {
+    _x = (int)x;
+    _y = (int)y;
+    _z = (int)z;
+  }
+
+  public Int3(Vector3 v3)
+  {
+    _x = (int)v3.x;
+    _y = (int)v3.y;
+    _z = (int)v3.z;
+  }
+
+  public int X
+  {
+    set { _x = value; }
+    get { return _x; }
+  }
+
+  public int Y
+  {
+    set { _y = value; }
+    get { return _y; }
+  }
+
+  public int Z
+  {
+    set { _z = value; }
+    get { return _z; }
+  }
+
+  public void Set(float x, float y, float z)
+  {
+    _x = (int)x;
+    _y = (int)y;
+    _z = (int)z;
+  }
+
+  public override string ToString()
+  {
+    return string.Format("[Int3: X={0}, Y={1}, Z={2}]", X, Y, Z);
+  }
+}
+
 public enum SerializableBlockType
 {
   NONE = 0,

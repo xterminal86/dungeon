@@ -12,7 +12,7 @@ public class DarwinVillage : LevelBase
   {
     int posY = _mapY / 2;
 
-    _cameraPos.Set(_mapX / 2, posY + 1, _mapZ / 2);
+    _playerPos.Set(_mapX / 2, posY + 1, _mapZ / 2);
 
     for (int x = 0; x < _mapX; x++)
     {

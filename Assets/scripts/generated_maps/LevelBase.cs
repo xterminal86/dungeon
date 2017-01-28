@@ -27,11 +27,11 @@ public class LevelBase
     get { return _mapZ; }
   }
 
-  // Position of camera (might be starting pos and saved for subsequent loading)
-  protected Vector3 _cameraPos = Vector3.zero;
-  public Vector3 CameraPos
+  // Position of player (might be starting pos and saved for subsequent loading)
+  protected Int3 _playerPos = new Int3();
+  public Int3 PlayerPos
   {
-    get { return _cameraPos; }
+    get { return _playerPos; }
   }
 
   public LevelBase(int x, int y, int z)

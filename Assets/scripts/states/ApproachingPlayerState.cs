@@ -52,8 +52,9 @@ public class ApproachingPlayerState : GameObjectState
     {
       _roadBuilder.AbortThread();
     }
-    
-    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, _actor.InputRef.PlayerMapPos, true);
+
+    // FIXME: replace ModelPos with Int3 like player (remove similar hacks below)
+    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z), true);
 
     while ((_road = _roadBuilder.GetResult()) == null)
     {      
@@ -145,10 +146,10 @@ public class ApproachingPlayerState : GameObjectState
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     // Rotate to face player on last step...
-    if (Utils.BlockDistance(_model.ModelPos, _actor.InputRef.PlayerMapPos) == 1)
+    if (Utils.BlockDistance(_model.ModelPos, new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z)) == 1)
     {
       angleStart = _model.transform.rotation.eulerAngles.y;
-      angleEnd = GetAngleToRotate(_actor.InputRef.PlayerMapPos);
+      angleEnd = GetAngleToRotate(new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z));
 
       if ((int)angleStart != (int)angleEnd)
       {
@@ -161,7 +162,7 @@ public class ApproachingPlayerState : GameObjectState
       }
             
       // ...and switch to attack mode if there is no wall before us...
-      if (CanMove(_actor.InputRef.PlayerMapPos))
+      if (CanMove(new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z)))
       {
         _actor.ChangeState(new AttackState(_actor));
         yield break;

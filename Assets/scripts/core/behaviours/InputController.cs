@@ -15,8 +15,8 @@ public class InputController : MonoBehaviour
   // when player rotates, the camera also rotates automatically as a child.
   public Transform CanMoveRayOrigin;
 
-  public Int2 PlayerMapPos = new Int2();
-  public Int2 PlayerPreviousMapPos = new Int2();
+  public Int3 PlayerMapPos = new Int3();
+  public Int3 PlayerPreviousMapPos = new Int3();
 
   public GameObject TrailPrefab;
 
@@ -571,17 +571,14 @@ public class InputController : MonoBehaviour
     }
 
     PlayerPreviousMapPos.X = PlayerMapPos.X;
-    PlayerPreviousMapPos.Y = PlayerMapPos.Y;
+    PlayerPreviousMapPos.Z = PlayerMapPos.Z;
 
     PlayerMapPos.X += dx;
-    PlayerMapPos.Y += dz;
-        
-    //if (AppScript.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y] != -1)
-    if (AppScript.NewLevelClass.Level[PlayerMapPos.X, 20, PlayerMapPos.Y].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
+    PlayerMapPos.Z += dz;
+
+    if (AppScript.NewLevelClass.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
     {
-      SoundManager.Instance.PlayFootstepSoundPlayer(AppScript.NewLevelClass.Level[PlayerMapPos.X, 20, PlayerMapPos.Y].FootstepSound);
-      //SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)AppScript.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y]);
-      //SoundManager.Instance.PlayFootstepSoundPlayer((GlobalConstants.FootstepSoundType)App.Instance.FloorSoundTypeByPosition[PlayerMapPos.X, PlayerMapPos.Y], App.Instance.CameraPos);
+      SoundManager.Instance.PlayFootstepSoundPlayer(AppScript.NewLevelClass.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
     }
 
     _isProcessing = false;
