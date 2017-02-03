@@ -24,6 +24,9 @@ public class CloudsController : MonoBehaviour
   [Range(5, 199)]
   public int MaxCloudSize = 29;
 
+  [Range(2, 15)]
+  public int MaxCloudThickness = 5;
+
   public Vector2 CloudsWorldOrigin = Vector2.zero;
   public float CloudsSpreadRadius = 10.0f;
 
@@ -95,7 +98,7 @@ public class CloudsController : MonoBehaviour
       Vector3 scale = cloud.transform.localScale;
 
       scale.x = cloudSize;
-      scale.y = Random.Range(1, 4);
+      scale.y = Random.Range(1, MaxCloudThickness);
       scale.z = cloudSize;
 
       if (condition == 0)

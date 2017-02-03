@@ -404,7 +404,10 @@ public static class GlobalConstants
     GRASS,
     WATER,
     STONE,
-    DIRT
+    DIRT,
+    WOOD_OAK,
+    WALL_COBBLESTONE_BRICKS,
+    WALL_SUPPORT_STONE
   }
 
   // Minecraft-style blocks prefab names by id
@@ -414,7 +417,10 @@ public static class GlobalConstants
     { BlockType.GRASS, "block-grass" },
     { BlockType.WATER, "block-water" },
     { BlockType.STONE, "block-stone" },
-    { BlockType.DIRT, "block-dirt" }
+    { BlockType.DIRT, "block-dirt" },
+    { BlockType.WOOD_OAK, "block-wood-oak" },
+    { BlockType.WALL_COBBLESTONE_BRICKS, "wall-border-cobblestone-bricks" },
+    { BlockType.WALL_SUPPORT_STONE, "wall-support-stone" }
   };
 }
 
