@@ -2,35 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinecraftBlock : MonoBehaviour 
-{
-  public Transform LeftQuad;
-  public MeshRenderer LeftQuadRenderer;
-  public Transform RightQuad;
-  public MeshRenderer RightQuadRenderer;
-  public Transform ForwardQuad;
-  public MeshRenderer ForwardQuadRenderer;
-  public Transform BackQuad;
-  public MeshRenderer BackQuadRenderer;
-  public Transform UpQuad;
-  public MeshRenderer UpQuadRenderer;
-  public Transform DownQuad;
-  public MeshRenderer DownQuadRenderer;
-
-  public bool ColliderOn = false;
-
+public class MinecraftBlockAnimated : MinecraftBlock 
+{  
   public Material AnimatedTextureMaterial;
 
   public int Frames = 32;
 
+  float _textureAnimationDelta = 1.0f;
   void Start()
-  {
-    GetComponent<BoxCollider>().enabled = ColliderOn;
-
+  {    
     _textureAnimationDelta = 1.0f / Frames;
   }
-
-  float _textureAnimationDelta = 1.0f;
 
   Vector2 _offset = Vector2.zero;
 
@@ -42,6 +24,7 @@ public class MinecraftBlock : MonoBehaviour
   {
     if (AnimatedTextureMaterial == null)
     {
+      Debug.LogWarning("No material on " + name);
       return;
     }
 
@@ -63,4 +46,5 @@ public class MinecraftBlock : MonoBehaviour
       AnimatedTextureMaterial.SetTextureOffset("_MainTex", _offset);
     }
   }
+
 }

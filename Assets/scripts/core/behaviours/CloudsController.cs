@@ -13,6 +13,9 @@ public class CloudsController : MonoBehaviour
   // Empty object to hold our formed cloud structure for easy manipulation
   public GameObject CloudHolder;
 
+  // All clouds holder
+  public GameObject AllClouds;
+
   public GameObject CloudBlock;
 
   public int MaximumNumberOfClouds = 10;
@@ -44,6 +47,7 @@ public class CloudsController : MonoBehaviour
     new Vector2(1, 0), new Vector2(-1, 0), new Vector2(0, 1), new Vector2(0, -1)
   };
     
+  GameObject _allClouds;
   Texture2D _cloudTexture;
   Material _cloudMaterial;
 	void Start() 
@@ -62,6 +66,8 @@ public class CloudsController : MonoBehaviour
     _cloud = new int[MaxCloudSize, MaxCloudSize];
 
     _cloudTexture = new Texture2D(128, 128, TextureFormat.ARGB32, false);
+
+    _allClouds = (GameObject)Instantiate(AllClouds);
 
     for (int x = 0; x < _cloudTexture.width; x++)
     {
@@ -113,6 +119,8 @@ public class CloudsController : MonoBehaviour
       cloud.transform.localScale = scale;
 
       cloud.transform.SetParent(_cloudHolder.transform, false);
+      _cloudHolder.transform.SetParent(_allClouds.transform, false);
+
       SetMaterial(cloud);
 
       float floatSpeed = Random.Range(0.01f, CloudSpeedRange);
@@ -358,6 +366,8 @@ public class CloudsController : MonoBehaviour
         }
       }
     }
+
+    _cloudHolder.transform.SetParent(_allClouds.transform, false);
 
     float floatSpeed = Random.Range(0.01f, CloudSpeedRange);
 

@@ -317,10 +317,15 @@ public static class GlobalConstants
     WALL_THIN_WOODEN,
     WALL_THIN_WOODEN_WINDOW,
     WALL_SUPPORT_WOODEN,
+    WALL_BORDER_STONE_BRICKS,
+    WALL_SUPPORT_STONE,
     TREE_BIRCH,
     FENCE
   }
 
+  /// <summary>
+  /// Non-interactive objects that are not a block (walls, columns etc)
+  /// </summary>
   public static Dictionary<StaticPrefabsEnum, string> StaticPrefabsNamesById = new Dictionary<StaticPrefabsEnum, string>()
   {
     { StaticPrefabsEnum.FLOOR_GRASS, "floor-grass" },
@@ -341,6 +346,8 @@ public static class GlobalConstants
     //{ StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-thin-wooden-window" },
     { StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-border-wooden-window" },
     { StaticPrefabsEnum.WALL_SUPPORT_WOODEN, "wall-support-wooden" },
+    { StaticPrefabsEnum.WALL_BORDER_STONE_BRICKS, "wall-border-stone-bricks" },
+    { StaticPrefabsEnum.WALL_SUPPORT_STONE, "wall-support-stone" },
     { StaticPrefabsEnum.FENCE, "block-fence" }
   };
 
@@ -355,6 +362,9 @@ public static class GlobalConstants
     VILLAGE_SIGN
   }
 
+  /// <summary>
+  /// Interactive objects that are not a block (doors, buttons etc)
+  /// </summary>
   public static Dictionary<ObjectPrefabsEnum, string> ObjectPrefabsNamesById = new Dictionary<ObjectPrefabsEnum, string>()
   {
     { ObjectPrefabsEnum.DOOR_IRON, "door-iron" },
@@ -382,6 +392,9 @@ public static class GlobalConstants
     WEAPON_RANGED
   }
 
+  /// <summary>
+  /// All game items (food, weapons etc)
+  /// </summary>
   public static Dictionary<string, WorldItemType> WorldItemTypes = new Dictionary<string, WorldItemType>()
   {
     { "placeholder", WorldItemType.PLACEHOLDER },
@@ -405,102 +418,22 @@ public static class GlobalConstants
     WATER,
     STONE,
     DIRT,
-    WOOD_OAK,
-    WALL_COBBLESTONE_BRICKS,
-    WALL_SUPPORT_STONE
+    WOOD_OAK
   }
 
-  // Minecraft-style blocks prefab names by id
-  // Id 0 is air block - not instantiated but used in calculations (e. g. in HideSides())
+  /// <summary>
+  /// Minecraft-style blocks prefab names by id.
+  /// Id 0 is air block - not instantiated but used in calculations (e. g. in HideSides())
+  /// </summary>
   public static Dictionary<BlockType, string> BlockPrefabById = new Dictionary<BlockType, string>() 
   {
     { BlockType.GRASS, "block-grass" },
     { BlockType.WATER, "block-water" },
     { BlockType.STONE, "block-stone" },
     { BlockType.DIRT, "block-dirt" },
-    { BlockType.WOOD_OAK, "block-wood-oak" },
-    { BlockType.WALL_COBBLESTONE_BRICKS, "wall-border-cobblestone-bricks" },
-    { BlockType.WALL_SUPPORT_STONE, "wall-support-stone" }
+    { BlockType.WOOD_OAK, "block-wood-oak" }
   };
 }
 
-public class VillagerInfo
-{
-  public string HailString = string.Empty;
-  public string PortraitName = string.Empty;
-  public string VillagerName = string.Empty;
-  public string VillagerJob = string.Empty;
-  public List<string> VillagerGossipLines = new List<string>();
 
-  public override string ToString()
-  {
-    string result = string.Format("[VillagerInfo] : Name \"{0}\", Job \"{1}\", Gossip lines:\n", VillagerName, VillagerJob);
-
-    foreach (var item in VillagerGossipLines)
-    {
-      result += item + "\n";
-    }
-
-    return result;
-  }
-};
-
-public class BlockEntity
-{
-  public bool Walkable = true;
-  public bool IsLiquid = false;
-  public bool SkipInstantiation = false;
-  public string BlockName = string.Empty;
-  public Vector3 ArrayCoordinates = Vector3.zero;
-  public Vector3 WorldCoordinates = Vector3.zero;
-  public GlobalConstants.FootstepSoundType FootstepSound = GlobalConstants.FootstepSoundType.DUMMY;
-
-  public Dictionary<GlobalConstants.Orientation, bool> SidesWalkability = new Dictionary<GlobalConstants.Orientation, bool>();
-
-  GlobalConstants.BlockType _blockType = GlobalConstants.BlockType.AIR;
-  public GlobalConstants.BlockType BlockType
-  {
-    get { return _blockType; }
-    set
-    {
-      _blockType = value;
-      SetFootstepSound();
-    }
-  }
-
-  public BlockEntity()
-  {
-    Walkable = true;
-
-    SidesWalkability[GlobalConstants.Orientation.EAST] = true;
-    SidesWalkability[GlobalConstants.Orientation.SOUTH] = true;
-    SidesWalkability[GlobalConstants.Orientation.WEST] = true;
-    SidesWalkability[GlobalConstants.Orientation.NORTH] = true;
-  }
-
-  public void SetFootstepSound()
-  {
-    switch (_blockType)
-    {
-      case GlobalConstants.BlockType.GRASS:
-        FootstepSound = GlobalConstants.FootstepSoundType.GRASS;
-        break;
-
-      case GlobalConstants.BlockType.DIRT:
-        FootstepSound = GlobalConstants.FootstepSoundType.DIRT;
-        break;
-
-      case GlobalConstants.BlockType.STONE:
-        FootstepSound = GlobalConstants.FootstepSoundType.STONE;
-        break;
-
-      case GlobalConstants.BlockType.WOOD_OAK:
-        FootstepSound = GlobalConstants.FootstepSoundType.WOOD;
-        break;
-
-      default:        
-        break;        
-    }
-  }
-};
 

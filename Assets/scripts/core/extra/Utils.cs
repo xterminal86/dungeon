@@ -34,9 +34,9 @@ public static class Utils
   /// <summary>
   /// Hide appropriate sides of a block to prevent side doubling and lighting artifacts.
   /// </summary>
-  /// <param name="block">Block to operate on</param>
-  /// <param name="coordinates">Block coordinates</param>
-  /// <param name="level">Level class reference</param>
+  /// <param name="blockSidesList">Block to operate on</param>
+  /// <param name="coordinates">Current block coordinates</param>
+  /// <param name="level">LevelBase based class</param>
   public static void HideLevelBlockSides(MinecraftBlock block, Vector3 coordinates, LevelBase level)
   {
     Vector3[] arrayCoordinatesAdds = new Vector3[6] 
@@ -133,11 +133,11 @@ public static class Utils
         {
           if ((int)arrayCoordinatesAdds[side][1] == -1)
           {
-            block.DownQuadRenderer.receiveShadows = false;
+            block.UpQuadRenderer.receiveShadows = false;
           }
           else if ((int)arrayCoordinatesAdds[side][1] == 1)
           {
-            block.UpQuadRenderer.receiveShadows = false;
+            block.DownQuadRenderer.receiveShadows = false;
           }
         }
 
@@ -146,11 +146,11 @@ public static class Utils
         {
           if ((int)arrayCoordinatesAdds[side][1] == -1)
           {            
-            block.DownQuad.gameObject.SetActive(false);
+            block.UpQuad.gameObject.SetActive(false);
           }
           else if ((int)arrayCoordinatesAdds[side][1] == 1)
           {
-            block.UpQuad.gameObject.SetActive(false);
+            block.DownQuad.gameObject.SetActive(false);
           }
         }
       }

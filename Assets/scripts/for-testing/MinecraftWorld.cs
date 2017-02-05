@@ -34,15 +34,6 @@ public class MinecraftWorld : MonoBehaviour
             continue;
           }
 
-          float wx = _world.Level[x, y, z].WorldCoordinates.x;
-          float wy = _world.Level[x, y, z].WorldCoordinates.y;
-          float wz = _world.Level[x, y, z].WorldCoordinates.z;
-
-          if (_world.Level[x, y, z].IsLiquid)
-          {
-            _world.Level[x, y, z].WorldCoordinates.Set(wx, wy - 0.3f, wz);
-          }
-
           GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_world.Level[x, y, z].BlockType]);
 
           if (prefab != null)
@@ -51,9 +42,17 @@ public class MinecraftWorld : MonoBehaviour
 
             block.transform.SetParent(WorldHolder);
 
-            MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
+            MinecraftBlockAnimated mba = block.GetComponent<MinecraftBlockAnimated>();
 
-            Utils.HideLevelBlockSides(blockScript, _world.Level[x, y, z].ArrayCoordinates, _world);
+            if (mba != null)
+            {
+              Utils.HideLevelBlockSides(mba, _world.Level[x, y, z].ArrayCoordinates, _world);
+            }
+            else
+            {
+              MinecraftBlock mb = block.GetComponent<MinecraftBlock>();
+              Utils.HideLevelBlockSides(mb, _world.Level[x, y, z].ArrayCoordinates, _world);
+            }
           }
         }
       }

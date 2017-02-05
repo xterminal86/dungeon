@@ -8,7 +8,7 @@ public class DarwinVillage : LevelBase
   { 
   }
 
-  public override void Generate()
+  public override void GenerateLevel()
   {
     int posY = _mapY / 2;
 
@@ -16,7 +16,7 @@ public class DarwinVillage : LevelBase
 
     CreateGround();
 
-    MakeHillLayered(10, posY, 10, 9);
+    MakeHillLayered(new Int3(10, posY, 10), 9);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }

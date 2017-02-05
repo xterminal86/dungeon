@@ -45,7 +45,19 @@ public class LevelBase
     InitArray();
   }
 
-  public virtual void Generate()
+  /// <summary>
+  /// Call this method to generate your level.
+  /// </summary>
+  public void Generate()
+  {
+    GenerateLevel();
+    AdjustLiquidBlocks();
+  }
+
+  /// <summary>
+  /// Code for generation of a level goes here.
+  /// </summary>
+  public virtual void GenerateLevel()
   {
   }
 
@@ -161,19 +173,42 @@ public class LevelBase
         }
       }
     }
+  }
 
+  /// <summary>
+  /// Lowers liquid blocks down a little.
+  /// </summary>
+  void AdjustLiquidBlocks()
+  {
+    for (int y = 0; y < _mapY; y++)
+    {
+      for (int x = 0; x < _mapX; x++)
+      {
+        for (int z = 0; z < _mapZ; z++)
+        {
+          if (_level[x, y, z].IsLiquid)
+          {
+            float wx = _level[x, y, z].WorldCoordinates.x;
+            float wy = _level[x, y, z].WorldCoordinates.y;
+            float wz = _level[x, y, z].WorldCoordinates.z;
+
+            _level[x, y, z].WorldCoordinates.Set(wx, wy - 0.3f, wz);
+          }
+        }
+      }
+    }
   }
 
   // ************************ WORLD GENERATION ************************ //
 
   // Should be odd
   int _maxHillsHeight = 15;
-  protected void MakeHillLayered(int x, int y, int z, int height)
+  protected void MakeHillLayered(Int3 arrayPos, int height)
   {
-    int lx = x - height;
-    int lz = z - height;
-    int hx = x + height;
-    int hz = z + height;
+    int lx = arrayPos.X - height;
+    int lz = arrayPos.Z - height;
+    int hx = arrayPos.X + height;
+    int hz = arrayPos.Z + height;
 
     lx = Mathf.Clamp(lx, 0, _mapX - 1);
     lz = Mathf.Clamp(lz, 0, _mapZ - 1);
@@ -186,7 +221,7 @@ public class LevelBase
 
     for (int h = 0; h < height; h++)
     {
-      hy = h + y;
+      hy = h + arrayPos.Y;
       hy = Mathf.Clamp(hy, 0, _mapY - 1);
 
       for (int ax = lx + h; ax <= hx - h; ax++)
@@ -240,5 +275,9 @@ public class LevelBase
     MakeHillQbert(hx, z, height - 1);
     MakeHillQbert(x, lz, height - 1);
     MakeHillQbert(x, hz, height - 1);
+  }
+
+  protected void PlaceStaticObject(Int3 arrayCoords, GlobalConstants.StaticPrefabsEnum objectType, GlobalConstants.Orientation orientation)
+  {
   }
 }

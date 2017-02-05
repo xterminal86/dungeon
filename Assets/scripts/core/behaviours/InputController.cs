@@ -355,7 +355,7 @@ public class InputController : MonoBehaviour
         obstacleAhead = (hit.collider.gameObject.GetComponent<ModelMover>() == null);
       }
     }
-    
+
     //return (emptyCell == '.' && !obstacleAhead);
     return !obstacleAhead;    
   }

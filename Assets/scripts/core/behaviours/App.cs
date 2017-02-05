@@ -444,9 +444,16 @@ public class App : MonoBehaviour
             GameObject block = (GameObject)Instantiate(prefab, _newLevelClass.Level[x, y, z].WorldCoordinates, Quaternion.identity);
             block.transform.parent = ObjectsInstancesTransform.transform;
 
-            MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
-
-            Utils.HideLevelBlockSides(blockScript, _newLevelClass.Level[x, y, z].ArrayCoordinates, _newLevelClass);
+            MinecraftBlockAnimated blockAnimated = block.GetComponent<MinecraftBlockAnimated>();
+            if (blockAnimated != null)
+            {
+              Utils.HideLevelBlockSides(blockAnimated, _newLevelClass.Level[x, y, z].ArrayCoordinates, _newLevelClass);
+            }
+            else
+            {              
+              MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
+              Utils.HideLevelBlockSides(blockScript, _newLevelClass.Level[x, y, z].ArrayCoordinates, _newLevelClass);
+            }
           }
         }
       }
