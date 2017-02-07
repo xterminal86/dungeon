@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// This script should be placed on all items
 /// </summary>
-public class BehaviourItemObject : MonoBehaviour 
+public class BehaviourItemObject : BehaviourObjectBase 
 {
   // Can this object be picked up in the world?
   public bool CanBeTaken = true;
@@ -15,16 +15,4 @@ public class BehaviourItemObject : MonoBehaviour
 
   // Logic class instance
   public ItemObject ItemObjectInstance;
-
-  Int2 _mapPosition = new Int2();
-  public Int2 MapPosition
-  {
-    get { return _mapPosition; }
-  }
-  
-  public void CalculateMapPosition()
-  {
-    _mapPosition.X = (int)transform.position.x / GlobalConstants.WallScaleFactor;
-    _mapPosition.Y = (int)transform.position.z / GlobalConstants.WallScaleFactor;
-  }
 }
