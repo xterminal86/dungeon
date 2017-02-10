@@ -27,7 +27,11 @@ public class LevelBase
     get { return _mapZ; }
   }
 
-  // Position of player (might be starting pos and saved for subsequent loading)
+  /// <summary>
+  /// Position of player (might be starting pos and saved for subsequent loading).
+  /// Indicates array coordinates of a block in which player is located.
+  /// Footstep sound is calcualted from Y - 1 coordinates (see the end of InputController::CameraMoveRoutine())
+  /// </summary>   
   protected Int3 _playerPos = new Int3();
   public Int3 PlayerPos
   {
@@ -203,7 +207,7 @@ public class LevelBase
 
   // Should be odd
   int _maxHillsHeight = 15;
-  protected void MakeHillLayered(Int3 arrayPos, int height)
+  protected void MakeHillLayered(GlobalConstants.BlockType blockType, Int3 arrayPos, int height)
   {
     int lx = arrayPos.X - height;
     int lz = arrayPos.Z - height;
@@ -217,8 +221,6 @@ public class LevelBase
 
     int hy = 0;
 
-    int choice = Random.Range(0, 2);
-
     for (int h = 0; h < height; h++)
     {
       hy = h + arrayPos.Y;
@@ -228,7 +230,7 @@ public class LevelBase
       {
         for (int ay = lz + h; ay <= hz - h; ay++)
         {               
-          _level[ax, hy, ay].BlockType = (choice == 0) ? GlobalConstants.BlockType.GRASS : GlobalConstants.BlockType.STONE;
+          _level[ax, hy, ay].BlockType = blockType;
         }
       }
     }

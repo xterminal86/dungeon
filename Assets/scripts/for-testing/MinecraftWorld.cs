@@ -34,7 +34,7 @@ public class MinecraftWorld : MonoBehaviour
             continue;
           }
 
-          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_world.Level[x, y, z].BlockType]);
+          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabByType[_world.Level[x, y, z].BlockType]);
 
           if (prefab != null)
           {

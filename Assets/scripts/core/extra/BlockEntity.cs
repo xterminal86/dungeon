@@ -24,6 +24,13 @@ public class BlockEntity
     set
     {
       _blockType = value;
+
+      // TODO: what about lava, water etc.?
+      if (_blockType != GlobalConstants.BlockType.AIR)
+      {
+        Walkable = false;
+      }
+
       SetFootstepSound();
     }
   }

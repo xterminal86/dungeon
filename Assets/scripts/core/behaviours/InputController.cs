@@ -202,6 +202,7 @@ public class InputController : MonoBehaviour
   {
     int x = PlayerMapPos.X;
     int y = PlayerMapPos.Y;
+    int z = PlayerMapPos.Z;
 
     var o = AppScript.CameraOrientation;
 
@@ -211,7 +212,7 @@ public class InputController : MonoBehaviour
     }
     else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.EAST) 
     {
-      y++;
+      z++;
     }
     else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.SOUTH) 
     {
@@ -219,32 +220,36 @@ public class InputController : MonoBehaviour
     }
     else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.WEST) 
     {
-      y--;
+      z--;
     }
 
     // Check bounds
-    if (x < 0 || x > AppScript.MapRows - 1 || y < 0 || y > AppScript.MapColumns - 1)
+    if (x < 0 || x > AppScript.GeneratedMapWidth - 1 || z < 0 || z > AppScript.GeneratedMapHeight - 1)
     {
       return;
     }
 
-    if (!AppScript.GeneratedMap.PathfindingMap[x, y].Walkable) return;
+    if (!AppScript.LevelMapNew.Level[x, y, z].Walkable)
+    {      
+      return;
+    }
 
     SoundManager.Instance.PlaySound(GlobalConstants.SFXItemPut);
     
     GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
 
     _itemPos.x = x * GlobalConstants.WallScaleFactor;
-    _itemPos.z = y * GlobalConstants.WallScaleFactor;
+    _itemPos.y = y * GlobalConstants.WallScaleFactor;
+    _itemPos.z = z * GlobalConstants.WallScaleFactor;
 
     _itemRotation = GUIManager.Instance.ItemTaken.BIO.gameObject.transform.eulerAngles;
 
     GlobalConstants.Orientation or = GlobalConstants.OrientationsMap[AppScript.CameraOrientation];
     _itemRotation.y = GlobalConstants.OrientationAngles[or];
 
+    GUIManager.Instance.ItemTaken.BIO.MapPosition.Set(x, y, z);
     GUIManager.Instance.ItemTaken.BIO.transform.position = _itemPos;
     GUIManager.Instance.ItemTaken.BIO.transform.eulerAngles = _itemRotation;
-    GUIManager.Instance.ItemTaken.BIO.CalculateMapPosition();
     GUIManager.Instance.ItemTaken.BIO.gameObject.SetActive(true);
     GUIManager.Instance.ItemTaken = null;
   }
@@ -268,10 +273,10 @@ public class InputController : MonoBehaviour
   void ProcessBIO(BehaviourItemObject bio)
   {
     int dx = PlayerMapPos.X - bio.MapPosition.X;
-    int dy = PlayerMapPos.Y - bio.MapPosition.Y;
+    int dz = PlayerMapPos.Z - bio.MapPosition.Z;
 
     // If object is on the same line as camera and can be taken
-    if ( ( (dx == 0 && dy != 0) || (dy == 0 && dx != 0) ) && bio.CanBeTaken)
+    if ( ( (dx == 0 && dz != 0) || (dz == 0 && dx != 0) ) && bio.CanBeTaken)
     {
       if (bio.ItemObjectInstance.LMBAction != null)
         bio.ItemObjectInstance.LMBAction(this);
@@ -283,7 +288,7 @@ public class InputController : MonoBehaviour
     // We might want to look into map array, so we use map coordinates (i.e. row and column)
 
     int newX = PlayerMapPos.X;
-    int newZ = PlayerMapPos.Y;
+    int newZ = PlayerMapPos.Z;
 
     int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
     int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
@@ -311,7 +316,7 @@ public class InputController : MonoBehaviour
 
     // Check bounds
     //if (newX < 0 || newX > AppScript.MapRows - 1 || newZ < 0 || newZ > AppScript.MapColumns - 1)
-    if (newX < 0 || newX > AppScript.NewLevelClass.MapX - 1 || newZ < 0 || newZ > AppScript.NewLevelClass.MapZ - 1)
+    if (newX < 0 || newX > AppScript.LevelMapNew.MapX - 1 || newZ < 0 || newZ > AppScript.LevelMapNew.MapZ - 1)
     {
       return false;
     }
@@ -347,6 +352,7 @@ public class InputController : MonoBehaviour
         
     //Debug.DrawRay(ray.origin, ray.direction * GlobalConstants.WallScaleFactor, Color.yellow, 10.0f);
 
+    /*
     RaycastHit hit;      
     if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
     {
@@ -356,8 +362,11 @@ public class InputController : MonoBehaviour
       }
     }
 
-    //return (emptyCell == '.' && !obstacleAhead);
     return !obstacleAhead;    
+    */
+
+    // TODO: don't use raycast for determining walkability?
+    return AppScript.LevelMapNew.Level[newX, PlayerMapPos.Y, newZ].Walkable;
   }
     
   void TurnCamera(int from, int to, bool turnRight)
@@ -576,9 +585,9 @@ public class InputController : MonoBehaviour
     PlayerMapPos.X += dx;
     PlayerMapPos.Z += dz;
 
-    if (AppScript.NewLevelClass.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
+    if (AppScript.LevelMapNew.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
     {
-      SoundManager.Instance.PlayFootstepSoundPlayer(AppScript.NewLevelClass.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
+      SoundManager.Instance.PlayFootstepSoundPlayer(AppScript.LevelMapNew.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
     }
 
     _isProcessing = false;

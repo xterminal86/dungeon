@@ -126,31 +126,38 @@ public static class Utils
         }
       }
 
+      // arrayCoordinatesAdds[side][1] == -1 means that ny will be less that current block y,
+      // thus below
+
       if (ny != y && ny >= 0 && ny <= level.MapY - 1)
       {        
         // Disable shadow casting if submerged
         if (!level.Level[x, y, z].IsLiquid && level.Level[x, ny, z].IsLiquid)
         {
+          // If current block is above liquid block
           if ((int)arrayCoordinatesAdds[side][1] == -1)
           {
-            block.UpQuadRenderer.receiveShadows = false;
+            // Disable shadow receiving of down quad
+            block.DownQuadRenderer.receiveShadows = false;
           }
           else if ((int)arrayCoordinatesAdds[side][1] == 1)
           {
-            block.DownQuadRenderer.receiveShadows = false;
+            block.UpQuadRenderer.receiveShadows = false;
           }
         }
 
         if ((!level.Level[x, y, z].IsLiquid && !level.Level[x, ny, z].IsLiquid && level.Level[x, ny, z].BlockType != GlobalConstants.BlockType.AIR)
           || (level.Level[x, y, z].IsLiquid && level.Level[x, ny, z].IsLiquid))
-        {
+        {          
+          // If ny is lower block
           if ((int)arrayCoordinatesAdds[side][1] == -1)
           {            
-            block.UpQuad.gameObject.SetActive(false);
+            // Hide down side of current block
+            block.DownQuad.gameObject.SetActive(false);
           }
           else if ((int)arrayCoordinatesAdds[side][1] == 1)
           {
-            block.DownQuad.gameObject.SetActive(false);
+            block.UpQuad.gameObject.SetActive(false);
           }
         }
       }

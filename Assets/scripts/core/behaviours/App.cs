@@ -132,10 +132,10 @@ public class App : MonoBehaviour
     }
   }
 
-  LevelBase _newLevelClass;
-  public LevelBase NewLevelClass
+  LevelBase _levelMapNew;
+  public LevelBase LevelMapNew
   {
-    get { return _newLevelClass; }
+    get { return _levelMapNew; }
   }
 
   Vector3 _villageLevelSize = new Vector3(80, 40, 80);
@@ -192,10 +192,10 @@ public class App : MonoBehaviour
         _generatedMap = new Village(_generatedMapWidth, _generatedMapHeight);
         break;
       case MapFilename.DARWIN_VILLAGE:
-        _newLevelClass = new DarwinVillage((int)_villageLevelSize.x, 
+        _levelMapNew = new DarwinVillage((int)_villageLevelSize.x, 
                                            (int)_villageLevelSize.y, 
                                            (int)_villageLevelSize.z);
-        _newLevelClass.Generate();
+        _levelMapNew.Generate();
         BuildMapNew();
         CloudsControllerScript.Generate(_villageLevelSize.y * GlobalConstants.WallScaleFactor);
         break;
@@ -204,11 +204,12 @@ public class App : MonoBehaviour
         break;
     }
 
+    SpawnItems();
+
     if (_generatedMap != null)
     {
       _generatedMap.Generate();
       BuildMap();
-      SpawnItems();
 
       if (MapFilenameField == MapFilename.GEN_VILLAGE)
       {
@@ -344,8 +345,6 @@ public class App : MonoBehaviour
       return null;
     }   
 
-    bio.CalculateMapPosition();
-
     switch (item.ItemType)
     {
       case GlobalConstants.WorldItemType.PLACEHOLDER:
@@ -426,40 +425,40 @@ public class App : MonoBehaviour
 
   void BuildMapNew()
   {
-    for (int y = 0; y < _newLevelClass.MapY; y++)
+    for (int y = 0; y < _levelMapNew.MapY; y++)
     {
-      for (int x = 0; x < _newLevelClass.MapX; x++)
+      for (int x = 0; x < _levelMapNew.MapX; x++)
       {
-        for (int z = 0; z < _newLevelClass.MapZ; z++)
+        for (int z = 0; z < _levelMapNew.MapZ; z++)
         {
-          if (_newLevelClass.Level[x, y, z].BlockType == GlobalConstants.BlockType.AIR || _newLevelClass.Level[x, y, z].SkipInstantiation)
+          if (_levelMapNew.Level[x, y, z].BlockType == GlobalConstants.BlockType.AIR || _levelMapNew.Level[x, y, z].SkipInstantiation)
           {
             continue;
           }
 
-          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabById[_newLevelClass.Level[x, y, z].BlockType]);
+          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabByType[_levelMapNew.Level[x, y, z].BlockType]);
 
           if (prefab != null)
           {
-            GameObject block = (GameObject)Instantiate(prefab, _newLevelClass.Level[x, y, z].WorldCoordinates, Quaternion.identity);
+            GameObject block = (GameObject)Instantiate(prefab, _levelMapNew.Level[x, y, z].WorldCoordinates, Quaternion.identity);
             block.transform.parent = ObjectsInstancesTransform.transform;
 
             MinecraftBlockAnimated blockAnimated = block.GetComponent<MinecraftBlockAnimated>();
             if (blockAnimated != null)
             {
-              Utils.HideLevelBlockSides(blockAnimated, _newLevelClass.Level[x, y, z].ArrayCoordinates, _newLevelClass);
+              Utils.HideLevelBlockSides(blockAnimated, _levelMapNew.Level[x, y, z].ArrayCoordinates, _levelMapNew);
             }
             else
             {              
               MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
-              Utils.HideLevelBlockSides(blockScript, _newLevelClass.Level[x, y, z].ArrayCoordinates, _newLevelClass);
+              Utils.HideLevelBlockSides(blockScript, _levelMapNew.Level[x, y, z].ArrayCoordinates, _levelMapNew);
             }
           }
         }
       }
     }
 
-    SetupCamera((int)_newLevelClass.PlayerPos.X, (int)_newLevelClass.PlayerPos.Y, (int)_newLevelClass.PlayerPos.Z, 2);
+    SetupCamera((int)_levelMapNew.PlayerPos.X, (int)_levelMapNew.PlayerPos.Y, (int)_levelMapNew.PlayerPos.Z, 2);
   }
 
   void BuildMap()
@@ -1085,8 +1084,6 @@ public class App : MonoBehaviour
       //Debug.LogWarning("Could not get BMO component from " + prefabName);
       return;
     }
-
-    bmo.CalculateMapPosition();
 
     switch (so.ObjectClassName)
     {

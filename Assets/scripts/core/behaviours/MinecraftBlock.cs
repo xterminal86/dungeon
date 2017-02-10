@@ -16,11 +16,4 @@ public class MinecraftBlock : MonoBehaviour
   public MeshRenderer UpQuadRenderer;
   public Transform DownQuad;
   public MeshRenderer DownQuadRenderer;
-
-  public bool ColliderOn = false;
-
-  void Start()
-  {
-    GetComponent<BoxCollider>().enabled = ColliderOn;
-  }
 }

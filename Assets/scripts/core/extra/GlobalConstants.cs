@@ -425,7 +425,7 @@ public static class GlobalConstants
   /// Minecraft-style blocks prefab names by id.
   /// Id 0 is air block - not instantiated but used in calculations (e. g. in HideSides())
   /// </summary>
-  public static Dictionary<BlockType, string> BlockPrefabById = new Dictionary<BlockType, string>() 
+  public static Dictionary<BlockType, string> BlockPrefabByType = new Dictionary<BlockType, string>() 
   {
     { BlockType.GRASS, "block-grass" },
     { BlockType.WATER, "block-water" },

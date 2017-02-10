@@ -22,7 +22,7 @@ public class TestLevel : LevelBase
     {
       for (int z = 0; z < _mapZ; z++)
       {
-        int choice = Random.Range(1, GlobalConstants.BlockPrefabById.Count + 1);
+        int choice = Random.Range(1, GlobalConstants.BlockPrefabByType.Count + 1);
         GlobalConstants.BlockType block = (GlobalConstants.BlockType)choice;
 
         _level[x, 0, z].BlockType = block;
@@ -57,7 +57,7 @@ public class TestLevel : LevelBase
       int x = Random.Range(10, _mapX - 10);
       int z = Random.Range(10, _mapZ - 10);
 
-      MakeHillLayered(new Int3(x, 0, z), h);
+      MakeHillLayered(GlobalConstants.BlockType.GRASS, new Int3(x, 0, z), h);
     }
   }
 }
