@@ -352,7 +352,6 @@ public class InputController : MonoBehaviour
         
     //Debug.DrawRay(ray.origin, ray.direction * GlobalConstants.WallScaleFactor, Color.yellow, 10.0f);
 
-    /*
     RaycastHit hit;      
     if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
     {
@@ -363,10 +362,16 @@ public class InputController : MonoBehaviour
     }
 
     return !obstacleAhead;    
-    */
 
     // TODO: don't use raycast for determining walkability?
-    return AppScript.LevelMapNew.Level[newX, PlayerMapPos.Y, newZ].Walkable;
+    //
+    // If we use just a check, there will be a visual inconsistency during opening of doors.
+    // If we set sides walkability flag immediately, then it will be possible to go through
+    // even though visually door is still haven't opened yet. If we wait for opening animation
+    // to end, then sometimes (during sliding up/down door, for example) there will be situations
+    // when door almost opened, but we still can't go through, though visually it is possible.
+
+    //return AppScript.LevelMapNew.Level[newX, PlayerMapPos.Y, newZ].Walkable;
   }
     
   void TurnCamera(int from, int to, bool turnRight)

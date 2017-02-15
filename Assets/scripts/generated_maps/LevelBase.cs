@@ -167,13 +167,10 @@ public class LevelBase
       for (int x = areaStartX; x < areaEndX; x++)
       {
         for (int z = areaStartZ; z < areaEndZ; z++)
-        {
-          // Air blocks are checked first during instantiation and skipped.
-          //
-          // IsLiquid and SkipInstantiation flags are not touched. 
-          // Set them accordingly when you change block type from air to other.
-
+        {          
           _level[x, y, z].BlockType = GlobalConstants.BlockType.AIR;
+          _level[x, y, z].Walkable = true;
+          _level[x, y, z].IsLiquid = false;
         }
       }
     }
