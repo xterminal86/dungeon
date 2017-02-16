@@ -300,80 +300,39 @@ public static class GlobalConstants
     WEST
   }
 
-  public enum StaticPrefabsEnum
+  public enum BlockType
   {
-    FLOOR_GRASS = 0,
-    FLOOR_DIRT,
-    FLOOR_WOODEN_BLACK,
-    FLOOR_COBBLESTONE,
-    FLOOR_COBBLESTONE_BRICKS,
-    BLOCK_BRICKS_RED,
-    BLOCK_WOODEN_LOG,
-    ROOF_WOODEN_LINE,
-    ROOF_WOODEN_CORNER,
-    ROOF_COBBLESTONE_LINE,
-    ROOF_COBBLESTONE_CORNER,
-    ROOF_COBBLESTONE_CLOSING,
-    WALL_THIN_WOODEN,
-    WALL_THIN_WOODEN_WINDOW,
-    WALL_SUPPORT_WOODEN,
-    WALL_BORDER_STONE_BRICKS,
-    WALL_SUPPORT_STONE,
-    TREE_BIRCH,
-    FENCE
+    AIR = 0,
+    GRASS,
+    WATER,
+    STONE,
+    DIRT,
+    WOOD_OAK
   }
 
   /// <summary>
-  /// Non-interactive objects that are not a block (walls, columns etc)
+  /// Minecraft-style blocks prefab names by id.
+  /// Id 0 is air block - not instantiated but used in calculations (e. g. in HideSides())
   /// </summary>
-  public static Dictionary<StaticPrefabsEnum, string> StaticPrefabsNamesById = new Dictionary<StaticPrefabsEnum, string>()
+  public static Dictionary<BlockType, string> BlockPrefabByType = new Dictionary<BlockType, string>() 
   {
-    { StaticPrefabsEnum.FLOOR_GRASS, "floor-grass" },
-    { StaticPrefabsEnum.FLOOR_DIRT, "floor-dirt" },
-    { StaticPrefabsEnum.FLOOR_WOODEN_BLACK, "floor-wooden-black" },
-    { StaticPrefabsEnum.FLOOR_COBBLESTONE, "floor-cobblestone" },
-    { StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS, "floor-cobblestone-bricks" },
-    { StaticPrefabsEnum.BLOCK_BRICKS_RED, "block-bricks-red" },
-    { StaticPrefabsEnum.TREE_BIRCH, "block-tree-birch" },
-    { StaticPrefabsEnum.BLOCK_WOODEN_LOG, "block-wooden-log" },
-    { StaticPrefabsEnum.ROOF_WOODEN_LINE, "roof-wooden-line" },
-    { StaticPrefabsEnum.ROOF_WOODEN_CORNER, "roof-wooden-corner" },
-    { StaticPrefabsEnum.ROOF_COBBLESTONE_LINE, "roof-cobblestone-line" },
-    { StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, "roof-cobblestone-corner" },
-    { StaticPrefabsEnum.ROOF_COBBLESTONE_CLOSING, "roof-cobblestone-closing" },
-    //{ StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-thin-wooden" },
-    { StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-border-wooden" },
-    //{ StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-thin-wooden-window" },
-    { StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-border-wooden-window" },
-    { StaticPrefabsEnum.WALL_SUPPORT_WOODEN, "wall-support-wooden" },
-    { StaticPrefabsEnum.WALL_BORDER_STONE_BRICKS, "wall-border-stone-bricks" },
-    { StaticPrefabsEnum.WALL_SUPPORT_STONE, "wall-support-stone" },
-    { StaticPrefabsEnum.FENCE, "block-fence" }
+    { BlockType.GRASS, "block-grass" },
+    { BlockType.WATER, "block-water" },
+    { BlockType.STONE, "block-stone" },
+    { BlockType.DIRT, "block-dirt" },
+    { BlockType.WOOD_OAK, "block-wood-oak" }
   };
 
-  public enum ObjectPrefabsEnum
+  public enum WorldObjectType
   {
-    DOOR_IRON = 0,
-    DOOR_PORTCULLIS,
-    DOOR_STONE,
-    DOOR_WOODEN,
-    BUTTON,
-    LEVER,
-    VILLAGE_SIGN
+    WALL_BORDER_STONE_BRICKS = 0,
+    WALL_SUPPORT_STONE
   }
 
-  /// <summary>
-  /// Interactive objects that are not a block (doors, buttons etc)
-  /// </summary>
-  public static Dictionary<ObjectPrefabsEnum, string> ObjectPrefabsNamesById = new Dictionary<ObjectPrefabsEnum, string>()
+  public static Dictionary<WorldObjectType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectType, string>()
   {
-    { ObjectPrefabsEnum.DOOR_IRON, "door-iron" },
-    { ObjectPrefabsEnum.DOOR_PORTCULLIS, "door-portcullis" },
-    { ObjectPrefabsEnum.DOOR_STONE, "door-stone" },
-    { ObjectPrefabsEnum.DOOR_WOODEN, "door-wooden-border" },
-    { ObjectPrefabsEnum.BUTTON, "button" },
-    { ObjectPrefabsEnum.LEVER, "lever" },
-    { ObjectPrefabsEnum.VILLAGE_SIGN, "sign-village" }
+    { WorldObjectType.WALL_BORDER_STONE_BRICKS, "wall-border-stone-bricks" },
+    { WorldObjectType.WALL_SUPPORT_STONE, "wall-support-stone" },
   };
 
   public enum WorldItemType
@@ -411,28 +370,80 @@ public static class GlobalConstants
     { "weapon-ranged", WorldItemType.WEAPON_RANGED },
   };
 
-  public enum BlockType
+  #region OLD
+  public enum StaticPrefabsEnum
   {
-    AIR = 0,
-    GRASS,
-    WATER,
-    STONE,
-    DIRT,
-    WOOD_OAK
+    FLOOR_GRASS = 0,
+    FLOOR_DIRT,
+    FLOOR_WOODEN_BLACK,
+    FLOOR_COBBLESTONE,
+    FLOOR_COBBLESTONE_BRICKS,
+    BLOCK_BRICKS_RED,
+    BLOCK_WOODEN_LOG,
+    ROOF_WOODEN_LINE,
+    ROOF_WOODEN_CORNER,
+    ROOF_COBBLESTONE_LINE,
+    ROOF_COBBLESTONE_CORNER,
+    ROOF_COBBLESTONE_CLOSING,
+    WALL_THIN_WOODEN,
+    WALL_THIN_WOODEN_WINDOW,
+    WALL_SUPPORT_WOODEN,
+    TREE_BIRCH,
+    FENCE
   }
 
   /// <summary>
-  /// Minecraft-style blocks prefab names by id.
-  /// Id 0 is air block - not instantiated but used in calculations (e. g. in HideSides())
+  /// Non-interactive objects that are not a block (walls, columns etc)
   /// </summary>
-  public static Dictionary<BlockType, string> BlockPrefabByType = new Dictionary<BlockType, string>() 
+  public static Dictionary<StaticPrefabsEnum, string> StaticPrefabsNamesById = new Dictionary<StaticPrefabsEnum, string>()
   {
-    { BlockType.GRASS, "block-grass" },
-    { BlockType.WATER, "block-water" },
-    { BlockType.STONE, "block-stone" },
-    { BlockType.DIRT, "block-dirt" },
-    { BlockType.WOOD_OAK, "block-wood-oak" }
+    { StaticPrefabsEnum.FLOOR_GRASS, "floor-grass" },
+    { StaticPrefabsEnum.FLOOR_DIRT, "floor-dirt" },
+    { StaticPrefabsEnum.FLOOR_WOODEN_BLACK, "floor-wooden-black" },
+    { StaticPrefabsEnum.FLOOR_COBBLESTONE, "floor-cobblestone" },
+    { StaticPrefabsEnum.FLOOR_COBBLESTONE_BRICKS, "floor-cobblestone-bricks" },
+    { StaticPrefabsEnum.BLOCK_BRICKS_RED, "block-bricks-red" },
+    { StaticPrefabsEnum.TREE_BIRCH, "block-tree-birch" },
+    { StaticPrefabsEnum.BLOCK_WOODEN_LOG, "block-wooden-log" },
+    { StaticPrefabsEnum.ROOF_WOODEN_LINE, "roof-wooden-line" },
+    { StaticPrefabsEnum.ROOF_WOODEN_CORNER, "roof-wooden-corner" },
+    { StaticPrefabsEnum.ROOF_COBBLESTONE_LINE, "roof-cobblestone-line" },
+    { StaticPrefabsEnum.ROOF_COBBLESTONE_CORNER, "roof-cobblestone-corner" },
+    { StaticPrefabsEnum.ROOF_COBBLESTONE_CLOSING, "roof-cobblestone-closing" },
+    //{ StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-thin-wooden" },
+    { StaticPrefabsEnum.WALL_THIN_WOODEN, "wall-border-wooden" },
+    //{ StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-thin-wooden-window" },
+    { StaticPrefabsEnum.WALL_THIN_WOODEN_WINDOW, "wall-border-wooden-window" },
+    { StaticPrefabsEnum.WALL_SUPPORT_WOODEN, "wall-support-wooden" },
+    { StaticPrefabsEnum.FENCE, "block-fence" }
   };
+
+  public enum ObjectPrefabsEnum
+  {
+    DOOR_IRON = 0,
+    DOOR_PORTCULLIS,
+    DOOR_STONE,
+    DOOR_WOODEN,
+    BUTTON,
+    LEVER,
+    VILLAGE_SIGN
+  }
+
+  /// <summary>
+  /// Interactive objects that are not a block (doors, buttons etc)
+  /// </summary>
+  public static Dictionary<ObjectPrefabsEnum, string> ObjectPrefabsNamesById = new Dictionary<ObjectPrefabsEnum, string>()
+  {
+    { ObjectPrefabsEnum.DOOR_IRON, "door-iron" },
+    { ObjectPrefabsEnum.DOOR_PORTCULLIS, "door-portcullis" },
+    { ObjectPrefabsEnum.DOOR_STONE, "door-stone" },
+    { ObjectPrefabsEnum.DOOR_WOODEN, "door-wooden-border" },
+    { ObjectPrefabsEnum.BUTTON, "button" },
+    { ObjectPrefabsEnum.LEVER, "lever" },
+    { ObjectPrefabsEnum.VILLAGE_SIGN, "sign-village" }
+  };
+  #endregion
+
 }
 
 
