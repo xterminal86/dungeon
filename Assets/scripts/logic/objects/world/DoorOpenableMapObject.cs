@@ -1,10 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class DoorMapObject : MapObject
-{
-  public string DoorSoundType = string.Empty;
-
+public class DoorOpenableMapObject : MapObject
+{  
   bool _lockInteraction = false;
 
   public float AnimationOpenSpeed = 1.0f;
@@ -16,7 +14,7 @@ public class DoorMapObject : MapObject
 
   Job _job;
 
-  public DoorMapObject (string className, string prefabName, BehaviourMapObject bmo, App appRef)
+  public DoorOpenableMapObject (string className, string prefabName, BehaviourMapObject bmo, App appRef)
   {
     _appRef = appRef;
 
@@ -36,22 +34,15 @@ public class DoorMapObject : MapObject
   {
     if (_animation != null && !_lockInteraction)
     {
-      if (DoorSoundType == "openable")
-      {
-        if (!IsOpen)
-        {
-          BMO.StartSound.Play();
-        }
-        else
-        {
-          BMO.EndSound.Play();
-        }
-      }
-      else if (DoorSoundType == "sliding")
+      if (!IsOpen)
       {
         BMO.StartSound.Play();
       }
-      
+      else
+      {
+        BMO.EndSound.Play();
+      }
+
       _job = new Job(DoorToggleRoutine());
 
       _lockInteraction = true;
@@ -65,13 +56,11 @@ public class DoorMapObject : MapObject
 
     //Debug.Log("changing map cell type: " + x + " " + y + " to " + IsOpen + " facing: " + Facing + " " + (GlobalConstants.Orientation)Facing);
 
-    _appRef.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)Facing] = IsOpen;    
+    _appRef.GeneratedMap.PathfindingMap[x, y].SidesWalkability[ObjectOrientation] = IsOpen;    
   }
 
   IEnumerator DoorToggleRoutine()
   {    
-    IsBeingInteracted = true;
-
     if (IsOpen)
     {
       _animation[_animationName].time = _animation[_animationName].length;
@@ -99,18 +88,6 @@ public class DoorMapObject : MapObject
     
     if (ActionCompleteCallback != null)
       ActionCompleteCallback(this);
-
-    IsBeingInteracted = false;
-
-    if (DoorSoundType == "sliding")
-    {
-      if (BMO.StartSound.isPlaying)
-      {
-        BMO.StartSound.Stop();
-      }
-
-      BMO.EndSound.Play();
-    }
   }
 }
 

@@ -323,16 +323,25 @@ public static class GlobalConstants
     { BlockType.WOOD_OAK, "block-wood-oak" }
   };
 
-  public enum WorldObjectType
+  public enum MapObjectClass
+  {
+    WALL = 0,
+    DOOR,
+    LEVER,
+    BUTTON,
+    SIGN
+  }
+
+  public enum WorldObjectPrefabName
   {
     WALL_BORDER_STONE_BRICKS = 0,
     WALL_SUPPORT_STONE
   }
 
-  public static Dictionary<WorldObjectType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectType, string>()
+  public static Dictionary<WorldObjectPrefabName, string> WorldObjectPrefabByName = new Dictionary<WorldObjectPrefabName, string>()
   {
-    { WorldObjectType.WALL_BORDER_STONE_BRICKS, "wall-border-stone-bricks" },
-    { WorldObjectType.WALL_SUPPORT_STONE, "wall-support-stone" },
+    { WorldObjectPrefabName.WALL_BORDER_STONE_BRICKS, "wall-border-stone-bricks" },
+    { WorldObjectPrefabName.WALL_SUPPORT_STONE, "wall-support-stone" },
   };
 
   public enum WorldItemType

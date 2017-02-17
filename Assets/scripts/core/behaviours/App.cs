@@ -193,8 +193,8 @@ public class App : MonoBehaviour
         break;
       case MapFilename.DARWIN_VILLAGE:
         _levelMapNew = new DarwinVillage((int)_villageLevelSize.x, 
-                                           (int)_villageLevelSize.y, 
-                                           (int)_villageLevelSize.z);
+                                          (int)_villageLevelSize.y, 
+                                          (int)_villageLevelSize.z);
         _levelMapNew.Generate();
         BuildMapNew();
         CloudsControllerScript.Generate(_villageLevelSize.y * GlobalConstants.WallScaleFactor);
@@ -1077,7 +1077,7 @@ public class App : MonoBehaviour
   }
 
   void CreateMapObject(GameObject go, SerializableObject so)
-  {
+  {    
     BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
     if (bmo == null)
     {
@@ -1088,31 +1088,23 @@ public class App : MonoBehaviour
     switch (so.ObjectClassName)
     {
       case "wall":
-        bmo.MapObjectInstance = new WallMapObject(so.ObjectClassName, so.PrefabName, bmo);
+        bmo.MapObjectInstance = new WallMapObject(so.ObjectClassName, so.PrefabName);
         (bmo.MapObjectInstance as WallMapObject).ActionCallback += (bmo.MapObjectInstance as WallMapObject).ActionHandler;
         break;
 
       case "door-openable":
-        bmo.MapObjectInstance = new DoorMapObject(so.ObjectClassName, so.PrefabName, bmo, this);
-        if (so.DoorSoundType != string.Empty)
-        {
-          (bmo.MapObjectInstance as DoorMapObject).DoorSoundType = so.DoorSoundType;
-        }
-        (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
-        (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
-        (bmo.MapObjectInstance as DoorMapObject).ActionCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
-        (bmo.MapObjectInstance as DoorMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorMapObject).ActionCompleteHandler;
+        bmo.MapObjectInstance = new DoorOpenableMapObject(so.ObjectClassName, so.PrefabName, bmo, this);
+        (bmo.MapObjectInstance as DoorOpenableMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
+        (bmo.MapObjectInstance as DoorOpenableMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
+        (bmo.MapObjectInstance as DoorOpenableMapObject).ActionCallback += (bmo.MapObjectInstance as DoorOpenableMapObject).ActionHandler;
+        (bmo.MapObjectInstance as DoorOpenableMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorOpenableMapObject).ActionCompleteHandler;
         break;
 
       case "door-controllable":
-        bmo.MapObjectInstance = new DoorMapObject(so.ObjectClassName, so.PrefabName, bmo, this);
-        if (so.DoorSoundType != string.Empty)
-        {
-          (bmo.MapObjectInstance as DoorMapObject).DoorSoundType = so.DoorSoundType;
-        }
-        (bmo.MapObjectInstance as DoorMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
-        (bmo.MapObjectInstance as DoorMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
-        (bmo.MapObjectInstance as DoorMapObject).ControlCallback += (bmo.MapObjectInstance as DoorMapObject).ActionHandler;
+        bmo.MapObjectInstance = new DoorOpenableMapObject(so.ObjectClassName, so.PrefabName, bmo, this);
+        (bmo.MapObjectInstance as DoorOpenableMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
+        (bmo.MapObjectInstance as DoorOpenableMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
+        (bmo.MapObjectInstance as DoorOpenableMapObject).ControlCallback += (bmo.MapObjectInstance as DoorOpenableMapObject).ActionHandler;
         break;
 
       case "lever":
@@ -1153,7 +1145,7 @@ public class App : MonoBehaviour
         break;
     }
 
-    bmo.MapObjectInstance.Facing = so.Facing;
+    //bmo.MapObjectInstance.Facing = so.Facing;
   }
 
   void SetupCamera(int x, int y, int z, int facing)

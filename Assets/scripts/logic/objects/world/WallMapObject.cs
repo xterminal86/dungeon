@@ -4,11 +4,10 @@ using System.Collections.Generic;
 
 public class WallMapObject : MapObject 
 {
-  public WallMapObject(string name, string id, BehaviourMapObject bmo)
+  public WallMapObject(string name, string prefabName)
   {
     ClassName = name;
-    PrefabName = id;
-    BMO = bmo;
+    PrefabName = prefabName;
   }
 
   public override void ActionCompleteHandler(object sender)

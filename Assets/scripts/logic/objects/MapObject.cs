@@ -12,12 +12,8 @@ public abstract class MapObject
   // Unused (for distinguishing objects in Debug.Log)
   public string PrefabName = string.Empty;
 
-  // Unused
-  public string ObjectId = string.Empty;
+  public GlobalConstants.Orientation ObjectOrientation = GlobalConstants.Orientation.NORTH;
 
-  public int Facing = -1;
-
-  public bool IsBeingInteracted = false;
   public bool IsOpen = false;
 
   // Called when user interacts with object on a scene
@@ -37,7 +33,6 @@ public abstract class MapObject
   {
     ClassName = "MapObject";  
     PrefabName = "None";
-    ObjectId = "n/a";
   }
 
   // These sould be overriden for respective interaction special handling.

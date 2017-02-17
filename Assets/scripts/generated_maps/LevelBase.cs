@@ -202,15 +202,6 @@ public class LevelBase
 
   // ************************ WORLD GENERATION ************************ //
 
-  protected void CreateObject(GlobalConstants.WorldObjectType objectType, Int3 arrayPosition, GlobalConstants.Orientation orientation)
-  {
-    switch (objectType)
-    {      
-      case GlobalConstants.WorldObjectType.WALL_BORDER_STONE_BRICKS:
-        break;
-    }
-  }
-
   // Should be odd
   int _maxHillsHeight = 15;
   protected void MakeHillLayered(GlobalConstants.BlockType blockType, Int3 arrayPos, int height)
