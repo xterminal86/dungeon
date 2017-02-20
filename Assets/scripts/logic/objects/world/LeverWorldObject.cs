@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class LeverMapObject : MapObject 
+public class LeverWorldObject : WorldObject 
 {
   bool _lockInteraction = false;
 
@@ -12,12 +12,12 @@ public class LeverMapObject : MapObject
 
   Animation _animation;
 
-  public MapObject ControlledObject;
+  public WorldObject ControlledObject;
 
-  public LeverMapObject(string className, string prefabName, BehaviourMapObject bmo)
+  bool _isOn = false;
+
+  public LeverWorldObject(string className, string prefabName, BehaviourMapObject bmo)
   {    
-    ClassName = className;
-    PrefabName = prefabName;
     BMO = bmo;
 
     _animation = BMO.GetComponent<Animation>();    
@@ -37,7 +37,7 @@ public class LeverMapObject : MapObject
 
   IEnumerator LeverToggleRoutine()
   {    
-    if (IsOpen)
+    if (_isOn)
     {
       _animation[_animationName].time = _animation[_animationName].length;
       _animation[_animationName].speed = -_animationSpeed;
@@ -57,11 +57,12 @@ public class LeverMapObject : MapObject
 
     if (ControlledObject != null)
     {
-      if (ControlledObject.ControlCallback != null && IsOpen == ControlledObject.IsOpen)
+      // FIXME: implement control for different types of objects (not only doors like it is assumed now)
+      if (ControlledObject.ControlCallback != null && _isOn == (ControlledObject as DoorWorldObject).IsOpen)
         ControlledObject.ControlCallback(this);
     }
 
     _lockInteraction = false;    
-    IsOpen = !IsOpen;
+    _isOn = !_isOn;
   }
 }

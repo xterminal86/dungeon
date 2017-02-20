@@ -1,12 +1,14 @@
 using UnityEngine;
 using System.Collections;
 
-public class DoorOpenableMapObject : MapObject
+public class DoorWorldObject : WorldObject
 {  
   bool _lockInteraction = false;
 
   public float AnimationOpenSpeed = 1.0f;
   public float AnimationCloseSpeed = 1.0f;  
+
+  public bool IsOpen = false;
 
   string _animationName = "Open";
   
@@ -14,13 +16,14 @@ public class DoorOpenableMapObject : MapObject
 
   Job _job;
 
-  public DoorOpenableMapObject (string className, string prefabName, BehaviourMapObject bmo, App appRef)
+  bool _isSliding = false;
+
+  public DoorWorldObject (bool isSliding, BehaviourMapObject bmo, App appRef)
   {
     _appRef = appRef;
 
-    ClassName = className;
-    PrefabName = prefabName;
     BMO = bmo;
+    _isSliding = isSliding;
 
     _animation = BMO.GetComponentInParent<Animation>();
     if (_animation != null)
@@ -34,13 +37,20 @@ public class DoorOpenableMapObject : MapObject
   {
     if (_animation != null && !_lockInteraction)
     {
-      if (!IsOpen)
+      if (_isSliding)
       {
         BMO.StartSound.Play();
       }
       else
       {
-        BMO.EndSound.Play();
+        if (!IsOpen)
+        {
+          BMO.StartSound.Play();
+        }
+        else
+        {
+          BMO.EndSound.Play();
+        }
       }
 
       _job = new Job(DoorToggleRoutine());
@@ -82,6 +92,12 @@ public class DoorOpenableMapObject : MapObject
     while (_animation.IsPlaying(_animationName))    
     {      
       yield return null;
+    }
+
+    if (_isSliding)
+    {
+      BMO.StartSound.Stop();
+      BMO.EndSound.Play();
     }
 
     _lockInteraction = false;    

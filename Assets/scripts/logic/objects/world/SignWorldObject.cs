@@ -2,12 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SignMapObject : MapObject 
+public class SignWorldObject : WorldObject 
 {
-  public SignMapObject(string className, string prefabName, BehaviourMapObject bmo, string signText)
+  public SignWorldObject(string className, string prefabName, BehaviourMapObject bmo, string signText)
   {
-    ClassName = className;
-    PrefabName = prefabName;
     BMO = bmo;
 
     var tm = BMO.GetComponentInChildren<TextMesh>();

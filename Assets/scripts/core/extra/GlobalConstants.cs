@@ -323,13 +323,14 @@ public static class GlobalConstants
     { BlockType.WOOD_OAK, "block-wood-oak" }
   };
 
-  public enum MapObjectClass
+  public enum WorldObjectClass
   {
-    WALL = 0,
+    PLACEHOLDER = 0,    // Occupies whole block (Walkable = false)
+    WALL,               // Occupies border of the block
     DOOR,
     LEVER,
     BUTTON,
-    SIGN
+    SIGN                // Any form of object with text
   }
 
   public enum WorldObjectPrefabName

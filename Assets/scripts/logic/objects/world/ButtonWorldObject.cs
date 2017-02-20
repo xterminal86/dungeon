@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ButtonMapObject : MapObject
+public class ButtonWorldObject : WorldObject
 {
   Animation _animation;
 
@@ -11,14 +11,12 @@ public class ButtonMapObject : MapObject
 
   float _animationSpeed = 4;
 
-  public MapObject ControlledObject;
+  public WorldObject ControlledObject;
 
-  public ButtonMapObject(string className, string prefabName, BehaviourMapObject bmo, App appRef)
+  public ButtonWorldObject(string className, string prefabName, BehaviourMapObject bmo, App appRef)
   {
     _appRef = appRef;
 
-    ClassName = className;
-    PrefabName = prefabName;
     BMO = bmo;
 
     _animation = BMO.GetComponentInParent<Animation>();

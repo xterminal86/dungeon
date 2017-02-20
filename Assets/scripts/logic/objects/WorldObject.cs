@@ -4,17 +4,12 @@ using System.Collections;
 /// <summary>
 /// Logic class of a scene interactable object
 /// </summary>
-public abstract class MapObject
+public abstract class WorldObject
 {
-  // Used for deciding which type of MapObject to instantiate (App::CreateMapObject())
-  public string ClassName = string.Empty;
-
-  // Unused (for distinguishing objects in Debug.Log)
-  public string PrefabName = string.Empty;
+  // So that we can have different prefabs for doors, walls etc.
+  public GlobalConstants.WorldObjectClass ObjectClass = GlobalConstants.WorldObjectClass.PLACEHOLDER;
 
   public GlobalConstants.Orientation ObjectOrientation = GlobalConstants.Orientation.NORTH;
-
-  public bool IsOpen = false;
 
   // Called when user interacts with object on a scene
   public CallbackO ActionCallback;
@@ -29,10 +24,8 @@ public abstract class MapObject
 
   protected App _appRef;
 
-  public MapObject()
-  {
-    ClassName = "MapObject";  
-    PrefabName = "None";
+  public WorldObject()
+  { 
   }
 
   // These sould be overriden for respective interaction special handling.

@@ -257,7 +257,7 @@ public class InputController : MonoBehaviour
   void ProcessBMO(BehaviourMapObject bmo)
   {
     float d = Vector3.Distance(AppScript.CameraPos, bmo.transform.position);
-    int facing = Mathf.Abs((int)bmo.MapObjectInstance.ObjectOrientation - AppScript.CameraOrientation);
+    int facing = Mathf.Abs((int)bmo.WorldObjectInstance.ObjectOrientation - AppScript.CameraOrientation);
     float dCond = d - float.Epsilon;
     //Debug.Log(_raycastHit.distance + " " + d);
     //if (dCond <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
@@ -265,8 +265,8 @@ public class InputController : MonoBehaviour
      || (facing == 0 && dCond <= 0.0f) 
      || (bmo.transform.position.x == AppScript.CameraPos.x && bmo.transform.position.z == AppScript.CameraPos.z)) 
     {
-      if (bmo.MapObjectInstance.ActionCallback != null)
-        bmo.MapObjectInstance.ActionCallback(bmo.MapObjectInstance);
+      if (bmo.WorldObjectInstance.ActionCallback != null)
+        bmo.WorldObjectInstance.ActionCallback(bmo.WorldObjectInstance);
     }
   }
 

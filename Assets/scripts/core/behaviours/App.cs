@@ -1036,7 +1036,7 @@ public class App : MonoBehaviour
     return null;
   }
 
-  public MapObject GetMapObjectById(string name)
+  public WorldObject GetMapObjectById(string name)
   {
     int hash = name.GetHashCode();
     if (_mapObjectsHashTable.ContainsKey(hash))
@@ -1044,16 +1044,16 @@ public class App : MonoBehaviour
       BehaviourMapObject bmo = _mapObjectsHashTable[hash].GetComponent<BehaviourMapObject>();
       if (bmo != null)
       {
-        return bmo.MapObjectInstance;
+        return bmo.WorldObjectInstance;
       }
     }
     
     return null;
   }
 
-  List<MapObject> _searchResult = new List<MapObject>();
+  List<WorldObject> _searchResult = new List<WorldObject>();
   Vector2 _searchKey = Vector2.zero;
-  public List<MapObject> GetMapObjectsByPosition(int x, int y)
+  public List<WorldObject> GetMapObjectsByPosition(int x, int y)
   {
     _searchKey.Set(x, y);
     if (!_mapObjectsHashListByPosition.ContainsKey(_searchKey)) return null;
@@ -1068,7 +1068,7 @@ public class App : MonoBehaviour
         BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
         if (bmo != null)
         {
-          _searchResult.Add(bmo.MapObjectInstance);
+          _searchResult.Add(bmo.WorldObjectInstance);
         }
       }
     }
@@ -1085,65 +1085,67 @@ public class App : MonoBehaviour
       return;
     }
 
+    /*
     switch (so.ObjectClassName)
     {
       case "wall":
-        bmo.MapObjectInstance = new WallMapObject(so.ObjectClassName, so.PrefabName);
-        (bmo.MapObjectInstance as WallMapObject).ActionCallback += (bmo.MapObjectInstance as WallMapObject).ActionHandler;
+        bmo.WorldObjectInstance = new WallWorldObject(so.ObjectClassName, so.PrefabName);
+        (bmo.WorldObjectInstance as WallWorldObject).ActionCallback += (bmo.WorldObjectInstance as WallWorldObject).ActionHandler;
         break;
 
       case "door-openable":
-        bmo.MapObjectInstance = new DoorOpenableMapObject(so.ObjectClassName, so.PrefabName, bmo, this);
-        (bmo.MapObjectInstance as DoorOpenableMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
-        (bmo.MapObjectInstance as DoorOpenableMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
-        (bmo.MapObjectInstance as DoorOpenableMapObject).ActionCallback += (bmo.MapObjectInstance as DoorOpenableMapObject).ActionHandler;
-        (bmo.MapObjectInstance as DoorOpenableMapObject).ActionCompleteCallback += (bmo.MapObjectInstance as DoorOpenableMapObject).ActionCompleteHandler;
+        bmo.WorldObjectInstance = new DoorOpenableWorldObject(so.ObjectClassName, so.PrefabName, bmo, this);
+        (bmo.WorldObjectInstance as DoorOpenableWorldObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
+        (bmo.WorldObjectInstance as DoorOpenableWorldObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
+        (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionCallback += (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionHandler;
+        (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionCompleteCallback += (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionCompleteHandler;
         break;
 
       case "door-controllable":
-        bmo.MapObjectInstance = new DoorOpenableMapObject(so.ObjectClassName, so.PrefabName, bmo, this);
-        (bmo.MapObjectInstance as DoorOpenableMapObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
-        (bmo.MapObjectInstance as DoorOpenableMapObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
-        (bmo.MapObjectInstance as DoorOpenableMapObject).ControlCallback += (bmo.MapObjectInstance as DoorOpenableMapObject).ActionHandler;
+        bmo.WorldObjectInstance = new DoorOpenableWorldObject(so.ObjectClassName, so.PrefabName, bmo, this);
+        (bmo.WorldObjectInstance as DoorOpenableWorldObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
+        (bmo.WorldObjectInstance as DoorOpenableWorldObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
+        (bmo.WorldObjectInstance as DoorOpenableWorldObject).ControlCallback += (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionHandler;
         break;
 
       case "lever":
-        bmo.MapObjectInstance = new LeverMapObject(so.ObjectClassName, so.PrefabName, bmo);
-        (bmo.MapObjectInstance as LeverMapObject).ActionCallback += (bmo.MapObjectInstance as LeverMapObject).ActionHandler;
+        bmo.WorldObjectInstance = new LeverWorldObject(so.ObjectClassName, so.PrefabName, bmo);
+        (bmo.WorldObjectInstance as LeverWorldObject).ActionCallback += (bmo.WorldObjectInstance as LeverWorldObject).ActionHandler;
           
         if (so.ObjectToControlId != string.Empty)
         {
-          MapObject mo = GetMapObjectById(so.ObjectToControlId);
+          WorldObject mo = GetMapObjectById(so.ObjectToControlId);
           if (mo != null)
           {
-            (bmo.MapObjectInstance as LeverMapObject).ControlledObject = mo;
+            (bmo.WorldObjectInstance as LeverWorldObject).ControlledObject = mo;
           }
         }
 
         break;
       
       case "button":
-        bmo.MapObjectInstance = new ButtonMapObject(so.ObjectClassName, so.PrefabName, bmo, this);
-        (bmo.MapObjectInstance as ButtonMapObject).ActionCallback += (bmo.MapObjectInstance as ButtonMapObject).ActionHandler;
+        bmo.WorldObjectInstance = new ButtonWorldObject(so.ObjectClassName, so.PrefabName, bmo, this);
+        (bmo.WorldObjectInstance as ButtonWorldObject).ActionCallback += (bmo.WorldObjectInstance as ButtonWorldObject).ActionHandler;
 
         if (so.ObjectToControlId != string.Empty)
         {
-          MapObject mo = GetMapObjectById(so.ObjectToControlId);
+          WorldObject mo = GetMapObjectById(so.ObjectToControlId);
           if (mo != null)
           {
-            (bmo.MapObjectInstance as ButtonMapObject).ControlledObject = mo;
+            (bmo.WorldObjectInstance as ButtonWorldObject).ControlledObject = mo;
           }
         }
 
         break;
 
       case "sign":
-        bmo.MapObjectInstance = new SignMapObject(so.ObjectClassName, so.PrefabName, bmo, so.TextField);
+        bmo.WorldObjectInstance = new SignWorldObject(so.ObjectClassName, so.PrefabName, bmo, so.TextField);
         break;      
 
       default:
         break;
     }
+    */
 
     //bmo.MapObjectInstance.Facing = so.Facing;
   }

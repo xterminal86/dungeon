@@ -2,12 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class WallMapObject : MapObject 
+public class WallWorldObject : WorldObject 
 {
-  public WallMapObject(string name, string prefabName)
+  public WallWorldObject(string name, string prefabName)
   {
-    ClassName = name;
-    PrefabName = prefabName;
   }
 
   public override void ActionCompleteHandler(object sender)
@@ -16,6 +14,6 @@ public class WallMapObject : MapObject
 
   public override void ActionHandler(object sender)
   {
-    Debug.Log("You see: " + ClassName + " " + PrefabName);
+    Debug.Log("You see: " + GetType());
   }
 }

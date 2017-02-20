@@ -15,7 +15,7 @@ public class BlockEntity
   public Vector3 WorldCoordinates = Vector3.zero;
   public GlobalConstants.FootstepSoundType FootstepSound = GlobalConstants.FootstepSoundType.DUMMY;
 
-  public List<MapObject> MapObjects = new List<MapObject>();
+  public List<WorldObject> MapObjects = new List<WorldObject>();
   public Dictionary<GlobalConstants.Orientation, bool> SidesWalkability = new Dictionary<GlobalConstants.Orientation, bool>();
 
   GlobalConstants.BlockType _blockType = GlobalConstants.BlockType.AIR;

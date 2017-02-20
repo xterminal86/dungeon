@@ -13,7 +13,7 @@ public class BehaviourMapObject : BehaviourObjectBase
   public AudioSource EndSound;
 
   // Which MapObject this sound is "attached" to
-  public MapObject MapObjectInstance;
+  public WorldObject WorldObjectInstance;
 
   void Start()
   {
