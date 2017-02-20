@@ -16,7 +16,7 @@ public class LeverWorldObject : WorldObject
 
   bool _isOn = false;
 
-  public LeverWorldObject(string className, string prefabName, BehaviourMapObject bmo)
+  public LeverWorldObject(string className, string prefabName, BehaviourWorldObject bmo)
   {    
     BMO = bmo;
 

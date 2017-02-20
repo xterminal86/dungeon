@@ -18,7 +18,7 @@ public class DoorWorldObject : WorldObject
 
   bool _isSliding = false;
 
-  public DoorWorldObject (bool isSliding, BehaviourMapObject bmo, App appRef)
+  public DoorWorldObject (bool isSliding, BehaviourWorldObject bmo, App appRef)
   {
     _appRef = appRef;
 

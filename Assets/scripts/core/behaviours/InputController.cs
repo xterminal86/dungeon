@@ -163,7 +163,7 @@ public class InputController : MonoBehaviour
       {          
         if (_raycastHit.collider != null)
         {
-          BehaviourMapObject bmo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourMapObject>();
+          BehaviourWorldObject bmo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourWorldObject>();
           if (bmo != null)
           {            
             ProcessBMO(bmo);
@@ -254,7 +254,7 @@ public class InputController : MonoBehaviour
     GUIManager.Instance.ItemTaken = null;
   }
 
-  void ProcessBMO(BehaviourMapObject bmo)
+  void ProcessBMO(BehaviourWorldObject bmo)
   {
     float d = Vector3.Distance(AppScript.CameraPos, bmo.transform.position);
     int facing = Mathf.Abs((int)bmo.WorldObjectInstance.ObjectOrientation - AppScript.CameraOrientation);

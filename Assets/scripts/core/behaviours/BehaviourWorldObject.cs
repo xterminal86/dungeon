@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// This script should be placed on all interactable objects
 /// </summary>
-public class BehaviourMapObject : BehaviourObjectBase
+public class BehaviourWorldObject : BehaviourWorldObjectBase
 {
   // Sound that is played on interaction start (e.g. door opening)
   public AudioSource StartSound;

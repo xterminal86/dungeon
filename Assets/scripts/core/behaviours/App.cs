@@ -10,6 +10,8 @@ using System.Threading;
 
 public class App : MonoBehaviour
 {  
+  // FIXME: remove old code when done refactoring
+
   public Terrain Mountains;
 
   public InputController InputControllerScript;
@@ -1041,7 +1043,7 @@ public class App : MonoBehaviour
     int hash = name.GetHashCode();
     if (_mapObjectsHashTable.ContainsKey(hash))
     {
-      BehaviourMapObject bmo = _mapObjectsHashTable[hash].GetComponent<BehaviourMapObject>();
+      BehaviourWorldObject bmo = _mapObjectsHashTable[hash].GetComponent<BehaviourWorldObject>();
       if (bmo != null)
       {
         return bmo.WorldObjectInstance;
@@ -1065,7 +1067,7 @@ public class App : MonoBehaviour
       if (_mapObjectsHashTable.ContainsKey(hash))
       {
         GameObject go = _mapObjectsHashTable[hash];
-        BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
+        BehaviourWorldObject bmo = go.GetComponent<BehaviourWorldObject>();
         if (bmo != null)
         {
           _searchResult.Add(bmo.WorldObjectInstance);
@@ -1078,7 +1080,7 @@ public class App : MonoBehaviour
 
   void CreateMapObject(GameObject go, SerializableObject so)
   {    
-    BehaviourMapObject bmo = go.GetComponent<BehaviourMapObject>();
+    BehaviourWorldObject bmo = go.GetComponent<BehaviourWorldObject>();
     if (bmo == null)
     {
       //Debug.LogWarning("Could not get BMO component from " + prefabName);

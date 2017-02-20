@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// This script should be placed on all items
 /// </summary>
-public class BehaviourItemObject : BehaviourObjectBase 
+public class BehaviourItemObject : BehaviourWorldObjectBase 
 {
   // Can this object be picked up in the world?
   public bool CanBeTaken = true;

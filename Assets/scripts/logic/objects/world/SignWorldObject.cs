@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SignWorldObject : WorldObject 
 {
-  public SignWorldObject(string className, string prefabName, BehaviourMapObject bmo, string signText)
+  public SignWorldObject(string className, string prefabName, BehaviourWorldObject bmo, string signText)
   {
     BMO = bmo;
 

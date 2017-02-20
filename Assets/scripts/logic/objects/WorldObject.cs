@@ -20,7 +20,7 @@ public abstract class WorldObject
   public CallbackO ControlCompleteCallback;
 
   // MonoBehaviour script reference to the respective interactable object
-  public BehaviourMapObject BMO;
+  public BehaviourWorldObject BMO;
 
   protected App _appRef;
 

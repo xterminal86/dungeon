@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BehaviourObjectBase : MonoBehaviour 
+public abstract class BehaviourWorldObjectBase : MonoBehaviour 
 {
   // Sound that is played as ambience
   public AudioSource LoopingSound;

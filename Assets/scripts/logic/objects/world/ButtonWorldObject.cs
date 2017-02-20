@@ -13,7 +13,7 @@ public class ButtonWorldObject : WorldObject
 
   public WorldObject ControlledObject;
 
-  public ButtonWorldObject(string className, string prefabName, BehaviourMapObject bmo, App appRef)
+  public ButtonWorldObject(string className, string prefabName, BehaviourWorldObject bmo, App appRef)
   {
     _appRef = appRef;
 
