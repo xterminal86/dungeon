@@ -9,8 +9,8 @@ public class WeaponItemObject : ItemObject
 
   float _cooldown = 0;
 
-  public WeaponItemObject(string name, string descriptionText, int atlasIcon, BehaviourItemObject bio, int minDam, int maxDam, int cool, InputController inputController) 
-    : base(name, descriptionText, atlasIcon, bio, inputController)
+  public WeaponItemObject(string name, string descriptionText, int atlasIcon, BehaviourItemObject bio, int minDam, int maxDam, int cool) 
+    : base(name, descriptionText, atlasIcon, bio)
   {
     _minDamage = minDam;
     _maxDamage = maxDam;

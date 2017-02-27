@@ -18,10 +18,8 @@ public class DoorWorldObject : WorldObject
 
   bool _isSliding = false;
 
-  public DoorWorldObject (bool isSliding, BehaviourWorldObject bmo, App appRef)
+  public DoorWorldObject (bool isSliding, BehaviourWorldObject bmo)
   {
-    _appRef = appRef;
-
     BMO = bmo;
     _isSliding = isSliding;
 
@@ -63,10 +61,11 @@ public class DoorWorldObject : WorldObject
   {
     int x = BMO.MapPosition.X;
     int y = BMO.MapPosition.Y;
+    int z = BMO.MapPosition.Z;
 
     //Debug.Log("changing map cell type: " + x + " " + y + " to " + IsOpen + " facing: " + Facing + " " + (GlobalConstants.Orientation)Facing);
 
-    _appRef.GeneratedMap.PathfindingMap[x, y].SidesWalkability[ObjectOrientation] = IsOpen;    
+    LevelLoader.Instance.LevelMap.Level[x, y, z].SidesWalkability[ObjectOrientation] = IsOpen;    
   }
 
   IEnumerator DoorToggleRoutine()

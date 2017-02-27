@@ -17,6 +17,10 @@ public class SceneLoader : MonoBehaviour
     ScreenFader.Instance.Initialize();
     SoundManager.Instance.Initialize();
     DateAndTime.Instance.Initialize();
+    LevelLoader.Instance.Initialize();
+    InputController.Instance.Initialize();
+
+    LevelLoader.Instance.LoadLevel();
 
     if (SkipTitleScreen)
     {

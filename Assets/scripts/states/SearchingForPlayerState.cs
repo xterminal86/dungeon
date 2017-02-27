@@ -16,22 +16,22 @@ public class SearchingForPlayerState : GameObjectState
     _model = _actor.Model;
     _working = false;
 
-    _visitedCells = new int[_actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight];
+    _visitedCells = new int[LevelLoader.Instance.LevelSize.X, LevelLoader.Instance.LevelSize.Z];
 
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
-    _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
+    //_roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
   }
 
   public override void ResetState()
   {
     _working = false;
 
-    for (int x = 0; x < _actor.AppRef.GeneratedMapWidth; x++)
+    for (int x = 0; x < LevelLoader.Instance.LevelSize.X; x++)
     {
-      for (int y = 0; y < _actor.AppRef.GeneratedMapHeight; y++)
+      for (int y = 0; y < LevelLoader.Instance.LevelSize.Z; y++)
       {
         _visitedCells[x, y] = 0;
       }
@@ -120,7 +120,7 @@ public class SearchingForPlayerState : GameObjectState
 
       Int2 cellCoord = new Int2(x, y);
 
-      if (x < 0 || x > _actor.AppRef.GeneratedMapWidth - 1 || y < 0 || y > _actor.AppRef.GeneratedMapHeight - 1)
+      if (x < 0 || x > LevelLoader.Instance.LevelSize.X - 1 || y < 0 || y > LevelLoader.Instance.LevelSize.Z - 1)
       {
         continue;
       }
@@ -181,12 +181,16 @@ public class SearchingForPlayerState : GameObjectState
     //Debug.Log(output);
     //PrintCellInfo(nextCellCoord);
 
+    // FIXME: fix!
+
+    /*
     if (!_actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].Walkable 
       || _actor.AppRef.GeneratedMap.PathfindingMap[modelX, modelY].SidesWalkability[orientation] == false
       || _actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].SidesWalkability[oppositeOrientation] == false)
     {
       return false;
     }
+    */
 
     return true;
   }
@@ -200,8 +204,9 @@ public class SearchingForPlayerState : GameObjectState
     _modelPosition.y = _model.transform.position.y;
     _modelPosition.z = _model.ModelPos.Y * GlobalConstants.WallScaleFactor;
     
-    Int2 destination = _actor.AppRef.GeneratedMap.GetRandomUnoccupiedCell();
-    
+    //Int2 destination = _actor.AppRef.GeneratedMap.GetRandomUnoccupiedCell();
+    Int2 destination = new Int2();
+
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
 
     _roadBuilder.BuildRoadAsync(_model.ModelPos, destination, true);    
@@ -316,7 +321,8 @@ public class SearchingForPlayerState : GameObjectState
 
   void PrintCellInfo(Int2 coords)
   {    
-    PathfindingCell cell = _actor.AppRef.GeneratedMap.PathfindingMap[coords.X, coords.Y];
+    //PathfindingCell cell = _actor.AppRef.GeneratedMap.PathfindingMap[coords.X, coords.Y];
+    PathfindingCell cell = new PathfindingCell();
 
     string output = string.Format("{0} -> walkable: {1} sides: ", coords, cell.Walkable);
     foreach (var item in cell.SidesWalkability)

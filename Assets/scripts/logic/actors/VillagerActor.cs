@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public class VillagerActor : ActorBase 
 {  
-  public VillagerActor(ModelMover model, App appRef, InputController inputRef) : base(model, appRef, inputRef)
+  public VillagerActor(ModelMover model) : base(model)
   {
     WanderingStateVar = new WanderingState(this);
     TalkingStateVar = new TalkingState(this);
@@ -25,7 +25,7 @@ public class VillagerActor : ActorBase
   {
     _hash = ActorName.GetHashCode();
 
-    if (!_appReference.VillagersInfo.ContainsKey(_hash))
+    if (!LevelLoader.Instance.NPCInfo.ContainsKey(_hash))
     {
       return;
     }
@@ -49,7 +49,7 @@ public class VillagerActor : ActorBase
     }
   }
 
-  VillagerInfo _villagerInfo;
+  NPCInfo _villagerInfo;
   Job _printTextJob;
   void SetupFormTalking()
   {
@@ -64,7 +64,7 @@ public class VillagerActor : ActorBase
     GUIManager.Instance.ButtonGossipCallback += ButtonGossipHandler;
     GUIManager.Instance.ButtonByeCallback += ButtonByeHandler;
 
-    _villagerInfo = _appReference.VillagersInfo[_hash];
+    _villagerInfo = LevelLoader.Instance.NPCInfo[_hash];
 
     Sprite portraitSprite = GUIManager.Instance.FindPortraitByName(_villagerInfo.PortraitName);
 
@@ -136,7 +136,7 @@ public class VillagerActor : ActorBase
       _printTextJob.KillJob();
     }
         
-    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerName));    
+    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.Name));    
   }
 
   void ButtonJobHandler()
@@ -146,7 +146,7 @@ public class VillagerActor : ActorBase
       _printTextJob.KillJob();      
     }
         
-    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerJob));    
+    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.Job));    
   }
 
   int _gossipListIndex = 0;
@@ -159,9 +159,9 @@ public class VillagerActor : ActorBase
         
     // In case some villagers have more gossip lines than others,
     // we first check for overflow.
-    _gossipListIndex %= _villagerInfo.VillagerGossipLines.Count;
+    _gossipListIndex %= _villagerInfo.GossipLines.Count;
 
-    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.VillagerGossipLines[_gossipListIndex]));
+    _printTextJob = JobManager.Instance.CreateCoroutine(PrintTextRoutine(_villagerInfo.GossipLines[_gossipListIndex]));
 
     _gossipListIndex++;
   }

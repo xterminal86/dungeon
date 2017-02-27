@@ -5,19 +5,19 @@ using UnityEngine;
 /// <summary>
 /// Holds information about villager NPC.
 /// </summary>
-public class VillagerInfo
+public class NPCInfo
 {
   public string HailString = string.Empty;
   public string PortraitName = string.Empty;
-  public string VillagerName = string.Empty;
-  public string VillagerJob = string.Empty;
-  public List<string> VillagerGossipLines = new List<string>();
+  public string Name = string.Empty;
+  public string Job = string.Empty;
+  public List<string> GossipLines = new List<string>();
 
   public override string ToString()
   {
-    string result = string.Format("[VillagerInfo] : Name \"{0}\", Job \"{1}\", Gossip lines:\n", VillagerName, VillagerJob);
+    string result = string.Format("[VillagerInfo] : Name \"{0}\", Job \"{1}\", Gossip lines:\n", Name, Job);
 
-    foreach (var item in VillagerGossipLines)
+    foreach (var item in GossipLines)
     {
       result += item + "\n";
     }

@@ -63,10 +63,10 @@ public class AttackState : GameObjectState
 
   bool IsPlayerReachable()
   {
-    float d = Vector3.Distance(_actor.Model.transform.position, _actor.AppRef.CameraPos);
+    float d = Vector3.Distance(_actor.Model.transform.position, InputController.Instance.CameraPos);
 
     // FIXME: see ApproachingPlayerState.cs:56
-    return (Utils.BlockDistance(_actor.Model.ModelPos, new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z)) == 1 && (int)d <= GlobalConstants.WallScaleFactor);    
+    return (Utils.BlockDistance(_actor.Model.ModelPos, new Int2(InputController.Instance.PlayerMapPos.X, InputController.Instance.PlayerMapPos.Z)) == 1 && (int)d <= GlobalConstants.WallScaleFactor);    
   }
 
   bool HasWall(Int2 actorPos)
@@ -82,16 +82,20 @@ public class AttackState : GameObjectState
     else if (modelFacing == GlobalConstants.Orientation.SOUTH) nextCellX++;
     else if (modelFacing == GlobalConstants.Orientation.WEST) nextCellY--;
 
-    bool nextCellWalkability = _actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].Walkable;
-    bool currentCellWall = _actor.AppRef.GeneratedMap.PathfindingMap[actorPos.X, actorPos.Y].SidesWalkability[modelFacing];
-    bool nextCellWall = _actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].SidesWalkability[nextCellSide];
+    // FIXME: fix!
+
+    //bool nextCellWalkability = _actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].Walkable;
+    //bool currentCellWall = _actor.AppRef.GeneratedMap.PathfindingMap[actorPos.X, actorPos.Y].SidesWalkability[modelFacing];
+    //bool nextCellWall = _actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].SidesWalkability[nextCellSide];
 
     //Debug.Log("Checking cells " + modelFacing + " " + nextCellSide + " " + nextCellX + " " + nextCellY + " " + nextCellWalkability + " " + currentCellWall + " " + nextCellWall);
 
+    /*
     if (!nextCellWalkability || !currentCellWall || !nextCellWall)
     {
       return true;
     }
+    */
 
     return false;
   }

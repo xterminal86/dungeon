@@ -85,6 +85,11 @@ public class Int3
   int _y = 0;
   int _z = 0;
 
+  public static Int3 Zero
+  {
+    get { return new Int3(); }
+  }
+
   public Int3()
   {
     _x = 0;
@@ -236,6 +241,7 @@ public class SerializableObject
 // similarily to SerializableObject and SerializableBlock.
 
 // TODO: item durability?
+// FIXME: adjust for new BlockEntity class
 
 [Serializable]
 public class SerializableItem

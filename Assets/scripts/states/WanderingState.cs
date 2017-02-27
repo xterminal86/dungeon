@@ -14,7 +14,7 @@ public class WanderingState : GameObjectState
     _actor = actor;
     _working = false;
 
-    _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
+    //_roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
         
     _actor.Model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
@@ -48,7 +48,9 @@ public class WanderingState : GameObjectState
     _modelPosition.y = _actor.Model.transform.position.y;
     _modelPosition.z = _actor.Model.ModelPos.Y * GlobalConstants.WallScaleFactor;
 
-    Int2 destination = _actor.AppRef.GeneratedMap.GetRandomUnoccupiedCell();
+    //Int2 destination = _actor.AppRef.GeneratedMap.GetRandomUnoccupiedCell();
+
+    Int2 destination = new Int2();
 
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
 
@@ -168,22 +170,22 @@ public class WanderingState : GameObjectState
 
   public void AdjustModelPosition()
   {
-    int modelX = _actor.InputRef.PlayerMapPos.X;
-    int modelZ = _actor.InputRef.PlayerMapPos.Y;
+    int modelX = InputController.Instance.PlayerMapPos.X;
+    int modelZ = InputController.Instance.PlayerMapPos.Y;
 
-    if (_actor.AppRef.CameraOrientation == (int)GlobalConstants.Orientation.EAST)
+    if (InputController.Instance.CameraOrientation == GlobalConstants.Orientation.EAST)
     {
       modelZ++;
     }
-    else if (_actor.AppRef.CameraOrientation == (int)GlobalConstants.Orientation.SOUTH)
+    else if (InputController.Instance.CameraOrientation == GlobalConstants.Orientation.SOUTH)
     {
       modelX++;
     }
-    else if (_actor.AppRef.CameraOrientation == (int)GlobalConstants.Orientation.WEST)
+    else if (InputController.Instance.CameraOrientation == GlobalConstants.Orientation.WEST)
     {
       modelZ--;
     }
-    else if (_actor.AppRef.CameraOrientation == (int)GlobalConstants.Orientation.NORTH)
+    else if (InputController.Instance.CameraOrientation == GlobalConstants.Orientation.NORTH)
     {
       modelX--;
     }

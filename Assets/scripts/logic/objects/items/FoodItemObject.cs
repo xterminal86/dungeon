@@ -4,8 +4,8 @@ using System.Collections;
 public class FoodItemObject : ItemObject
 {
   int _saturation = 0;
-  public FoodItemObject(string name, string desc, int atlasIcon, BehaviourItemObject bio, int saturation, InputController inputController)
-    : base(name, desc, atlasIcon, bio, inputController)
+  public FoodItemObject(string name, string desc, int atlasIcon, BehaviourItemObject bio, int saturation)
+    : base(name, desc, atlasIcon, bio)
   {
     _saturation = saturation;
   }

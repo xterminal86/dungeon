@@ -18,7 +18,9 @@ public class ApproachingPlayerState : GameObjectState
   {
     _actor = actor;
     _model = actor.Model;
-    _roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
+
+    // FIXME: fix!
+    //_roadBuilder = new RoadBuilder(_actor.AppRef.GeneratedMap.PathfindingMap, _actor.AppRef.GeneratedMapWidth, _actor.AppRef.GeneratedMapHeight);
       
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
     _modelPosition.y = _model.transform.position.y;
@@ -54,7 +56,7 @@ public class ApproachingPlayerState : GameObjectState
     }
 
     // FIXME: replace ModelPos with Int3 like player (remove similar hacks below)
-    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z), true);
+    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, new Int2(InputController.Instance.PlayerMapPos.X, InputController.Instance.PlayerMapPos.Z), true);
 
     while ((_road = _roadBuilder.GetResult()) == null)
     {      
@@ -146,10 +148,10 @@ public class ApproachingPlayerState : GameObjectState
     _model.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
 
     // Rotate to face player on last step...
-    if (Utils.BlockDistance(_model.ModelPos, new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z)) == 1)
+    if (Utils.BlockDistance(_model.ModelPos, new Int2(InputController.Instance.PlayerMapPos.X, InputController.Instance.PlayerMapPos.Z)) == 1)
     {
       angleStart = _model.transform.rotation.eulerAngles.y;
-      angleEnd = GetAngleToRotate(new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z));
+      angleEnd = GetAngleToRotate(new Int2(InputController.Instance.PlayerMapPos.X, InputController.Instance.PlayerMapPos.Z));
 
       if ((int)angleStart != (int)angleEnd)
       {
@@ -162,7 +164,7 @@ public class ApproachingPlayerState : GameObjectState
       }
             
       // ...and switch to attack mode if there is no wall before us...
-      if (CanMove(new Int2(_actor.InputRef.PlayerMapPos.X, _actor.InputRef.PlayerMapPos.Z)))
+      if (CanMove(new Int2(InputController.Instance.PlayerMapPos.X, InputController.Instance.PlayerMapPos.Z)))
       {
         _actor.ChangeState(new AttackState(_actor));
         yield break;
@@ -199,9 +201,10 @@ public class ApproachingPlayerState : GameObjectState
     int x = nextCellCoord.X;
     int y = nextCellCoord.Y;
 
-    if (!_actor.AppRef.GeneratedMap.PathfindingMap[x, y].Walkable 
-      || _actor.AppRef.GeneratedMap.PathfindingMap[_model.ModelPos.X, _model.ModelPos.Y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
-      || _actor.AppRef.GeneratedMap.PathfindingMap[x, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
+    // FIXME: fix!
+    if (!LevelLoader.Instance.LevelMap.Level[x, 0, y].Walkable 
+      || LevelLoader.Instance.LevelMap.Level[x, 0, y].SidesWalkability[(GlobalConstants.Orientation)modelFacing] == false
+      || LevelLoader.Instance.LevelMap.Level[x, 0, y].SidesWalkability[(GlobalConstants.Orientation)nextCellSide] == false)
     {
       return false;
     }

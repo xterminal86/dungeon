@@ -22,8 +22,6 @@ public abstract class WorldObject
   // MonoBehaviour script reference to the respective interactable object
   public BehaviourWorldObject BMO;
 
-  protected App _appRef;
-
   public WorldObject()
   { 
   }

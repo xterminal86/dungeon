@@ -23,11 +23,8 @@ public abstract class ItemObject
   // Type of item for equipment slots resolution
   public GlobalConstants.WorldItemType ItemType = GlobalConstants.WorldItemType.PLACEHOLDER;
 
-  protected InputController _inputControllerRef;
-
-  public ItemObject(string name, string descriptionText, int atlasIcon, BehaviourItemObject bio, InputController inputController)
-  {
-    _inputControllerRef = inputController;
+  public ItemObject(string name, string descriptionText, int atlasIcon, BehaviourItemObject bio)
+  {    
     ItemNameText = name;
     DescriptionText = descriptionText;
     AtlasIcon = atlasIcon;

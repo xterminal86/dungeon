@@ -8,6 +8,8 @@ using System.Collections.Generic;
 public abstract class GameObjectState
 {
   protected ActorBase _actor;
+
+  // FIXME: fix this
   protected Int2 _oldPlayerPos = new Int2();
 
   // Avoid starting coroutines in state ctor since changing of states is carried out
@@ -22,8 +24,8 @@ public abstract class GameObjectState
 
     if (_actor != null)
     {
-      _oldPlayerPos.X = _actor.InputRef.PlayerMapPos.X;
-      _oldPlayerPos.Y = _actor.InputRef.PlayerMapPos.Y;
+      _oldPlayerPos.X = InputController.Instance.PlayerMapPos.X;
+      _oldPlayerPos.Y = InputController.Instance.PlayerMapPos.Z;
     }
   }
 
@@ -42,14 +44,15 @@ public abstract class GameObjectState
 
   protected void PlayFootstepSound3D(Int2 mapPos, Vector3 position3D)
   {
-    if (_actor.AppRef.FloorSoundTypeByPosition[mapPos.X, mapPos.Y] != -1)
+    if (LevelLoader.Instance.LevelMap.Level[mapPos.X, 0, mapPos.Y].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
     {
-      SoundManager.Instance.PlayFootstepSound(_actor.Model.name, (GlobalConstants.FootstepSoundType)_actor.AppRef.FloorSoundTypeByPosition[mapPos.X, mapPos.Y], position3D);
+      SoundManager.Instance.PlayFootstepSound(_actor.Model.name, LevelLoader.Instance.LevelMap.Level[mapPos.X, 0, mapPos.Y].FootstepSound, position3D);
     }
   }
 
   protected bool IsPlayerPositionChanged()
   {
+    /*
     if (_actor.InputRef.PlayerMapPos.X != _oldPlayerPos.X || _actor.InputRef.PlayerMapPos.Y != _oldPlayerPos.Y)
     {
       _oldPlayerPos.X = _actor.InputRef.PlayerMapPos.X;
@@ -57,12 +60,14 @@ public abstract class GameObjectState
       
       return true;
     }
-    
+    */
+
     return false;
   }
   
   protected bool IsPlayerInRange()
   {
+    /*
     Int2 pos = _actor.Model.ModelPos;
     
     int lx = Mathf.Clamp(pos.X - (_actor as EnemyActor).AgroRange, 0, _actor.AppRef.GeneratedMapHeight - 1);
@@ -75,7 +80,8 @@ public abstract class GameObjectState
     {
       return true;
     }
-    
+    */
+
     return false;
   }
 

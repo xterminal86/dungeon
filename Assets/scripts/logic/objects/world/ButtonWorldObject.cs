@@ -13,10 +13,8 @@ public class ButtonWorldObject : WorldObject
 
   public WorldObject ControlledObject;
 
-  public ButtonWorldObject(string className, string prefabName, BehaviourWorldObject bmo, App appRef)
+  public ButtonWorldObject(string className, string prefabName, BehaviourWorldObject bmo)
   {
-    _appRef = appRef;
-
     BMO = bmo;
 
     _animation = BMO.GetComponentInParent<Animation>();

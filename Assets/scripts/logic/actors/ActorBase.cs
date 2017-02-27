@@ -18,18 +18,6 @@ public abstract class ActorBase
   // Cached component
   public Animation AnimationComponent;
 
-  protected App _appReference;
-  public App AppRef
-  {
-    get { return _appReference; }
-  }
-
-  protected InputController _inputRef;
-  public InputController InputRef
-  {
-    get { return _inputRef; }
-  }
-
   // All possible states go here.
   // Create needed state objects in constructor of a specific Actor.
   // Use ChangeState(SomeStateVar) to change state.
@@ -41,11 +29,8 @@ public abstract class ActorBase
   public AttackState AttackStateVar;
   public StoppedState StoppedStateVar;
 
-  public ActorBase(ModelMover model, App appRef, InputController inputRef)
-  {    
-    _appReference = appRef;
-    _inputRef = inputRef;
-
+  public ActorBase(ModelMover model)
+  {        
     Model = model;
     AnimationComponent = Model.GetComponent<Animation>();
 

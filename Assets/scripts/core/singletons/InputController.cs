@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class InputController : MonoBehaviour
+public class InputController : MonoSingleton<InputController>
 { 
-  public App AppScript;
+  public Transform CameraHolder;
 
   // Origin of raycast ray for checking move availability status.
   // Goes from center of the tile that player (camera) currently occupies (same height as the camera).
@@ -18,30 +18,60 @@ public class InputController : MonoBehaviour
   public Int3 PlayerMapPos = new Int3();
   public Int3 PlayerPreviousMapPos = new Int3();
 
-  public GameObject TrailPrefab;
+  Vector3 _cameraPos = Vector3.zero;
+  public Vector3 CameraPos
+  {
+    set { _cameraPos = value; }
+    get { return _cameraPos; }
+  }
+
+  Vector3 _cameraAngles = Vector3.zero;
+  public Vector3 CameraAngles
+  {
+    get { return _cameraAngles; }
+  }
+
+  GlobalConstants.Orientation _cameraOrientation = GlobalConstants.Orientation.EAST;
+  public GlobalConstants.Orientation CameraOrientation
+  {
+    get { return _cameraOrientation; }
+  }
+
+  public void SetupCamera(Int3 position, GlobalConstants.Orientation orientation = GlobalConstants.Orientation.EAST)
+  { 
+    _cameraPos.x = position.X * GlobalConstants.WallScaleFactor;
+    _cameraPos.y = position.Y * GlobalConstants.WallScaleFactor;
+    _cameraPos.z = position.Z * GlobalConstants.WallScaleFactor;
+    CameraHolder.position = _cameraPos;
+
+    CameraHolder.Rotate(Vector3.up, GlobalConstants.OrientationAngles[orientation]);
+    _cameraAngles = CameraHolder.eulerAngles;
+
+    _cameraOrientation = orientation;
+
+    PlayerMapPos.X = position.X;
+    PlayerMapPos.Y = position.Y;
+    PlayerMapPos.Z = position.Z;
+
+    PlayerPreviousMapPos.X = position.X;
+    PlayerPreviousMapPos.Y = position.Y;
+    PlayerPreviousMapPos.Z = position.Z;
+  }
 
   float _raycastDistance = GlobalConstants.WallScaleFactor + GlobalConstants.WallScaleFactor / 2;
 
   CameraTurnArgument _cameraTurnArgument = new CameraTurnArgument();
   CameraMoveArgument _cameraMoveArgument = new CameraMoveArgument();
-  void Awake () 
-  {	    
+  public override void Initialize()
+  {        
     _cameraTurnArgument.Speed = GlobalConstants.CameraTurnSpeed;
     _cameraMoveArgument.Speed = GlobalConstants.CameraMoveSpeed;
+    _compassSpriteAngles.z = _cameraAngles.y + 90.0f;
 	}
 	
-  public void MapLoadingFinishedHandler()
-  {
-    _cameraAngles = AppScript.CameraAngles;
-    _cameraPos = AppScript.CameraPos;
-    _compassSpriteAngles.z = _cameraAngles.y + 90.0f;
-  }
-
   float _cameraBob = 0.0f;
   bool _isProcessing = false;
-  Vector3 _cameraAngles = Vector3.zero;
   Vector3 _compassSpriteAngles = Vector3.zero;
-  Vector3 _cameraPos = Vector3.zero;
   float _currentMoveSpeed = 0.0f;
 	void Update () 
   {
@@ -59,9 +89,8 @@ public class InputController : MonoBehaviour
 
     //_cameraPos.y += _cameraBob;
 
-    AppScript.CameraPivot.transform.eulerAngles = _cameraAngles;
-    AppScript.CameraPos = _cameraPos;
-    AppScript.CameraPivot.transform.position = AppScript.CameraPos;
+    CameraHolder.eulerAngles = _cameraAngles;
+    CameraHolder.position = _cameraPos;
 
     GUIManager.Instance.CompassImage.transform.eulerAngles = _compassSpriteAngles;
 	}
@@ -71,13 +100,15 @@ public class InputController : MonoBehaviour
   {
     _doMove = false;
 
+    int cameraOrientation = (int)_cameraOrientation;
+
     if (Input.GetKey(KeyCode.E)) 
     {      
-      TurnCamera(AppScript.CameraOrientation, AppScript.CameraOrientation + 1, true);
+      TurnCamera(cameraOrientation, cameraOrientation + 1, true);
     }
     else if (Input.GetKey(KeyCode.Q)) 
     {
-      TurnCamera(AppScript.CameraOrientation, AppScript.CameraOrientation - 1, false);
+      TurnCamera(cameraOrientation, cameraOrientation - 1, false);
     }
     else if (Input.GetKey(KeyCode.W)) 
     {
@@ -134,8 +165,8 @@ public class InputController : MonoBehaviour
 
     if (_doMove)
     {
-      int posX = (int)AppScript.CameraPos.x;
-      int posZ = (int)AppScript.CameraPos.z;
+      int posX = (int)_cameraPos.x;
+      int posZ = (int)_cameraPos.z;
       _cameraMoveArgument.From = new Vector2(posX, posZ);
       _cameraMoveArgument.Speed = _currentMoveSpeed;
       bool res = CanMove(posX, posZ, _cameraMoveArgument.MoveType);
@@ -204,32 +235,30 @@ public class InputController : MonoBehaviour
     int y = PlayerMapPos.Y;
     int z = PlayerMapPos.Z;
 
-    var o = AppScript.CameraOrientation;
-
-    if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.NORTH)
+    if (_cameraOrientation == GlobalConstants.Orientation.NORTH)
     {
       x--;
     }
-    else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.EAST) 
+    else if (_cameraOrientation == GlobalConstants.Orientation.EAST) 
     {
       z++;
     }
-    else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.SOUTH) 
+    else if (_cameraOrientation == GlobalConstants.Orientation.SOUTH) 
     {
       x++;
     }
-    else if (GlobalConstants.OrientationsMap[o] == GlobalConstants.Orientation.WEST) 
+    else if (_cameraOrientation == GlobalConstants.Orientation.WEST) 
     {
       z--;
     }
 
     // Check bounds
-    if (x < 0 || x > AppScript.GeneratedMapWidth - 1 || z < 0 || z > AppScript.GeneratedMapHeight - 1)
+    if (x < 0 || x > LevelLoader.Instance.LevelSize.X - 1 || z < 0 || z > LevelLoader.Instance.LevelSize.Z - 1)
     {
       return;
     }
 
-    if (!AppScript.LevelMapNew.Level[x, y, z].Walkable)
+    if (!LevelLoader.Instance.LevelMap.Level[x, y, z].Walkable)
     {      
       return;
     }
@@ -244,8 +273,7 @@ public class InputController : MonoBehaviour
 
     _itemRotation = GUIManager.Instance.ItemTaken.BIO.gameObject.transform.eulerAngles;
 
-    GlobalConstants.Orientation or = GlobalConstants.OrientationsMap[AppScript.CameraOrientation];
-    _itemRotation.y = GlobalConstants.OrientationAngles[or];
+    _itemRotation.y = GlobalConstants.OrientationAngles[_cameraOrientation];
 
     GUIManager.Instance.ItemTaken.BIO.MapPosition.Set(x, y, z);
     GUIManager.Instance.ItemTaken.BIO.transform.position = _itemPos;
@@ -256,14 +284,14 @@ public class InputController : MonoBehaviour
 
   void ProcessBMO(BehaviourWorldObject bmo)
   {
-    float d = Vector3.Distance(AppScript.CameraPos, bmo.transform.position);
-    int facing = Mathf.Abs((int)bmo.WorldObjectInstance.ObjectOrientation - AppScript.CameraOrientation);
+    float d = Vector3.Distance(_cameraPos, bmo.transform.position);
+    int facing = Mathf.Abs((int)bmo.WorldObjectInstance.ObjectOrientation - (int)_cameraOrientation);
     float dCond = d - float.Epsilon;
     //Debug.Log(_raycastHit.distance + " " + d);
     //if (dCond <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
     if ((facing == 2 && dCond <= GlobalConstants.WallScaleFactor) 
      || (facing == 0 && dCond <= 0.0f) 
-     || (bmo.transform.position.x == AppScript.CameraPos.x && bmo.transform.position.z == AppScript.CameraPos.z)) 
+     || (bmo.transform.position.x == _cameraPos.x && bmo.transform.position.z == _cameraPos.z)) 
     {
       if (bmo.WorldObjectInstance.ActionCallback != null)
         bmo.WorldObjectInstance.ActionCallback(bmo.WorldObjectInstance);
@@ -316,7 +344,7 @@ public class InputController : MonoBehaviour
 
     // Check bounds
     //if (newX < 0 || newX > AppScript.MapRows - 1 || newZ < 0 || newZ > AppScript.MapColumns - 1)
-    if (newX < 0 || newX > AppScript.LevelMapNew.MapX - 1 || newZ < 0 || newZ > AppScript.LevelMapNew.MapZ - 1)
+    if (newX < 0 || newX > LevelLoader.Instance.LevelMap.MapX - 1 || newZ < 0 || newZ > LevelLoader.Instance.LevelMap.MapZ - 1)
     {
       return false;
     }
@@ -466,7 +494,7 @@ public class InputController : MonoBehaviour
       yield return null;
     }
 
-    AppScript.CameraOrientation = ca.To;
+    _cameraOrientation = GlobalConstants.OrientationByAngle[toAngle];
 
     _isProcessing = false;   
   }
@@ -590,9 +618,9 @@ public class InputController : MonoBehaviour
     PlayerMapPos.X += dx;
     PlayerMapPos.Z += dz;
 
-    if (AppScript.LevelMapNew.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
+    if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
     {
-      SoundManager.Instance.PlayFootstepSoundPlayer(AppScript.LevelMapNew.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
+      SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
     }
 
     _isProcessing = false;
@@ -705,89 +733,6 @@ public class InputController : MonoBehaviour
     _cameraForwardVector.z = zComponent;
 
     return _cameraForwardVector;
-  }
-
-  bool _horizontalTrail = false;
-  public void DrawTrail()
-  {
-    if (!_horizontalTrail)
-    {
-      StartCoroutine(DrawHorizontalTrailRoutine());
-    }
-    else
-    {
-      StartCoroutine(DrawVerticalTrailRoutine());
-    }
-
-    _horizontalTrail = !_horizontalTrail;
-  }
-
-  IEnumerator DrawHorizontalTrailRoutine()
-  {    
-    float dy = Random.Range(-0.1f, 0.1f);
-
-    Vector3 trailPos = Vector3.zero;
-
-    trailPos.Set(-(GlobalConstants.WallScaleFactor + 1), TrailPrefab.transform.position.y + dy, TrailPrefab.transform.position.z);
-
-    var trail = (GameObject)Instantiate(TrailPrefab, trailPos, Quaternion.identity);
-    trail.transform.parent = transform;
-
-    while (trailPos.x < GlobalConstants.WallScaleFactor + 1)
-    {      
-      trailPos.x += Time.smoothDeltaTime * GlobalConstants.AttackTrailSpeed;
-
-      if (dy < 0.0f)
-      {
-        trailPos.y += Time.smoothDeltaTime;
-      }
-      else
-      {
-        trailPos.y -= Time.smoothDeltaTime;
-      }
-
-      trail.transform.localPosition = trailPos;
-
-      yield return null;
-    }
-
-    Destroy(trail.gameObject);
-
-    yield return null;
-  }
-
-  IEnumerator DrawVerticalTrailRoutine()
-  {    
-    float dx = Random.Range(-0.1f, 0.1f);
-
-    Vector3 trailPos = Vector3.zero;
-
-    trailPos.Set(0.0f + dx, GlobalConstants.WallScaleFactor + 1, TrailPrefab.transform.position.z);
-
-    var trail = (GameObject)Instantiate(TrailPrefab, trailPos, Quaternion.identity);
-    trail.transform.parent = transform;
-
-    while (trailPos.y > -(GlobalConstants.WallScaleFactor + 1))
-    {      
-      trailPos.y -= Time.smoothDeltaTime * GlobalConstants.AttackTrailSpeed;
-
-      if (dx < 0.0f)
-      {
-        trailPos.x += Time.smoothDeltaTime;
-      }
-      else
-      {
-        trailPos.x -= Time.smoothDeltaTime;
-      }
-
-      trail.transform.localPosition = trailPos;
-
-      yield return null;
-    }
-
-    Destroy(trail.gameObject);
-
-    yield return null;
   }
 }
 

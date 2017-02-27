@@ -7,8 +7,8 @@ using System.Collections.Generic;
 /// </summary>
 public class PlaceholderItemObject : ItemObject
 {  
-  public PlaceholderItemObject(string name, string desc, int atlasIcon, BehaviourItemObject bio, InputController inputController) 
-    : base(name, desc, atlasIcon, bio, inputController)
+  public PlaceholderItemObject(string name, string desc, int atlasIcon, BehaviourItemObject bio) 
+    : base(name, desc, atlasIcon, bio)
   {    
   }
 }
