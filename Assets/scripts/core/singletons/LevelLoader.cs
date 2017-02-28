@@ -17,10 +17,6 @@ public class LevelLoader : MonoSingleton<LevelLoader>
     get { return _levelSize; }
   }
 
-  public override void Initialize()
-  {    
-  }
-
   Dictionary<int, NPCInfo> _npcInfo = new Dictionary<int, NPCInfo>();
   public Dictionary<int, NPCInfo> NPCInfo
   {

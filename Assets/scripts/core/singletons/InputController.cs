@@ -494,7 +494,7 @@ public class InputController : MonoSingleton<InputController>
       yield return null;
     }
 
-    _cameraOrientation = GlobalConstants.OrientationByAngle[toAngle];
+    _cameraOrientation = GlobalConstants.OrientationByAngle[toAngle == 360 ? 0 : toAngle];
 
     _isProcessing = false;   
   }

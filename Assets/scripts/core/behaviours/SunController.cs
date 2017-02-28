@@ -7,7 +7,8 @@ public class SunController : MonoBehaviour
 {
   public Transform SunTransform;
   public Light LightComponent;
-  public Skybox SkyboxShader;
+
+  Skybox _skyboxShader;
 
   Vector3 _cameraAngles = Vector3.zero;
 
@@ -27,9 +28,13 @@ public class SunController : MonoBehaviour
     get { return _dayNightFadeDelta; }
   }
 
+  void Awake()
+  {
+    _skyboxShader = FindObjectOfType<Skybox>();
+  }
+
   float _ambientIntensityDelta = 0.0f;
   float _skyboxAtmosphereThickness = 0.0f;
-
   void Start()
   {
     _sunMoveDelta = 360.0f / GlobalConstants.InGameDayNightLength;
@@ -103,7 +108,7 @@ public class SunController : MonoBehaviour
 
     _skyboxAtmosphereThickness = Mathf.Clamp(_skyboxAtmosphereThickness, _atmosphereThickness.x, _atmosphereThickness.y);
 
-    SkyboxShader.material.SetFloat("_AtmosphereThickness", _skyboxAtmosphereThickness);
+    _skyboxShader.material.SetFloat("_AtmosphereThickness", _skyboxAtmosphereThickness);
     LightComponent.intensity = Mathf.Clamp(LightComponent.intensity, 0.0f, 1.0f);
     LightComponent.shadowStrength = Mathf.Clamp(LightComponent.shadowStrength, 0.0f, 1.0f);
     //RenderSettings.ambientIntensity = Mathf.Clamp(RenderSettings.ambientIntensity, 0.2f, 0.5f);

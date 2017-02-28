@@ -102,6 +102,7 @@ public class App : MonoBehaviour
 
     Camera.main.backgroundColor = _fogColor;
 
+    BuildMap();
     SpawnItems();
 
     ScreenFader.Instance.FadeIn();
@@ -310,7 +311,7 @@ public class App : MonoBehaviour
     Instantiate(Mountains, terrainPosition, Quaternion.identity);    
   }
 
-  void BuildMapNew()
+  void BuildMap()
   {
     for (int y = 0; y < LevelLoader.Instance.LevelMap.MapY; y++)
     {

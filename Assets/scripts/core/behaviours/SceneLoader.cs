@@ -25,11 +25,13 @@ public class SceneLoader : MonoBehaviour
     if (SkipTitleScreen)
     {
       GameData.Instance.PlayerCharacterVariable.ResetToDefault();
-      ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("main"); });
+      SceneManager.LoadSceneAsync("main");
+      //ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("main"); });
     }
     else
     {
-      ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("title"); });
+      SceneManager.LoadSceneAsync("title");
+      //ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("title"); });
     }
 	}
 }
