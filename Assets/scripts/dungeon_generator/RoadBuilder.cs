@@ -8,6 +8,8 @@ using System.Text;
 /// </summary>
 public class RoadBuilder
 {
+  // FIXME: rewrite for new map organization
+
   Int2 _start = new Int2();
   Int2 _end = new Int2();
     
@@ -16,16 +18,16 @@ public class RoadBuilder
   List<PathNode> _openList = new List<PathNode>();
   List<PathNode> _closedList = new List<PathNode>();
 
-  GeneratedMapCell[,] _map;
-  PathfindingCell[,] _pathfindingMap;
+  //GeneratedMapCell[,] _map;
+  //PathfindingCell[,] _pathfindingMap;
 
   int _hvCost = 10;
   int _diagonalCost = 20;
 
   int _mapWidth = 0, _mapHeight = 0;
-  public RoadBuilder(GeneratedMapCell[,] map, int width, int height)
+  public RoadBuilder(int width, int height)
   {
-    _map = map;
+    //_map = map;
 
     _mapWidth = width;
     _mapHeight = height;
@@ -35,18 +37,7 @@ public class RoadBuilder
 
     //PrintMap();
   }
-
-  public RoadBuilder(PathfindingCell[,] map, int width, int height)
-  {
-    _pathfindingMap = map;
-
-    _mapWidth = width;
-    _mapHeight = height;
-    
-    _resultReady = false;
-    _abortThread = false;
-  }
-      
+        
   /// <summary>
   /// Returns traversal cost between two points
   /// </summary>
@@ -157,6 +148,9 @@ public class RoadBuilder
 
       //Debug.Log("Current cell " + node.Coordinate + " Next cell " + coordinate);
 
+      bool condition = false;
+
+      /*
       // Cell is valid if next cell is marked as passable and current cell does not have thin wall 
       // along current orientation, and next cell does not have thin wall along opposite orientation.
       bool condition = avoidObstacles ? 
@@ -165,6 +159,7 @@ public class RoadBuilder
                      && _pathfindingMap[coordinate.X, coordinate.Y].SidesWalkability[oppositeOrientations[i]] == true 
                      && !isInClosedList) 
                      : !isInClosedList;
+      */
 
       /*
       bool condition = (avoidObstacles ? 
@@ -220,7 +215,8 @@ public class RoadBuilder
         coordinate.Y = y;
 
         bool isInClosedList = IsNodePresent(coordinate, _closedList);
-        
+
+        /*
         if (_map[x, y].CellType != GeneratedCellType.ROOM && !isInClosedList)
         {
           bool isInOpenList = IsNodePresent(coordinate, _openList);
@@ -235,6 +231,7 @@ public class RoadBuilder
             _openList.Add(newNode);
           }
         }
+        */
       }
     }
   }
@@ -459,7 +456,7 @@ public class RoadBuilder
     {
       for (int y = 0; y < _mapWidth; y++)
       {
-        sb.Append(string.Format("({0};{1}) => {2} | ", x, y, _map[x, y]));
+        //sb.Append(string.Format("({0};{1}) => {2} | ", x, y, _map[x, y]));
       }
     }
 

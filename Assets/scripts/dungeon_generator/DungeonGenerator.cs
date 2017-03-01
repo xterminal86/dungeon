@@ -76,7 +76,7 @@ public class DungeonGenerator : MonoBehaviour
         alg.Do(_map);
         break;
       case (int)GenerationMethods.ROAD_BUILDER_TEST:
-        BuildRoad();
+        //BuildRoad();
         break;
       default:
         break;
@@ -108,6 +108,7 @@ public class DungeonGenerator : MonoBehaviour
     return _result.ToString();
   }
 
+  /*
   GeneratedMapCell[,] _testMap;
   PathfindingCell[,] _testMap2;
   void BuildRoad()
@@ -169,7 +170,7 @@ public class DungeonGenerator : MonoBehaviour
 
     //Job j = new Job(BuildPathRoutine(rb));
   }
-    
+
   IEnumerator BuildPathRoutine(RoadBuilder rb)
   {
     List<RoadBuilder.PathNode> road;
@@ -229,6 +230,7 @@ public class DungeonGenerator : MonoBehaviour
 
     //_testMap[tl.X + 1, tl.Y].CellType = GeneratedCellType.ROAD;
   }
+  */
 
   public enum GenerationMethods
   {

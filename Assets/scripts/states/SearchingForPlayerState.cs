@@ -40,7 +40,7 @@ public class SearchingForPlayerState : GameObjectState
 
   Job _mainJob, _stepJob, _rotateJob, _delayJob; 
 
-  GeneratedMapCell _playerCell;
+  //GeneratedMapCell _playerCell;
   public override void Run()
   {
     if (!_working)
@@ -320,7 +320,8 @@ public class SearchingForPlayerState : GameObjectState
   }
 
   void PrintCellInfo(Int2 coords)
-  {    
+  {   
+    /*
     //PathfindingCell cell = _actor.AppRef.GeneratedMap.PathfindingMap[coords.X, coords.Y];
     PathfindingCell cell = new PathfindingCell();
 
@@ -333,5 +334,6 @@ public class SearchingForPlayerState : GameObjectState
     output += "\n";
 
     Debug.Log(output);
+    */
   }
 }
