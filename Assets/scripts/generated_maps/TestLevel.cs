@@ -14,6 +14,8 @@ public class TestLevel : LevelBase
     //GenerateHills();
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
+
+    _playerPos.Set(_mapX / 2, 1, _mapZ / 2);
   }
 
   void GenerateRandomTerrain()

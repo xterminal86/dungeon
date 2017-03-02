@@ -25,7 +25,8 @@ public class LevelLoader : MonoSingleton<LevelLoader>
 
   public void LoadLevel()
   {
-    _levelMap = new DarwinVillage(_levelSize.X, _levelSize.Y, _levelSize.Z);
+    //_levelMap = new DarwinVillage(_levelSize.X, _levelSize.Y, _levelSize.Z);
+    _levelMap = new TestLevel(_levelSize.X, _levelSize.Y, _levelSize.Z);
     _levelMap.Generate();
 
     InputController.Instance.SetupCamera(_levelMap.PlayerPos);

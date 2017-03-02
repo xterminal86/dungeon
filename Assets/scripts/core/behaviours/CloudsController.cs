@@ -83,18 +83,19 @@ public class CloudsController : MonoBehaviour
 
     _cloudMaterial.SetTexture("_MainTex", _cloudTexture);
 
-    //GenerateClouds();
     GenerateCloudsScaled();
 
     // Spread clouds across the map
     SpreadClouds();
   }
 
+  List<float> _cloudsSpeeds = new List<float>();
+  List<GameObject> _cloudsList = new List<GameObject>();
   void GenerateCloudsScaled()
   {
     for (int i = 0; i < MaximumNumberOfClouds; i++)
     {
-      _cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(0.0f, _cloudsHeight, 0.0f), Quaternion.identity);
+      GameObject cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(0.0f, _cloudsHeight, 0.0f), Quaternion.identity);
 
       int cloudSize = Random.Range(5, MaxCloudSize);
       int cloudSizeAddon = Random.Range(1, cloudSize / 2);
@@ -118,41 +119,18 @@ public class CloudsController : MonoBehaviour
 
       cloud.transform.localScale = scale;
 
-      cloud.transform.SetParent(_cloudHolder.transform, false);
-      _cloudHolder.transform.SetParent(_allClouds.transform, false);
+      cloud.transform.SetParent(cloudHolder.transform, false);
+      cloudHolder.transform.SetParent(_allClouds.transform, false);
 
       SetMaterial(cloud);
 
       float floatSpeed = Random.Range(0.01f, CloudSpeedRange);
 
       _cloudsSpeeds.Add(floatSpeed);
-      _cloudsList.Add(_cloudHolder);
+      _cloudsList.Add(cloudHolder);
     }
   }
-
-  void GenerateClouds()
-  {
-    // Generation starts here
-
-    for (int i = 0; i < MaximumNumberOfClouds; i++)    
-    {      
-      System.Array.Clear(_cloud, 0, MaxCloudSize * MaxCloudSize);
-
-      _startIndex = (MaxCloudSize + 1) / 2;
-
-      FormCloud(_startIndex, _startIndex);
-
-      // FIXME: single hole is just one case. There might be two, three and more neighbouring holes as well.
-      // Either fix it or beat it.
-
-      //CloseHoles();
-
-      //PrintClouds();
-
-      InstantiateCloud();
-    }
-  }
-      
+        
   float[] _cloudRotationAngles = { 0.0f, 90.0f, 180.0f, 270.0f };    
   void SpreadClouds()
   {    
@@ -179,42 +157,6 @@ public class CloudsController : MonoBehaviour
 
       cloud.transform.localPosition = pos;
       cloud.transform.localEulerAngles = rotation;
-    }
-  }
-
-  void CloseHoles()
-  {
-    int lx, hx, ly, hy;
-
-    for (int x = 0; x < MaxCloudSize; x++)
-    {
-      lx = x - 1;
-      hx = x + 1;
-
-      if (lx < 0 || hx >= MaxCloudSize)
-      {
-        continue;
-      }
-
-      for (int y = 0; y < MaxCloudSize; y++)
-      {        
-        ly = y - 1;
-        hy = y + 1;
-
-        if (ly < 0 || hy >= MaxCloudSize)
-        {
-          continue;
-        }
-
-        if (_cloud[x, y] == 0)
-        {
-          // Just a hole block
-          if (_cloud[x, ly] == 1 && _cloud[lx, y] == 1 && _cloud[x, hy] == 1 && _cloud[hx, y] == 1)
-          {
-            _cloud[x, y] = 1;
-          }
-        }
-      }
     }
   }
 
@@ -267,153 +209,6 @@ public class CloudsController : MonoBehaviour
     for (int i = 0; i < renderers.Length; i++)
     {
       renderers[i].material = _cloudMaterial;
-    }
-  }
-
-  List<float> _cloudsSpeeds = new List<float>();
-  List<GameObject> _cloudsList = new List<GameObject>();
-
-  GameObject _cloudHolder;
-  void InstantiateCloud()
-  { 
-    _cloudHolder = (GameObject)Instantiate(CloudHolder, new Vector3(CloudsWorldOrigin.x, _cloudsHeight, CloudsWorldOrigin.y), Quaternion.identity);
-
-    // Form cloud
-
-    for (int x = 0; x < MaxCloudSize; x++)
-    {
-      for (int y = 0; y < MaxCloudSize; y++)
-      {
-        if (_cloud[x, y] == 1)
-        {
-          GameObject cloudBlock = (GameObject)Instantiate(CloudInner, new Vector3(x, 0.0f, y), Quaternion.identity);
-          cloudBlock.transform.SetParent(_cloudHolder.transform, false);
-
-          SetMaterial(cloudBlock);
-        }
-      }
-    }
-
-    // Place walls for cloud block on sides that are facing empty space.
-    //
-    // Array columns are in positive Z direction, rows - negative X
-    // Outer cloud prefab should not be rotated when 0 is to the left of the array element
-    // then it is designed to be rotated 90 degrees clockwise for each consequent case: 
-    // 0 array element to the up, right and down.
-
-    int ly, hy, lx, hx = 0;
-
-    GameObject cloudOuter;
-
-    for (int x = 0; x < MaxCloudSize; x++)
-    {
-      lx = x - 1;
-      hx = x + 1;
-
-      for (int y = 0; y < MaxCloudSize; y++)
-      {
-        ly = y - 1;
-        hy = y + 1;
-
-        // Do nothing if current array block is empty
-
-        if (_cloud[x, y] == 0)
-        {
-          continue;
-        }
-
-        // Force place walls for a block that is on the edge of the map since we cannot look past the array bounds
-        CloseEdgeCloudBlock(x, y);
-
-        // Block to the left
-
-        if (ly >= 0 && _cloud[x, ly] == 0)
-        {
-          cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.identity);
-          cloudOuter.transform.SetParent(_cloudHolder.transform, false);
-
-          SetMaterial(cloudOuter);
-        }
-
-        // Up
-
-        if (lx >= 0 && _cloud[lx, y] == 0)
-        {
-          cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(90.0f, Vector3.up));
-          cloudOuter.transform.SetParent(_cloudHolder.transform, false);
-
-          SetMaterial(cloudOuter);
-        }
-
-        // Right
-
-        if (hy < MaxCloudSize && _cloud[x, hy] == 0)
-        {
-          cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(180.0f, Vector3.up));
-          cloudOuter.transform.SetParent(_cloudHolder.transform, false);
-
-          SetMaterial(cloudOuter);
-        }
-
-        // Down
-
-        if (hx < MaxCloudSize && _cloud[hx, y] == 0)
-        {
-          cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(270.0f, Vector3.up));
-          cloudOuter.transform.SetParent(_cloudHolder.transform, false);
-
-          SetMaterial(cloudOuter);
-        }
-      }
-    }
-
-    _cloudHolder.transform.SetParent(_allClouds.transform, false);
-
-    float floatSpeed = Random.Range(0.01f, CloudSpeedRange);
-
-    _cloudsSpeeds.Add(floatSpeed);
-    _cloudsList.Add(_cloudHolder);
-  }
-
-  void CloseEdgeCloudBlock(int x, int y)
-  {
-    int lx = x - 1;
-    int hx = x + 1;
-    int ly = y - 1;
-    int hy = y + 1;
-
-    GameObject cloudOuter;
-
-    if (ly < 0)
-    {
-      cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.identity);
-      cloudOuter.transform.SetParent(_cloudHolder.transform, false);
-
-      SetMaterial(cloudOuter);
-    }
-
-    if (hy >= MaxCloudSize)
-    {
-      cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(180.0f, Vector3.up));
-      cloudOuter.transform.SetParent(_cloudHolder.transform, false);
-
-      SetMaterial(cloudOuter);
-    }
-
-    if (lx < 0)
-    {
-      cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(90.0f, Vector3.up));
-      cloudOuter.transform.SetParent(_cloudHolder.transform, false);
-
-      SetMaterial(cloudOuter);
-    }
-
-    if (hx >= MaxCloudSize)
-    {
-      cloudOuter = (GameObject)Instantiate(CloudOuter, new Vector3(x, 0.0f, y), Quaternion.AngleAxis(270.0f, Vector3.up));
-      cloudOuter.transform.SetParent(_cloudHolder.transform, false);
-
-      SetMaterial(cloudOuter);
     }
   }
 

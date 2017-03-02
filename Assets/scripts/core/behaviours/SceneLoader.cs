@@ -26,12 +26,10 @@ public class SceneLoader : MonoBehaviour
     {
       GameData.Instance.PlayerCharacterVariable.ResetToDefault();
       SceneManager.LoadSceneAsync("main");
-      //ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("main"); });
     }
     else
     {
       SceneManager.LoadSceneAsync("title");
-      //ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("title"); });
     }
 	}
 }
