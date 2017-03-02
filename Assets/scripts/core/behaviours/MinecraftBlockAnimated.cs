@@ -46,5 +46,4 @@ public class MinecraftBlockAnimated : MinecraftBlock
       AnimatedTextureMaterial.SetTextureOffset("_MainTex", _offset);
     }
   }
-
 }

@@ -103,7 +103,8 @@ public class App : MonoBehaviour
     BuildMap();
     SpawnItems();
 
-    CloudsControllerScript.Generate(80);
+    // FIXME: clouds are not visible if far clip plane is quite less than 1000
+    // CloudsControllerScript.Generate(80);
 
     ScreenFader.Instance.FadeIn();
 

@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SceneLoader : MonoBehaviour 
-{
+{  
+  public ScenesList SceneToLoad;
+
   public bool SkipTitleScreen = false;
 
   void Start() 
@@ -20,7 +22,7 @@ public class SceneLoader : MonoBehaviour
     LevelLoader.Instance.Initialize();
     InputController.Instance.Initialize();
 
-    LevelLoader.Instance.LoadLevel();
+    LevelLoader.Instance.LoadLevel(SceneToLoad);
 
     if (SkipTitleScreen)
     {
@@ -32,4 +34,10 @@ public class SceneLoader : MonoBehaviour
       SceneManager.LoadSceneAsync("title");
     }
 	}
+}
+
+public enum ScenesList
+{
+  VILLAGE = 0,
+  TEST1
 }

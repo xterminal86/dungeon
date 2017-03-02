@@ -23,13 +23,24 @@ public class LevelLoader : MonoSingleton<LevelLoader>
     get { return _npcInfo; }
   }
 
-  public void LoadLevel()
+  public void LoadLevel(ScenesList scene)
   {
-    //_levelMap = new DarwinVillage(_levelSize.X, _levelSize.Y, _levelSize.Z);
-    _levelMap = new TestLevel(_levelSize.X, _levelSize.Y, _levelSize.Z);
+    switch (scene)
+    {
+      case ScenesList.VILLAGE:
+        _levelMap = new DarwinVillage(_levelSize.X, _levelSize.Y, _levelSize.Z);
+        break;
+
+      case ScenesList.TEST1:
+        _levelMap = new TestLevel(_levelSize.X, _levelSize.Y, _levelSize.Z);
+        break;
+    }
+
     _levelMap.Generate();
 
     InputController.Instance.SetupCamera(_levelMap.PlayerPos);
+
+    Camera.main.farClipPlane = _levelSize.X * GlobalConstants.WallScaleFactor;
   }
 
   public void LoadNPCData()
