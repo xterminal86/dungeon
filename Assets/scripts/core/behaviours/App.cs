@@ -322,7 +322,7 @@ public class App : MonoBehaviour
       {
         for (int z = 0; z < LevelLoader.Instance.LevelMap.MapZ; z++)
         {
-          if (LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType == GlobalConstants.BlockType.AIR || LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
+          if ((LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType == GlobalConstants.BlockType.AIR && LevelLoader.Instance.LevelMap.Level[x, y, z].WorldObjects.Count == 0) || LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
           {
             continue;
           }
@@ -330,7 +330,7 @@ public class App : MonoBehaviour
           GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabByType[LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType]);
 
           if (prefab != null)
-          {
+          {            
             GameObject block = (GameObject)Instantiate(prefab, LevelLoader.Instance.LevelMap.Level[x, y, z].WorldCoordinates, Quaternion.identity);
             block.transform.parent = ObjectsInstancesTransform.transform;
 

@@ -18,7 +18,7 @@ public class DoorWorldObject : WorldObject
 
   bool _isSliding = false;
 
-  public DoorWorldObject (bool isSliding, BehaviourWorldObject bmo)
+  public DoorWorldObject (string inGameName, string prefabName, bool isSliding, BehaviourWorldObject bmo) : base(inGameName, prefabName)
   {
     BMO = bmo;
     _isSliding = isSliding;

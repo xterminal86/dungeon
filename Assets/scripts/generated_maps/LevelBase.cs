@@ -202,8 +202,10 @@ public class LevelBase
 
   // ************************ WORLD GENERATION ************************ //
 
-  // Should be odd
-  int _maxHillsHeight = 15;
+  /// <summary>
+  /// Makes hill from layers of blocks on top of each other. Height should be odd.
+  /// </summary>
+  /// <param name="height">Hill height (should be odd)</param>
   protected void MakeHillLayered(GlobalConstants.BlockType blockType, Int3 arrayPos, int height)
   {
     int lx = arrayPos.X - height;
@@ -276,7 +278,24 @@ public class LevelBase
     MakeHillQbert(x, hz, height - 1);
   }
 
-  protected void PlaceStaticObject(Int3 arrayCoords, GlobalConstants.StaticPrefabsEnum objectType, GlobalConstants.Orientation orientation)
+  protected void PlaceStaticObject(Int3 pos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.WorldObjectPrefabName prefabName, GlobalConstants.Orientation orientation)
   {
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByName[prefabName];
+
+    if (PrefabsManager.Instance.FindPrefabByName(prefabStringName) == null)
+    {
+      Debug.LogWarning("Couldn't find prefab " + prefabStringName);
+      return;
+    }
+
+    switch (objectClass)
+    {
+      case GlobalConstants.WorldObjectClass.WALL:
+        WorldObject wo = new WallWorldObject("Generic Wall", prefabStringName);
+        _level[pos.X, pos.Y, pos.Z].ArrayCoordinates.Set(pos.X, pos.Y, pos.Z);
+        _level[pos.X, pos.Y, pos.Z].WorldCoordinates.Set(pos.X * GlobalConstants.WallScaleFactor, pos.Y * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
+        //_level[pos.X, pos.Y, pos.Z].SidesWalkability[orientation] = false;
+        break;
+    }
   }
 }

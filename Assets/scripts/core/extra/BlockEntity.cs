@@ -10,12 +10,11 @@ public class BlockEntity
   public bool Walkable = true;
   public bool IsLiquid = false;
   public bool SkipInstantiation = false;
-  public string BlockName = string.Empty;
   public Vector3 ArrayCoordinates = Vector3.zero;
   public Vector3 WorldCoordinates = Vector3.zero;
   public GlobalConstants.FootstepSoundType FootstepSound = GlobalConstants.FootstepSoundType.DUMMY;
 
-  public List<WorldObject> MapObjects = new List<WorldObject>();
+  public List<WorldObject> WorldObjects = new List<WorldObject>();
   public Dictionary<GlobalConstants.Orientation, bool> SidesWalkability = new Dictionary<GlobalConstants.Orientation, bool>();
 
   GlobalConstants.BlockType _blockType = GlobalConstants.BlockType.AIR;
@@ -62,7 +61,7 @@ public class BlockEntity
         FootstepSound = GlobalConstants.FootstepSoundType.STONE;
         break;
 
-      case GlobalConstants.BlockType.WOOD_OAK:
+      case GlobalConstants.BlockType.OAK_PLANKS:
         FootstepSound = GlobalConstants.FootstepSoundType.WOOD;
         break;
 

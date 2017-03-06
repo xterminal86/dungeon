@@ -12,11 +12,11 @@ public class DarwinVillage : LevelBase
   {
     int posY = _mapY / 2;
 
-    _playerPos.Set(_mapX / 2, posY + 1, _mapZ / 2);
+    _playerPos.Set(_mapX / 2 - 10, posY + 1, _mapZ / 2 - 10);
 
     CreateGround();
 
-    //MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(10, posY, 10), 9);
+    MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(_mapX / 2, posY, _mapZ / 2), 5);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }

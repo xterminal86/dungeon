@@ -307,7 +307,7 @@ public static class GlobalConstants
     WATER,
     STONE,
     DIRT,
-    WOOD_OAK
+    OAK_PLANKS
   }
 
   /// <summary>
@@ -320,12 +320,12 @@ public static class GlobalConstants
     { BlockType.WATER, "block-water" },
     { BlockType.STONE, "block-stone" },
     { BlockType.DIRT, "block-dirt" },
-    { BlockType.WOOD_OAK, "block-wood-oak" }
+    { BlockType.OAK_PLANKS, "block-oak-planks" }
   };
 
   public enum WorldObjectClass
   {
-    PLACEHOLDER = 0,    // Occupies whole block (Walkable = false)
+    PLACEHOLDER = 0,    // Occupies whole block
     WALL,               // Occupies border of the block
     DOOR,
     LEVER,
@@ -380,6 +380,7 @@ public static class GlobalConstants
     { "weapon-ranged", WorldItemType.WEAPON_RANGED },
   };
 
+  /*
   #region OLD
   public enum StaticPrefabsEnum
   {
@@ -453,7 +454,7 @@ public static class GlobalConstants
     { ObjectPrefabsEnum.VILLAGE_SIGN, "sign-village" }
   };
   #endregion
-
+  */
 }
 
 

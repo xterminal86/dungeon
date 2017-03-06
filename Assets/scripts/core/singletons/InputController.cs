@@ -311,6 +311,9 @@ public class InputController : MonoSingleton<InputController>
     }
   }
 
+  /// <summary>
+  /// Determines whether it is possible to move. Returns true meaning it's possible, false otherwise.
+  /// </summary>
   bool CanMove(int posX, int posZ, CameraMoveType moveType)
   {
     // We might want to look into map array, so we use map coordinates (i.e. row and column)
@@ -380,6 +383,15 @@ public class InputController : MonoSingleton<InputController>
         
     //Debug.DrawRay(ray.origin, ray.direction * GlobalConstants.WallScaleFactor, Color.yellow, 10.0f);
 
+    // TODO: don't use raycast for determining walkability?
+    //
+    // If we use just a check, there will be a visual inconsistency during opening of doors.
+    // If we set sides walkability flag immediately, then it will be possible to go through
+    // even though visually door is still haven't opened yet. If we wait for opening animation
+    // to end, then sometimes (during sliding up/down door, for example) there will be situations
+    // when door almost opened, but we still can't go through, though visually it is possible.
+
+    /*
     RaycastHit hit;      
     if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
     {
@@ -390,16 +402,14 @@ public class InputController : MonoSingleton<InputController>
     }
 
     return !obstacleAhead;    
+    */
 
-    // TODO: don't use raycast for determining walkability?
-    //
-    // If we use just a check, there will be a visual inconsistency during opening of doors.
-    // If we set sides walkability flag immediately, then it will be possible to go through
-    // even though visually door is still haven't opened yet. If we wait for opening animation
-    // to end, then sometimes (during sliding up/down door, for example) there will be situations
-    // when door almost opened, but we still can't go through, though visually it is possible.
+    bool isBlockWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].Walkable;
+    bool currentBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].SidesWalkability[CameraOrientation];
+    bool nextBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].SidesWalkability[GetCameraOppositeOrientation()];
 
-    //return AppScript.LevelMapNew.Level[newX, PlayerMapPos.Y, newZ].Walkable;
+    // Can move if next block is walkable and we don't have "walls" on current block and next block.
+    return (isBlockWalkable && currentBlockSideWalkable && nextBlockSideWalkable);
   }
     
   void TurnCamera(int from, int to, bool turnRight)
@@ -708,6 +718,17 @@ public class InputController : MonoSingleton<InputController>
     _cameraPos.z = endZ;
     
     _isProcessing = false;    
+  }
+
+  GlobalConstants.Orientation GetCameraOppositeOrientation()
+  {
+    int orientation = (int)CameraOrientation;
+
+    orientation += 2;
+
+    orientation %= 4;
+
+    return (GlobalConstants.Orientation)orientation;
   }
 
   Vector3 _cameraForwardVector = Vector3.zero;

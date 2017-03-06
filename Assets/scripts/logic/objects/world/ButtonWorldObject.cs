@@ -13,7 +13,7 @@ public class ButtonWorldObject : WorldObject
 
   public WorldObject ControlledObject;
 
-  public ButtonWorldObject(string className, string prefabName, BehaviourWorldObject bmo)
+  public ButtonWorldObject(string inGameName, string prefabName, BehaviourWorldObject bmo) : base(inGameName, prefabName)
   {
     BMO = bmo;
 

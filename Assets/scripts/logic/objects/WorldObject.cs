@@ -22,8 +22,13 @@ public abstract class WorldObject
   // MonoBehaviour script reference to the respective interactable object
   public BehaviourWorldObject BMO;
 
-  public WorldObject()
+  public string InGameName = "n\a";
+  public string PrefabName = string.Empty;
+
+  public WorldObject(string inGameName, string prefabName)
   { 
+    InGameName = inGameName;
+    PrefabName = prefabName;
   }
 
   // These sould be overriden for respective interaction special handling.
