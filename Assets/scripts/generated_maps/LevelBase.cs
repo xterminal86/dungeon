@@ -278,9 +278,9 @@ public class LevelBase
     MakeHillQbert(x, hz, height - 1);
   }
 
-  protected void PlaceStaticObject(Int3 pos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.WorldObjectPrefabName prefabName, GlobalConstants.Orientation orientation)
+  protected void PlaceStaticObject(Int3 pos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
   {
-    string prefabStringName = GlobalConstants.WorldObjectPrefabByName[prefabName];
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
 
     if (PrefabsManager.Instance.FindPrefabByName(prefabStringName) == null)
     {
@@ -291,10 +291,13 @@ public class LevelBase
     switch (objectClass)
     {
       case GlobalConstants.WorldObjectClass.WALL:
-        WorldObject wo = new WallWorldObject("Generic Wall", prefabStringName);
+        WorldObject wo = new WallWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+        wo.ObjectOrientation = orientation;
+        _level[pos.X, pos.Y, pos.Z].WorldObjects.Add(wo);
+
         _level[pos.X, pos.Y, pos.Z].ArrayCoordinates.Set(pos.X, pos.Y, pos.Z);
         _level[pos.X, pos.Y, pos.Z].WorldCoordinates.Set(pos.X * GlobalConstants.WallScaleFactor, pos.Y * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
-        //_level[pos.X, pos.Y, pos.Z].SidesWalkability[orientation] = false;
+        _level[pos.X, pos.Y, pos.Z].SidesWalkability[orientation] = false;
         break;
     }
   }

@@ -194,10 +194,10 @@ public class InputController : MonoSingleton<InputController>
       {          
         if (_raycastHit.collider != null)
         {
-          BehaviourWorldObject bmo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourWorldObject>();
-          if (bmo != null)
+          BehaviourWorldObject bwo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourWorldObject>();
+          if (bwo != null)
           {            
-            ProcessBMO(bmo);
+            ProcessBWO(bwo);
           }
 
           BehaviourItemObject bio = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourItemObject>();
@@ -282,19 +282,19 @@ public class InputController : MonoSingleton<InputController>
     GUIManager.Instance.ItemTaken = null;
   }
 
-  void ProcessBMO(BehaviourWorldObject bmo)
+  void ProcessBWO(BehaviourWorldObject bwo)
   {
-    float d = Vector3.Distance(_cameraPos, bmo.transform.position);
-    int facing = Mathf.Abs((int)bmo.WorldObjectInstance.ObjectOrientation - (int)_cameraOrientation);
+    float d = Vector3.Distance(_cameraPos, bwo.transform.position);
+    int facing = Mathf.Abs((int)bwo.WorldObjectInstance.ObjectOrientation - (int)_cameraOrientation);
     float dCond = d - float.Epsilon;
     //Debug.Log(_raycastHit.distance + " " + d);
     //if (dCond <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
     if ((facing == 2 && dCond <= GlobalConstants.WallScaleFactor) 
-     || (facing == 0 && dCond <= 0.0f) 
-     || (bmo.transform.position.x == _cameraPos.x && bmo.transform.position.z == _cameraPos.z)) 
+      || (facing == 0 && dCond <= 0.0f) 
+      || (bwo.transform.position.x == _cameraPos.x && bwo.transform.position.z == _cameraPos.z)) 
     {
-      if (bmo.WorldObjectInstance.ActionCallback != null)
-        bmo.WorldObjectInstance.ActionCallback(bmo.WorldObjectInstance);
+      if (bwo.WorldObjectInstance.ActionCallback != null)
+        bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
     }
   }
 
@@ -352,7 +352,15 @@ public class InputController : MonoSingleton<InputController>
       return false;
     }
 
-    //char emptyCell = AppScript.GetMapLayoutPoint(newX, newZ);
+    // TODO: don't use raycast for determining walkability?
+    //
+    // If we use just a check, there will be a visual inconsistency during opening of doors.
+    // If we set sides walkability flag immediately, then it will be possible to go through
+    // even though visually door is still haven't opened yet. If we wait for opening animation
+    // to end, then sometimes (during sliding up/down door, for example) there will be situations
+    // when door almost opened, but we still can't go through, though visually it is possible.
+
+    /*
     bool obstacleAhead = false;
         
     // Construct a ray from center of the tile with direction that depends on movement type
@@ -383,15 +391,6 @@ public class InputController : MonoSingleton<InputController>
         
     //Debug.DrawRay(ray.origin, ray.direction * GlobalConstants.WallScaleFactor, Color.yellow, 10.0f);
 
-    // TODO: don't use raycast for determining walkability?
-    //
-    // If we use just a check, there will be a visual inconsistency during opening of doors.
-    // If we set sides walkability flag immediately, then it will be possible to go through
-    // even though visually door is still haven't opened yet. If we wait for opening animation
-    // to end, then sometimes (during sliding up/down door, for example) there will be situations
-    // when door almost opened, but we still can't go through, though visually it is possible.
-
-    /*
     RaycastHit hit;      
     if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
     {
@@ -404,14 +403,69 @@ public class InputController : MonoSingleton<InputController>
     return !obstacleAhead;    
     */
 
-    bool isBlockWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].Walkable;
-    bool currentBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].SidesWalkability[CameraOrientation];
-    bool nextBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].SidesWalkability[GetCameraOppositeOrientation()];
-
+    // Check walkability of the appropriate side based on the movement type 
+    var res = CheckWalkability(newX, newZ, moveType);
+   
     // Can move if next block is walkable and we don't have "walls" on current block and next block.
-    return (isBlockWalkable && currentBlockSideWalkable && nextBlockSideWalkable);
+    return (res[0] && (res[1] && res[2]));
   }
-    
+
+  bool[] CheckWalkability(int newX, int newZ, CameraMoveType moveType)
+  {
+    bool[] _walkabilityCheckResult = new bool[3];
+
+    bool isBlockWalkable = false;
+    bool currentBlockSideWalkable = false;
+    bool nextBlockSideWalkable = false;
+
+    GlobalConstants.Orientation newOrientation = GlobalConstants.Orientation.EAST;
+
+    int orientationInt = 0;
+
+    switch (moveType)
+    {
+      case CameraMoveType.FORWARD:
+        newOrientation = CameraOrientation;
+        break;
+
+      case CameraMoveType.BACKWARD:
+        newOrientation = GetOppositeOrientation(CameraOrientation);
+        break;
+
+        // If we are facing NORTH, it is 0, so to deal with -1 we use special condition.
+
+      case CameraMoveType.STRAFE_LEFT:
+        if (CameraOrientation == GlobalConstants.Orientation.NORTH)
+        {
+          newOrientation = GlobalConstants.Orientation.WEST;
+        }
+        else
+        {
+          orientationInt = (int)CameraOrientation;
+          orientationInt--;
+          newOrientation = (GlobalConstants.Orientation)orientationInt;
+        }
+        break;
+
+      case CameraMoveType.STRAFE_RIGHT:
+        orientationInt = (int)CameraOrientation;
+        orientationInt++;
+        orientationInt %= 4;
+        newOrientation = (GlobalConstants.Orientation)orientationInt;
+        break;
+    }
+
+    isBlockWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].Walkable;
+    currentBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].SidesWalkability[newOrientation];
+    nextBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].SidesWalkability[GetOppositeOrientation(newOrientation)];
+
+    _walkabilityCheckResult[0] = isBlockWalkable;
+    _walkabilityCheckResult[1] = currentBlockSideWalkable;
+    _walkabilityCheckResult[2] = nextBlockSideWalkable;
+
+    return _walkabilityCheckResult;
+  }
+
   void TurnCamera(int from, int to, bool turnRight)
   {    
     if (from < 0) from = GlobalConstants.OrientationsMap.Count - 1;
@@ -720,15 +774,14 @@ public class InputController : MonoSingleton<InputController>
     _isProcessing = false;    
   }
 
-  GlobalConstants.Orientation GetCameraOppositeOrientation()
+  GlobalConstants.Orientation GetOppositeOrientation(GlobalConstants.Orientation orientation)
   {
-    int orientation = (int)CameraOrientation;
+    int oppositeOrientation = (int)orientation;
 
-    orientation += 2;
+    oppositeOrientation += 2;
+    oppositeOrientation %= 4;
 
-    orientation %= 4;
-
-    return (GlobalConstants.Orientation)orientation;
+    return (GlobalConstants.Orientation)oppositeOrientation;
   }
 
   Vector3 _cameraForwardVector = Vector3.zero;

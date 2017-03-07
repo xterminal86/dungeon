@@ -333,16 +333,23 @@ public static class GlobalConstants
     SIGN                // Any form of object with text
   }
 
-  public enum WorldObjectPrefabName
+  public enum WorldObjectPrefabType
   {
-    WALL_BORDER_STONE_BRICKS = 0,
+    DUMMY = 0,
+    WALL_BORDER_STONE_BRICKS,
     WALL_SUPPORT_STONE
   }
 
-  public static Dictionary<WorldObjectPrefabName, string> WorldObjectPrefabByName = new Dictionary<WorldObjectPrefabName, string>()
+  public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
   {
-    { WorldObjectPrefabName.WALL_BORDER_STONE_BRICKS, "wall-border-stone-bricks" },
-    { WorldObjectPrefabName.WALL_SUPPORT_STONE, "wall-support-stone" },
+    { WorldObjectPrefabType.WALL_BORDER_STONE_BRICKS, "wall-border-stone-bricks" },
+    { WorldObjectPrefabType.WALL_SUPPORT_STONE, "wall-support-stone" },
+  };
+
+  public static Dictionary<WorldObjectPrefabType, string> WorldObjectInGameNameByType = new Dictionary<WorldObjectPrefabType, string>()
+  {
+    { WorldObjectPrefabType.WALL_BORDER_STONE_BRICKS, "stone bricks wall" },
+    { WorldObjectPrefabType.WALL_SUPPORT_STONE, "stone support" },
   };
 
   public enum WorldItemType

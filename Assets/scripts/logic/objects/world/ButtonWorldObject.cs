@@ -15,9 +15,9 @@ public class ButtonWorldObject : WorldObject
 
   public ButtonWorldObject(string inGameName, string prefabName, BehaviourWorldObject bmo) : base(inGameName, prefabName)
   {
-    BMO = bmo;
+    BWO = bmo;
 
-    _animation = BMO.GetComponentInParent<Animation>();
+    _animation = BWO.GetComponentInParent<Animation>();
     if (_animation != null)
     {
       _animation[_animationName].time = 0;
@@ -29,7 +29,7 @@ public class ButtonWorldObject : WorldObject
   {
     if (_animation != null && !_lockInteraction)
     {
-      BMO.StartSound.Play();
+      BWO.StartSound.Play();
 
       Job _job = new Job(ButtonToggleRoutine());
 

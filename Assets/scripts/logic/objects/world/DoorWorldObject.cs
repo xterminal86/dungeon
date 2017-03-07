@@ -20,10 +20,10 @@ public class DoorWorldObject : WorldObject
 
   public DoorWorldObject (string inGameName, string prefabName, bool isSliding, BehaviourWorldObject bmo) : base(inGameName, prefabName)
   {
-    BMO = bmo;
+    BWO = bmo;
     _isSliding = isSliding;
 
-    _animation = BMO.GetComponentInParent<Animation>();
+    _animation = BWO.GetComponentInParent<Animation>();
     if (_animation != null)
     {      
       _animation[_animationName].time = 0;
@@ -37,17 +37,17 @@ public class DoorWorldObject : WorldObject
     {
       if (_isSliding)
       {
-        BMO.StartSound.Play();
+        BWO.StartSound.Play();
       }
       else
       {
         if (!IsOpen)
         {
-          BMO.StartSound.Play();
+          BWO.StartSound.Play();
         }
         else
         {
-          BMO.EndSound.Play();
+          BWO.EndSound.Play();
         }
       }
 
@@ -59,9 +59,9 @@ public class DoorWorldObject : WorldObject
 
   public override void ActionCompleteHandler(object sender)
   {
-    int x = BMO.MapPosition.X;
-    int y = BMO.MapPosition.Y;
-    int z = BMO.MapPosition.Z;
+    int x = BWO.MapPosition.X;
+    int y = BWO.MapPosition.Y;
+    int z = BWO.MapPosition.Z;
 
     //Debug.Log("changing map cell type: " + x + " " + y + " to " + IsOpen + " facing: " + Facing + " " + (GlobalConstants.Orientation)Facing);
 
@@ -95,8 +95,8 @@ public class DoorWorldObject : WorldObject
 
     if (_isSliding)
     {
-      BMO.StartSound.Stop();
-      BMO.EndSound.Play();
+      BWO.StartSound.Stop();
+      BWO.EndSound.Play();
     }
 
     _lockInteraction = false;    

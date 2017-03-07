@@ -322,28 +322,14 @@ public class App : MonoBehaviour
       {
         for (int z = 0; z < LevelLoader.Instance.LevelMap.MapZ; z++)
         {
-          if ((LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType == GlobalConstants.BlockType.AIR && LevelLoader.Instance.LevelMap.Level[x, y, z].WorldObjects.Count == 0) || LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
+          if (LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType != GlobalConstants.BlockType.AIR && !LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
           {
-            continue;
+            InstantiateBlock(LevelLoader.Instance.LevelMap.Level[x, y, z]);
           }
 
-          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabByType[LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType]);
-
-          if (prefab != null)
-          {            
-            GameObject block = (GameObject)Instantiate(prefab, LevelLoader.Instance.LevelMap.Level[x, y, z].WorldCoordinates, Quaternion.identity);
-            block.transform.parent = ObjectsInstancesTransform.transform;
-
-            MinecraftBlockAnimated blockAnimated = block.GetComponent<MinecraftBlockAnimated>();
-            if (blockAnimated != null)
-            {
-              Utils.HideLevelBlockSides(blockAnimated, LevelLoader.Instance.LevelMap.Level[x, y, z].ArrayCoordinates, LevelLoader.Instance.LevelMap);
-            }
-            else
-            {              
-              MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
-              Utils.HideLevelBlockSides(blockScript, LevelLoader.Instance.LevelMap.Level[x, y, z].ArrayCoordinates, LevelLoader.Instance.LevelMap);
-            }
+          if (LevelLoader.Instance.LevelMap.Level[x, y, z].WorldObjects.Count != 0)
+          {
+            InstantiateObject(LevelLoader.Instance.LevelMap.Level[x, y, z]);
           }
         }
       }
@@ -397,82 +383,6 @@ public class App : MonoBehaviour
 
   // ********************** HELPER FUNCTIONS ********************** //
 
-  // FIXME: rewrite
-
-  void CreateMapObject(GameObject go, SerializableObject so)
-  {    
-    BehaviourWorldObject bmo = go.GetComponent<BehaviourWorldObject>();
-    if (bmo == null)
-    {
-      //Debug.LogWarning("Could not get BMO component from " + prefabName);
-      return;
-    }
-
-    /*
-    switch (so.ObjectClassName)
-    {
-      case "wall":
-        bmo.WorldObjectInstance = new WallWorldObject(so.ObjectClassName, so.PrefabName);
-        (bmo.WorldObjectInstance as WallWorldObject).ActionCallback += (bmo.WorldObjectInstance as WallWorldObject).ActionHandler;
-        break;
-
-      case "door-openable":
-        bmo.WorldObjectInstance = new DoorOpenableWorldObject(so.ObjectClassName, so.PrefabName, bmo, this);
-        (bmo.WorldObjectInstance as DoorOpenableWorldObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
-        (bmo.WorldObjectInstance as DoorOpenableWorldObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
-        (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionCallback += (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionHandler;
-        (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionCompleteCallback += (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionCompleteHandler;
-        break;
-
-      case "door-controllable":
-        bmo.WorldObjectInstance = new DoorOpenableWorldObject(so.ObjectClassName, so.PrefabName, bmo, this);
-        (bmo.WorldObjectInstance as DoorOpenableWorldObject).AnimationOpenSpeed = so.AnimationOpenSpeed;
-        (bmo.WorldObjectInstance as DoorOpenableWorldObject).AnimationCloseSpeed = so.AnimationCloseSpeed;
-        (bmo.WorldObjectInstance as DoorOpenableWorldObject).ControlCallback += (bmo.WorldObjectInstance as DoorOpenableWorldObject).ActionHandler;
-        break;
-
-      case "lever":
-        bmo.WorldObjectInstance = new LeverWorldObject(so.ObjectClassName, so.PrefabName, bmo);
-        (bmo.WorldObjectInstance as LeverWorldObject).ActionCallback += (bmo.WorldObjectInstance as LeverWorldObject).ActionHandler;
-          
-        if (so.ObjectToControlId != string.Empty)
-        {
-          WorldObject mo = GetMapObjectById(so.ObjectToControlId);
-          if (mo != null)
-          {
-            (bmo.WorldObjectInstance as LeverWorldObject).ControlledObject = mo;
-          }
-        }
-
-        break;
-      
-      case "button":
-        bmo.WorldObjectInstance = new ButtonWorldObject(so.ObjectClassName, so.PrefabName, bmo, this);
-        (bmo.WorldObjectInstance as ButtonWorldObject).ActionCallback += (bmo.WorldObjectInstance as ButtonWorldObject).ActionHandler;
-
-        if (so.ObjectToControlId != string.Empty)
-        {
-          WorldObject mo = GetMapObjectById(so.ObjectToControlId);
-          if (mo != null)
-          {
-            (bmo.WorldObjectInstance as ButtonWorldObject).ControlledObject = mo;
-          }
-        }
-
-        break;
-
-      case "sign":
-        bmo.WorldObjectInstance = new SignWorldObject(so.ObjectClassName, so.PrefabName, bmo, so.TextField);
-        break;      
-
-      default:
-        break;
-    }
-    */
-
-    //bmo.MapObjectInstance.Facing = so.Facing;
-  }
-
   void GameOverHandler()
   {
     JobManager.Instance.StartCoroutine(DelayRoutine());       
@@ -490,6 +400,45 @@ public class App : MonoBehaviour
     }
 
     ScreenFader.Instance.FadeIn(() => { SceneManager.LoadScene("title"); });
+  }
+
+  void InstantiateBlock(BlockEntity blockEntity)
+  {
+    GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabByType[blockEntity.BlockType]);
+
+    if (prefab != null)
+    {
+      GameObject block = (GameObject)Instantiate(prefab, blockEntity.WorldCoordinates, Quaternion.identity);
+      block.transform.parent = ObjectsInstancesTransform.transform;
+      MinecraftBlockAnimated blockAnimated = block.GetComponent<MinecraftBlockAnimated>();
+      if (blockAnimated != null)
+      {
+        Utils.HideLevelBlockSides(blockAnimated, blockEntity.ArrayCoordinates, LevelLoader.Instance.LevelMap);
+      }
+      else
+      {
+        MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
+        Utils.HideLevelBlockSides(blockScript, blockEntity.ArrayCoordinates, LevelLoader.Instance.LevelMap);
+      }
+    }
+  }
+
+  void InstantiateObject(BlockEntity blockEnity)
+  {
+    foreach (var item in blockEnity.WorldObjects)    
+    {
+      GameObject prefab = PrefabsManager.Instance.FindPrefabByName(item.PrefabName);
+
+      if (prefab != null)
+      {
+        GameObject go = (GameObject)Instantiate(prefab, blockEnity.WorldCoordinates, Quaternion.identity);
+        go.transform.parent = ObjectsInstancesTransform.transform;
+
+        BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
+        item.ActionCallback += item.ActionHandler;
+        bwo.WorldObjectInstance = item;
+      }
+    }
   }
 
   Color _starsColor = Color.white;

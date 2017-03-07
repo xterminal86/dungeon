@@ -11,7 +11,7 @@ public class LevelLoader : MonoSingleton<LevelLoader>
     get { return _levelMap; }
   }
 
-  Int3 _levelSize = new Int3(80, 40, 80);
+  Int3 _levelSize = new Int3(10, 10, 10);
   public Int3 LevelSize
   {
     get { return _levelSize; }
@@ -42,6 +42,8 @@ public class LevelLoader : MonoSingleton<LevelLoader>
 
     Camera.main.farClipPlane = _levelSize.X * GlobalConstants.WallScaleFactor;
   }
+
+  // TODO: rewrite
 
   public void LoadNPCData()
   {

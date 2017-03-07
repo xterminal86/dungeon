@@ -9,6 +9,7 @@ public abstract class WorldObject
   // So that we can have different prefabs for doors, walls etc.
   public GlobalConstants.WorldObjectClass ObjectClass = GlobalConstants.WorldObjectClass.PLACEHOLDER;
 
+  // Object orientation
   public GlobalConstants.Orientation ObjectOrientation = GlobalConstants.Orientation.NORTH;
 
   // Called when user interacts with object on a scene
@@ -20,7 +21,7 @@ public abstract class WorldObject
   public CallbackO ControlCompleteCallback;
 
   // MonoBehaviour script reference to the respective interactable object
-  public BehaviourWorldObject BMO;
+  public BehaviourWorldObject BWO;
 
   public string InGameName = "n\a";
   public string PrefabName = string.Empty;

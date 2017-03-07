@@ -18,16 +18,16 @@ public class LeverWorldObject : WorldObject
 
   public LeverWorldObject(string inGameName, string prefabName, BehaviourWorldObject bmo) : base(inGameName, prefabName)
   {    
-    BMO = bmo;
+    BWO = bmo;
 
-    _animation = BMO.GetComponent<Animation>();    
+    _animation = BWO.GetComponent<Animation>();    
   }
     
   public override void ActionHandler(object sender)
   {
     if (_animation != null && !_lockInteraction)
     {
-      BMO.StartSound.Play();
+      BWO.StartSound.Play();
 
       Job _job = new Job(LeverToggleRoutine());
 
