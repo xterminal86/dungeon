@@ -278,27 +278,64 @@ public class LevelBase
     MakeHillQbert(x, hz, height - 1);
   }
 
-  protected void PlaceStaticObject(Int3 pos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
+  protected WorldObject PlaceWorldObject(Int3 arrayPos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation, WorldObject objectToControl = null)
   {
     string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
 
     if (PrefabsManager.Instance.FindPrefabByName(prefabStringName) == null)
     {
       Debug.LogWarning("Couldn't find prefab " + prefabStringName);
-      return;
+      return null;
     }
+
+    WorldObject wo = null;
 
     switch (objectClass)
     {
       case GlobalConstants.WorldObjectClass.WALL:
-        WorldObject wo = new WallWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
-        wo.ObjectOrientation = orientation;
-        _level[pos.X, pos.Y, pos.Z].WorldObjects.Add(wo);
+        wo = new WallWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+        break;
 
-        _level[pos.X, pos.Y, pos.Z].ArrayCoordinates.Set(pos.X, pos.Y, pos.Z);
-        _level[pos.X, pos.Y, pos.Z].WorldCoordinates.Set(pos.X * GlobalConstants.WallScaleFactor, pos.Y * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
-        _level[pos.X, pos.Y, pos.Z].SidesWalkability[orientation] = false;
+      case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
+        wo = new DoorWorldObject("", prefabStringName, false);
+        (wo as DoorWorldObject).AnimationOpenSpeed = 2.0f;
+        (wo as DoorWorldObject).AnimationCloseSpeed = 4.0f;
+        wo.ActionCallback += wo.ActionHandler;
+        break;
+
+      case GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE:
+        wo = new DoorWorldObject("", prefabStringName, false);
+        (wo as DoorWorldObject).AnimationOpenSpeed = 2.0f;
+        (wo as DoorWorldObject).AnimationCloseSpeed = 4.0f;
+        break;
+
+      case GlobalConstants.WorldObjectClass.LEVER:
+        wo = new LeverWorldObject("", prefabStringName);
+        (wo as LeverWorldObject).ControlledObject = objectToControl;
+        (wo as LeverWorldObject).ActionCallback += (wo as LeverWorldObject).ActionHandler;
+        (wo as LeverWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
         break;
     }
+
+    if (wo != null)
+    {      
+      wo.ArrayCoordinates = arrayPos;
+      wo.ObjectClass = objectClass;
+      wo.ObjectOrientation = orientation;
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldObjects.Add(wo);
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].ArrayCoordinates.Set(arrayPos.X, arrayPos.Y, arrayPos.Z);
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
+
+      if (wo.ObjectClass != GlobalConstants.WorldObjectClass.PLACEHOLDER)
+      {
+        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
+      }
+      else
+      {
+        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].Walkable = false;
+      }
+    }
+
+    return wo;
   }
 }

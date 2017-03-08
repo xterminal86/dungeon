@@ -16,7 +16,11 @@ public class DarwinVillage : LevelBase
 
     CreateGround();
 
-    PlaceStaticObject(new Int3(0, posY + 1, 1), GlobalConstants.WorldObjectClass.WALL, GlobalConstants.WorldObjectPrefabType.WALL_BORDER_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWorldObject(new Int3(0, posY + 1, 1), GlobalConstants.WorldObjectClass.WALL, GlobalConstants.WorldObjectPrefabType.WALL_BORDER_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWorldObject(new Int3(1, posY + 1, 1), GlobalConstants.WorldObjectClass.DOOR_OPENABLE, GlobalConstants.WorldObjectPrefabType.DOOR_WOODEN_SWING, GlobalConstants.Orientation.EAST);
+    PlaceWorldObject(new Int3(2, posY + 1, 1), GlobalConstants.WorldObjectClass.DOOR_OPENABLE, GlobalConstants.WorldObjectPrefabType.DOOR_IRON_SWING, GlobalConstants.Orientation.EAST);
+    var wo = PlaceWorldObject(new Int3(3, posY + 1, 1), GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE, GlobalConstants.WorldObjectPrefabType.DOOR_IRON_SWING, GlobalConstants.Orientation.EAST);
+    PlaceWorldObject(new Int3(4, posY + 1, 2), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.EAST, wo);
 
     MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(_mapX / 2, posY, _mapZ / 2), 3);
 

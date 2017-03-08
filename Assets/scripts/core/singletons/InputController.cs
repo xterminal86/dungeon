@@ -294,7 +294,13 @@ public class InputController : MonoSingleton<InputController>
       || (bwo.transform.position.x == _cameraPos.x && bwo.transform.position.z == _cameraPos.z)) 
     {
       if (bwo.WorldObjectInstance.ActionCallback != null)
+      {
         bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
+      }
+      else
+      {
+        Debug.Log("You see: " + bwo.WorldObjectInstance.InGameName);
+      }
     }
   }
 

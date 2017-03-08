@@ -46,12 +46,9 @@ public class ButtonWorldObject : WorldObject
       yield return null;
     }
 
-    if (ControlledObject != null)
-    {
-      if (ControlledObject.ControlCallback != null)
-        ControlledObject.ControlCallback(this);
-    }
-
     _lockInteraction = false;
+
+    if (ActionCompleteCallback != null)
+      ActionCompleteCallback(this);    
   }
 }

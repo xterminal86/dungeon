@@ -16,9 +16,8 @@ public abstract class WorldObject
   public CallbackO ActionCallback;
   public CallbackO ActionCompleteCallback;
 
-  // Called when object on a scene is interacted via control (button, lever etc)
-  public CallbackO ControlCallback;
-  public CallbackO ControlCompleteCallback;
+  // Position in a map grid array
+  public Int3 ArrayCoordinates = new Int3();
 
   // MonoBehaviour script reference to the respective interactable object
   public BehaviourWorldObject BWO;
@@ -36,8 +35,8 @@ public abstract class WorldObject
   // Subscription should be done during instantiation of a specific derived class object
   // and routed on these methods accordingly.
 
+  // Handles the object's interaction
   public virtual void ActionHandler(object sender) { }
+  // Called at the end of the above handler
   public virtual void ActionCompleteHandler(object sender) { }
-  public virtual void ControlHandler(object sender) { }
-  public virtual void ControlCompleteHandler(object sender) { }
 }

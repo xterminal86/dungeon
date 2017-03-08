@@ -327,7 +327,8 @@ public static class GlobalConstants
   {
     PLACEHOLDER = 0,    // Occupies whole block
     WALL,               // Occupies border of the block
-    DOOR,
+    DOOR_OPENABLE,
+    DOOR_CONTROLLABLE,
     LEVER,
     BUTTON,
     SIGN                // Any form of object with text
@@ -337,13 +338,19 @@ public static class GlobalConstants
   {
     DUMMY = 0,
     WALL_BORDER_STONE_BRICKS,
-    WALL_SUPPORT_STONE
+    WALL_SUPPORT_STONE,
+    DOOR_WOODEN_SWING,
+    DOOR_IRON_SWING,
+    LEVER
   }
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
   {
-    { WorldObjectPrefabType.WALL_BORDER_STONE_BRICKS, "wall-border-stone-bricks" },
+    { WorldObjectPrefabType.WALL_BORDER_STONE_BRICKS, "wall-stone-bricks" },
     { WorldObjectPrefabType.WALL_SUPPORT_STONE, "wall-support-stone" },
+    { WorldObjectPrefabType.DOOR_WOODEN_SWING, "door-wooden-swing" },
+    { WorldObjectPrefabType.DOOR_IRON_SWING, "door-iron-swing" },
+    { WorldObjectPrefabType.LEVER, "lever" }
   };
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectInGameNameByType = new Dictionary<WorldObjectPrefabType, string>()

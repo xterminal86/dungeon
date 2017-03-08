@@ -435,8 +435,19 @@ public class App : MonoBehaviour
         go.transform.parent = ObjectsInstancesTransform.transform;
 
         BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
-        item.ActionCallback += item.ActionHandler;
         bwo.WorldObjectInstance = item;
+
+        switch (item.ObjectClass)
+        {          
+          case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
+          case GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE:
+            (item as DoorWorldObject).InitBWO(bwo);
+            break;
+
+          case GlobalConstants.WorldObjectClass.LEVER:
+            (item as LeverWorldObject).InitBWO(bwo);
+            break;
+        }
       }
     }
   }

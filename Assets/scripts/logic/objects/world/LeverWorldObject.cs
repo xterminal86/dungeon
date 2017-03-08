@@ -16,11 +16,8 @@ public class LeverWorldObject : WorldObject
 
   bool _isOn = false;
 
-  public LeverWorldObject(string inGameName, string prefabName, BehaviourWorldObject bmo) : base(inGameName, prefabName)
-  {    
-    BWO = bmo;
-
-    _animation = BWO.GetComponent<Animation>();    
+  public LeverWorldObject(string inGameName, string prefabName) : base(inGameName, prefabName)
+  { 
   }
     
   public override void ActionHandler(object sender)
@@ -55,14 +52,17 @@ public class LeverWorldObject : WorldObject
       yield return null;
     }
 
-    if (ControlledObject != null)
-    {
-      // FIXME: implement control for different types of objects (not only doors like it is assumed now)
-      if (ControlledObject.ControlCallback != null && _isOn == (ControlledObject as DoorWorldObject).IsOpen)
-        ControlledObject.ControlCallback(this);
-    }
-
     _lockInteraction = false;    
     _isOn = !_isOn;
+
+    if (ActionCompleteCallback != null)
+      ActionCompleteCallback(this);
+  }
+
+  public void InitBWO(BehaviourWorldObject bwo)
+  {
+    BWO = bwo;
+
+    _animation = BWO.GetComponentInChildren<Animation>();
   }
 }
