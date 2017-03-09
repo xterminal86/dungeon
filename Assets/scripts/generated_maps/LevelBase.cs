@@ -298,14 +298,14 @@ public class LevelBase
 
       case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
         wo = new DoorWorldObject("", prefabStringName, false);
-        (wo as DoorWorldObject).AnimationOpenSpeed = 2.0f;
+        (wo as DoorWorldObject).AnimationOpenSpeed = 4.0f;
         (wo as DoorWorldObject).AnimationCloseSpeed = 4.0f;
         wo.ActionCallback += wo.ActionHandler;
         break;
 
       case GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE:
         wo = new DoorWorldObject("", prefabStringName, false);
-        (wo as DoorWorldObject).AnimationOpenSpeed = 2.0f;
+        (wo as DoorWorldObject).AnimationOpenSpeed = 4.0f;
         (wo as DoorWorldObject).AnimationCloseSpeed = 4.0f;
         break;
 

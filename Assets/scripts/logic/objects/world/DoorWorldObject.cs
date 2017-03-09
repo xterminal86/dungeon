@@ -84,10 +84,20 @@ public class DoorWorldObject : WorldObject
       if (_animation[_animationName].normalizedTime > 0.8f)
       {
         LevelLoader.Instance.LevelMap.Level[ArrayCoordinates.X, ArrayCoordinates.Y, ArrayCoordinates.Z].SidesWalkability[ObjectOrientation] = true;
+
+        if (!_isSliding)
+        {
+          SetDoorSideWalkability(false);
+        }
       }
       else
       {
         LevelLoader.Instance.LevelMap.Level[ArrayCoordinates.X, ArrayCoordinates.Y, ArrayCoordinates.Z].SidesWalkability[ObjectOrientation] =  false;
+
+        if (!_isSliding)
+        {
+          SetDoorSideWalkability(true);
+        }
       }
 
       yield return null;
@@ -101,6 +111,38 @@ public class DoorWorldObject : WorldObject
 
     if (ActionCompleteCallback != null)
       ActionCompleteCallback(this);
+  }
+
+  void SetDoorSideWalkability(bool status)
+  {
+    int newOrientation = (int)ObjectOrientation;
+
+    newOrientation++;
+    newOrientation %= 4;
+
+    int newX = ArrayCoordinates.X;
+    int newZ = ArrayCoordinates.Z;
+
+    // Hardcoded
+
+    if (ObjectOrientation == GlobalConstants.Orientation.EAST)
+    {
+      newZ++;
+    }
+    else if (ObjectOrientation == GlobalConstants.Orientation.SOUTH)
+    {
+      newX++;
+    }
+    else if (ObjectOrientation == GlobalConstants.Orientation.WEST)
+    {
+      newZ--;
+    }
+    else if (ObjectOrientation == GlobalConstants.Orientation.NORTH)    
+    {
+      newX--;
+    }
+
+    LevelLoader.Instance.LevelMap.Level[newX, ArrayCoordinates.Y, newZ].SidesWalkability[(GlobalConstants.Orientation)newOrientation] = status;
   }
 
   public void InitBWO(BehaviourWorldObject bwo)

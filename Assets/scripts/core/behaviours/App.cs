@@ -432,6 +432,11 @@ public class App : MonoBehaviour
       if (prefab != null)
       {
         GameObject go = (GameObject)Instantiate(prefab, blockEnity.WorldCoordinates, Quaternion.identity);
+
+        Vector3 eulerAngles = go.transform.eulerAngles;
+        eulerAngles.y = GlobalConstants.OrientationAngles[item.ObjectOrientation];
+
+        go.transform.eulerAngles = eulerAngles;
         go.transform.parent = ObjectsInstancesTransform.transform;
 
         BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
