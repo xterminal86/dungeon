@@ -337,26 +337,35 @@ public static class GlobalConstants
   public enum WorldObjectPrefabType
   {
     DUMMY = 0,
-    WALL_BORDER_STONE_BRICKS,
+    WALL_STONE_BRICKS,
+    WALL_TILES,
     WALL_SUPPORT_STONE,
     DOOR_WOODEN_SWING,
     DOOR_IRON_SWING,
-    LEVER
+    DOOR_TILE_SLIDING,
+    DOOR_PORTCULLIS,
+    LEVER,
+    BUTTON
   }
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
   {
-    { WorldObjectPrefabType.WALL_BORDER_STONE_BRICKS, "wall-stone-bricks" },
+    { WorldObjectPrefabType.WALL_STONE_BRICKS, "wall-stone-bricks" },
+    { WorldObjectPrefabType.WALL_TILES, "wall-tiles" },
     { WorldObjectPrefabType.WALL_SUPPORT_STONE, "wall-support-stone" },
     { WorldObjectPrefabType.DOOR_WOODEN_SWING, "door-wooden-swing" },
     { WorldObjectPrefabType.DOOR_IRON_SWING, "door-iron-swing" },
-    { WorldObjectPrefabType.LEVER, "lever" }
+    { WorldObjectPrefabType.DOOR_TILE_SLIDING, "door-tile-sliding" },
+    { WorldObjectPrefabType.DOOR_PORTCULLIS, "door-portcullis" },
+    { WorldObjectPrefabType.LEVER, "lever" },
+    { WorldObjectPrefabType.BUTTON, "button" },
   };
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectInGameNameByType = new Dictionary<WorldObjectPrefabType, string>()
   {
-    { WorldObjectPrefabType.WALL_BORDER_STONE_BRICKS, "stone bricks wall" },
-    { WorldObjectPrefabType.WALL_SUPPORT_STONE, "stone support" },
+    { WorldObjectPrefabType.WALL_STONE_BRICKS, "Stone bricks wall" },
+    { WorldObjectPrefabType.WALL_SUPPORT_STONE, "Stone support pillar" },
+    { WorldObjectPrefabType.WALL_TILES, "Tiled wall" }
   };
 
   public enum WorldItemType

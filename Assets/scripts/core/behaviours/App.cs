@@ -452,6 +452,10 @@ public class App : MonoBehaviour
           case GlobalConstants.WorldObjectClass.LEVER:
             (item as LeverWorldObject).InitBWO(bwo);
             break;
+
+          case GlobalConstants.WorldObjectClass.BUTTON:
+            (item as ButtonWorldObject).InitBWO(bwo);
+            break;
         }
       }
     }

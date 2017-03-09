@@ -12,12 +12,18 @@ public class DoorWorldObject : WorldObject
 
   Job _job;
 
-  bool _isSliding = false;
+  public bool IsSliding = false;
+
   bool _isOpening = false;
 
-  public DoorWorldObject(string inGameName, string prefabName, bool isSliding) : base(inGameName, prefabName)
+  bool _isOpen = false;
+  public bool IsOpen
   {
-    _isSliding = isSliding;
+    get { return _isOpen; }
+  }
+
+  public DoorWorldObject(string inGameName, string prefabName) : base(inGameName, prefabName)
+  {    
   }
 
   public override void ActionHandler(object sender)
@@ -31,6 +37,10 @@ public class DoorWorldObject : WorldObject
       }
 
       _job = new Job(DoorToggleRoutine());
+    }
+    else
+    {
+      Debug.LogWarning("No animation on " + this + " at " + ArrayCoordinates);
     }
   }
 
@@ -48,7 +58,7 @@ public class DoorWorldObject : WorldObject
       _animation[_animationName].speed = AnimationOpenSpeed;
     }
 
-    if (_isSliding)
+    if (IsSliding)
     {
       if (!BWO.StartSound.isPlaying)
       {
@@ -85,7 +95,7 @@ public class DoorWorldObject : WorldObject
       {
         LevelLoader.Instance.LevelMap.Level[ArrayCoordinates.X, ArrayCoordinates.Y, ArrayCoordinates.Z].SidesWalkability[ObjectOrientation] = true;
 
-        if (!_isSliding)
+        if (!IsSliding)
         {
           SetDoorSideWalkability(false);
         }
@@ -94,7 +104,7 @@ public class DoorWorldObject : WorldObject
       {
         LevelLoader.Instance.LevelMap.Level[ArrayCoordinates.X, ArrayCoordinates.Y, ArrayCoordinates.Z].SidesWalkability[ObjectOrientation] =  false;
 
-        if (!_isSliding)
+        if (!IsSliding)
         {
           SetDoorSideWalkability(true);
         }
@@ -103,10 +113,19 @@ public class DoorWorldObject : WorldObject
       yield return null;
     }
 
-    if (_isSliding)
+    if (IsSliding)
     {
       BWO.StartSound.Stop();
       BWO.EndSound.Play();
+    }
+
+    if ((int)Mathf.Sign(_animation[_animationName].speed) == 1)
+    {
+      _isOpen = true;    
+    }
+    else
+    {
+      _isOpen = false;
     }
 
     if (ActionCompleteCallback != null)

@@ -13,16 +13,9 @@ public class ButtonWorldObject : WorldObject
 
   public WorldObject ControlledObject;
 
-  public ButtonWorldObject(string inGameName, string prefabName, BehaviourWorldObject bmo) : base(inGameName, prefabName)
-  {
-    BWO = bmo;
-
-    _animation = BWO.GetComponentInParent<Animation>();
-    if (_animation != null)
-    {
-      _animation[_animationName].time = 0;
-      _animation[_animationName].speed = _animationSpeed;    
-    }
+  public ButtonWorldObject(string inGameName, string prefabName) : base(inGameName, prefabName)
+  {    
+    
   }
 
   public override void ActionHandler(object sender)
@@ -34,6 +27,11 @@ public class ButtonWorldObject : WorldObject
       Job _job = new Job(ButtonToggleRoutine());
 
       _lockInteraction = true;
+    }
+
+    if (_animation == null)
+    {
+      Debug.LogWarning("No animation on " + this + " at " + ArrayCoordinates);
     }
   }
 
@@ -50,5 +48,17 @@ public class ButtonWorldObject : WorldObject
 
     if (ActionCompleteCallback != null)
       ActionCompleteCallback(this);    
+  }
+
+  public void InitBWO(BehaviourWorldObject bwo)
+  {
+    BWO = bwo;
+
+    _animation = BWO.GetComponentInChildren<Animation>();
+    if (_animation != null)
+    {
+      _animation[_animationName].time = 0;
+      _animation[_animationName].speed = _animationSpeed;    
+    }
   }
 }

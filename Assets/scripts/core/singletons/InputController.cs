@@ -299,7 +299,7 @@ public class InputController : MonoSingleton<InputController>
       }
       else
       {
-        Debug.Log("You see: " + bwo.WorldObjectInstance.InGameName);
+        Debug.Log(bwo.WorldObjectInstance.InGameName);
       }
     }
   }

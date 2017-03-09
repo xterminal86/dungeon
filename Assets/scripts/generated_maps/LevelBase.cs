@@ -297,16 +297,16 @@ public class LevelBase
         break;
 
       case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
-        wo = new DoorWorldObject("", prefabStringName, false);
-        (wo as DoorWorldObject).AnimationOpenSpeed = 4.0f;
-        (wo as DoorWorldObject).AnimationCloseSpeed = 4.0f;
+        wo = new DoorWorldObject("", prefabStringName);
+        (wo as DoorWorldObject).AnimationOpenSpeed = 3.0f;
+        (wo as DoorWorldObject).AnimationCloseSpeed = 3.0f;
         wo.ActionCallback += wo.ActionHandler;
         break;
 
       case GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE:
-        wo = new DoorWorldObject("", prefabStringName, false);
-        (wo as DoorWorldObject).AnimationOpenSpeed = 4.0f;
-        (wo as DoorWorldObject).AnimationCloseSpeed = 4.0f;
+        wo = new DoorWorldObject("", prefabStringName);
+        (wo as DoorWorldObject).AnimationOpenSpeed = 3.0f;
+        (wo as DoorWorldObject).AnimationCloseSpeed = 3.0f;
         break;
 
       case GlobalConstants.WorldObjectClass.LEVER:
@@ -314,6 +314,13 @@ public class LevelBase
         (wo as LeverWorldObject).ControlledObject = objectToControl;
         (wo as LeverWorldObject).ActionCallback += (wo as LeverWorldObject).ActionHandler;
         (wo as LeverWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
+        break;
+
+      case GlobalConstants.WorldObjectClass.BUTTON:
+        wo = new ButtonWorldObject("", prefabStringName);
+        (wo as ButtonWorldObject).ControlledObject = objectToControl;
+        (wo as ButtonWorldObject).ActionCallback += (wo as ButtonWorldObject).ActionHandler;
+        (wo as ButtonWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
         break;
     }
 

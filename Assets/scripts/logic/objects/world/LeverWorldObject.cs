@@ -30,6 +30,11 @@ public class LeverWorldObject : WorldObject
 
       _lockInteraction = true;
     }
+
+    if (_animation == null)
+    {
+      Debug.LogWarning("No animation on " + this + " at " + ArrayCoordinates);
+    }
   }
 
   IEnumerator LeverToggleRoutine()
@@ -55,8 +60,30 @@ public class LeverWorldObject : WorldObject
     _lockInteraction = false;    
     _isOn = !_isOn;
 
-    if (ActionCompleteCallback != null)
-      ActionCompleteCallback(this);
+    // FIXME: probably dirtyish hack (hard-coded door type of controller object)
+    //
+    // Door should react to control only when their "on" states are different:
+    // e.g. lever is up - door closed. We pull the lever down, it becomes "on", 
+    // while door is still "off", so we execute callback and door also becomes "on".
+    // Thus if we open a door from one side and then flip lever on the other side,
+    // it won't do anything.
+
+    if (ControlledObject != null)
+    {
+      if (ControlledObject is DoorWorldObject)
+      {
+        if ((ControlledObject as DoorWorldObject).IsOpen != _isOn)
+        {
+          if (ActionCompleteCallback != null)
+            ActionCompleteCallback(this);
+        }
+      }
+    }
+    else
+    {
+      if (ActionCompleteCallback != null)
+        ActionCompleteCallback(this);
+    }
   }
 
   public void InitBWO(BehaviourWorldObject bwo)
