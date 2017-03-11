@@ -24,7 +24,8 @@ public class LeverWorldObject : WorldObject
   {
     if (_animation != null && !_lockInteraction)
     {
-      BWO.StartSound.Play();
+      if (BWO.OnStateBeginSound != null)
+        BWO.OnStateBeginSound.Play();
 
       Job _job = new Job(LeverToggleRoutine());
 
@@ -40,12 +41,12 @@ public class LeverWorldObject : WorldObject
   IEnumerator LeverToggleRoutine()
   {    
     if (_isOn)
-    {
+    {      
       _animation[_animationName].time = _animation[_animationName].length;
       _animation[_animationName].speed = -_animationSpeed;
     }
     else
-    {
+    {      
       _animation[_animationName].time = 0;
       _animation[_animationName].speed = _animationSpeed;
     }
@@ -60,6 +61,16 @@ public class LeverWorldObject : WorldObject
     _lockInteraction = false;    
     _isOn = !_isOn;
 
+    ProcessControlledObjectCallback();
+  }
+
+  public void InitBWO()
+  {    
+    _animation = BWO.GetComponentInChildren<Animation>();
+  }
+
+  void ProcessControlledObjectCallback()
+  {
     // FIXME: probably dirtyish hack (hard-coded door type of controller object)
     //
     // Door should react to control only when their "on" states are different:
@@ -68,14 +79,37 @@ public class LeverWorldObject : WorldObject
     // Thus if we open a door from one side and then flip lever on the other side,
     // it won't do anything.
 
+    // ControlledObject is assigned in PlaceWorldObject, but theoretically you can
+    // assign ActionCompleteCallback to invoke something else:
+    // e.g. (wo as DoorWorldObject).ActionCompleteCallback += Something;
     if (ControlledObject != null)
     {
       if (ControlledObject is DoorWorldObject)
-      {
-        if ((ControlledObject as DoorWorldObject).IsOpen != _isOn)
+      { 
+        // Sliding door can be "toggled" when door is playing its animation, but when it's done
+        // lever toggles corresponding animation only according to its state
+        if ((ControlledObject as DoorWorldObject).IsSliding)    
         {
-          if (ActionCompleteCallback != null)
-            ActionCompleteCallback(this);
+          if ((ControlledObject as DoorWorldObject).IsAnimationPlaying)              
+          {
+            if (ActionCompleteCallback != null)
+              ActionCompleteCallback(this);
+          }
+          else if (!(ControlledObject as DoorWorldObject).IsAnimationPlaying 
+            && (ControlledObject as DoorWorldObject).IsOpen != _isOn)
+          {
+            if (ActionCompleteCallback != null)
+              ActionCompleteCallback(this);
+          }
+        }
+        else
+        {
+          // If door is a simple swing type, just toggle it according to lever's current state
+          if ((ControlledObject as DoorWorldObject).IsOpen != _isOn)
+          {
+            if (ActionCompleteCallback != null)
+              ActionCompleteCallback(this);
+          }
         }
       }
     }
@@ -84,12 +118,5 @@ public class LeverWorldObject : WorldObject
       if (ActionCompleteCallback != null)
         ActionCompleteCallback(this);
     }
-  }
-
-  public void InitBWO(BehaviourWorldObject bwo)
-  {
-    BWO = bwo;
-
-    _animation = BWO.GetComponentInChildren<Animation>();
   }
 }

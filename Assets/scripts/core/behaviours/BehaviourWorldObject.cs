@@ -6,20 +6,24 @@ using System.Collections;
 /// </summary>
 public class BehaviourWorldObject : BehaviourWorldObjectBase
 {
-  // Sound that is played on interaction start (e.g. door opening)
-  public AudioSource StartSound;
+  [Header("Sound that is played when object starts the \"on\" state (e.g. door opening)")]
+  public AudioSource OnStateBeginSound;
+  [Header("Sound that is played when \"on\" state completes")]
+  public AudioSource OnStateFinishedSound;
 
-  // Sound that is played on interaction end (e.g. door closing)
-  public AudioSource EndSound;
+  [Header("Sound that is played when object starts the \"off\" state (e.g. door closing)")]
+  public AudioSource OffStateBeginSound;
+  [Header("Sound that is played when \"off\" state completes")]
+  public AudioSource OffStateFinishedSound;
 
   // Which MapObject this sound is "attached" to
   public WorldObject WorldObjectInstance;
 
   void Start()
   {
-    if (LoopingSound != null)
+    if (AmbientSound != null)
     {
-      LoopingSound.Play();
+      AmbientSound.Play();
     }
   }
 }

@@ -294,6 +294,7 @@ public class LevelBase
     {
       case GlobalConstants.WorldObjectClass.WALL:
         wo = new WallWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
         break;
 
       case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
@@ -301,12 +302,14 @@ public class LevelBase
         (wo as DoorWorldObject).AnimationOpenSpeed = 3.0f;
         (wo as DoorWorldObject).AnimationCloseSpeed = 3.0f;
         wo.ActionCallback += wo.ActionHandler;
+        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
         break;
 
       case GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE:
         wo = new DoorWorldObject("", prefabStringName);
         (wo as DoorWorldObject).AnimationOpenSpeed = 3.0f;
         (wo as DoorWorldObject).AnimationCloseSpeed = 3.0f;
+        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
         break;
 
       case GlobalConstants.WorldObjectClass.LEVER:
@@ -332,15 +335,6 @@ public class LevelBase
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldObjects.Add(wo);
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].ArrayCoordinates.Set(arrayPos.X, arrayPos.Y, arrayPos.Z);
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
-
-      if (wo.ObjectClass != GlobalConstants.WorldObjectClass.PLACEHOLDER)
-      {
-        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
-      }
-      else
-      {
-        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].Walkable = false;
-      }
     }
 
     return wo;

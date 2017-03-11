@@ -22,7 +22,8 @@ public class ButtonWorldObject : WorldObject
   {
     if (_animation != null && !_lockInteraction)
     {
-      BWO.StartSound.Play();
+      if (BWO.OnStateBeginSound != null)
+        BWO.OnStateBeginSound.Play();
 
       Job _job = new Job(ButtonToggleRoutine());
 
@@ -50,10 +51,8 @@ public class ButtonWorldObject : WorldObject
       ActionCompleteCallback(this);    
   }
 
-  public void InitBWO(BehaviourWorldObject bwo)
+  public void InitBWO()
   {
-    BWO = bwo;
-
     _animation = BWO.GetComponentInChildren<Animation>();
     if (_animation != null)
     {

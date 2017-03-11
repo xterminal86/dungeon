@@ -11,7 +11,7 @@ public class LevelLoader : MonoSingleton<LevelLoader>
     get { return _levelMap; }
   }
 
-  Int3 _levelSize = new Int3(10, 10, 10);
+  Int3 _levelSize = new Int3(20, 20, 20);
   public Int3 LevelSize
   {
     get { return _levelSize; }

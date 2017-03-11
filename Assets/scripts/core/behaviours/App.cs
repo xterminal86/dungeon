@@ -442,19 +442,21 @@ public class App : MonoBehaviour
         BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
         bwo.WorldObjectInstance = item;
 
+        item.BWO = bwo;
+
         switch (item.ObjectClass)
         {          
           case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
           case GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE:
-            (item as DoorWorldObject).InitBWO(bwo);
+            (item as DoorWorldObject).InitBWO();
             break;
 
           case GlobalConstants.WorldObjectClass.LEVER:
-            (item as LeverWorldObject).InitBWO(bwo);
+            (item as LeverWorldObject).InitBWO();
             break;
 
           case GlobalConstants.WorldObjectClass.BUTTON:
-            (item as ButtonWorldObject).InitBWO(bwo);
+            (item as ButtonWorldObject).InitBWO();
             break;
         }
       }

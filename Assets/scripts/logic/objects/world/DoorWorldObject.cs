@@ -14,6 +14,12 @@ public class DoorWorldObject : WorldObject
 
   public bool IsSliding = false;
 
+  bool _isAnimationPlaying = false;
+  public bool IsAnimationPlaying
+  {
+    get { return _isAnimationPlaying; }
+  }
+
   bool _isOpening = false;
 
   bool _isOpen = false;
@@ -48,7 +54,7 @@ public class DoorWorldObject : WorldObject
   IEnumerator DoorToggleRoutine()
   { 
     if (_isOpening)
-    {
+    {      
       _animation[_animationName].normalizedTime = _animationTime;
       _animation[_animationName].speed = -AnimationCloseSpeed;
     }
@@ -60,20 +66,34 @@ public class DoorWorldObject : WorldObject
 
     if (IsSliding)
     {
-      if (!BWO.StartSound.isPlaying)
+      if ((int)Mathf.Sign(_animation[_animationName].speed) == 1)
       {
-        BWO.StartSound.Play();
+        if (BWO.OffStateBeginSound != null)
+          BWO.OffStateBeginSound.Stop();
+
+        if (BWO.OnStateBeginSound != null)
+          BWO.OnStateBeginSound.Play();
+      }
+      else
+      {
+        if (BWO.OnStateBeginSound != null)
+          BWO.OnStateBeginSound.Stop();
+
+        if (BWO.OffStateBeginSound != null)
+          BWO.OffStateBeginSound.Play();
       }
     }
     else
     {
       if ((int)Mathf.Sign(_animation[_animationName].speed) == 1)
       {
-        BWO.StartSound.Play();
+        if (BWO.OnStateBeginSound != null)
+          BWO.OnStateBeginSound.Play();
       }
       else
       {
-        BWO.EndSound.Play();
+        if (BWO.OffStateBeginSound != null)
+          BWO.OffStateBeginSound.Play();
       }
     }
 
@@ -84,6 +104,8 @@ public class DoorWorldObject : WorldObject
 
     while (_animation.IsPlaying(_animationName))    
     {           
+      _isAnimationPlaying = true;
+
       _animationTime = _animation[_animationName].normalizedTime;
 
       // If door is 80% opened, we can go
@@ -113,11 +135,7 @@ public class DoorWorldObject : WorldObject
       yield return null;
     }
 
-    if (IsSliding)
-    {
-      BWO.StartSound.Stop();
-      BWO.EndSound.Play();
-    }
+    _isAnimationPlaying = false;
 
     if ((int)Mathf.Sign(_animation[_animationName].speed) == 1)
     {
@@ -126,6 +144,39 @@ public class DoorWorldObject : WorldObject
     else
     {
       _isOpen = false;
+    }
+
+    if (IsSliding)
+    {
+      if (_isOpen)
+      {
+        if (BWO.OnStateBeginSound != null)
+          BWO.OnStateBeginSound.Stop();
+
+        if (BWO.OnStateFinishedSound != null)
+          BWO.OnStateFinishedSound.Play();
+      }
+      else
+      {
+        if (BWO.OffStateBeginSound != null)
+          BWO.OffStateBeginSound.Stop();
+
+        if (BWO.OffStateFinishedSound != null)
+          BWO.OffStateFinishedSound.Play();
+      }
+    }
+    else
+    {
+      if (_isOpen)
+      {
+        if (BWO.OnStateFinishedSound != null)
+          BWO.OnStateFinishedSound.Play();
+      }
+      else
+      {
+        if (BWO.OffStateFinishedSound != null)
+          BWO.OffStateFinishedSound.Play();
+      }
     }
 
     if (ActionCompleteCallback != null)
@@ -164,10 +215,8 @@ public class DoorWorldObject : WorldObject
     LevelLoader.Instance.LevelMap.Level[newX, ArrayCoordinates.Y, newZ].SidesWalkability[(GlobalConstants.Orientation)newOrientation] = status;
   }
 
-  public void InitBWO(BehaviourWorldObject bwo)
-  {
-    BWO = bwo;
-
+  public void InitBWO()
+  {    
     _animation = BWO.GetComponentInChildren<Animation>();
     if (_animation != null)
     {      

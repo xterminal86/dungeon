@@ -297,10 +297,6 @@ public class InputController : MonoSingleton<InputController>
       {
         bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
       }
-      else
-      {
-        Debug.Log(bwo.WorldObjectInstance.InGameName);
-      }
     }
   }
 
