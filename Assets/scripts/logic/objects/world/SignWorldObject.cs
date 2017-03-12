@@ -4,14 +4,18 @@ using System.Collections.Generic;
 
 public class SignWorldObject : WorldObject 
 {
-  public SignWorldObject(string inGameName, string prefabName, BehaviourWorldObject bmo, string signText) : base(inGameName, prefabName)
-  {
-    BWO = bmo;
+  public string SignText = string.Empty;
 
+  public SignWorldObject(string inGameName, string prefabName) : base(inGameName, prefabName)
+  { 
+  }
+
+  public void InitBWO()
+  {
     var tm = BWO.GetComponentInChildren<TextMesh>();
     if (tm != null)
     {
-      tm.text = signText;
+      tm.text = SignText;
     }
   }
 }

@@ -71,7 +71,14 @@ public static class GlobalConstants
 
   public static Vector3 DefaultVillageMountainsSize = new Vector3(25, 30, 25);
 
-  // Greeting string
+  // In game strings
+
+  public static Dictionary<PlayerCharacter.CharacterClass, string> PersonalNotesByClass = new Dictionary<PlayerCharacter.CharacterClass, string>() 
+  {
+    { PlayerCharacter.CharacterClass.SOLDIER, "After finally made it to my vacation, I decided to visit some countryside and relax there, away from the crowds and marketplaces of the City.\nI've come across a village called Darwin. The place looks peaceful enough, but it looks like there's some kind of commotion going on." },
+    { PlayerCharacter.CharacterClass.THIEF, "Job well done, time for some rest.\nThere wasn't much to take but at least it's something. Nobody will care much about some newborn middle-class upstart.\nSome backwater settlement should suffice. There are some strange soldiers here though, but they aren't from around here, judging by their looks. Anyways, I think it's a nice place to lay low for a while." },
+    { PlayerCharacter.CharacterClass.MAGE, "The Order is concerned about suspicious activity near the City.\nThe Council sent me to investigate the matter as a part of my training. Since it is already coming to an end, I am pretty sure this task can be considered as the final test before I can be ordained.\nI can already sense some disturbance at this village. God knows what evil lurks here..." }
+  };
 
   public const string PlayerGreeting = "Welcome to Dungeon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development.\nUse SPACE to talk with villagers and MOUSE to interact with objects.\nF9 to take a screenshot.\n\nxterminal86";
   public const string LoremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
@@ -345,7 +352,8 @@ public static class GlobalConstants
     DOOR_TILE_SLIDING,
     DOOR_PORTCULLIS,
     LEVER,
-    BUTTON
+    BUTTON,
+    SIGN_PLAQUE_METAL
   }
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
@@ -359,6 +367,7 @@ public static class GlobalConstants
     { WorldObjectPrefabType.DOOR_PORTCULLIS, "door-portcullis" },
     { WorldObjectPrefabType.LEVER, "lever" },
     { WorldObjectPrefabType.BUTTON, "button" },
+    { WorldObjectPrefabType.SIGN_PLAQUE_METAL, "sign-plaque-metal" }
   };
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectInGameNameByType = new Dictionary<WorldObjectPrefabType, string>()

@@ -37,6 +37,7 @@ public class FormInventory : MonoBehaviour
   public Text HealthVal;
   public Text MagicVal;
   public Text AcVal;
+  public Text CoinsVal;
 
   string _charNameAndTitle = string.Empty;
   Vector2 _hungerBarRectTransformSize = Vector2.zero;

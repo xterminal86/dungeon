@@ -70,6 +70,8 @@ public class PlayerCharacter
 
   public string CharacterName = string.Empty;
 
+  public int Coins = 0;
+
   CharacterClass _characterClass = CharacterClass.NONE;
   public CharacterClass GetCharacterClass
   {
@@ -148,6 +150,8 @@ public class PlayerCharacter
     _hunger = GlobalConstants.HungerMax;    
     _hungerDecreaseMultiplier = 1.0f;
     _hungerTick = GlobalConstants.HungerDefaultTick;
+
+    Coins = 50;
   }
 
   public void InitThief()
@@ -177,6 +181,8 @@ public class PlayerCharacter
     _hunger = GlobalConstants.HungerMax;    
     _hungerDecreaseMultiplier = 0.8f;
     _hungerTick = GlobalConstants.HungerDefaultTick;
+
+    Coins = 200;
   }
 
   public void InitMage()
@@ -206,6 +212,8 @@ public class PlayerCharacter
     _hunger = GlobalConstants.HungerMax;
     _hungerDecreaseMultiplier = 2.0f;
     _hungerTick = GlobalConstants.HungerDefaultTick;
+
+    Coins = 0;
   }
 
   public void ResetToDefault()

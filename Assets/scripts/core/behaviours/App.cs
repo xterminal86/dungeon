@@ -127,7 +127,9 @@ public class App : MonoBehaviour
   // TODO: In the future move all item names from items-db.xml somewhere
   void SpawnItems()
   {    
-    var io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Scroll of Welcoming", GlobalConstants.PlayerGreeting);
+    var cc = GameData.Instance.PlayerCharacterVariable.GetCharacterClass;
+
+    var io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Personal Notes", GlobalConstants.PersonalNotesByClass[cc]);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
     io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false, "Loaf of Bread", GlobalConstants.BreadDescription);
@@ -457,6 +459,10 @@ public class App : MonoBehaviour
 
           case GlobalConstants.WorldObjectClass.BUTTON:
             (item as ButtonWorldObject).InitBWO();
+            break;
+
+          case GlobalConstants.WorldObjectClass.SIGN:
+            (item as SignWorldObject).InitBWO();
             break;
         }
       }

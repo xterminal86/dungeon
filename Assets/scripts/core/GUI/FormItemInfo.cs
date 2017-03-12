@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class FormItemInfo : MonoBehaviour 
 {
   public RectTransform Window;
+
+  public RectTransform TextBackground;
   public CanvasScaler Scaler;
 
   public Text HeadText;
@@ -22,9 +24,11 @@ public class FormItemInfo : MonoBehaviour
 
   Vector2 _sizeDelta = Vector2.zero;
   Vector2 _position = Vector2.zero;
+  Vector2 _textBackgroundPosition = Vector2.zero;
 
   public void SetWindowTexts(string head, string desc)
   {
+    /*
     HeadText.text = head;
     DescriptionText.text = desc;
 
@@ -60,15 +64,48 @@ public class FormItemInfo : MonoBehaviour
     // In case of Old_Terminal it's 15 and only works on Constant Pixel Size canvas scaler
     // with scale factor of 1
 
-    _sizeDelta.x = Window.sizeDelta.x;
+    //_sizeDelta.x = TextBackground.sizeDelta.x;
 
     // We should consider the offset from the top of the window where item name is located.
     // Right now it's -45, so we add 45 to the window height
     // and 15 more for one blank line of height.
-    _sizeDelta.y = newLines * RowHeight + 60;
+    //_sizeDelta.y = newLines * RowHeight + 60;
+    */
 
-    Window.sizeDelta = _sizeDelta;
-            
+    string clampedDescription = string.Empty;
+
+    int charsCount = 0;
+    for (int i = 0; i < desc.Length; i++)
+    {
+      if (charsCount > 80)
+      {
+        charsCount = 0;
+        clampedDescription += '\n';
+      }
+
+      if (desc[i] == '\n')
+      {
+        charsCount = 0;
+      }
+      else
+      {
+        charsCount++;
+      }
+
+      clampedDescription += desc[i];
+    }
+
+    DescriptionText.text = clampedDescription;
+
+    _sizeDelta.x = DescriptionText.rectTransform.sizeDelta.x + 40;
+    _sizeDelta.y = DescriptionText.rectTransform.sizeDelta.y + 40;
+
+    _textBackgroundPosition.x = 0;
+    _textBackgroundPosition.y = 20;
+
+    TextBackground.sizeDelta = _sizeDelta;
+    //TextBackground.anchoredPosition = _textBackgroundPosition;
+
     Window.gameObject.SetActive(true);
   }
 

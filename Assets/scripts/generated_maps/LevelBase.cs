@@ -299,6 +299,7 @@ public class LevelBase
 
       case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
         wo = new DoorWorldObject("", prefabStringName);
+        // These can be overriden after the method call
         (wo as DoorWorldObject).AnimationOpenSpeed = 3.0f;
         (wo as DoorWorldObject).AnimationCloseSpeed = 3.0f;
         wo.ActionCallback += wo.ActionHandler;
@@ -324,6 +325,10 @@ public class LevelBase
         (wo as ButtonWorldObject).ControlledObject = objectToControl;
         (wo as ButtonWorldObject).ActionCallback += (wo as ButtonWorldObject).ActionHandler;
         (wo as ButtonWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
+        break;
+
+      case GlobalConstants.WorldObjectClass.SIGN:
+        wo = new SignWorldObject("", prefabStringName);
         break;
     }
 

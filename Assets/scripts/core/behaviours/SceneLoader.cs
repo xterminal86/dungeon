@@ -4,10 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SceneLoader : MonoBehaviour 
-{  
+{ 
   public ScenesList SceneToLoad;
 
   public bool SkipTitleScreen = false;
+
+  public PlayerCharacter.CharacterClass CharacterClass;
 
   void Start() 
 	{ 
@@ -26,7 +28,28 @@ public class SceneLoader : MonoBehaviour
 
     if (SkipTitleScreen)
     {
-      GameData.Instance.PlayerCharacterVariable.ResetToDefault();
+      switch (CharacterClass)
+      {
+        case PlayerCharacter.CharacterClass.SOLDIER:
+          GameData.Instance.PlayerCharacterVariable.InitSoldier();
+          break;
+
+        case PlayerCharacter.CharacterClass.THIEF:
+          GameData.Instance.PlayerCharacterVariable.InitThief();
+          break;
+
+        case PlayerCharacter.CharacterClass.MAGE:
+          GameData.Instance.PlayerCharacterVariable.InitMage();
+          break;
+
+        default:
+          GameData.Instance.PlayerCharacterVariable.ResetToDefault();
+          break;
+      }
+
+      GUIManager.Instance.InventoryForm.SetPlayerNameAndTitle();
+      GUIManager.Instance.InventoryForm.CoinsVal.text = GameData.Instance.PlayerCharacterVariable.Coins.ToString();
+
       SceneManager.LoadSceneAsync("main");
     }
     else

@@ -18,6 +18,12 @@ public class TestLevel : LevelBase
 
     WorldObject wo = null;
 
+    // Sign
+
+    PlaceWorldObject(new Int3(0, 1, 1), GlobalConstants.WorldObjectClass.WALL, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    wo = PlaceWorldObject(new Int3(0, 1, 1), GlobalConstants.WorldObjectClass.SIGN, GlobalConstants.WorldObjectPrefabType.SIGN_PLAQUE_METAL, GlobalConstants.Orientation.EAST);
+    (wo as SignWorldObject).SignText = "Welcome to\nthe Test Map!";
+
     // Doors
     PlaceWorldObject(new Int3(1, 1, 1), GlobalConstants.WorldObjectClass.DOOR_OPENABLE, GlobalConstants.WorldObjectPrefabType.DOOR_WOODEN_SWING, GlobalConstants.Orientation.EAST);
     PlaceWorldObject(new Int3(2, 1, 1), GlobalConstants.WorldObjectClass.DOOR_OPENABLE, GlobalConstants.WorldObjectPrefabType.DOOR_IRON_SWING, GlobalConstants.Orientation.EAST);
@@ -59,6 +65,13 @@ public class TestLevel : LevelBase
     PlaceWorldObject(new Int3(10, 1, 1), GlobalConstants.WorldObjectClass.WALL, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceWorldObject(new Int3(10, 1, 1), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.EAST, wo);
     PlaceWorldObject(new Int3(10, 1, 2), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.WEST, wo);
+
+    // Two gates
+
+    wo = PlaceWorldObject(new Int3(11, 1, 1), GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE, GlobalConstants.WorldObjectPrefabType.DOOR_PORTCULLIS, GlobalConstants.Orientation.EAST);
+    WorldObject wo2 = PlaceWorldObject(new Int3(12, 1, 1), GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE, GlobalConstants.WorldObjectPrefabType.DOOR_PORTCULLIS, GlobalConstants.Orientation.EAST);
+    //PlaceWorldObject(new Int3(13, 1, 1), GlobalConstants.WorldObjectClass.WALL, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    //PlaceWorldObject(new Int3(13, 1, 1), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.EAST);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }
