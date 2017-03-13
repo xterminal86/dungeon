@@ -41,12 +41,15 @@ public class TestLevel : LevelBase
 
     // Portcullis
 
+    PlaceWall(new Int3(7, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     wo = PlaceDoor(new Int3(7, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_PORTCULLIS, GlobalConstants.Orientation.EAST, false, true, 0.5f, 2.0f);
 
     PlaceWall(new Int3(8, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(8, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceControl(new Int3(8, 1, 1), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.EAST, wo);
     PlaceControl(new Int3(8, 1, 2), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.WEST, wo);
 
+    PlaceWall(new Int3(9, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     wo = PlaceDoor(new Int3(9, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_PORTCULLIS, GlobalConstants.Orientation.EAST, false, true, 0.5f, 2.0f);
 
     PlaceWall(new Int3(10, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
