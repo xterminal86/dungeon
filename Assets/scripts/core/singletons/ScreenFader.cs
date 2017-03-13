@@ -20,6 +20,7 @@ public class ScreenFader : MonoSingleton<ScreenFader>
 
   public void FlashScreen()
   {
+    StopCoroutine(FlashScreenRoutine());
     StartCoroutine(FlashScreenRoutine());
   }
 

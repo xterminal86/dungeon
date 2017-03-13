@@ -280,6 +280,14 @@ public class LevelBase
 
   // ********************************* World object placement methods ********************************* //
 
+  /// <summary>
+  /// Places placeholder type WorldObject.
+  /// </summary>
+  protected WorldObject PlaceObject(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
+  {
+    return null;
+  }
+
   protected WorldObject PlaceWall(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
   {
     string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
