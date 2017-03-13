@@ -112,6 +112,7 @@ public static class GlobalConstants
   public const string SFXFemaleVillagerHuh = "act-huh-f";
   public const string SFXMaleVillagerHuh = "act-huh-m";
   public const string SFXTakeScreenshot = "act-photo";
+  public const string SFXTeleportation = "snd-teleportation";
 
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
   {
@@ -338,7 +339,8 @@ public static class GlobalConstants
     DOOR_CONTROLLABLE,
     LEVER,
     BUTTON,
-    SIGN                // Any form of object with text
+    SIGN,                // Any form of object with text  
+    TELEPORTER
   }
 
   public enum WorldObjectPrefabType
@@ -353,7 +355,8 @@ public static class GlobalConstants
     DOOR_PORTCULLIS,
     LEVER,
     BUTTON,
-    SIGN_PLAQUE_METAL
+    SIGN_PLAQUE_METAL,
+    TELEPORTER
   }
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
@@ -367,7 +370,8 @@ public static class GlobalConstants
     { WorldObjectPrefabType.DOOR_PORTCULLIS, "door-portcullis" },
     { WorldObjectPrefabType.LEVER, "lever" },
     { WorldObjectPrefabType.BUTTON, "button" },
-    { WorldObjectPrefabType.SIGN_PLAQUE_METAL, "sign-plaque-metal" }
+    { WorldObjectPrefabType.SIGN_PLAQUE_METAL, "sign-plaque-metal" },
+    { WorldObjectPrefabType.TELEPORTER, "teleporter" }
   };
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectInGameNameByType = new Dictionary<WorldObjectPrefabType, string>()

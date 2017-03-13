@@ -324,14 +324,20 @@ public class App : MonoBehaviour
       {
         for (int z = 0; z < LevelLoader.Instance.LevelMap.MapZ; z++)
         {
-          if (LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType != GlobalConstants.BlockType.AIR && !LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
+          if (LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType != GlobalConstants.BlockType.AIR 
+           && !LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
           {
             InstantiateBlock(LevelLoader.Instance.LevelMap.Level[x, y, z]);
           }
 
           if (LevelLoader.Instance.LevelMap.Level[x, y, z].WorldObjects.Count != 0)
           {
-            InstantiateObject(LevelLoader.Instance.LevelMap.Level[x, y, z]);
+            InstantiateObjects(LevelLoader.Instance.LevelMap.Level[x, y, z]);
+          }
+
+          if (LevelLoader.Instance.LevelMap.Level[x, y, z].Teleporter != null)
+          {
+            InstantiateTeleporter(LevelLoader.Instance.LevelMap.Level[x, y, z]);
           }
         }
       }
@@ -339,6 +345,22 @@ public class App : MonoBehaviour
 
     Int3 cameraPos = new Int3(LevelLoader.Instance.LevelMap.PlayerPos.X, LevelLoader.Instance.LevelMap.PlayerPos.Y, LevelLoader.Instance.LevelMap.PlayerPos.Z);
     InputController.Instance.SetupCamera(cameraPos);
+  }
+
+  void InstantiateTeleporter(BlockEntity block)
+  {    
+    GameObject prefab = PrefabsManager.Instance.FindPrefabByName(block.Teleporter.PrefabName);
+
+    GameObject go = (GameObject)Instantiate(prefab, block.WorldCoordinates, Quaternion.identity);
+
+    Vector3 eulerAngles = go.transform.eulerAngles;
+    eulerAngles.y = GlobalConstants.OrientationAngles[block.Teleporter.ObjectOrientation];
+
+    go.transform.eulerAngles = eulerAngles;
+    go.transform.parent = ObjectsInstancesTransform.transform;
+
+    BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
+    bwo.AmbientSound.Play();
   }
 
   GameObject FindCharacterPrefabByName(string name)
@@ -425,7 +447,7 @@ public class App : MonoBehaviour
     }
   }
 
-  void InstantiateObject(BlockEntity blockEnity)
+  void InstantiateObjects(BlockEntity blockEnity)
   {
     foreach (var item in blockEnity.WorldObjects)    
     {
@@ -463,7 +485,7 @@ public class App : MonoBehaviour
 
           case GlobalConstants.WorldObjectClass.SIGN:
             (item as SignWorldObject).InitBWO();
-            break;
+            break;          
         }
       }
     }

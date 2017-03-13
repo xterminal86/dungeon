@@ -66,13 +66,13 @@ public class SoundManagerInspector : Editor
       string[] dirs = Directory.GetDirectories(soundsPath, "*", SearchOption.AllDirectories);
       if (dirs.Length == 0)
       {
-        LoadFiles(sm.SoundEffects, soundsPath, "*.wav");
+        LoadFiles(sm.SoundEffects, soundsPath, "*.ogg");
       }
       else
       {
         for (int i = 0; i < dirs.Length; i++)
         {
-          LoadFiles(sm.SoundEffects, dirs[i], "*.wav");
+          LoadFiles(sm.SoundEffects, dirs[i], "*.ogg");
         }
       } 
     }

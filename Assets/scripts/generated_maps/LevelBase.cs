@@ -278,70 +278,154 @@ public class LevelBase
     MakeHillQbert(x, hz, height - 1);
   }
 
-  protected WorldObject PlaceWorldObject(Int3 arrayPos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation, WorldObject objectToControl = null)
+  // ********************************* World object placement methods ********************************* //
+
+  protected WorldObject PlaceWall(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
   {
     string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
 
+    if (TryFindPrefab(prefabStringName))
+    {
+      WorldObject wo = new WallWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
+
+      SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.WALL, orientation);
+
+      return wo;
+    }
+
+    return null;
+  }
+
+  protected WorldObject PlaceDoor(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation, bool canBeOpenedByHand, bool isSlidingAnimated, float animationOpenSpeed = 1.0f, float animationCloseSpeed = 1.0f)
+  { 
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
+
+    if (TryFindPrefab(prefabStringName))
+    {
+      WorldObject wo = new DoorWorldObject("", prefabStringName);
+      (wo as DoorWorldObject).AnimationOpenSpeed = animationOpenSpeed;
+      (wo as DoorWorldObject).AnimationCloseSpeed = animationCloseSpeed;
+      (wo as DoorWorldObject).IsSliding = isSlidingAnimated;
+
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
+
+      if (canBeOpenedByHand)
+      {
+        wo.ActionCallback += wo.ActionHandler;
+        SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.DOOR_OPENABLE, orientation);
+      }
+      else
+      {
+        SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE, orientation);
+      }
+
+      return wo;
+    }  
+
+    return null;
+  }
+
+  protected WorldObject PlaceControl(Int3 arrayPos, GlobalConstants.WorldObjectClass controlClass, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation, WorldObject objectToControl)
+  {
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
+
+    if (TryFindPrefab(prefabStringName))
+    {
+      WorldObject wo = null;
+        
+      switch (controlClass)
+      {
+        case GlobalConstants.WorldObjectClass.LEVER:
+          wo = new LeverWorldObject("", prefabStringName);
+          (wo as LeverWorldObject).ControlledObject = objectToControl;
+          (wo as LeverWorldObject).ActionCallback += (wo as LeverWorldObject).ActionHandler;
+          (wo as LeverWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
+
+          SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.LEVER, orientation);
+
+          break;
+
+        case GlobalConstants.WorldObjectClass.BUTTON:
+          wo = new ButtonWorldObject("", prefabStringName);
+          (wo as ButtonWorldObject).ControlledObject = objectToControl;
+          (wo as ButtonWorldObject).ActionCallback += (wo as ButtonWorldObject).ActionHandler;
+          (wo as ButtonWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
+
+          SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.BUTTON, orientation);
+
+          break;
+      }
+
+      return wo;
+    }
+
+    return null;
+  }
+
+  protected WorldObject PlaceSign(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation, string textToDisplay)
+  {
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
+
+    if (TryFindPrefab(prefabStringName))
+    {
+      WorldObject wo = new SignWorldObject("", prefabStringName);
+      (wo as SignWorldObject).SignText = textToDisplay;
+
+      SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.SIGN, orientation);
+
+      return wo;
+    }
+
+    return null;
+  }
+
+  protected void PlaceTeleporter(Int3 arrayPos, Int3 destination)
+  {
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByType[GlobalConstants.WorldObjectPrefabType.TELEPORTER];
+
+    if (TryFindPrefab(prefabStringName))
+    {
+      WorldObject wo = new TeleporterWorldObject("", prefabStringName);
+
+      (wo as TeleporterWorldObject).CoordinatesToTeleport = destination;
+
+      wo.ArrayCoordinates = arrayPos;
+
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].ArrayCoordinates.Set(arrayPos.X, arrayPos.Y, arrayPos.Z);
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].Teleporter = wo as TeleporterWorldObject;
+    }
+  }
+
+  // ********************************* Helper Functions ********************************* //
+
+  bool TryFindPrefab(string prefabStringName)
+  {    
     if (PrefabsManager.Instance.FindPrefabByName(prefabStringName) == null)
     {
       Debug.LogWarning("Couldn't find prefab " + prefabStringName);
-      return null;
+      return false;
     }
 
-    WorldObject wo = null;
+    return true;
+  }
 
-    switch (objectClass)
-    {
-      case GlobalConstants.WorldObjectClass.WALL:
-        wo = new WallWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
-        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
-        break;
+  /// <summary>
+  /// Sets world object common parameters.
+  /// </summary>
+  /// <param name="wo">WorldObject to modify</param>
+  /// <param name="arrayPos">Array coordinates</param>
+  /// <param name="objectClass">Object class</param>
+  /// <param name="orientation">Orientation</param>
+  void SetWorldObjectParams(WorldObject wo, Int3 arrayPos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.Orientation orientation)
+  {
+    wo.ArrayCoordinates = arrayPos;
+    wo.ObjectClass = objectClass;
+    wo.ObjectOrientation = orientation;
 
-      case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
-        wo = new DoorWorldObject("", prefabStringName);
-        // These can be overriden after the method call
-        (wo as DoorWorldObject).AnimationOpenSpeed = 3.0f;
-        (wo as DoorWorldObject).AnimationCloseSpeed = 3.0f;
-        wo.ActionCallback += wo.ActionHandler;
-        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
-        break;
-
-      case GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE:
-        wo = new DoorWorldObject("", prefabStringName);
-        (wo as DoorWorldObject).AnimationOpenSpeed = 3.0f;
-        (wo as DoorWorldObject).AnimationCloseSpeed = 3.0f;
-        _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
-        break;
-
-      case GlobalConstants.WorldObjectClass.LEVER:
-        wo = new LeverWorldObject("", prefabStringName);
-        (wo as LeverWorldObject).ControlledObject = objectToControl;
-        (wo as LeverWorldObject).ActionCallback += (wo as LeverWorldObject).ActionHandler;
-        (wo as LeverWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
-        break;
-
-      case GlobalConstants.WorldObjectClass.BUTTON:
-        wo = new ButtonWorldObject("", prefabStringName);
-        (wo as ButtonWorldObject).ControlledObject = objectToControl;
-        (wo as ButtonWorldObject).ActionCallback += (wo as ButtonWorldObject).ActionHandler;
-        (wo as ButtonWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
-        break;
-
-      case GlobalConstants.WorldObjectClass.SIGN:
-        wo = new SignWorldObject("", prefabStringName);
-        break;
-    }
-
-    if (wo != null)
-    {      
-      wo.ArrayCoordinates = arrayPos;
-      wo.ObjectClass = objectClass;
-      wo.ObjectOrientation = orientation;
-      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldObjects.Add(wo);
-      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].ArrayCoordinates.Set(arrayPos.X, arrayPos.Y, arrayPos.Z);
-      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
-    }
-
-    return wo;
+    _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldObjects.Add(wo);
+    _level[arrayPos.X, arrayPos.Y, arrayPos.Z].ArrayCoordinates.Set(arrayPos.X, arrayPos.Y, arrayPos.Z);
+    _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
   }
 }

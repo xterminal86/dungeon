@@ -16,7 +16,6 @@ public class InputController : MonoSingleton<InputController>
   public Transform CanMoveRayOrigin;
 
   public Int3 PlayerMapPos = new Int3();
-  public Int3 PlayerPreviousMapPos = new Int3();
 
   Vector3 _cameraPos = Vector3.zero;
   public Vector3 CameraPos
@@ -42,7 +41,12 @@ public class InputController : MonoSingleton<InputController>
     _cameraPos.x = position.X * GlobalConstants.WallScaleFactor;
     _cameraPos.y = position.Y * GlobalConstants.WallScaleFactor;
     _cameraPos.z = position.Z * GlobalConstants.WallScaleFactor;
+
     CameraHolder.position = _cameraPos;
+
+    // Teleportation uses this method, so without resetting eulerAngles first we'll get wrong rotation
+    _cameraAngles = Vector3.zero;
+    CameraHolder.eulerAngles = _cameraAngles;
 
     CameraHolder.Rotate(Vector3.up, GlobalConstants.OrientationAngles[orientation]);
     _cameraAngles = CameraHolder.eulerAngles;
@@ -52,10 +56,6 @@ public class InputController : MonoSingleton<InputController>
     PlayerMapPos.X = position.X;
     PlayerMapPos.Y = position.Y;
     PlayerMapPos.Z = position.Z;
-
-    PlayerPreviousMapPos.X = position.X;
-    PlayerPreviousMapPos.Y = position.Y;
-    PlayerPreviousMapPos.Z = position.Z;
   }
 
   float _raycastDistance = GlobalConstants.WallScaleFactor + GlobalConstants.WallScaleFactor / 2;
@@ -678,15 +678,21 @@ public class InputController : MonoSingleton<InputController>
       yield return null;
     }
 
-    PlayerPreviousMapPos.X = PlayerMapPos.X;
-    PlayerPreviousMapPos.Z = PlayerMapPos.Z;
-
     PlayerMapPos.X += dx;
     PlayerMapPos.Z += dz;
 
-    if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
+    if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter != null)
     {
-      SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
+      ScreenFader.Instance.FlashScreen();
+      SetupCamera(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter.CoordinatesToTeleport, CameraOrientation);
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXTeleportation);
+    }
+    else
+    {
+      if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
+      {
+        SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
+      }
     }
 
     _isProcessing = false;

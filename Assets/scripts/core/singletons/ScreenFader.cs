@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 public class ScreenFader : MonoSingleton<ScreenFader> 
 {
-  public Callback FadeCompleteCallback;
-
   public Image FaderImage;
+  public Image WhiteFlasher;
 
   Color _faderColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -17,6 +16,36 @@ public class ScreenFader : MonoSingleton<ScreenFader>
     _faderColor.a = 1.0f;
     FaderImage.gameObject.SetActive(true);
     FaderImage.color = _faderColor;    
+  }
+
+  public void FlashScreen()
+  {
+    StartCoroutine(FlashScreenRoutine());
+  }
+
+  IEnumerator FlashScreenRoutine()
+  { 
+    Color c = Color.white;
+
+    WhiteFlasher.color = c;
+
+    WhiteFlasher.gameObject.SetActive(true);
+
+    float alpha = 1.0f;
+    while (alpha > 0.0f)
+    {      
+      alpha -= Time.smoothDeltaTime * 3.0f;
+
+      c.a = alpha;
+
+      WhiteFlasher.color = c;
+
+      yield return null;
+    }
+
+    WhiteFlasher.gameObject.SetActive(false);
+
+    yield return null;
   }
 
   public void FadeOut(Callback cb = null)
@@ -49,9 +78,6 @@ public class ScreenFader : MonoSingleton<ScreenFader>
 
     if (cb != null)
       cb();
-    
-    //if (FadeCompleteCallback != null)
-    //  FadeCompleteCallback();
   }
 
   IEnumerator FadeInRoutine(Callback cb)
@@ -73,8 +99,5 @@ public class ScreenFader : MonoSingleton<ScreenFader>
 
     if (cb != null)
       cb();
-    
-    //if (FadeCompleteCallback != null)
-    //  FadeCompleteCallback();
   }
 }
