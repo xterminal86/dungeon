@@ -50,13 +50,11 @@ public class SceneLoader : MonoBehaviour
       GUIManager.Instance.InventoryForm.SetPlayerNameAndTitle();
       GUIManager.Instance.InventoryForm.CoinsVal.text = GameData.Instance.PlayerCharacterVariable.Coins.ToString();
 
-      SceneManager.LoadSceneAsync("main");
-
-      //SoundManager.Instance.PlayMusicTrack("amb-map-test");
+      SceneManager.LoadScene("main");
     }
     else
     {
-      SceneManager.LoadSceneAsync("title");
+      SceneManager.LoadScene("title");
     }
 	}
 }

@@ -21,21 +21,26 @@ public class TestLevel : LevelBase
     // Sign
 
     PlaceWall(new Int3(0, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(0, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceSign(new Int3(0, 1, 1), GlobalConstants.WorldObjectPrefabType.SIGN_PLAQUE_METAL, GlobalConstants.Orientation.EAST, "\n\nWelcome to the\nTest Map!");
 
     // Doors
+    PlaceWall(new Int3(1, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceDoor(new Int3(1, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_WOODEN_SWING, GlobalConstants.Orientation.EAST, true, false, 3.0f, 4.0f);
+    PlaceWall(new Int3(2, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceDoor(new Int3(2, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_IRON_SWING, GlobalConstants.Orientation.EAST, true, false, 3.0f, 4.0f);
+    PlaceWall(new Int3(3, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     wo = PlaceDoor(new Int3(3, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_IRON_SWING, GlobalConstants.Orientation.EAST, false, false, 3.0f, 4.0f);
+    PlaceWall(new Int3(4, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceWall(new Int3(4, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceControl(new Int3(4, 1, 1), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.EAST, wo);
     PlaceControl(new Int3(4, 1, 2), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.WEST, wo);
 
     // Tiles
-    PlaceWall(new Int3(5, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_TILES, GlobalConstants.Orientation.EAST);
-    wo = PlaceDoor(new Int3(5, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_TILE_SLIDING, GlobalConstants.Orientation.EAST, false, true, 0.5f, 0.5f);
+    wo = PlaceDoor(new Int3(5, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_STONE_BRICKS_SLIDING, GlobalConstants.Orientation.EAST, false, true, 0.5f, 0.5f);
 
-    PlaceWall(new Int3(6, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_TILES, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(6, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(6, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceControl(new Int3(6, 1, 1), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.EAST, wo);
     PlaceControl(new Int3(6, 1, 2), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.WEST, wo);
 
@@ -53,6 +58,7 @@ public class TestLevel : LevelBase
     wo = PlaceDoor(new Int3(9, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_PORTCULLIS, GlobalConstants.Orientation.EAST, false, true, 0.5f, 2.0f);
 
     PlaceWall(new Int3(10, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(10, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceControl(new Int3(10, 1, 1), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.EAST, wo);
     PlaceControl(new Int3(10, 1, 2), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.WEST, wo);
 

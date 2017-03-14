@@ -108,12 +108,12 @@ public class DoorWorldObject : WorldObject
 
       _animationTime = _animation[_animationName].normalizedTime;
 
-      // If door is 80% opened, we can go
+      // If door is 90% opened, we can go
       // FIXME:  Possibly this is a hack?
 
       // We probably shouldn't force close/open both sides (far side of the current block and near side of the next block),
       // only set state for the current object's side.
-      if (_animation[_animationName].normalizedTime > 0.8f)
+      if (_animation[_animationName].normalizedTime > 0.9f)
       {
         LevelLoader.Instance.LevelMap.Level[ArrayCoordinates.X, ArrayCoordinates.Y, ArrayCoordinates.Z].SidesWalkability[ObjectOrientation] = true;
 

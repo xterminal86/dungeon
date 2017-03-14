@@ -84,7 +84,7 @@ public class App : MonoBehaviour
 
   Color _fogColor = Color.black;
   void SceneLoadedHandler(Scene scene, LoadSceneMode mode)
-  { 
+  {     
     DateAndTime.Instance.InGameTime = GlobalConstants.DawnEndTime;
 
     AdjustFogDensityForTime();
@@ -102,6 +102,11 @@ public class App : MonoBehaviour
 
     BuildMap();
     SpawnItems();
+
+    if (LevelLoader.Instance.LevelMap is TestLevel)
+    {
+      SoundManager.Instance.PlayMusicTrack("map-test");
+    }
 
     // FIXME: clouds are not visible if far clip plane is quite less than 1000
     // CloudsControllerScript.Generate(80);
