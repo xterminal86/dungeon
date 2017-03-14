@@ -334,7 +334,7 @@ public class LevelBase
     return null;
   }
 
-  protected WorldObject PlaceControl(Int3 arrayPos, GlobalConstants.WorldObjectClass controlClass, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation, WorldObject objectToControl)
+  protected WorldObject PlaceControl(Int3 arrayPos, GlobalConstants.WorldObjectClass controlClass, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation, params WorldObject[] objectsToControl)
   {
     string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
 
@@ -346,9 +346,13 @@ public class LevelBase
       {
         case GlobalConstants.WorldObjectClass.LEVER:
           wo = new LeverWorldObject("", prefabStringName);
-          (wo as LeverWorldObject).ControlledObject = objectToControl;
           (wo as LeverWorldObject).ActionCallback += (wo as LeverWorldObject).ActionHandler;
-          (wo as LeverWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
+
+          foreach (var obj in objectsToControl)
+          {
+            (wo as LeverWorldObject).ControlledObject = obj;
+            (wo as LeverWorldObject).ActionCompleteCallback += obj.ActionHandler;
+          }
 
           SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.LEVER, orientation);
 
@@ -356,9 +360,13 @@ public class LevelBase
 
         case GlobalConstants.WorldObjectClass.BUTTON:
           wo = new ButtonWorldObject("", prefabStringName);
-          (wo as ButtonWorldObject).ControlledObject = objectToControl;
           (wo as ButtonWorldObject).ActionCallback += (wo as ButtonWorldObject).ActionHandler;
-          (wo as ButtonWorldObject).ActionCompleteCallback += objectToControl.ActionHandler;
+
+          foreach (var obj in objectsToControl)
+          {
+            (wo as ButtonWorldObject).ControlledObject = obj;
+            (wo as ButtonWorldObject).ActionCompleteCallback += obj.ActionHandler;
+          }
 
           SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.BUTTON, orientation);
 
