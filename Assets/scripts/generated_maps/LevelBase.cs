@@ -305,6 +305,20 @@ public class LevelBase
     return null;
   }
 
+  /// <summary>
+  /// Places door world object.
+  /// </summary>
+  /// <returns>WorldObject reference</returns>
+  /// <param name="arrayPos">Array position</param>
+  /// <param name="prefabType">Prefab type</param>
+  /// <param name="orientation">Orientation</param>
+  /// <param name="canBeOpenedByHand">If set to <c>true</c> can be opened by hand - door action callback is subscribed to its own handler.</param>
+  /// <param name="isSlidingAnimated">If set to <c>true</c> indicates that door is "sliding" type, 
+  /// which determines walkability of the corresponding cell sides: sliding doors (e.g. portcullis) set own side to true/false, 
+  /// while swing doors set side where door was before opening to true/false and where door is now to false/true.
+  /// </param>
+  /// <param name="animationOpenSpeed">Opening animation speed</param>
+  /// <param name="animationCloseSpeed">Closing animation speed</param>
   protected WorldObject PlaceDoor(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation, bool canBeOpenedByHand, bool isSlidingAnimated, float animationOpenSpeed = 1.0f, float animationCloseSpeed = 1.0f)
   { 
     string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
@@ -348,9 +362,10 @@ public class LevelBase
           wo = new LeverWorldObject("", prefabStringName);
           (wo as LeverWorldObject).ActionCallback += (wo as LeverWorldObject).ActionHandler;
 
+          (wo as LeverWorldObject).ControlledObjects = objectsToControl;
+
           foreach (var obj in objectsToControl)
           {
-            (wo as LeverWorldObject).ControlledObject = obj;
             (wo as LeverWorldObject).ActionCompleteCallback += obj.ActionHandler;
           }
 
@@ -362,9 +377,10 @@ public class LevelBase
           wo = new ButtonWorldObject("", prefabStringName);
           (wo as ButtonWorldObject).ActionCallback += (wo as ButtonWorldObject).ActionHandler;
 
+          (wo as ButtonWorldObject).ControlledObjects = objectsToControl;
+
           foreach (var obj in objectsToControl)
           {
-            (wo as ButtonWorldObject).ControlledObject = obj;
             (wo as ButtonWorldObject).ActionCompleteCallback += obj.ActionHandler;
           }
 

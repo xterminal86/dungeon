@@ -714,7 +714,7 @@ public class InputController : MonoSingleton<InputController>
     int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
 
     float cond = 0.0f;
-    float nudge = (float)GlobalConstants.WallScaleFactor / 4.0f;
+    float nudge = (float)GlobalConstants.WallScaleFactor / 6.0f;
     float half = nudge / 2.0f;
     while (cond < nudge)
     {

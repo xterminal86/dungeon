@@ -75,7 +75,7 @@ public class DoorWorldObject : WorldObject
           BWO.OnStateBeginSound.Play();
       }
       else
-      {
+      {        
         if (BWO.OnStateBeginSound != null)
           BWO.OnStateBeginSound.Stop();
 
@@ -103,7 +103,7 @@ public class DoorWorldObject : WorldObject
     // to prevent animation not playing when model is not in the camera view.
 
     while (_animation.IsPlaying(_animationName))    
-    {           
+    { 
       _isAnimationPlaying = true;
 
       _animationTime = _animation[_animationName].normalizedTime;
@@ -114,7 +114,7 @@ public class DoorWorldObject : WorldObject
       // We probably shouldn't force close/open both sides (far side of the current block and near side of the next block),
       // only set state for the current object's side.
       if (_animation[_animationName].normalizedTime > 0.9f)
-      {
+      {        
         LevelLoader.Instance.LevelMap.Level[ArrayCoordinates.X, ArrayCoordinates.Y, ArrayCoordinates.Z].SidesWalkability[ObjectOrientation] = true;
 
         if (!IsSliding)
@@ -124,7 +124,7 @@ public class DoorWorldObject : WorldObject
       }
       else
       {
-        LevelLoader.Instance.LevelMap.Level[ArrayCoordinates.X, ArrayCoordinates.Y, ArrayCoordinates.Z].SidesWalkability[ObjectOrientation] =  false;
+        LevelLoader.Instance.LevelMap.Level[ArrayCoordinates.X, ArrayCoordinates.Y, ArrayCoordinates.Z].SidesWalkability[ObjectOrientation] = false;
 
         if (!IsSliding)
         {
@@ -147,7 +147,7 @@ public class DoorWorldObject : WorldObject
     }
 
     if (IsSliding)
-    {
+    {      
       if (_isOpen)
       {
         if (BWO.OnStateBeginSound != null)
@@ -184,7 +184,7 @@ public class DoorWorldObject : WorldObject
   }
 
   void SetDoorSideWalkability(bool status)
-  {
+  {    
     int newOrientation = (int)ObjectOrientation;
 
     newOrientation++;

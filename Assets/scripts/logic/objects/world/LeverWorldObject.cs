@@ -12,7 +12,7 @@ public class LeverWorldObject : WorldObject
 
   Animation _animation;
 
-  public WorldObject ControlledObject;
+  public WorldObject[] ControlledObjects;
 
   bool _isOn = false;
 
@@ -82,33 +82,35 @@ public class LeverWorldObject : WorldObject
     // ControlledObject is assigned in PlaceWorldObject, but theoretically you can
     // assign ActionCompleteCallback to invoke something else:
     // e.g. (wo as DoorWorldObject).ActionCompleteCallback += Something;
-    if (ControlledObject != null)
+    if (ControlledObjects != null)
     {
-      if (ControlledObject is DoorWorldObject)
-      { 
-        // Sliding door can be "toggled" when door is playing its animation, but when it's done
-        // lever toggles corresponding animation only according to its state
-        if ((ControlledObject as DoorWorldObject).IsSliding)    
-        {
-          if ((ControlledObject as DoorWorldObject).IsAnimationPlaying)              
-          {
-            if (ActionCompleteCallback != null)
-              ActionCompleteCallback(this);
+      foreach (var obj in ControlledObjects)
+      {        
+        if (obj is DoorWorldObject)
+        { 
+          // Sliding door can be "toggled" when door is playing its animation, but when it's done
+          // lever toggles corresponding animation only according to its state
+          if ((obj as DoorWorldObject).IsSliding)
+          {            
+            if ((obj as DoorWorldObject).IsAnimationPlaying)
+            {              
+              if (ActionCompleteCallback != null)
+                ActionCompleteCallback(this);
+            }
+            else if (!(obj as DoorWorldObject).IsAnimationPlaying && (obj as DoorWorldObject).IsOpen != _isOn)
+            {
+              if (ActionCompleteCallback != null)
+                ActionCompleteCallback(this);
+            }
           }
-          else if (!(ControlledObject as DoorWorldObject).IsAnimationPlaying 
-            && (ControlledObject as DoorWorldObject).IsOpen != _isOn)
-          {
-            if (ActionCompleteCallback != null)
-              ActionCompleteCallback(this);
-          }
-        }
-        else
-        {
-          // If door is a simple swing type, just toggle it according to lever's current state
-          if ((ControlledObject as DoorWorldObject).IsOpen != _isOn)
-          {
-            if (ActionCompleteCallback != null)
-              ActionCompleteCallback(this);
+          else
+          {            
+            // If door is a simple swing type, just toggle it according to lever's current state
+            if ((obj as DoorWorldObject).IsOpen != _isOn)
+            {               
+              if (ActionCompleteCallback != null)
+                ActionCompleteCallback(this);
+            }
           }
         }
       }

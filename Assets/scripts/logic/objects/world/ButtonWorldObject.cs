@@ -11,7 +11,7 @@ public class ButtonWorldObject : WorldObject
 
   float _animationSpeed = 4;
 
-  public WorldObject ControlledObject;
+  public WorldObject[] ControlledObjects;
 
   public ButtonWorldObject(string inGameName, string prefabName) : base(inGameName, prefabName)
   {    
