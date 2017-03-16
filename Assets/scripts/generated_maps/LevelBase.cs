@@ -202,6 +202,40 @@ public class LevelBase
 
   // ************************ WORLD GENERATION ************************ //
 
+  protected void MakeHillCubed(GlobalConstants.BlockType blockType, Int3 arrayPos, int width, int height)
+  {
+    int lx = arrayPos.X - width;
+    int lz = arrayPos.Z - width;
+    int hx = arrayPos.X + width;
+    int hz = arrayPos.Z + width;
+
+    lx = Mathf.Clamp(lx, 0, _mapX - 1);
+    lz = Mathf.Clamp(lz, 0, _mapZ - 1);
+    hx = Mathf.Clamp(hx, 0, _mapX - 1);
+    hz = Mathf.Clamp(hz, 0, _mapZ - 1);
+
+    int hy = height + arrayPos.Y;
+    hy = Mathf.Clamp(hy, 0, _mapY - 1);
+
+    for (int h = arrayPos.Y; h < hy; h++)
+    { 
+      for (int ax = lx; ax <= hx; ax++)
+      {
+        for (int ay = lz; ay <= hz; ay++)
+        {               
+          if (blockType == GlobalConstants.BlockType.GRASS)
+          {
+            _level[ax, h, ay].BlockType = (h != hy - 1) ? GlobalConstants.BlockType.DIRT : GlobalConstants.BlockType.GRASS;
+          }
+          else
+          {
+            _level[ax, h, ay].BlockType = blockType;
+          }
+        }
+      }
+    }
+  }
+
   /// <summary>
   /// Makes hill from layers of blocks on top of each other. Height should be odd.
   /// </summary>

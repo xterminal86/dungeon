@@ -86,13 +86,32 @@ public class TestLevel : LevelBase
 
     PlaceWall(new Int3(10, 1, 0), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
     PlaceWall(new Int3(10, 2, 0), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
-    PlaceSign(new Int3(10, 1, 0), GlobalConstants.WorldObjectPrefabType.SIGN_PLAQUE_METAL, GlobalConstants.Orientation.SOUTH, "\n\n\nGoing up!");
-     PlaceTeleporter(new Int3(11, 1, 1), new Int3(12, 6, 12));
-    PlaceTeleporter(new Int3(13, 6, 12), new Int3(0, 1, 0));
+    PlaceSign(new Int3(10, 1, 0), GlobalConstants.WorldObjectPrefabType.SIGN_PLAQUE_METAL, GlobalConstants.Orientation.SOUTH, "\n\n\nKing of the Hill");
+    PlaceTeleporter(new Int3(11, 1, 1), new Int3(5, 21, 21));
 
     // Upper level
 
-    MakeHillLayered(GlobalConstants.BlockType.GRASS, new Int3(12, 1, 12), 5);
+    MakeHillCubed(GlobalConstants.BlockType.GRASS, new Int3(5, 1, 20), 5, 20);
+
+    PlaceTeleporter(new Int3(5, 21, 20), new Int3(0, 1, 1));
+
+    // Hill Layered
+
+    MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(25, 1, 25), 7);
+
+    // Pull up test
+
+    _level[8, 1, 10].BlockType = GlobalConstants.BlockType.DIRT;
+    _level[9, 2, 10].BlockType = GlobalConstants.BlockType.DIRT;
+    _level[8, 2, 11].BlockType = GlobalConstants.BlockType.DIRT;
+    _level[9, 3, 11].BlockType = GlobalConstants.BlockType.DIRT;
+    _level[10, 3, 11].BlockType = GlobalConstants.BlockType.DIRT;
+    _level[11, 3, 11].BlockType = GlobalConstants.BlockType.DIRT;
+    _level[11, 2, 11].BlockType = GlobalConstants.BlockType.DIRT;
+    _level[11, 1, 11].BlockType = GlobalConstants.BlockType.DIRT;
+
+    PlaceWall(new Int3(7, 1, 10), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceSign(new Int3(7, 1, 10), GlobalConstants.WorldObjectPrefabType.SIGN_PLAQUE_METAL, GlobalConstants.Orientation.EAST, "\nPress F\nto pull yourself up\nwhen standing\nin front of a block");
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }

@@ -118,6 +118,13 @@ public class Int3
     _z = (int)v3.z;
   }
 
+  public Int3(Int3 v3)
+  {
+    _x = v3.X;
+    _y = v3.Y;
+    _z = v3.Z;
+  }
+
   public int X
   {
     set { _x = value; }
@@ -141,6 +148,20 @@ public class Int3
     _x = (int)x;
     _y = (int)y;
     _z = (int)z;
+  }
+
+  public void Set(int x, int y, int z)
+  {
+    _x = x;
+    _y = y;
+    _z = z;
+  }
+
+  public void Set(Int3 arg)
+  {
+    _x = arg.X;
+    _y = arg.Y;
+    _z = arg.Z;
   }
 
   public override string ToString()

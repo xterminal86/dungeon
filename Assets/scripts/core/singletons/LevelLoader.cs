@@ -11,7 +11,7 @@ public class LevelLoader : MonoSingleton<LevelLoader>
     get { return _levelMap; }
   }
 
-  Int3 _levelSize = new Int3(20, 20, 20);
+  Int3 _levelSize = new Int3(40, 40, 40);
   public Int3 LevelSize
   {
     get { return _levelSize; }
@@ -41,6 +41,24 @@ public class LevelLoader : MonoSingleton<LevelLoader>
     InputController.Instance.SetupCamera(_levelMap.PlayerPos);
 
     //Camera.main.farClipPlane = _levelSize.X * GlobalConstants.WallScaleFactor;
+  }
+
+  /// <summary>
+  /// Gets the block by array coordinates.
+  /// </summary>
+  /// <returns>The block by coordinates or null if coordinates are out of bounds</returns>
+  public BlockEntity GetBlockByCoordinates(Int3 coords)
+  {
+    BlockEntity block = null;
+
+    if (coords.X >= 0 && coords.X < _levelSize.X
+     && coords.Y >= 0 && coords.Y < _levelSize.Y
+     && coords.Z >= 0 && coords.Z < _levelSize.Z)
+    {
+      block = _levelMap.Level[coords.X, coords.Y, coords.Z];
+    }
+
+    return block;
   }
 
   // TODO: rewrite

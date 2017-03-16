@@ -80,7 +80,7 @@ public static class GlobalConstants
     { PlayerCharacter.CharacterClass.MAGE, "The Order is concerned about suspicious activity near the City.\nThe Council sent me to investigate the matter as a part of my training. Since it is already coming to an end, I am pretty sure this task can be considered as the final test before I can be ordained.\nI can already sense some disturbance at this village. God knows what evil lurks here..." }
   };
 
-  public const string PlayerGreeting = "Welcome to Dungeon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development.\nUse SPACE to talk with villagers and MOUSE to interact with objects.\nF9 to take a screenshot.\n\nxterminal86";
+  public const string PlayerGreeting = "Welcome to Dungeon: There and Back Again!\n\nThis game is one-man work in progress, so expect a lot of bugs and not very active development.\n\nxterminal86";
   public const string LoremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
   public const string ClothArmorDescription = "- Sonny, when the hell are you wearin', are you from the future or sum'n'?\n- Keep your fucking distance, pal, will ya?!";
   public const string BreadDescription = "- This is delicious!\n- Guess you won't be needin' those tapes I made for ya. You want me to get rid of 'em?\n- Don't be hasty! Not until I see those \"street fighters\" pummeled to dust which should be any moment now... YESH!!! YESH!!!";
@@ -105,7 +105,7 @@ public static class GlobalConstants
   public const string SFXPunch = "atk-punch";
   public const string SFXSwing = "atk-swing";
   public const string SFXPlayerDeath = "player-death";
-  public const string SFXPlayerCannotMove = "player-cannot-move2";
+  public const string SFXPlayerCannotMove = "player-cannot-move";
   public const string SFXItemTake = "player-item-take";
   public const string SFXItemPut = "player-item-put";
   public const string SFXPlayerEat = "player-eat";
@@ -113,6 +113,12 @@ public static class GlobalConstants
   public const string SFXMaleVillagerHuh = "act-huh-m";
   public const string SFXTakeScreenshot = "act-photo";
   public const string SFXTeleportation = "snd-teleportation";
+  public const string SFXPlayerFall = "player-thump";
+  public const string SFXPlayerFallLong = "player-fall";
+  public const string SFXPlayerPullStartMale = "player-pull-start-m";
+  public const string SFXPlayerPullEndMale = "player-pull-end-m";
+  public const string SFXPlayerPullStartFemale = "player-pull-start-f";
+  public const string SFXPlayerPullEndFemale = "player-pull-end-f";
 
   public static Dictionary<MapAttributes, string> MapAttributesDictionary = new Dictionary<MapAttributes, string>()
   {

@@ -134,7 +134,10 @@ public class App : MonoBehaviour
   {    
     var cc = GameData.Instance.PlayerCharacterVariable.GetCharacterClass;
 
-    var io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Personal Notes", GlobalConstants.PersonalNotesByClass[cc]);
+    var io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Scroll of Greeting", GlobalConstants.PlayerGreeting);
+    GUIManager.Instance.InventoryForm.AddItemToInventory(io);
+
+    io = SpawnItem(GlobalConstants.WorldItemType.PLACEHOLDER, "Scroll", false, "Personal Notes", GlobalConstants.PersonalNotesByClass[cc]);
     GUIManager.Instance.InventoryForm.AddItemToInventory(io);
 
     io = SpawnItem(GlobalConstants.WorldItemType.FOOD, "Bread", false, "Loaf of Bread", GlobalConstants.BreadDescription);

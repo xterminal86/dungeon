@@ -10,6 +10,7 @@ public class SceneLoader : MonoBehaviour
   public bool SkipTitleScreen = false;
 
   public PlayerCharacter.CharacterClass CharacterClass;
+  public bool IsFemale = false;
 
   void Start() 
 	{ 
@@ -28,6 +29,8 @@ public class SceneLoader : MonoBehaviour
 
     if (SkipTitleScreen)
     {
+      GameData.Instance.PlayerCharacterVariable.IsFemale = IsFemale;
+        
       switch (CharacterClass)
       {
         case PlayerCharacter.CharacterClass.SOLDIER:

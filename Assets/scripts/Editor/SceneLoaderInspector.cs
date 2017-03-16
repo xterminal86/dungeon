@@ -19,6 +19,7 @@ public class SceneLoaderInspector : Editor
     if (sceneLoader.SkipTitleScreen)
     {
       sceneLoader.CharacterClass = (PlayerCharacter.CharacterClass)EditorGUILayout.EnumPopup("Character Class to Start With", sceneLoader.CharacterClass);
+      sceneLoader.IsFemale = EditorGUILayout.Toggle("Female", sceneLoader.IsFemale);
     }    
   }
 }

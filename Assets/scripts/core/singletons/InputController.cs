@@ -102,33 +102,37 @@ public class InputController : MonoSingleton<InputController>
 
     int cameraOrientation = (int)_cameraOrientation;
 
-    if (Input.GetKey(KeyCode.E)) 
+    if (Input.GetKey(KeyCode.E))
     {      
       TurnCamera(cameraOrientation, cameraOrientation + 1, true);
     }
-    else if (Input.GetKey(KeyCode.Q)) 
+    else if (Input.GetKey(KeyCode.Q))
     {
       TurnCamera(cameraOrientation, cameraOrientation - 1, false);
     }
-    else if (Input.GetKey(KeyCode.W)) 
+    else if (Input.GetKey(KeyCode.W))
     {
       _cameraMoveArgument.MoveType = CameraMoveType.FORWARD;
       _doMove = true;
     }
-    else if (Input.GetKey(KeyCode.S)) 
+    else if (Input.GetKey(KeyCode.S))
     {
       _cameraMoveArgument.MoveType = CameraMoveType.BACKWARD;
       _doMove = true;
     }
-    else if (Input.GetKey(KeyCode.A)) 
+    else if (Input.GetKey(KeyCode.A))
     {
       _cameraMoveArgument.MoveType = CameraMoveType.STRAFE_LEFT;
       _doMove = true;
     }
-    else if (Input.GetKey(KeyCode.D)) 
+    else if (Input.GetKey(KeyCode.D))
     {
       _cameraMoveArgument.MoveType = CameraMoveType.STRAFE_RIGHT;
       _doMove = true;
+    }
+    else if (Input.GetKeyDown(KeyCode.F))
+    {
+      CheckAndProcessPullUp();
     }
     else if (Input.GetKeyDown(KeyCode.Space))
     {      
@@ -180,6 +184,196 @@ public class InputController : MonoSingleton<InputController>
         StartCoroutine(CameraCannotMoveRoutine(_cameraMoveArgument));
       }
     }
+  }
+
+  Int3 _playerPosCached = new Int3();
+  void CheckAndProcessPullUp()
+  {
+    // Try to get block before player
+
+    _playerPosCached.X = PlayerMapPos.X;
+    _playerPosCached.Y = PlayerMapPos.Y;
+    _playerPosCached.Z = PlayerMapPos.Z;
+
+    switch (CameraOrientation)
+    {
+      case GlobalConstants.Orientation.NORTH:
+        _playerPosCached.X--;
+        break;
+
+      case GlobalConstants.Orientation.SOUTH:
+        _playerPosCached.X++;
+        break;
+
+      case GlobalConstants.Orientation.EAST:
+        _playerPosCached.Z++;
+        break;
+
+      case GlobalConstants.Orientation.WEST:
+        _playerPosCached.Z--;
+        break;
+    }
+
+    Int3 newPos = new Int3(_playerPosCached);
+
+    newPos.Y++;
+      
+    BlockEntity blockBefore = LevelLoader.Instance.GetBlockByCoordinates(_playerPosCached);
+
+    _playerPosCached.Y++;
+
+    BlockEntity blockAboveBefore = LevelLoader.Instance.GetBlockByCoordinates(_playerPosCached);
+
+    if (blockBefore == null)
+    {      
+      Debug.LogWarning("Map bounds reached!");
+      return;
+    }
+
+    // Block above player
+
+    _playerPosCached.Set(PlayerMapPos);
+
+    _playerPosCached.Y++;
+
+    BlockEntity blockAbove = LevelLoader.Instance.GetBlockByCoordinates(_playerPosCached);
+
+    if (blockAbove == null || blockAboveBefore == null)
+    {      
+      Debug.LogWarning("Map roof reached!");
+      return;
+    }
+
+    GlobalConstants.Orientation oppositeOrientation = GetOppositeOrientation(CameraOrientation);
+
+    if (blockBefore.BlockType != GlobalConstants.BlockType.AIR 
+     && blockAbove.BlockType == GlobalConstants.BlockType.AIR
+     && blockAboveBefore.BlockType == GlobalConstants.BlockType.AIR
+     && blockAbove.SidesWalkability[CameraOrientation] && blockAboveBefore.SidesWalkability[oppositeOrientation])
+    {
+      StartCoroutine(PullUpRoutine(newPos));
+    }
+  }
+
+  IEnumerator PullUpRoutine(Int3 newPlayerPos)
+  {
+    _isProcessing = true;
+
+    if (GameData.Instance.PlayerCharacterVariable.IsFemale)
+    {
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerPullStartFemale);
+    }
+    else
+    {
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerPullStartMale);
+    }
+
+    float oldY = PlayerMapPos.Y;
+    float newY = PlayerMapPos.Y + 1;
+
+    // Pull camera down
+
+    while (oldY < newY)
+    {
+      oldY += Time.smoothDeltaTime * 2.0f;
+
+      _cameraAngles.x += 2;
+      _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+
+      _cameraPos.y = oldY * GlobalConstants.WallScaleFactor;
+      _cameraPos.y = Mathf.Clamp(_cameraPos.y, oldY * GlobalConstants.WallScaleFactor, newY * GlobalConstants.WallScaleFactor);
+
+      yield return null;
+    }
+
+    if (GameData.Instance.PlayerCharacterVariable.IsFemale)
+    {
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerPullEndFemale);
+    }
+    else
+    {
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerPullEndMale);
+    }
+
+    float oldX = PlayerMapPos.X;
+    float oldZ = PlayerMapPos.Z;
+    float newX = newPlayerPos.X;
+    float newZ = newPlayerPos.Z;
+          
+    // Pull camera back and move to new position depending on player's facing
+
+    if (newPlayerPos.X != PlayerMapPos.X)
+    { 
+      if (oldX < newX)
+      {
+        while (oldX < newX)
+        {
+          oldX += Time.smoothDeltaTime * 2.0f;
+
+          _cameraPos.x = oldX * GlobalConstants.WallScaleFactor;
+          _cameraPos.x = Mathf.Clamp(_cameraPos.x, oldX * GlobalConstants.WallScaleFactor, newX * GlobalConstants.WallScaleFactor);
+
+          _cameraAngles.x -= 2;
+          _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+
+          yield return null;
+        }
+      }
+      else
+      {
+        while (oldX > newX)
+        {
+          oldX -= Time.smoothDeltaTime * 2.0f;
+
+          _cameraPos.x = oldX * GlobalConstants.WallScaleFactor;
+          _cameraPos.x = Mathf.Clamp(_cameraPos.x, newX * GlobalConstants.WallScaleFactor, oldX * GlobalConstants.WallScaleFactor);
+
+          _cameraAngles.x -= 2;
+          _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+
+          yield return null;
+        }
+      }
+    }
+    else if (newPlayerPos.Z != PlayerMapPos.Z)
+    {      
+      if (oldZ < newZ)
+      {
+        while (oldZ < newZ)
+        {
+          oldZ += Time.smoothDeltaTime * 2.0f;
+
+          _cameraPos.z = oldZ * GlobalConstants.WallScaleFactor;
+          _cameraPos.z = Mathf.Clamp(_cameraPos.z, oldZ * GlobalConstants.WallScaleFactor, newZ * GlobalConstants.WallScaleFactor);
+
+          _cameraAngles.x -= 2;
+          _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+
+          yield return null;
+        }
+      }
+      else
+      {
+        while (oldZ > newZ)
+        {
+          oldZ -= Time.smoothDeltaTime * 2.0f;
+
+          _cameraPos.z = oldZ * GlobalConstants.WallScaleFactor;
+          _cameraPos.z = Mathf.Clamp(_cameraPos.z, newZ * GlobalConstants.WallScaleFactor, oldZ * GlobalConstants.WallScaleFactor);
+
+          _cameraAngles.x -= 2;
+          _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+
+          yield return null;
+        }
+      }
+    }
+
+    PlayerMapPos.Set(newPlayerPos);
+
+    _isProcessing = false;
+
+    yield return null;
   }
 
   RaycastHit _raycastHit;      
@@ -353,57 +547,6 @@ public class InputController : MonoSingleton<InputController>
     {
       return false;
     }
-
-    // TODO: don't use raycast for determining walkability?
-    //
-    // If we use just a check, there will be a visual inconsistency during opening of doors.
-    // If we set sides walkability flag immediately, then it will be possible to go through
-    // even though visually door is still haven't opened yet. If we wait for opening animation
-    // to end, then sometimes (during sliding up/down door, for example) there will be situations
-    // when door almost opened, but we still can't go through, though visually it is possible.
-
-    /*
-    bool obstacleAhead = false;
-        
-    // Construct a ray from center of the tile with direction that depends on movement type
-    Ray ray = new Ray(CanMoveRayOrigin.position, new Vector3(xComponent, 0.0f, zComponent));
-
-    Vector3 tmp = ray.direction;
-
-    if (moveType == CameraMoveType.BACKWARD)
-    {
-      if (xComponent != 0) tmp.x = -ray.direction.x;
-      if (zComponent != 0) tmp.z = -ray.direction.z;
-      ray.direction = tmp;
-    }
-    else if (moveType == CameraMoveType.STRAFE_LEFT)
-    {
-      tmp = Vector3.zero;
-      if (xComponent != 0) tmp.z = ray.direction.x;
-      if (zComponent != 0) tmp.x = -ray.direction.z;
-      ray.direction = tmp;
-    }
-    else if (moveType == CameraMoveType.STRAFE_RIGHT)
-    {
-      tmp = Vector3.zero;
-      if (xComponent != 0) tmp.z = -ray.direction.x;
-      if (zComponent != 0) tmp.x = ray.direction.z;
-      ray.direction = tmp;
-    }
-        
-    //Debug.DrawRay(ray.origin, ray.direction * GlobalConstants.WallScaleFactor, Color.yellow, 10.0f);
-
-    RaycastHit hit;      
-    if (Physics.Raycast(ray, out hit, GlobalConstants.WallScaleFactor))
-    {
-      if (hit.collider != null)
-      {
-        obstacleAhead = (hit.collider.gameObject.GetComponent<ModelMover>() == null);
-      }
-    }
-
-    return !obstacleAhead;    
-    */
 
     // Check walkability of the appropriate side based on the movement type 
     var res = CheckWalkability(newX, newZ, moveType);
@@ -695,7 +838,73 @@ public class InputController : MonoSingleton<InputController>
       }
     }
 
-    _isProcessing = false;
+    CheckAndProcessFalling();
+  }
+
+  int _numberOfCoroutineCalls = 0;
+  void CheckAndProcessFalling()
+  {
+    BlockEntity blockUnderneath = LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z];
+
+    if (blockUnderneath.BlockType != GlobalConstants.BlockType.AIR)
+    {
+      _isProcessing = false;
+
+      return;
+    }
+
+    _fallingAcceleration = 0.0f;
+    _numberOfCoroutineCalls = 0;
+
+    StartCoroutine(PlayerFallRoutine());
+  }
+
+  float _fallingAccelerationMax = 10.0f;
+  float _fallingAccelerationMultiplier = 10.0f;
+  float _fallingAcceleration = 0.0f;
+  IEnumerator PlayerFallRoutine()
+  {  
+    _numberOfCoroutineCalls++;
+
+    float oldY = PlayerMapPos.Y;
+    float newY = PlayerMapPos.Y - 1;
+
+    while (oldY > newY)
+    {
+      oldY -= Time.smoothDeltaTime * _fallingAcceleration;
+
+      _fallingAcceleration += Time.smoothDeltaTime * _fallingAccelerationMultiplier;
+      _fallingAcceleration = Mathf.Clamp(_fallingAcceleration, 0.0f, _fallingAccelerationMax);
+
+      _cameraPos.y = oldY * GlobalConstants.WallScaleFactor;
+      _cameraPos.y = Mathf.Clamp(_cameraPos.y, newY * GlobalConstants.WallScaleFactor, oldY * GlobalConstants.WallScaleFactor);
+
+      yield return null;
+    }
+
+    PlayerMapPos.Y--;
+
+    BlockEntity blockUnderneath = LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z];
+
+    if (blockUnderneath.BlockType == GlobalConstants.BlockType.AIR)
+    {
+      yield return StartCoroutine(PlayerFallRoutine());
+    }
+    else
+    {
+      _isProcessing = false;
+
+      if (_numberOfCoroutineCalls > 1)
+      {
+        SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerFallLong);
+      }
+      else
+      {
+        SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerFall);
+      }
+    }
+      
+    yield return null;
   }
 
   IEnumerator CameraCannotMoveRoutine(object arg)
@@ -793,7 +1002,7 @@ public class InputController : MonoSingleton<InputController>
   }
 
   Vector3 _cameraForwardVector = Vector3.zero;
-  public Vector3 GetCameraForwardVector()
+  Vector3 GetCameraForwardVector()
   {
     int newX = (int)_cameraPos.x;
     int newZ = (int)_cameraPos.z;
