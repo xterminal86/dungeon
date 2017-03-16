@@ -14,10 +14,8 @@ public abstract class WorldObject
 
   // Called when user interacts with object on a scene
   public CallbackO ActionCallback;
+
   // Use this to call something after ActionCallback method is done
-  //
-  // E.g. after lever is flipped, at the end of its interaction coroutine ActionCompleteCallback is called,
-  // and it's subscribed on door's ActionHandler (see LevelBase::PlaceWorldObject())
   public CallbackO ActionCompleteCallback;
 
   // Position in a map grid array

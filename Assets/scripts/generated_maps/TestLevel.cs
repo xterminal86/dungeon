@@ -72,10 +72,11 @@ public class TestLevel : LevelBase
 
     WorldObject o1 = PlaceDoor(new Int3(2, 1, 5), GlobalConstants.WorldObjectPrefabType.DOOR_PORTCULLIS, GlobalConstants.Orientation.EAST, false, true, 0.5f, 2.0f);
     WorldObject o2 = PlaceDoor(new Int3(3, 1, 5), GlobalConstants.WorldObjectPrefabType.DOOR_IRON_SWING, GlobalConstants.Orientation.EAST, false, false, 3.0f, 4.0f);
-    WorldObject o3 = PlaceDoor(new Int3(4, 1, 5), GlobalConstants.WorldObjectPrefabType.DOOR_WOODEN_SWING, GlobalConstants.Orientation.EAST, false, false, 3.0f, 4.0f);
+    WorldObject o3 = PlaceDoor(new Int3(4, 1, 5), GlobalConstants.WorldObjectPrefabType.DOOR_WOODEN_SWING, GlobalConstants.Orientation.EAST, true, false, 3.0f, 4.0f);
 
-    PlaceControl(new Int3(1, 1, 5), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.EAST, o2, o3);
-    PlaceControl(new Int3(5, 1, 5), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.EAST, o2, o3);
+    PlaceControl(new Int3(1, 1, 5), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.EAST, o1, o2, o3);
+    PlaceControl(new Int3(5, 1, 5), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.EAST, o1, o2, o3);
+    PlaceControl(new Int3(5, 1, 6), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.WEST, o1, o2, o3);
 
     // Teleporter
 

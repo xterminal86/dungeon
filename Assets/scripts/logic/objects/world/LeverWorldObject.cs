@@ -14,6 +14,9 @@ public class LeverWorldObject : WorldObject
 
   public WorldObject[] ControlledObjects;
 
+  // Callbacks for objects controlled by this one
+  public CallbackO[] ControlCallbacks;
+
   bool _isOn = false;
 
   public LeverWorldObject(string inGameName, string prefabName) : base(inGameName, prefabName)
@@ -69,38 +72,55 @@ public class LeverWorldObject : WorldObject
     _animation = BWO.GetComponentInChildren<Animation>();
   }
 
-  void ProcessControlledObjectCallback()
+  public void AssignControlledObjects(WorldObject[] objectsToControl)
   {
-    // FIXME: probably dirtyish hack (hard-coded door type of controller object)
-    //
-    // Door should react to control only when their "on" states are different:
-    // e.g. lever is up - door closed. We pull the lever down, it becomes "on", 
-    // while door is still "off", so we execute callback and door also becomes "on".
-    // Thus if we open a door from one side and then flip lever on the other side,
-    // it won't do anything.
+    if (objectsToControl == null)
+    {
+      return;
+    }
 
-    // ControlledObject is assigned in PlaceWorldObject, but theoretically you can
-    // assign ActionCompleteCallback to invoke something else:
-    // e.g. (wo as DoorWorldObject).ActionCompleteCallback += Something;
+    ControlledObjects = objectsToControl;
+    ControlCallbacks = new CallbackO[objectsToControl.Length];
+
+    for (int i = 0; i < objectsToControl.Length; i++)
+    {
+      ControlCallbacks[i] += ControlledObjects[i].ActionHandler;
+    }
+  }
+
+  void ProcessControlledObjectCallback()
+  {    
     if (ControlledObjects != null)
     {
-      foreach (var obj in ControlledObjects)
-      {        
+      for (int i = 0; i < ControlledObjects.Length; i++)
+      {
+        var obj = ControlledObjects[i];
+        var cb = ControlCallbacks[i];
+
+        // FIXME: probably dirtyish hack (hard-coded door type of controller object)
+        //
+        // Door should react to control only when their "on" states are different:
+        // e.g. lever is up - door closed. We pull the lever down, it becomes "on", 
+        // while door is still "off", so we execute callback and door also becomes "on".
+        // Thus if we open a door from one side and then flip lever on the other side,
+        // it won't do anything.
+
         if (obj is DoorWorldObject)
-        { 
+        {
           // Sliding door can be "toggled" when door is playing its animation, but when it's done
           // lever toggles corresponding animation only according to its state
           if ((obj as DoorWorldObject).IsSliding)
           {            
             if ((obj as DoorWorldObject).IsAnimationPlaying)
             {              
-              if (ActionCompleteCallback != null)
-                ActionCompleteCallback(this);
+              if (cb != null)
+                cb(this);
             }
-            else if (!(obj as DoorWorldObject).IsAnimationPlaying && (obj as DoorWorldObject).IsOpen != _isOn)
+            else if (!(obj as DoorWorldObject).IsAnimationPlaying
+                   && (obj as DoorWorldObject).IsOpen != _isOn)
             {
-              if (ActionCompleteCallback != null)
-                ActionCompleteCallback(this);
+              if (cb != null)
+                cb(this);
             }
           }
           else
@@ -108,17 +128,15 @@ public class LeverWorldObject : WorldObject
             // If door is a simple swing type, just toggle it according to lever's current state
             if ((obj as DoorWorldObject).IsOpen != _isOn)
             {               
-              if (ActionCompleteCallback != null)
-                ActionCompleteCallback(this);
+              if (cb != null)
+                cb(this);
             }
           }
         }
       }
     }
-    else
-    {
-      if (ActionCompleteCallback != null)
-        ActionCompleteCallback(this);
-    }
+
+    if (ActionCompleteCallback != null)
+      ActionCompleteCallback(this);
   }
 }

@@ -362,12 +362,7 @@ public class LevelBase
           wo = new LeverWorldObject("", prefabStringName);
           (wo as LeverWorldObject).ActionCallback += (wo as LeverWorldObject).ActionHandler;
 
-          (wo as LeverWorldObject).ControlledObjects = objectsToControl;
-
-          foreach (var obj in objectsToControl)
-          {
-            (wo as LeverWorldObject).ActionCompleteCallback += obj.ActionHandler;
-          }
+          (wo as LeverWorldObject).AssignControlledObjects(objectsToControl);
 
           SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.LEVER, orientation);
 

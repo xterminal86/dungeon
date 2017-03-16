@@ -14,8 +14,7 @@ public class ButtonWorldObject : WorldObject
   public WorldObject[] ControlledObjects;
 
   public ButtonWorldObject(string inGameName, string prefabName) : base(inGameName, prefabName)
-  {    
-    
+  {        
   }
 
   public override void ActionHandler(object sender)

@@ -40,7 +40,7 @@ public class LevelLoader : MonoSingleton<LevelLoader>
 
     InputController.Instance.SetupCamera(_levelMap.PlayerPos);
 
-    Camera.main.farClipPlane = _levelSize.X * GlobalConstants.WallScaleFactor;
+    //Camera.main.farClipPlane = _levelSize.X * GlobalConstants.WallScaleFactor;
   }
 
   // TODO: rewrite
