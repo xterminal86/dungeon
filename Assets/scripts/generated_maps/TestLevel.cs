@@ -62,9 +62,6 @@ public class TestLevel : LevelBase
     PlaceControl(new Int3(10, 1, 1), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.EAST, wo);
     PlaceControl(new Int3(10, 1, 2), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.WEST, wo);
 
-    // FIXME: lever does not open multiple doors: 
-    // 1 door - works; 2 - no, bugged sound; portcullis and doors - works, bugged sound
-    //
     // Control multiple objects
 
     PlaceWall(new Int3(1, 1,   5), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
@@ -86,7 +83,16 @@ public class TestLevel : LevelBase
     PlaceWall(new Int3(11, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
     PlaceWall(new Int3(11, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
     PlaceWall(new Int3(11, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
-    PlaceTeleporter(new Int3(11, 1, 1), new Int3(0, 1, 1));
+
+    PlaceWall(new Int3(10, 1, 0), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
+    PlaceWall(new Int3(10, 2, 0), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
+    PlaceSign(new Int3(10, 1, 0), GlobalConstants.WorldObjectPrefabType.SIGN_PLAQUE_METAL, GlobalConstants.Orientation.SOUTH, "\n\n\nGoing up!");
+     PlaceTeleporter(new Int3(11, 1, 1), new Int3(12, 6, 12));
+    PlaceTeleporter(new Int3(13, 6, 12), new Int3(0, 1, 0));
+
+    // Upper level
+
+    MakeHillLayered(GlobalConstants.BlockType.GRASS, new Int3(12, 1, 12), 5);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }

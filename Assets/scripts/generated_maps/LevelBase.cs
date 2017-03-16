@@ -280,6 +280,8 @@ public class LevelBase
 
   // ********************************* World object placement methods ********************************* //
 
+  // FIXME: finish
+
   /// <summary>
   /// Places placeholder type WorldObject.
   /// </summary>
