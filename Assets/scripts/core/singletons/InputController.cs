@@ -96,7 +96,7 @@ public class InputController : MonoSingleton<InputController>
 
     GUIManager.Instance.CompassImage.transform.eulerAngles = _compassSpriteAngles;
 
-    DebugText.text = string.Format("[{0};{1};{2}] - {3}", PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z, CameraOrientation);
+    DebugText.text = string.Format("[{0};{1};{2}] - {3}\n{4:F2}", PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z, CameraOrientation, _cameraAngles);
 	}
 
   bool _doMove = false;
@@ -259,6 +259,8 @@ public class InputController : MonoSingleton<InputController>
     }
   }
 
+  float _climbSpeed = 2.0f;
+  float _cameraClimbPullFactor = 150.0f;
   IEnumerator ClimbingRoutine(Int3 newPlayerPos)
   {
     _isProcessing = true;
@@ -279,10 +281,10 @@ public class InputController : MonoSingleton<InputController>
 
     while (oldY < newY)
     {
-      oldY += Time.smoothDeltaTime * 2.0f;
+      oldY += Time.smoothDeltaTime * _climbSpeed;
 
-      _cameraAngles.x += 2;
-      _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+      _cameraAngles.x += Time.smoothDeltaTime * _cameraClimbPullFactor;
+      _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
 
       _cameraPos.y = oldY * GlobalConstants.WallScaleFactor;
       _cameraPos.y = Mathf.Clamp(_cameraPos.y, oldY * GlobalConstants.WallScaleFactor, newY * GlobalConstants.WallScaleFactor);
@@ -312,13 +314,13 @@ public class InputController : MonoSingleton<InputController>
       {
         while (oldX < newX)
         {
-          oldX += Time.smoothDeltaTime * 2.0f;
+          oldX += Time.smoothDeltaTime * _climbSpeed;
 
           _cameraPos.x = oldX * GlobalConstants.WallScaleFactor;
           _cameraPos.x = Mathf.Clamp(_cameraPos.x, oldX * GlobalConstants.WallScaleFactor, newX * GlobalConstants.WallScaleFactor);
 
-          _cameraAngles.x -= 2;
-          _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+          _cameraAngles.x -= Time.smoothDeltaTime * _cameraClimbPullFactor;
+          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
 
           yield return null;
         }
@@ -327,13 +329,13 @@ public class InputController : MonoSingleton<InputController>
       {
         while (oldX > newX)
         {
-          oldX -= Time.smoothDeltaTime * 2.0f;
+          oldX -= Time.smoothDeltaTime * _climbSpeed;
 
           _cameraPos.x = oldX * GlobalConstants.WallScaleFactor;
           _cameraPos.x = Mathf.Clamp(_cameraPos.x, newX * GlobalConstants.WallScaleFactor, oldX * GlobalConstants.WallScaleFactor);
 
-          _cameraAngles.x -= 2;
-          _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+          _cameraAngles.x -= Time.smoothDeltaTime * _cameraClimbPullFactor;
+          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
 
           yield return null;
         }
@@ -345,13 +347,13 @@ public class InputController : MonoSingleton<InputController>
       {
         while (oldZ < newZ)
         {
-          oldZ += Time.smoothDeltaTime * 2.0f;
+          oldZ += Time.smoothDeltaTime * _climbSpeed;
 
           _cameraPos.z = oldZ * GlobalConstants.WallScaleFactor;
           _cameraPos.z = Mathf.Clamp(_cameraPos.z, oldZ * GlobalConstants.WallScaleFactor, newZ * GlobalConstants.WallScaleFactor);
 
-          _cameraAngles.x -= 2;
-          _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+          _cameraAngles.x -= Time.smoothDeltaTime * _cameraClimbPullFactor;
+          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
 
           yield return null;
         }
@@ -360,13 +362,13 @@ public class InputController : MonoSingleton<InputController>
       {
         while (oldZ > newZ)
         {
-          oldZ -= Time.smoothDeltaTime * 2.0f;
+          oldZ -= Time.smoothDeltaTime * _climbSpeed;
 
           _cameraPos.z = oldZ * GlobalConstants.WallScaleFactor;
           _cameraPos.z = Mathf.Clamp(_cameraPos.z, newZ * GlobalConstants.WallScaleFactor, oldZ * GlobalConstants.WallScaleFactor);
 
-          _cameraAngles.x -= 2;
-          _cameraAngles.x = Mathf.Clamp(_cameraAngles.x, 0.0f, 90.0f);
+          _cameraAngles.x -= Time.smoothDeltaTime * _cameraClimbPullFactor;
+          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
 
           yield return null;
         }
