@@ -16,6 +16,8 @@ public class TestLevel : LevelBase
 
     _playerPos.Set(0, 1, 0);
 
+    MakePerimeter();
+
     WorldObject wo = null;
 
     // Sign
@@ -36,7 +38,10 @@ public class TestLevel : LevelBase
     PlaceControl(new Int3(4, 1, 1), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.EAST, wo);
     PlaceControl(new Int3(4, 1, 2), GlobalConstants.WorldObjectClass.LEVER, GlobalConstants.WorldObjectPrefabType.LEVER, GlobalConstants.Orientation.WEST, wo);
 
-    // Tiles
+    // Secret door
+
+    _level[5, 3, 1].BlockType = GlobalConstants.BlockType.STONE_BRICKS;
+
     wo = PlaceDoor(new Int3(5, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_STONE_BRICKS_SLIDING, GlobalConstants.Orientation.EAST, false, true, 0.5f, 0.5f);
 
     PlaceWall(new Int3(6, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
@@ -95,11 +100,7 @@ public class TestLevel : LevelBase
 
     PlaceTeleporter(new Int3(5, 21, 20), new Int3(0, 1, 1));
 
-    // Hill Layered
-
-    MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(25, 1, 25), 7);
-
-    // Pull up test
+    // Climbing test
 
     _level[8, 1, 10].BlockType = GlobalConstants.BlockType.DIRT;
     _level[9, 2, 10].BlockType = GlobalConstants.BlockType.DIRT;
@@ -110,10 +111,48 @@ public class TestLevel : LevelBase
     _level[11, 2, 11].BlockType = GlobalConstants.BlockType.DIRT;
     _level[11, 1, 11].BlockType = GlobalConstants.BlockType.DIRT;
 
-    PlaceWall(new Int3(7, 1, 10), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
-    PlaceSign(new Int3(7, 1, 10), GlobalConstants.WorldObjectPrefabType.SIGN_PLAQUE_METAL, GlobalConstants.Orientation.EAST, "\nPress F\nto pull yourself up\nwhen standing\nin front of a block");
+    _level[7, 1, 10].SidesWalkability[GlobalConstants.Orientation.EAST] = false;
+
+    PlaceSign(new Int3(7, 1, 10), GlobalConstants.WorldObjectPrefabType.SIGN_POST_WOODEN, GlobalConstants.Orientation.EAST, "Press F\nto climb on the block\nin front of you");
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
+  }
+
+  Int3 _pos = new Int3();
+  void MakePerimeter()
+  {
+    for (int y = 1; y < 3; y++)
+    {
+      for (int z = 0; z < _mapZ; z++)
+      {
+        _pos.X = 0;
+        _pos.Y = y;
+        _pos.Z = z;
+
+        PlaceWall(_pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+
+        _pos.X = _mapX - 1;
+        _pos.Y = y;
+        _pos.Z = z;
+
+        PlaceWall(_pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
+      }
+
+      for (int x = 0; x < _mapX; x++)
+      {
+        _pos.X = x;
+        _pos.Y = y;
+        _pos.Z = 0;
+
+        PlaceWall(_pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
+
+        _pos.X = x;
+        _pos.Y = y;
+        _pos.Z = _mapZ - 1;
+
+        PlaceWall(_pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+      }
+    }
   }
 
   void CreateSuperflatTerrain()

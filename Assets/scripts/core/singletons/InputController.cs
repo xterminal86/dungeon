@@ -15,6 +15,8 @@ public class InputController : MonoSingleton<InputController>
   // when player rotates, the camera also rotates automatically as a child.
   public Transform CanMoveRayOrigin;
 
+  public Text DebugText;
+
   public Int3 PlayerMapPos = new Int3();
 
   Vector3 _cameraPos = Vector3.zero;
@@ -93,6 +95,8 @@ public class InputController : MonoSingleton<InputController>
     CameraHolder.position = _cameraPos;
 
     GUIManager.Instance.CompassImage.transform.eulerAngles = _compassSpriteAngles;
+
+    DebugText.text = string.Format("[{0};{1};{2}] - {3}", PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z, CameraOrientation);
 	}
 
   bool _doMove = false;
@@ -132,7 +136,7 @@ public class InputController : MonoSingleton<InputController>
     }
     else if (Input.GetKeyDown(KeyCode.F))
     {
-      CheckAndProcessPullUp();
+      CheckAndProcessClimbing();
     }
     else if (Input.GetKeyDown(KeyCode.Space))
     {      
@@ -187,7 +191,7 @@ public class InputController : MonoSingleton<InputController>
   }
 
   Int3 _playerPosCached = new Int3();
-  void CheckAndProcessPullUp()
+  void CheckAndProcessClimbing()
   {
     // Try to get block before player
 
@@ -251,11 +255,11 @@ public class InputController : MonoSingleton<InputController>
      && blockAboveBefore.BlockType == GlobalConstants.BlockType.AIR
      && blockAbove.SidesWalkability[CameraOrientation] && blockAboveBefore.SidesWalkability[oppositeOrientation])
     {
-      StartCoroutine(PullUpRoutine(newPos));
+      StartCoroutine(ClimbingRoutine(newPos));
     }
   }
 
-  IEnumerator PullUpRoutine(Int3 newPlayerPos)
+  IEnumerator ClimbingRoutine(Int3 newPlayerPos)
   {
     _isProcessing = true;
 

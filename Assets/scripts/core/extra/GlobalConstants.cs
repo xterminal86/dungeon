@@ -321,7 +321,8 @@ public static class GlobalConstants
     WATER,
     STONE,
     DIRT,
-    OAK_PLANKS
+    OAK_PLANKS,
+    STONE_BRICKS
   }
 
   /// <summary>
@@ -333,6 +334,7 @@ public static class GlobalConstants
     { BlockType.GRASS, "block-grass" },
     { BlockType.WATER, "block-water" },
     { BlockType.STONE, "block-stone" },
+    { BlockType.STONE_BRICKS, "block-stone-bricks" },
     { BlockType.DIRT, "block-dirt" },
     { BlockType.OAK_PLANKS, "block-oak-planks" }
   };
@@ -362,6 +364,7 @@ public static class GlobalConstants
     LEVER,
     BUTTON,
     SIGN_PLAQUE_METAL,
+    SIGN_POST_WOODEN,
     TELEPORTER
   }
 
@@ -377,6 +380,7 @@ public static class GlobalConstants
     { WorldObjectPrefabType.LEVER, "lever" },
     { WorldObjectPrefabType.BUTTON, "button" },
     { WorldObjectPrefabType.SIGN_PLAQUE_METAL, "sign-plaque-metal" },
+    { WorldObjectPrefabType.SIGN_POST_WOODEN, "sign-post-wooden" },
     { WorldObjectPrefabType.TELEPORTER, "teleporter" }
   };
 
