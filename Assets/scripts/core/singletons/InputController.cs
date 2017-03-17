@@ -89,15 +89,24 @@ public class InputController : MonoSingleton<InputController>
       ProcessMouse();
     }
 
-    //_cameraPos.y += _cameraBob;
-
     CameraHolder.eulerAngles = _cameraAngles;
     CameraHolder.position = _cameraPos;
 
     GUIManager.Instance.CompassImage.transform.eulerAngles = _compassSpriteAngles;
 
-    DebugText.text = string.Format("[{0};{1};{2}] - {3}\n{4:F2}", PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z, CameraOrientation, _cameraAngles);
+    #if UNITY_EDITOR
+    PrintDebugInfo();
+    #endif
 	}
+
+  void PrintDebugInfo()
+  {
+    string debugString = string.Format("[{0};{1};{2}] - {3}\n", PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z, CameraOrientation);
+    debugString += string.Format("[{0:F5};{1:F5};{2:F5}]\n", CameraHolder.transform.position.x, CameraHolder.transform.position.y, CameraHolder.transform.position.z);
+    debugString += string.Format("[{0:F5};{1:F5};{2:F5}]", CameraHolder.eulerAngles.x, CameraHolder.eulerAngles.y, CameraHolder.eulerAngles.z);
+
+    DebugText.text = debugString;
+  }
 
   bool _doMove = false;
   void ProcessKeyboard ()
@@ -261,6 +270,7 @@ public class InputController : MonoSingleton<InputController>
 
   float _climbSpeed = 2.0f;
   float _cameraClimbPullFactor = 150.0f;
+  const int _cameraAngleXLimit = 60;
   IEnumerator ClimbingRoutine(Int3 newPlayerPos)
   {
     _isProcessing = true;
@@ -277,14 +287,17 @@ public class InputController : MonoSingleton<InputController>
     float oldY = PlayerMapPos.Y;
     float newY = PlayerMapPos.Y + 1;
 
-    // Pull camera down
+    // Pull camera down and move up
 
     while (oldY < newY)
     {
       oldY += Time.smoothDeltaTime * _climbSpeed;
 
+      // For some reason clamp here doesn't work on floats and we can get overshoot of _cameraAngles.x.
+      // Probably due to different Time.smoothDeltaTime multipliers.
+
       _cameraAngles.x += Time.smoothDeltaTime * _cameraClimbPullFactor;
-      _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
+      _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, _cameraAngleXLimit);
 
       _cameraPos.y = oldY * GlobalConstants.WallScaleFactor;
       _cameraPos.y = Mathf.Clamp(_cameraPos.y, oldY * GlobalConstants.WallScaleFactor, newY * GlobalConstants.WallScaleFactor);
@@ -320,7 +333,7 @@ public class InputController : MonoSingleton<InputController>
           _cameraPos.x = Mathf.Clamp(_cameraPos.x, oldX * GlobalConstants.WallScaleFactor, newX * GlobalConstants.WallScaleFactor);
 
           _cameraAngles.x -= Time.smoothDeltaTime * _cameraClimbPullFactor;
-          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
+          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, _cameraAngleXLimit);
 
           yield return null;
         }
@@ -335,7 +348,7 @@ public class InputController : MonoSingleton<InputController>
           _cameraPos.x = Mathf.Clamp(_cameraPos.x, newX * GlobalConstants.WallScaleFactor, oldX * GlobalConstants.WallScaleFactor);
 
           _cameraAngles.x -= Time.smoothDeltaTime * _cameraClimbPullFactor;
-          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
+          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, _cameraAngleXLimit);
 
           yield return null;
         }
@@ -353,7 +366,7 @@ public class InputController : MonoSingleton<InputController>
           _cameraPos.z = Mathf.Clamp(_cameraPos.z, oldZ * GlobalConstants.WallScaleFactor, newZ * GlobalConstants.WallScaleFactor);
 
           _cameraAngles.x -= Time.smoothDeltaTime * _cameraClimbPullFactor;
-          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
+          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, _cameraAngleXLimit);
 
           yield return null;
         }
@@ -368,7 +381,7 @@ public class InputController : MonoSingleton<InputController>
           _cameraPos.z = Mathf.Clamp(_cameraPos.z, newZ * GlobalConstants.WallScaleFactor, oldZ * GlobalConstants.WallScaleFactor);
 
           _cameraAngles.x -= Time.smoothDeltaTime * _cameraClimbPullFactor;
-          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, 90);
+          _cameraAngles.x = Mathf.Clamp((int)_cameraAngles.x, 0, _cameraAngleXLimit);
 
           yield return null;
         }

@@ -10,7 +10,7 @@ public static class Utils
   }	
 
   /// <summary>
-  /// Hide appropriate sides of a block to prevent side doubling and lighting artifacts.
+  /// Hide appropriate sides of a block to prevent side doubling and lighting artifacts (also to reduce draw calls).
   /// </summary>
   /// <param name="blockSidesList">Block to operate on</param>
   /// <param name="coordinates">Current block coordinates</param>
@@ -140,5 +140,162 @@ public static class Utils
         }
       }
     }
+  }
+
+  public static void HideWallSides(WallWorldObject wall, LevelBase level)
+  {     
+    // Increment of X is equivalent of going to the south, increment of Z - east.
+    // So, we have four cases: neighbouring Xs for east and west walls, and neighbouring Zs for south and north.
+
+    TryHideLeftRightSides(wall, level);
+    TryHideTopBottomSides(wall, level);
+  }
+
+  static void TryHideLeftRightSides(WallWorldObject wall, LevelBase level)
+  {
+    int x = wall.ArrayCoordinates.X;
+    int y = wall.ArrayCoordinates.Y;
+    int z = wall.ArrayCoordinates.Z;
+
+    int lx = wall.ArrayCoordinates.X - 1;
+    int lz = wall.ArrayCoordinates.Z - 1;
+    int hx = wall.ArrayCoordinates.X + 1;
+    int hz = wall.ArrayCoordinates.Z + 1;
+
+    GlobalConstants.Orientation wallOrientation = wall.ObjectOrientation;
+
+    WorldObject res = null;
+
+    if (lx >= 0)
+    {
+      res = DetectObject(level.Level[lx, y, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
+
+      if (res != null)
+      {
+        if (wallOrientation == GlobalConstants.Orientation.EAST)
+        {
+          wall.BWO.LeftQuad.gameObject.SetActive(false);
+        }
+        else if (wallOrientation == GlobalConstants.Orientation.WEST)
+        {
+          wall.BWO.RightQuad.gameObject.SetActive(false);
+        }
+      }
+    }
+
+    if (hx < level.MapX)
+    {
+      res = DetectObject(level.Level[hx, y, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
+
+      if (res != null)
+      {
+        if (wallOrientation == GlobalConstants.Orientation.EAST)
+        {
+          wall.BWO.RightQuad.gameObject.SetActive(false);
+        }
+        else if (wallOrientation == GlobalConstants.Orientation.WEST)
+        {
+          wall.BWO.LeftQuad.gameObject.SetActive(false);
+        }
+      }
+    }
+
+    if (lz >= 0)
+    {
+      res = DetectObject(level.Level[x, y, lz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
+
+      if (res != null)
+      {
+        if (wallOrientation == GlobalConstants.Orientation.SOUTH)
+        {
+          wall.BWO.RightQuad.gameObject.SetActive(false);
+        }
+        else if (wallOrientation == GlobalConstants.Orientation.NORTH)
+        {
+          wall.BWO.LeftQuad.gameObject.SetActive(false);
+        }
+      }
+    }
+
+    if (hz < level.MapZ)
+    {
+      res = DetectObject(level.Level[x, y, hz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
+
+      if (res != null)
+      {
+        if (wallOrientation == GlobalConstants.Orientation.SOUTH)
+        {
+          wall.BWO.LeftQuad.gameObject.SetActive(false);
+        }
+        else if (wallOrientation == GlobalConstants.Orientation.NORTH)
+        {
+          wall.BWO.RightQuad.gameObject.SetActive(false);
+        }
+      }
+    }
+  }
+
+  static void TryHideTopBottomSides(WallWorldObject wall, LevelBase level)
+  {
+    int x = wall.ArrayCoordinates.X;
+    int y = wall.ArrayCoordinates.Y;
+    int z = wall.ArrayCoordinates.Z;
+
+    int ly = wall.ArrayCoordinates.Y - 1;
+    int hy = wall.ArrayCoordinates.Y + 1;
+
+    GlobalConstants.Orientation wallOrientation = wall.ObjectOrientation;
+
+    WorldObject res1 = null;
+    WorldObject res2 = null;
+    WorldObject res3 = null;
+
+    if (ly >= 0)
+    {
+      res1 = DetectObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
+
+      if (res1 != null)
+      {
+        wall.BWO.BottomQuad.gameObject.SetActive(false);
+      }
+      else
+      {
+        res2 = DetectObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE);
+        res3 = DetectObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE);
+
+        if (res2 != null || res3 != null)
+        {
+          wall.BWO.BottomQuad.gameObject.SetActive(false);
+        }
+      }        
+    }
+
+    if (hy < level.MapY)
+    {
+      res1 = DetectObject(level.Level[x, hy, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
+
+      if (res1 != null)
+      {
+        wall.BWO.TopQuad.gameObject.SetActive(false);
+      }
+    }
+  }
+
+  static WorldObject DetectObject(List<WorldObject> worldObjects, GlobalConstants.Orientation orientation, GlobalConstants.WorldObjectClass objectClass)
+  {
+    if (worldObjects == null)
+    {
+      return null;
+    }
+    
+    foreach (var item in worldObjects)
+    {
+      if ( item.ObjectClass == objectClass && item.ObjectOrientation == orientation)
+      {
+        return item;
+      }
+    }
+
+    return null;
   }
 }

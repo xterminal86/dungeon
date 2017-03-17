@@ -12,4 +12,14 @@ public class BehaviourWorldObject : BehaviourWorldObjectBase
   public AudioSource OffStateBeginSound;
   [Header("Sound that is played when \"off\" state completes")]
   public AudioSource OffStateFinishedSound;
+
+  [Space(32)]
+  [Header("For walls")]
+
+  public Transform FrontQuad;
+  public Transform BackQuad;
+  public Transform LeftQuad;
+  public Transform RightQuad;
+  public Transform TopQuad;
+  public Transform BottomQuad;
 }

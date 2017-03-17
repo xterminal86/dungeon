@@ -494,6 +494,10 @@ public class App : MonoBehaviour
           case GlobalConstants.WorldObjectClass.SIGN:
             (item as SignWorldObject).InitBWO();
             break;          
+
+          case GlobalConstants.WorldObjectClass.WALL:
+            Utils.HideWallSides((item as WallWorldObject), LevelLoader.Instance.LevelMap); 
+            break;
         }
       }
     }

@@ -370,7 +370,7 @@ public static class GlobalConstants
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
   {
-    { WorldObjectPrefabType.WALL_STONE_BRICKS, "wall-stone-bricks" },
+    { WorldObjectPrefabType.WALL_STONE_BRICKS, "wall-stone-bricks-new" },
     { WorldObjectPrefabType.WALL_TILES, "wall-tiles" },
     { WorldObjectPrefabType.WALL_SUPPORT_STONE, "wall-support-stone" },
     { WorldObjectPrefabType.DOOR_WOODEN_SWING, "door-wooden-swing" },
