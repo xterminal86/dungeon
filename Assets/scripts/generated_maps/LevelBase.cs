@@ -483,7 +483,7 @@ public class LevelBase
   /// <param name="orientation">Orientation</param>
   void SetWorldObjectParams(WorldObject wo, Int3 arrayPos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.Orientation orientation)
   {
-    wo.ArrayCoordinates = arrayPos;
+    wo.ArrayCoordinates.Set(arrayPos);
     wo.ObjectClass = objectClass;
     wo.ObjectOrientation = orientation;
 

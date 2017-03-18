@@ -50,6 +50,12 @@ public class TestLevel : LevelBase
     PlaceWall(new Int3(15, 2, 38), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
     PlaceWall(new Int3(15, 2, 37), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
 
+    PlaceWall(new Int3(1, 1, 4), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+    PlaceWall(new Int3(1, 1, 3), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+
+    PlaceWall(new Int3(0, 1, 4), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+    PlaceWall(new Int3(0, 1, 3), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+
     // Sign
 
     PlaceWall(new Int3(0, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
@@ -146,39 +152,40 @@ public class TestLevel : LevelBase
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }
 
-  Int3 _pos = new Int3();
   void MakePerimeter()
   {
+    Int3 pos = new Int3();
+
     for (int y = 1; y < 3; y++)
     {
       for (int z = 0; z < _mapZ; z++)
-      {
-        _pos.X = 0;
-        _pos.Y = y;
-        _pos.Z = z;
+      {        
+        pos.X = 0;
+        pos.Y = y;
+        pos.Z = z;
 
-        PlaceWall(_pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+        PlaceWall(pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
 
-        _pos.X = _mapX - 1;
-        _pos.Y = y;
-        _pos.Z = z;
+        pos.X = _mapX - 1;
+        pos.Y = y;
+        pos.Z = z;
 
-        PlaceWall(_pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
+        PlaceWall(pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
       }
 
       for (int x = 0; x < _mapX; x++)
       {
-        _pos.X = x;
-        _pos.Y = y;
-        _pos.Z = 0;
+        pos.X = x;
+        pos.Y = y;
+        pos.Z = 0;
 
-        PlaceWall(_pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
+        PlaceWall(pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
 
-        _pos.X = x;
-        _pos.Y = y;
-        _pos.Z = _mapZ - 1;
+        pos.X = x;
+        pos.Y = y;
+        pos.Z = _mapZ - 1;
 
-        PlaceWall(_pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+        PlaceWall(pos, GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
       }
     }
   }

@@ -201,7 +201,7 @@ public static class Utils
     }
 
     if (lz >= 0)
-    {
+    {      
       res = DetectObject(level.Level[x, y, lz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
 
       if (res != null)
