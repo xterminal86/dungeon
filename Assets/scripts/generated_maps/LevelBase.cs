@@ -314,13 +314,21 @@ public class LevelBase
 
   // ********************************* World object placement methods ********************************* //
 
-  // FIXME: finish
-
   /// <summary>
-  /// Places placeholder type WorldObject.
+  /// Places placeholder type WorldObject (no wall sides blocking).
   /// </summary>
   protected WorldObject PlaceObject(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
   {
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
+
+    if (TryFindPrefab(prefabStringName))
+    {
+      WorldObject wo = new PlaceholderWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+      SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.PLACEHOLDER, orientation);
+
+      return wo;
+    }
+
     return null;
   }
 

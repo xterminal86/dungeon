@@ -497,7 +497,7 @@ public class App : MonoBehaviour
 
           case GlobalConstants.WorldObjectClass.WALL:
             Utils.HideWallSides((item as WallWorldObject), LevelLoader.Instance.LevelMap); 
-            break;
+            break;          
         }
       }
     }

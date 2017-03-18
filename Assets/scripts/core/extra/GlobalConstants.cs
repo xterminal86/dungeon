@@ -365,12 +365,13 @@ public static class GlobalConstants
     BUTTON,
     SIGN_PLAQUE_METAL,
     SIGN_POST_WOODEN,
-    TELEPORTER
+    TELEPORTER,
+    TORCH
   }
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
   {
-    { WorldObjectPrefabType.WALL_STONE_BRICKS, "wall-stone-bricks-new" },
+    { WorldObjectPrefabType.WALL_STONE_BRICKS, "wall-stone-bricks" },
     { WorldObjectPrefabType.WALL_TILES, "wall-tiles" },
     { WorldObjectPrefabType.WALL_SUPPORT_STONE, "wall-support-stone" },
     { WorldObjectPrefabType.DOOR_WOODEN_SWING, "door-wooden-swing" },
@@ -381,14 +382,16 @@ public static class GlobalConstants
     { WorldObjectPrefabType.BUTTON, "button" },
     { WorldObjectPrefabType.SIGN_PLAQUE_METAL, "sign-plaque-metal" },
     { WorldObjectPrefabType.SIGN_POST_WOODEN, "sign-post-wooden" },
-    { WorldObjectPrefabType.TELEPORTER, "teleporter" }
+    { WorldObjectPrefabType.TELEPORTER, "teleporter" },
+    { WorldObjectPrefabType.TORCH, "torch-wall" }
   };
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectInGameNameByType = new Dictionary<WorldObjectPrefabType, string>()
   {
     { WorldObjectPrefabType.WALL_STONE_BRICKS, "Stone bricks wall" },
     { WorldObjectPrefabType.WALL_SUPPORT_STONE, "Stone support pillar" },
-    { WorldObjectPrefabType.WALL_TILES, "Tiled wall" }
+    { WorldObjectPrefabType.WALL_TILES, "Tiled wall" },
+    { WorldObjectPrefabType.TORCH, "Torch" }
   };
 
   public enum WorldItemType

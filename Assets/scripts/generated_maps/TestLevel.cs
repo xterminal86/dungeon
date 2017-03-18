@@ -20,42 +20,6 @@ public class TestLevel : LevelBase
 
     WorldObject wo = null;
 
-    // Walls
-
-    PlaceWall(new Int3(39, 1, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
-    PlaceWall(new Int3(38, 1, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
-    PlaceWall(new Int3(37, 1, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
-    PlaceWall(new Int3(39, 2, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
-    PlaceWall(new Int3(38, 2, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
-    PlaceWall(new Int3(37, 2, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
-
-    PlaceWall(new Int3(39, 1, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
-    PlaceWall(new Int3(38, 1, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
-    PlaceWall(new Int3(37, 1, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
-    PlaceWall(new Int3(39, 2, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
-    PlaceWall(new Int3(38, 2, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
-    PlaceWall(new Int3(37, 2, 2), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
-
-    PlaceWall(new Int3(15, 1, 39), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
-    PlaceWall(new Int3(15, 1, 38), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
-    PlaceWall(new Int3(15, 1, 37), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
-    PlaceWall(new Int3(15, 2, 39), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
-    PlaceWall(new Int3(15, 2, 38), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
-    PlaceWall(new Int3(15, 2, 37), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
-
-    PlaceWall(new Int3(15, 1, 39), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-    PlaceWall(new Int3(15, 1, 38), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-    PlaceWall(new Int3(15, 1, 37), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-    PlaceWall(new Int3(15, 2, 39), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-    PlaceWall(new Int3(15, 2, 38), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-    PlaceWall(new Int3(15, 2, 37), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-
-    PlaceWall(new Int3(1, 1, 4), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-    PlaceWall(new Int3(1, 1, 3), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-
-    PlaceWall(new Int3(0, 1, 4), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-    PlaceWall(new Int3(0, 1, 3), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
-
     // Sign
 
     PlaceWall(new Int3(0, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
@@ -148,6 +112,12 @@ public class TestLevel : LevelBase
     _level[7, 1, 10].SidesWalkability[GlobalConstants.Orientation.EAST] = false;
 
     PlaceSign(new Int3(7, 1, 10), GlobalConstants.WorldObjectPrefabType.SIGN_POST_WOODEN, GlobalConstants.Orientation.EAST, "Press F\nto climb on the block\nin front of you");
+
+    // Objects
+
+    PlaceObject(new Int3(0, 1, 0), GlobalConstants.WorldObjectPrefabType.TORCH, GlobalConstants.Orientation.WEST);
+    PlaceObject(new Int3(4, 1, 0), GlobalConstants.WorldObjectPrefabType.TORCH, GlobalConstants.Orientation.WEST);
+    PlaceObject(new Int3(10, 1, 0), GlobalConstants.WorldObjectPrefabType.TORCH, GlobalConstants.Orientation.WEST);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }

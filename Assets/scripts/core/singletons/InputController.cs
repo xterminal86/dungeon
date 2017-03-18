@@ -276,7 +276,7 @@ public class InputController : MonoSingleton<InputController>
     _isProcessing = true;
 
     if (GameData.Instance.PlayerCharacterVariable.IsFemale)
-    {
+    { 
       SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerPullStartFemale);
     }
     else
@@ -306,7 +306,7 @@ public class InputController : MonoSingleton<InputController>
     }
 
     if (GameData.Instance.PlayerCharacterVariable.IsFemale)
-    {
+    {      
       SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerPullEndFemale);
     }
     else
