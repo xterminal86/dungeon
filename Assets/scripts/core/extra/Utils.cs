@@ -142,6 +142,9 @@ public static class Utils
     }
   }
 
+  /// <summary>
+  /// Hides the wall sides if it has adjacent walls to save draw calls and minimize lighting artefacts.
+  /// </summary>
   public static void HideWallSides(WallWorldObject wall, LevelBase level)
   {     
     // Increment of X is equivalent of going to the south, increment of Z - east.
@@ -151,6 +154,9 @@ public static class Utils
     TryHideTopBottomSides(wall, level);
   }
 
+  /// <summary>
+  /// If we have neighbouring walls, hide appropriate lateral sides of the current wall.
+  /// </summary>
   static void TryHideLeftRightSides(WallWorldObject wall, LevelBase level)
   {
     int x = wall.ArrayCoordinates.X;
@@ -235,6 +241,9 @@ public static class Utils
     }
   }
 
+  /// <summary>
+  /// If we have neighbouring walls, hide appropriate top and bottom sides of the current wall.
+  /// </summary>
   static void TryHideTopBottomSides(WallWorldObject wall, LevelBase level)
   {
     int x = wall.ArrayCoordinates.X;
@@ -260,6 +269,8 @@ public static class Utils
       }
       else
       {
+        // To disable Z fighting of door frame with bottom side of the wall, handle this case specifically.
+
         res2 = DetectObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE);
         res3 = DetectObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE);
 
