@@ -332,6 +332,26 @@ public class LevelBase
     return null;
   }
 
+  // FIXME: Factually duplication of code except for WorldObject type. 
+  // Think on universal design (introduce type of shrine enum?)
+
+  protected WorldObject PlaceShrine(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
+  {
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
+
+    if (TryFindPrefab(prefabStringName))
+    {      
+      WorldObject wo = new ShrineWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+      (wo as ShrineWorldObject).ActionCallback += (wo as ShrineWorldObject).ActionHandler;
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].Walkable = false;
+      SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.SHRINE, orientation);
+
+      return wo;
+    }
+
+    return null;
+  }
+
   protected WorldObject PlaceWall(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
   {
     string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
@@ -340,7 +360,6 @@ public class LevelBase
     {
       WorldObject wo = new WallWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
-
       SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.WALL, orientation);
 
       return wo;
@@ -378,7 +397,7 @@ public class LevelBase
 
       if (canBeOpenedByHand)
       {
-        wo.ActionCallback += wo.ActionHandler;
+        (wo as DoorWorldObject).ActionCallback += (wo as DoorWorldObject).ActionHandler;
         SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.DOOR_OPENABLE, orientation);
       }
       else

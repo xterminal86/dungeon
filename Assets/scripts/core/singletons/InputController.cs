@@ -409,7 +409,7 @@ public class InputController : MonoSingleton<InputController>
         {
           BehaviourWorldObject bwo = _raycastHit.collider.gameObject.GetComponentInParent<BehaviourWorldObject>();
           if (bwo != null)
-          {            
+          { 
             ProcessBWO(bwo);
           }
 
@@ -497,6 +497,15 @@ public class InputController : MonoSingleton<InputController>
 
   void ProcessBWO(BehaviourWorldObject bwo)
   {
+    if (bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation)
+    {
+      if (bwo.WorldObjectInstance.ActionCallback != null)
+      {
+        bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
+      }
+    }
+
+    /*
     float d = Vector3.Distance(_cameraPos, bwo.transform.position);
     int facing = Mathf.Abs((int)bwo.WorldObjectInstance.ObjectOrientation - (int)_cameraOrientation);
     float dCond = d - float.Epsilon;
@@ -506,11 +515,13 @@ public class InputController : MonoSingleton<InputController>
       || (facing == 0 && dCond <= 0.0f) 
       || (bwo.transform.position.x == _cameraPos.x && bwo.transform.position.z == _cameraPos.z)) 
     {
+      Debug.Log("here");
+
       if (bwo.WorldObjectInstance.ActionCallback != null)
       {
         bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
       }
-    }
+    }*/
   }
 
   void ProcessBIO(BehaviourItemObject bio)

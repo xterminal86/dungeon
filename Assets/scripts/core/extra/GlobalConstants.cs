@@ -348,7 +348,8 @@ public static class GlobalConstants
     LEVER,
     BUTTON,
     SIGN,                // Any form of object with text  
-    TELEPORTER
+    TELEPORTER,
+    SHRINE
   }
 
   public enum WorldObjectPrefabType
@@ -366,7 +367,9 @@ public static class GlobalConstants
     SIGN_PLAQUE_METAL,
     SIGN_POST_WOODEN,
     TELEPORTER,
-    TORCH
+    TORCH,
+    SHRINE_MIGHT,
+    SHRINE_SPIRIT
   }
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
@@ -383,15 +386,21 @@ public static class GlobalConstants
     { WorldObjectPrefabType.SIGN_PLAQUE_METAL, "sign-plaque-metal" },
     { WorldObjectPrefabType.SIGN_POST_WOODEN, "sign-post-wooden" },
     { WorldObjectPrefabType.TELEPORTER, "teleporter" },
-    { WorldObjectPrefabType.TORCH, "torch-wall" }
+    { WorldObjectPrefabType.TORCH, "torch-wall" },
+    { WorldObjectPrefabType.SHRINE_MIGHT, "shrine-might" },
+    { WorldObjectPrefabType.SHRINE_SPIRIT, "shrine-spirit" }
   };
+
+  // TODO: remove?
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectInGameNameByType = new Dictionary<WorldObjectPrefabType, string>()
   {
     { WorldObjectPrefabType.WALL_STONE_BRICKS, "Stone bricks wall" },
     { WorldObjectPrefabType.WALL_SUPPORT_STONE, "Stone support pillar" },
     { WorldObjectPrefabType.WALL_TILES, "Tiled wall" },
-    { WorldObjectPrefabType.TORCH, "Torch" }
+    { WorldObjectPrefabType.TORCH, "Torch" },
+    { WorldObjectPrefabType.SHRINE_MIGHT, "Shrine of Might" },
+    { WorldObjectPrefabType.SHRINE_SPIRIT, "Shrine of Spirit" }
   };
 
   public enum WorldItemType

@@ -27,6 +27,7 @@ public class TestLevel : LevelBase
     PlaceSign(new Int3(0, 1, 1), GlobalConstants.WorldObjectPrefabType.SIGN_PLAQUE_METAL, GlobalConstants.Orientation.EAST, "\n\nWelcome to the\nTest Map!");
 
     // Doors
+
     PlaceWall(new Int3(1, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceDoor(new Int3(1, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_WOODEN_SWING, GlobalConstants.Orientation.EAST, true, false, 3.0f, 4.0f);
     PlaceWall(new Int3(2, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
@@ -118,6 +119,9 @@ public class TestLevel : LevelBase
     PlaceObject(new Int3(0, 1, 0), GlobalConstants.WorldObjectPrefabType.TORCH, GlobalConstants.Orientation.WEST);
     PlaceObject(new Int3(4, 1, 0), GlobalConstants.WorldObjectPrefabType.TORCH, GlobalConstants.Orientation.WEST);
     PlaceObject(new Int3(10, 1, 0), GlobalConstants.WorldObjectPrefabType.TORCH, GlobalConstants.Orientation.WEST);
+
+    PlaceShrine(new Int3(10, 21, 25), GlobalConstants.WorldObjectPrefabType.SHRINE_MIGHT, GlobalConstants.Orientation.SOUTH);
+    PlaceShrine(new Int3(10, 21, 15), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }

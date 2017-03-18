@@ -105,7 +105,7 @@ public class App : MonoBehaviour
 
     if (LevelLoader.Instance.LevelMap is TestLevel)
     {
-      SoundManager.Instance.PlayMusicTrack("map-test");
+      //SoundManager.Instance.PlayMusicTrack("map-test");
     }
 
     // FIXME: clouds are not visible if far clip plane is quite less than 1000
@@ -457,47 +457,51 @@ public class App : MonoBehaviour
 
   void InstantiateObjects(BlockEntity blockEnity)
   {
-    foreach (var item in blockEnity.WorldObjects)    
+    foreach (var worldObject in blockEnity.WorldObjects)    
     {
-      GameObject prefab = PrefabsManager.Instance.FindPrefabByName(item.PrefabName);
+      GameObject prefab = PrefabsManager.Instance.FindPrefabByName(worldObject.PrefabName);
 
       if (prefab != null)
       {
         GameObject go = (GameObject)Instantiate(prefab, blockEnity.WorldCoordinates, Quaternion.identity);
 
         Vector3 eulerAngles = go.transform.eulerAngles;
-        eulerAngles.y = GlobalConstants.OrientationAngles[item.ObjectOrientation];
+        eulerAngles.y = GlobalConstants.OrientationAngles[worldObject.ObjectOrientation];
 
         go.transform.eulerAngles = eulerAngles;
         go.transform.parent = ObjectsInstancesTransform.transform;
 
         BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
-        bwo.WorldObjectInstance = item;
+        bwo.WorldObjectInstance = worldObject;
 
-        item.BWO = bwo;
+        worldObject.BWO = bwo;
 
-        switch (item.ObjectClass)
+        switch (worldObject.ObjectClass)
         {          
           case GlobalConstants.WorldObjectClass.DOOR_OPENABLE:
           case GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE:
-            (item as DoorWorldObject).InitBWO();
+            (worldObject as DoorWorldObject).InitBWO();
             break;
 
           case GlobalConstants.WorldObjectClass.LEVER:
-            (item as LeverWorldObject).InitBWO();
+            (worldObject as LeverWorldObject).InitBWO();
             break;
 
           case GlobalConstants.WorldObjectClass.BUTTON:
-            (item as ButtonWorldObject).InitBWO();
+            (worldObject as ButtonWorldObject).InitBWO();
             break;
 
           case GlobalConstants.WorldObjectClass.SIGN:
-            (item as SignWorldObject).InitBWO();
+            (worldObject as SignWorldObject).InitBWO();
             break;          
 
           case GlobalConstants.WorldObjectClass.WALL:
-            Utils.HideWallSides((item as WallWorldObject), LevelLoader.Instance.LevelMap); 
-            break;          
+            Utils.HideWallSides((worldObject as WallWorldObject), LevelLoader.Instance.LevelMap); 
+            break;
+
+          case GlobalConstants.WorldObjectClass.SHRINE:
+            (worldObject as ShrineWorldObject).InitBWO();
+            break;
         }
       }
     }
