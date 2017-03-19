@@ -51,6 +51,11 @@ public class JobManager : MonoSingleton<JobManager>
 public class Job
 {
   IEnumerator _coroutineMethod;
+  public IEnumerator CoroutineMethod
+  {
+    get { return _coroutineMethod; }
+  }
+
   int _hash = -1;
   public Job (IEnumerator coroutineMethod)
   {

@@ -46,6 +46,7 @@ ModelImporter:
     7400002: OrbFloat
     7400004: Orb|OrbFloat
     7400006: Orb|OrbRest
+    7400008: OrbRestLoop
     9500000: //RootNode
     11100000: //RootNode
   materials:
@@ -55,7 +56,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -74,7 +75,7 @@ ModelImporter:
       takeName: OrbRest
       firstFrame: 0
       lastFrame: 59
-      wrapMode: 1
+      wrapMode: 8
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -182,6 +183,7 @@ ModelImporter:
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -192,7 +194,10 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 1
   humanoidOversampling: 1

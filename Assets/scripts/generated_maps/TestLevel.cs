@@ -122,6 +122,7 @@ public class TestLevel : LevelBase
 
     PlaceShrine(new Int3(10, 21, 25), GlobalConstants.WorldObjectPrefabType.SHRINE_MIGHT, GlobalConstants.Orientation.SOUTH);
     PlaceShrine(new Int3(10, 21, 15), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
+    //PlaceShrine(new Int3(1, 1, 0), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }
