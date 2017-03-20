@@ -164,6 +164,23 @@ public class Int3
     _z = arg.Z;
   }
 
+  public void Set(Vector3 arg)
+  {
+    _x = (int)arg.x;
+    _y = (int)arg.y;
+    _z = (int)arg.z;
+  }
+
+  public static bool operator ==(Int3 a, Int3 b)
+  {
+    return (a.X == b.X && a.Y == b.Y && a.Z == b.Z);
+  }
+
+  public static bool operator !=(Int3 a, Int3 b)
+  {
+    return (a.X != b.X || a.Y != b.Y || a.Z != b.Z);
+  }
+
   public override string ToString()
   {
     return string.Format("[Int3: X={0}, Y={1}, Z={2}]", X, Y, Z);

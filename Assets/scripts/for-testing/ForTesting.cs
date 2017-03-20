@@ -23,6 +23,12 @@ public class ForTesting : MonoBehaviour
     _r1.Set(5, 6, 7);
 
     Debug.Log(_r1 + " " + _r2 + " " + _r3);
+
+    Int3 a = new Int3(1, 2, 3);
+    Int3 b = new Int3(4, 5, 6);
+    Int3 c = new Int3(1, 2, 3);
+
+    Debug.Log((a == b) + " " + (b == c) + " " + (a == c));
   }
 
 	void Update () 

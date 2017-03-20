@@ -495,33 +495,33 @@ public class InputController : MonoSingleton<InputController>
     GUIManager.Instance.ItemTaken = null;
   }
 
+  Int3 _nextCellArrayCoordinates = new Int3();
   void ProcessBWO(BehaviourWorldObject bwo)
-  {
-    if (bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation)
+  { 
+    // If object belongs to the same cell as player and has the same orientation
+    if (bwo.WorldObjectInstance.ArrayCoordinates == PlayerMapPos && bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation)
     {
       if (bwo.WorldObjectInstance.ActionCallback != null)
+        bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);      
+    }
+    else if (bwo.WorldObjectInstance.ArrayCoordinates != PlayerMapPos)
+    {
+      BlockEntity nextCell = GetNextCellForCurrentOrientation();
+
+      if (nextCell != null)
       {
-        bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
+        _nextCellArrayCoordinates.Set(nextCell.ArrayCoordinates);
+
+        // If object belongs to the next cell before player and has the same or opposite orientation 
+        if (bwo.WorldObjectInstance.ArrayCoordinates == _nextCellArrayCoordinates
+          && (bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation 
+           || bwo.WorldObjectInstance.ObjectOrientation == GetOppositeOrientation(CameraOrientation)) )
+        {          
+          if (bwo.WorldObjectInstance.ActionCallback != null)
+            bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
+        }
       }
     }
-
-    /*
-    float d = Vector3.Distance(_cameraPos, bwo.transform.position);
-    int facing = Mathf.Abs((int)bwo.WorldObjectInstance.ObjectOrientation - (int)_cameraOrientation);
-    float dCond = d - float.Epsilon;
-    //Debug.Log(_raycastHit.distance + " " + d);
-    //if (dCond <= GlobalConstants.WallScaleFactor && (facing == 2 || facing == 0))
-    if ((facing == 2 && dCond <= GlobalConstants.WallScaleFactor) 
-      || (facing == 0 && dCond <= 0.0f) 
-      || (bwo.transform.position.x == _cameraPos.x && bwo.transform.position.z == _cameraPos.z)) 
-    {
-      Debug.Log("here");
-
-      if (bwo.WorldObjectInstance.ActionCallback != null)
-      {
-        bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
-      }
-    }*/
   }
 
   void ProcessBIO(BehaviourItemObject bio)
@@ -1029,6 +1029,39 @@ public class InputController : MonoSingleton<InputController>
     oppositeOrientation %= 4;
 
     return (GlobalConstants.Orientation)oppositeOrientation;
+  }
+
+  Int3 _nextCellCoordsForCurrentOrientation = new Int3();
+  BlockEntity GetNextCellForCurrentOrientation()
+  {
+    _nextCellCoordsForCurrentOrientation.Set(PlayerMapPos);
+
+    // South - X+, East - Z+
+
+    if (CameraOrientation == GlobalConstants.Orientation.NORTH)
+    {
+      _nextCellCoordsForCurrentOrientation.X--;
+    }
+    else if (CameraOrientation == GlobalConstants.Orientation.EAST)
+    {
+      _nextCellCoordsForCurrentOrientation.Z++;
+    }
+    else if (CameraOrientation == GlobalConstants.Orientation.SOUTH)
+    {
+      _nextCellCoordsForCurrentOrientation.X++;
+    }
+    else if (CameraOrientation == GlobalConstants.Orientation.WEST)
+    {
+      _nextCellCoordsForCurrentOrientation.Z--;
+    }
+
+    if (_nextCellCoordsForCurrentOrientation.X >= 0 && _nextCellCoordsForCurrentOrientation.X < LevelLoader.Instance.LevelSize.X
+     && _nextCellCoordsForCurrentOrientation.Z >= 0 && _nextCellCoordsForCurrentOrientation.Z < LevelLoader.Instance.LevelSize.Z)
+    {
+      return LevelLoader.Instance.LevelMap.Level[_nextCellCoordsForCurrentOrientation.X, _nextCellCoordsForCurrentOrientation.Y, _nextCellCoordsForCurrentOrientation.Z];
+    }
+      
+    return null;
   }
 
   Vector3 _cameraForwardVector = Vector3.zero;
