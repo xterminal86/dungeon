@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShrineWorldObject : WorldObject 
 {
   ParticleSystem _orbAura;
+  ParticleSystem _orbActivated;
 
   Animation _animation;
 
@@ -30,7 +31,8 @@ public class ShrineWorldObject : WorldObject
   public override void ActionHandler(object sender)
   {
     if (!_wasActivated)
-    {
+    {      
+      _orbActivated.Play();
       _orbAura.Stop();
 
       _animation.CrossFade(_animationInactiveName);
@@ -121,7 +123,10 @@ public class ShrineWorldObject : WorldObject
       if (item.name == "aura")
       {
         _orbAura = item;
-        break;
+      }
+      else if (item.name == "activate")
+      {
+        _orbActivated = item;
       }
     }
 

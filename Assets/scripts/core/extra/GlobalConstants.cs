@@ -36,7 +36,7 @@ public static class GlobalConstants
   public const int HungerDefaultTick = 60;
 
   // Speed of camera bobbing
-  public const float CameraBobSpeed = 0.5f;
+  public const float CameraBobSpeed = 0.3f;
 
   // ScreenFader speed
   public const float FadeSpeed = 1.0f;
