@@ -356,6 +356,7 @@ public static class GlobalConstants
   {
     DUMMY = 0,
     WALL_STONE_BRICKS,
+    WALL_STONE_BRICKS_WINDOW,
     WALL_TILES,
     WALL_SUPPORT_STONE,
     DOOR_WOODEN_SWING,
@@ -375,6 +376,7 @@ public static class GlobalConstants
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
   {
     { WorldObjectPrefabType.WALL_STONE_BRICKS, "wall-stone-bricks" },
+    { WorldObjectPrefabType.WALL_STONE_BRICKS_WINDOW, "wall-stone-bricks-window" },
     { WorldObjectPrefabType.WALL_TILES, "wall-tiles" },
     { WorldObjectPrefabType.WALL_SUPPORT_STONE, "wall-support-stone" },
     { WorldObjectPrefabType.DOOR_WOODEN_SWING, "door-wooden-swing" },
@@ -389,18 +391,6 @@ public static class GlobalConstants
     { WorldObjectPrefabType.TORCH, "torch-wall" },
     { WorldObjectPrefabType.SHRINE_MIGHT, "shrine-might" },
     { WorldObjectPrefabType.SHRINE_SPIRIT, "shrine-spirit" }
-  };
-
-  // TODO: remove?
-
-  public static Dictionary<WorldObjectPrefabType, string> WorldObjectInGameNameByType = new Dictionary<WorldObjectPrefabType, string>()
-  {
-    { WorldObjectPrefabType.WALL_STONE_BRICKS, "Stone bricks wall" },
-    { WorldObjectPrefabType.WALL_SUPPORT_STONE, "Stone support pillar" },
-    { WorldObjectPrefabType.WALL_TILES, "Tiled wall" },
-    { WorldObjectPrefabType.TORCH, "Torch" },
-    { WorldObjectPrefabType.SHRINE_MIGHT, "Shrine of Might" },
-    { WorldObjectPrefabType.SHRINE_SPIRIT, "Shrine of Spirit" }
   };
 
   public enum WorldItemType

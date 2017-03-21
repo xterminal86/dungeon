@@ -323,7 +323,7 @@ public class LevelBase
 
     if (TryFindPrefab(prefabStringName))
     {
-      WorldObject wo = new PlaceholderWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+      WorldObject wo = new PlaceholderWorldObject(string.Empty, prefabStringName);
       SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.PLACEHOLDER, orientation);
 
       return wo;
@@ -341,7 +341,7 @@ public class LevelBase
 
     if (TryFindPrefab(prefabStringName))
     {      
-      WorldObject wo = new ShrineWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+      WorldObject wo = new ShrineWorldObject(string.Empty, prefabStringName);
       (wo as ShrineWorldObject).ActionCallback += (wo as ShrineWorldObject).ActionHandler;
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].Walkable = false;
       SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.SHRINE, orientation);
@@ -358,7 +358,7 @@ public class LevelBase
 
     if (TryFindPrefab(prefabStringName))
     {
-      WorldObject wo = new WallWorldObject(GlobalConstants.WorldObjectInGameNameByType[prefabType], prefabStringName);
+      WorldObject wo = new WallWorldObject(string.Empty, prefabStringName);
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
       SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.WALL, orientation);
 
@@ -388,7 +388,7 @@ public class LevelBase
 
     if (TryFindPrefab(prefabStringName))
     {
-      WorldObject wo = new DoorWorldObject("", prefabStringName);
+      WorldObject wo = new DoorWorldObject(string.Empty, prefabStringName);
       (wo as DoorWorldObject).AnimationOpenSpeed = animationOpenSpeed;
       (wo as DoorWorldObject).AnimationCloseSpeed = animationCloseSpeed;
       (wo as DoorWorldObject).IsSliding = isSlidingAnimated;
@@ -422,7 +422,7 @@ public class LevelBase
       switch (controlClass)
       {
         case GlobalConstants.WorldObjectClass.LEVER:
-          wo = new LeverWorldObject("", prefabStringName);
+          wo = new LeverWorldObject(string.Empty, prefabStringName);
           (wo as LeverWorldObject).ActionCallback += (wo as LeverWorldObject).ActionHandler;
 
           (wo as LeverWorldObject).AssignControlledObjects(objectsToControl);
@@ -432,7 +432,7 @@ public class LevelBase
           break;
 
         case GlobalConstants.WorldObjectClass.BUTTON:
-          wo = new ButtonWorldObject("", prefabStringName);
+          wo = new ButtonWorldObject(string.Empty, prefabStringName);
           (wo as ButtonWorldObject).ActionCallback += (wo as ButtonWorldObject).ActionHandler;
 
           (wo as ButtonWorldObject).ControlledObjects = objectsToControl;
@@ -459,7 +459,7 @@ public class LevelBase
 
     if (TryFindPrefab(prefabStringName))
     {
-      WorldObject wo = new SignWorldObject("", prefabStringName);
+      WorldObject wo = new SignWorldObject(string.Empty, prefabStringName);
       (wo as SignWorldObject).SignText = textToDisplay;
 
       SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.SIGN, orientation);
@@ -476,7 +476,7 @@ public class LevelBase
 
     if (TryFindPrefab(prefabStringName))
     {
-      WorldObject wo = new TeleporterWorldObject("", prefabStringName);
+      WorldObject wo = new TeleporterWorldObject(string.Empty, prefabStringName);
 
       (wo as TeleporterWorldObject).CoordinatesToTeleport = destination;
 
