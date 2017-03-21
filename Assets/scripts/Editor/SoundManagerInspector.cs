@@ -7,96 +7,77 @@ using System.IO;
 [CustomEditor(typeof(SoundManager))]
 public class SoundManagerInspector : Editor
 {
-  string _musicList = string.Empty;
-  string _soundsList = string.Empty;
+  string _musicPath = "Assets/sounds/music";
+  string _soundsPath = "Assets/sounds/sfx";
+
+  SoundManager _sm;
 
   public override void OnInspectorGUI()
   {
-    SoundManager sm = target as SoundManager;
+    _sm = target as SoundManager;
 
-    if (sm == null) return;
+    if (_sm == null) return;
 
-    sm.AudioSourceOneShotPrefab = (AudioSource)EditorGUILayout.ObjectField("Audio Source One Shot Prefab", sm.AudioSourceOneShotPrefab, typeof(AudioSource));
+    _sm.AudioSourceOneShotPrefab = (AudioSource)EditorGUILayout.ObjectField("Audio Source One Shot Prefab", _sm.AudioSourceOneShotPrefab, typeof(AudioSource));
 
-    sm.SoundVolume = EditorGUILayout.Slider("Sound Volume", sm.SoundVolume, 0.0f, 1.0f);
-    sm.MusicVolume = EditorGUILayout.Slider("Music Volume", sm.MusicVolume, 0.0f, 1.0f);    
-
-    string musicPath = "Assets/sounds/music";
-    string soundsPath = "Assets/sounds/sfx";
+    _sm.SoundVolume = EditorGUILayout.Slider("Sound Volume", _sm.SoundVolume, 0.0f, 1.0f);
+    _sm.MusicVolume = EditorGUILayout.Slider("Music Volume", _sm.MusicVolume, 0.0f, 1.0f);    
 
     if (GUILayout.Button("Generate Music List"))
     {
-      sm.MusicTracks.Clear();
-
-      string[] dirs = Directory.GetDirectories(musicPath, "*", SearchOption.AllDirectories);
-      if (dirs.Length == 0)
-      {
-        LoadFiles(sm.MusicTracks, musicPath, "*.ogg");
-      }
-      else
-      {
-        for (int i = 0; i < dirs.Length; i++)
-        {
-          LoadFiles(sm.MusicTracks, dirs[i], "*.ogg");
-        }
-      }
+      BuildMediaList(_sm.MusicTracks, _musicPath);
     }
 
-    if (sm.MusicTracks.Count != 0)
-    {
-      _musicList = string.Empty;
-      
-      int counter = 0;
-      foreach (var item in sm.MusicTracks)
-      {
-        if (item != null)
-        {
-          _musicList += string.Format("{0}: {1}\n", counter, item.name);
-          counter++;
-        }
-      }
-      
-      EditorGUILayout.HelpBox(_musicList, MessageType.None);
-    }
+    PrintListContents(_sm.MusicTracks);
 
     if (GUILayout.Button("Generate Sounds List"))
     {
-      sm.SoundEffects.Clear();
-      
-      string[] dirs = Directory.GetDirectories(soundsPath, "*", SearchOption.AllDirectories);
-      if (dirs.Length == 0)
-      {
-        LoadFiles(sm.SoundEffects, soundsPath, "*.ogg");
-      }
-      else
-      {
-        for (int i = 0; i < dirs.Length; i++)
-        {
-          LoadFiles(sm.SoundEffects, dirs[i], "*.ogg");
-        }
-      } 
+      BuildMediaList(_sm.SoundEffects, _soundsPath);
     }
 
-    if (sm.SoundEffects.Count != 0)
-    {
-      _soundsList = string.Empty;
-      
-      int counter = 0;
-      foreach (var item in sm.SoundEffects)
-      {
-        if (item != null)
-        {
-          _soundsList += string.Format("{0}: {1}\n", counter, item.name);
-          counter++;
-        }
-      }
-      
-      EditorGUILayout.HelpBox(_soundsList, MessageType.None);
-    }
+    PrintListContents(_sm.SoundEffects);
 
     if (GUI.changed)
     {
       EditorUtility.SetDirty(target);
+    }
+  }
+
+  void BuildMediaList(List<AudioClip> listToPopulate, string pathToDirWithFiles)
+  {
+    listToPopulate.Clear();
+
+    string[] dirs = Directory.GetDirectories(pathToDirWithFiles, "*", SearchOption.AllDirectories);
+    if (dirs.Length == 0)
+    {
+      LoadFiles(listToPopulate, pathToDirWithFiles, "*.ogg");
+    }
+    else
+    {
+      for (int i = 0; i < dirs.Length; i++)
+      {
+        LoadFiles(listToPopulate, dirs[i], "*.ogg");
+      }
+    }
+  }
+
+  void PrintListContents(List<AudioClip> listToPrint)
+  {
+    if (listToPrint.Count != 0)
+    {
+      string text = string.Empty;
+
+      int counter = 0;
+      foreach (var item in listToPrint)
+      {
+        if (item != null)
+        {
+          text += string.Format("{0}: {1}\n", counter, item.name);
+          counter++;
+        }
+      }
+
+      EditorGUILayout.HelpBox(text, MessageType.None);
     }
   }
 

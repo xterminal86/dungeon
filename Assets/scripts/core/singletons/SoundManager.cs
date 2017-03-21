@@ -29,16 +29,22 @@ public class SoundManager : MonoSingleton<SoundManager>
   {
     foreach (var item in MusicTracks)
     {
+      if (item == null)
+      {
+        Debug.LogWarning("Music track didn't load (is null) - rebuild media list in Inspector!");
+        continue;
+      }
+
       AudioSource s = (AudioSource)Instantiate(AudioSourceOneShotPrefab);
       s.transform.parent = transform;
-      
+    
       s.clip = item;
       s.volume = MusicVolume;
       s.name = item.name;
       s.loop = true;
 
       int hash = s.name.GetHashCode();
-      
+    
       _audioSourcesByHash.Add(hash, s);
     }
   }
@@ -46,7 +52,19 @@ public class SoundManager : MonoSingleton<SoundManager>
   void MakeSoundsDatabase()
   {
     foreach (var item in SoundEffects)
-    {
+    {   
+      // It happened several times: for some reason after checkout there is a null in the list
+      // if you try to run the game immediately (Debug.Log shows that player-thump.ogg didn't load
+      // for some reason). Fixed after pressing "Generate Sounds List" in SoundManager Inspector.
+      //
+      // For safety same condition is applied to the music list.
+
+      if (item == null)
+      {
+        Debug.LogWarning("Sound track didn't load (is null) - rebuild media list in Inspector!");
+        continue;
+      }
+
       AudioSource s = (AudioSource)Instantiate(AudioSourceOneShotPrefab);
       s.transform.parent = transform;
 
