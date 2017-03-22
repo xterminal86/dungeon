@@ -102,6 +102,7 @@ public class App : MonoBehaviour
 
     BuildMap();
     SpawnItems();
+    SetupMobs();
 
     if (LevelLoader.Instance.LevelMap is TestLevel)
     {
@@ -286,7 +287,7 @@ public class App : MonoBehaviour
 
   void SetupMobs()
   {
-    var go = (GameObject)Instantiate(TestMob, Vector3.zero, Quaternion.identity);
+    var go = (GameObject)Instantiate(TestMob, new Vector3(2.0f, 2.0f, 0.0f), Quaternion.identity);
     var mm = go.GetComponent<ModelMover>();
     if (mm != null)
     {
@@ -403,8 +404,8 @@ public class App : MonoBehaviour
           mm.ModelPos.X = pos.X;
           mm.ModelPos.Y = pos.Y;
 
-          mm.Actor = new VillagerActor(mm);
-          mm.Actor.ActorName = mm.ActorName;
+//          mm.Actor = new VillagerActor(mm);
+//          mm.Actor.ActorName = mm.ActorName;
         }
         break;
 

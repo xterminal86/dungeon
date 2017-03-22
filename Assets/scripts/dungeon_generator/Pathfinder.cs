@@ -6,31 +6,28 @@ using System.Text;
 /// <summary>
 /// A* pathfinder (no diagonal movement)
 /// </summary>
-public class RoadBuilder
+public class Pathfinder
 {
-  // FIXME: rewrite for new map organization
-
-  Int2 _start = new Int2();
-  Int2 _end = new Int2();
+  Int3 _start = new Int3();
+  Int3 _end = new Int3();
     
   List<PathNode> _path = new List<PathNode>();
 
   List<PathNode> _openList = new List<PathNode>();
   List<PathNode> _closedList = new List<PathNode>();
 
-  //GeneratedMapCell[,] _map;
-  //PathfindingCell[,] _pathfindingMap;
-
   int _hvCost = 10;
   int _diagonalCost = 20;
 
-  int _mapWidth = 0, _mapHeight = 0;
-  public RoadBuilder(int width, int height)
-  {
-    //_map = map;
+  LevelBase _map;
 
-    _mapWidth = width;
-    _mapHeight = height;
+  int _mapWidth = 0, _mapHeight = 0;
+  public Pathfinder(LevelBase map)
+  {
+    _map = map;
+
+    _mapWidth = _map.MapX;
+    _mapHeight = _map.MapZ;
 
     _resultReady = false;
     _abortThread = false;
@@ -44,9 +41,9 @@ public class RoadBuilder
   /// <param name="point">Point 1</param>
   /// <param name="goal">Point 2</param>
   /// <returns>Cost of the traversal</returns>
-  int TraverseCost(Int2 point, Int2 goal)
+  int TraverseCost(Int3 point, Int3 goal)
   {
-    if (point.X == goal.X || point.Y == goal.Y)
+    if (point.X == goal.X || point.Z == goal.Z)
     {    
       return _hvCost;
     }
@@ -57,9 +54,9 @@ public class RoadBuilder
   /// <summary>
   /// Heuristic
   /// </summary>
-  int ManhattanDistance(Int2 point, Int2 end)
+  int ManhattanDistance(Int3 point, Int3 end)
   {
-    int cost = ( Mathf.Abs(end.Y - point.Y) + Mathf.Abs(end.X - point.X) ) * _hvCost;
+    int cost = ( Mathf.Abs(end.Z - point.Z) + Mathf.Abs(end.X - point.X) ) * _hvCost;
 
     //Debug.Log(string.Format("Manhattan distance remaining from {0} to {1}: {2}", point.ToString(), end.ToString(), cost));
 
@@ -91,12 +88,12 @@ public class RoadBuilder
     return index;
   }
 
-  PathNode FindNode(Int2 nodeCoordinate, List<PathNode> listToLookIn)
+  PathNode FindNode(Int3 nodeCoordinate, List<PathNode> listToLookIn)
   {
     foreach (var item in listToLookIn)
     {
       if (nodeCoordinate.X == item.Coordinate.X &&
-          nodeCoordinate.Y == item.Coordinate.Y)
+          nodeCoordinate.Z == item.Coordinate.Z)
       {
         return item;
       }
@@ -105,12 +102,12 @@ public class RoadBuilder
     return null;
   }
 
-  bool IsNodePresent(Int2 nodeCoordinate, List<PathNode> listToLookIn)
+  bool IsNodePresent(Int3 nodeCoordinate, List<PathNode> listToLookIn)
   {
     foreach (var item in listToLookIn)
     {
       if (nodeCoordinate.X == item.Coordinate.X &&
-          nodeCoordinate.Y == item.Coordinate.Y)
+          nodeCoordinate.Z == item.Coordinate.Z)
       {
         return true;
       }
@@ -135,52 +132,36 @@ public class RoadBuilder
       GlobalConstants.Orientation.WEST, GlobalConstants.Orientation.SOUTH 
     };
 
-    Int2 coordinate = new Int2();
+    Int3 coordinate = new Int3();
     for (int i = 0; i < 4; i++)
     {
       coordinate.X = node.Coordinate.X + direction[i, 0];
-      coordinate.Y = node.Coordinate.Y + direction[i, 1];
+      coordinate.Y = node.Coordinate.Y;
+      coordinate.Z = node.Coordinate.Z + direction[i, 1];
 
       coordinate.X = Mathf.Clamp(coordinate.X, 0, _mapHeight - 1);
-      coordinate.Y = Mathf.Clamp(coordinate.Y, 0, _mapWidth - 1);
+      coordinate.Z = Mathf.Clamp(coordinate.Z, 0, _mapWidth - 1);
 
       bool isInClosedList = IsNodePresent(coordinate, _closedList);
 
       //Debug.Log("Current cell " + node.Coordinate + " Next cell " + coordinate);
 
-      bool condition = false;
-
-      /*
       // Cell is valid if next cell is marked as passable and current cell does not have thin wall 
       // along current orientation, and next cell does not have thin wall along opposite orientation.
       bool condition = avoidObstacles ? 
-                       (_pathfindingMap[coordinate.X, coordinate.Y].Walkable 
-                     && _pathfindingMap[node.Coordinate.X, node.Coordinate.Y].SidesWalkability[orientations[i]] == true
-                     && _pathfindingMap[coordinate.X, coordinate.Y].SidesWalkability[oppositeOrientations[i]] == true 
-                     && !isInClosedList) 
+                      (_map.Level[coordinate.X, coordinate.Y, coordinate.Z].Walkable 
+                    && _map.Level[node.Coordinate.X, node.Coordinate.Y, node.Coordinate.Z].SidesWalkability[orientations[i]] == true
+                    && _map.Level[coordinate.X, coordinate.Y, coordinate.Z].SidesWalkability[oppositeOrientations[i]] == true 
+                    && !isInClosedList) 
                      : !isInClosedList;
-      */
-
-      /*
-      bool condition = (avoidObstacles ? 
-                       (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM &&
-                        _map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.OBSTACLE && !isInClosedList) :
-                       (_map[coordinate.X, coordinate.Y].CellType != GeneratedCellType.ROOM && !isInClosedList) );
       
-      GeneratedCellType ct = _map[coordinate.X, coordinate.Y].CellType;
-
-      bool condition = ( avoidObstacles ? 
-                       ((ct != GeneratedCellType.OBSTACLE && ct != GeneratedCellType.DECOR) && !isInClosedList) :
-                       !isInClosedList );
-      */
-
       if (condition)
-      {
+      {        
         bool isInOpenList = IsNodePresent(coordinate, _openList);
 
         if (!isInOpenList)
         {
-          PathNode newNode = new PathNode(new Int2(coordinate.X, coordinate.Y), node);
+          PathNode newNode = new PathNode(coordinate, node);
           newNode.CostG = node.CostG + TraverseCost(node.Coordinate, newNode.Coordinate);
           newNode.CostH = ManhattanDistance(newNode.Coordinate, _end);
           newNode.CostF = newNode.CostG + newNode.CostH;
@@ -189,51 +170,6 @@ public class RoadBuilder
         }
       }      
     }    
-  }
-
-  /// <summary>
-  /// Creates next nodes for algorithm
-  /// </summary>
-  void LookAround9(PathNode node)
-  {    
-    int lowerX = node.Coordinate.X - 1;
-    int lowerY = node.Coordinate.Y - 1;
-    int higherX = node.Coordinate.X + 1;
-    int higherY = node.Coordinate.Y + 1;
-
-    lowerX = Mathf.Clamp(lowerX, 0, _mapHeight - 1);
-    lowerY = Mathf.Clamp(lowerY, 0, _mapWidth - 1);
-    higherX = Mathf.Clamp(higherX, 0, _mapHeight - 1);
-    higherY = Mathf.Clamp(higherY, 0, _mapWidth - 1);
-
-    Int2 coordinate = new Int2();
-    for (int x = lowerX; x <= higherX; x++)
-    {
-      for (int y = lowerY; y <= higherY; y++)
-      {        
-        coordinate.X = x;
-        coordinate.Y = y;
-
-        bool isInClosedList = IsNodePresent(coordinate, _closedList);
-
-        /*
-        if (_map[x, y].CellType != GeneratedCellType.ROOM && !isInClosedList)
-        {
-          bool isInOpenList = IsNodePresent(coordinate, _openList);
-
-          if (!isInOpenList)
-          {
-            PathNode newNode = new PathNode(new Int2(x, y), node);
-            newNode.CostG = node.CostG + TraverseCost(node.Coordinate, newNode.Coordinate);
-            newNode.CostH = ManhattanDistance(newNode.Coordinate, _end);
-            newNode.CostF = newNode.CostG + newNode.CostH;
-
-            _openList.Add(newNode);
-          }
-        }
-        */
-      }
-    }
   }
 
   bool ExitCondition()
@@ -248,18 +184,15 @@ public class RoadBuilder
   /// <param name="start">Starting point</param>
   /// <param name="end">Destination point</param>
   /// <returns>List of nodes from start to end</returns>
-  public List<PathNode> BuildRoad(Int2 start, Int2 end, bool avoidObstacles = false, bool printPath = false)
+  public List<PathNode> BuildPath(Int3 start, Int3 end, bool avoidObstacles = false, bool printPath = false)
   {
     _start = start;
     _end = end;
 
-    /*
-    //if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
-    if (!_pathfindingMap[_end.X, _end.Y].Walkable)
+    if (!_map.Level[_end.X, _end.Y, end.Z].Walkable)
     {
-      Debug.Log(end + " - Goal is on the obstacle! : " + _map[_end.X, _end.Y].CellType + " (this is not an error)");
+      Debug.Log(end + " - goal is not walkable! (this is not an error)");
     }
-    */
 
     _path.Clear();
     _openList.Clear();
@@ -306,7 +239,7 @@ public class RoadBuilder
   }
 
   // Async version of above
-  public void BuildRoadAsync(Int2 start, Int2 end, bool avoidObstacles = false)
+  public void BuildPathAsync(Int3 start, Int3 end, bool avoidObstacles = false)
   {    
     _threadIsWorking = true;
 
@@ -314,16 +247,14 @@ public class RoadBuilder
     // we make references, so if in the process of building road player position changes,
     // it fucks up algorithm working, because we change _end during pathfinding loop.
     // So, to prevent this, we copy by value.
-    _start = new Int2(start.X, start.Y);
-    _end = new Int2(end.X, end.Y);
+    _start = new Int3(start);
+    _end = new Int3(end);
 
-    /*
     //if (_map[_end.X, _end.Y].CellType != GeneratedCellType.NONE && !avoidObstacles)
-    if (!_pathfindingMap[_end.X, _end.Y].Walkable)
+    if (!_map.Level[_end.X, _end.Y, _end.Z].Walkable)
     {
-      Debug.Log(end + " - Goal is on the obstacle! : " + _map[_end.X, _end.Y].CellType + " (this is not an error)");
+      Debug.Log(end + " - goal is not walkable! (this is not an error)");
     }
-    */
 
     _path.Clear();
     _openList.Clear();
@@ -339,11 +270,11 @@ public class RoadBuilder
 
     _resultReady = false;
 
-    JobManager.Instance.CreateThreadB(BuildRoadThreadFunction, avoidObstacles);
+    JobManager.Instance.CreateThreadB(BuildPathThreadFunction, avoidObstacles);
   }
 
   volatile bool _abortThread = false;
-  void BuildRoadThreadFunction(object arg)
+  void BuildPathThreadFunction(object arg)
   {
     bool avoidObstacles = (bool)arg;
 
@@ -385,7 +316,7 @@ public class RoadBuilder
     _abortThread = true;
   }
 
-  // Constantly check the result via this property in a coroutine  
+  // You should constantly call this method in a coroutine to check the result  
   public List<PathNode> GetResult(bool ignoreAsync = false)
   {
     if (_resultReady || ignoreAsync)
@@ -436,11 +367,11 @@ public class RoadBuilder
   {
     StringBuilder sb = new StringBuilder();
 
-    sb.Append(string.Format("Path from {0} to {1} :", _start.ToString(), _end.ToString()));
+    sb.Append(string.Format("Path from {0} to {1} :\n", _start.ToString(), _end.ToString()));
 
     foreach (var item in _path)
     {
-      sb.Append(string.Format("[{0};{1} costF: {2}] => ", item.Coordinate.X, item.Coordinate.Y, item.CostF));
+      sb.Append(string.Format("[{0} costF: {1}] => ", item.ToString(), item.CostF));
     }
 
     sb.Append("Done!");
@@ -468,10 +399,11 @@ public class RoadBuilder
   /// </summary>
   public class PathNode
   {
-    public PathNode(Int2 coord)
+    public PathNode(Int3 coord)
     {
       Coordinate.X = coord.X;
-      Coordinate.Y = coord.Y;           
+      Coordinate.Y = coord.Y;
+      Coordinate.Z = coord.Z;           
     }
 
     public PathNode(PathNode rhs)
@@ -483,10 +415,11 @@ public class RoadBuilder
       CostH = rhs.CostH;
     }
 
-    public PathNode(Int2 coord, PathNode parent)
+    public PathNode(Int3 coord, PathNode parent)
     {
       Coordinate.X = coord.X;
       Coordinate.Y = coord.Y;
+      Coordinate.Z = coord.Z;
       ParentNode = parent;
     }
 
@@ -496,7 +429,7 @@ public class RoadBuilder
     }
 
     // Map coordinate of this node
-    public Int2 Coordinate = new Int2();
+    public Int3 Coordinate = new Int3();
     // Reference to parent node
     public PathNode ParentNode = null;
 

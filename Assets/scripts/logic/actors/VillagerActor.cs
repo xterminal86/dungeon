@@ -6,7 +6,12 @@ using System.Collections.Generic;
 /// Represents villager, that randomly wanders around and can give random hints to player.
 /// </summary>
 public class VillagerActor : ActorBase 
-{  
+{
+  public VillagerActor(ModelMover model) : base(model)
+  {
+  }
+
+  /*  
   public VillagerActor(ModelMover model) : base(model)
   {
     WanderingStateVar = new WanderingState(this);
@@ -188,4 +193,5 @@ public class VillagerActor : ActorBase
     
     GameData.Instance.PlayerMoveState = GameData.PlayerMoveStateEnum.NORMAL;
   }
+  */
 }

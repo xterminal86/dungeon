@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 public class ApproachingPlayerState : GameObjectState 
 {
+  /*
   Vector3 _modelPosition = Vector3.zero;
 
   Job _moveJob, _rotateJob, _stepJob;
 
-  RoadBuilder _roadBuilder;
+  Pathfinder _roadBuilder;
 
   ModelMover _model;
 
@@ -43,7 +44,7 @@ public class ApproachingPlayerState : GameObjectState
     _model.transform.position = _modelPosition;
   }
 
-  List<RoadBuilder.PathNode> _road;
+  List<Pathfinder.PathNode> _road;
   IEnumerator ApproachPlayerRoutine()
   {    
     _modelPosition.x = _model.ModelPos.X * GlobalConstants.WallScaleFactor;
@@ -56,7 +57,7 @@ public class ApproachingPlayerState : GameObjectState
     }
 
     // FIXME: replace ModelPos with Int3 like player (remove similar hacks below)
-    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, new Int2(InputController.Instance.PlayerMapPos.X, InputController.Instance.PlayerMapPos.Z), true);
+    _roadBuilder.BuildPathAsync(_actor.Model.ModelPos, new Int2(InputController.Instance.PlayerMapPos.X, InputController.Instance.PlayerMapPos.Z), true);
 
     while ((_road = _roadBuilder.GetResult()) == null)
     {      
@@ -317,4 +318,5 @@ public class ApproachingPlayerState : GameObjectState
     
     yield return null;
   }
+  */
 }

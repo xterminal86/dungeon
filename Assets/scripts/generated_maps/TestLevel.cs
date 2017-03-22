@@ -125,6 +125,9 @@ public class TestLevel : LevelBase
     //PlaceShrine(new Int3(1, 1, 0), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
+
+    Pathfinder p = new Pathfinder(this);
+    p.BuildPath(new Int3(0, 1, 0), new Int3(0, 1, 8), true);
   }
 
   void MakePerimeter()

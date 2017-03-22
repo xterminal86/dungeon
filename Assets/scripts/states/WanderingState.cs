@@ -8,7 +8,8 @@ using System.Collections.Generic;
 /// </summary>
 public class WanderingState : GameObjectState
 {   
-  RoadBuilder _roadBuilder;
+  /*
+  Pathfinder _roadBuilder;
   public WanderingState(ActorBase actor)
   {
     _actor = actor;
@@ -39,7 +40,7 @@ public class WanderingState : GameObjectState
     _actor.Model.transform.position = _modelPosition;
   }
 
-  List<RoadBuilder.PathNode> _road;
+  List<Pathfinder.PathNode> _road;
   IEnumerator MoveOnPath()
   {
     _firstStepSound = false;
@@ -54,7 +55,7 @@ public class WanderingState : GameObjectState
 
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
 
-    _roadBuilder.BuildRoadAsync(_actor.Model.ModelPos, destination, true);
+    _roadBuilder.BuildPathAsync(_actor.Model.ModelPos, destination, true);
 
     while ((_road = _roadBuilder.GetResult()) == null)
     {
@@ -198,4 +199,5 @@ public class WanderingState : GameObjectState
 
     _actor.Model.transform.position = _modelPosition;
   }
+  */
 }

@@ -61,7 +61,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
       if (item == null)
       {
-        Debug.LogWarning("Sound track didn't load (is null) - rebuild media list in Inspector!");
+        Debug.LogWarning("Sound effect didn't load (is null) - rebuild media list in Inspector!");
         continue;
       }
 

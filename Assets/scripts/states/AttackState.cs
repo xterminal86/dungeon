@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class AttackState : GameObjectState 
 {
+  /*
   float _attackHalfway = 0.0f;
   public AttackState(ActorBase actor)
   {
@@ -90,13 +91,12 @@ public class AttackState : GameObjectState
 
     //Debug.Log("Checking cells " + modelFacing + " " + nextCellSide + " " + nextCellX + " " + nextCellY + " " + nextCellWalkability + " " + currentCellWall + " " + nextCellWall);
 
-    /*
-    if (!nextCellWalkability || !currentCellWall || !nextCellWall)
-    {
-      return true;
-    }
-    */
+//    if (!nextCellWalkability || !currentCellWall || !nextCellWall)
+//    {
+//      return true;
+//    }
 
     return false;
   }
+  */
 }

@@ -4,11 +4,16 @@ using System.Collections.Generic;
 
 public class SearchingForPlayerState : GameObjectState 
 {
+  public SearchingForPlayerState(ActorBase actor)
+  {
+  }
+
+  /*
   bool _working = false;
 
   int[,] _visitedCells;
 
-  RoadBuilder _roadBuilder;
+  Pathfinder _roadBuilder;
   ModelMover _model;
   public SearchingForPlayerState(ActorBase actor)
   {
@@ -183,19 +188,17 @@ public class SearchingForPlayerState : GameObjectState
 
     // FIXME: fix!
 
-    /*
-    if (!_actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].Walkable 
-      || _actor.AppRef.GeneratedMap.PathfindingMap[modelX, modelY].SidesWalkability[orientation] == false
-      || _actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].SidesWalkability[oppositeOrientation] == false)
-    {
-      return false;
-    }
-    */
+    //if (!_actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].Walkable 
+    //  || _actor.AppRef.GeneratedMap.PathfindingMap[modelX, modelY].SidesWalkability[orientation] == false
+    //  || _actor.AppRef.GeneratedMap.PathfindingMap[nextCellX, nextCellY].SidesWalkability[oppositeOrientation] == false)
+    //{
+    //  return false;
+    //}
 
     return true;
   }
 
-  List<RoadBuilder.PathNode> _road, _roadToPlayer;
+  List<Pathfinder.PathNode> _road, _roadToPlayer;
   IEnumerator MoveOnPath()
   {
     _firstStepSound = false;
@@ -209,7 +212,7 @@ public class SearchingForPlayerState : GameObjectState
 
     //Debug.Log(name + ": going from " + ModelPos + " to " + destination);    
 
-    _roadBuilder.BuildRoadAsync(_model.ModelPos, destination, true);    
+    _roadBuilder.BuildPathAsync(_model.ModelPos, destination, true);    
 
     while ((_road = _roadBuilder.GetResult()) == null)
     {      
@@ -287,13 +290,11 @@ public class SearchingForPlayerState : GameObjectState
     {
       time += Time.smoothDeltaTime;
 
-      /*
-      if (IsPlayerInRange())
-      {
-        _actor.ChangeState(new ApproachingPlayerState(_actor));
-        yield break;
-      }
-      */
+      //if (IsPlayerInRange())
+      //{
+      //  _actor.ChangeState(new ApproachingPlayerState(_actor));
+      //  yield break;
+      //}
 
       yield return null;
     }
@@ -321,19 +322,18 @@ public class SearchingForPlayerState : GameObjectState
 
   void PrintCellInfo(Int2 coords)
   {   
-    /*
     //PathfindingCell cell = _actor.AppRef.GeneratedMap.PathfindingMap[coords.X, coords.Y];
-    PathfindingCell cell = new PathfindingCell();
-
-    string output = string.Format("{0} -> walkable: {1} sides: ", coords, cell.Walkable);
-    foreach (var item in cell.SidesWalkability)
-    {
-      output += string.Format("| {0} {1} | ", item.Key, item.Value);
-    }
-
-    output += "\n";
-
-    Debug.Log(output);
-    */
+//    PathfindingCell cell = new PathfindingCell();
+//
+//    string output = string.Format("{0} -> walkable: {1} sides: ", coords, cell.Walkable);
+//    foreach (var item in cell.SidesWalkability)
+//    {
+//      output += string.Format("| {0} {1} | ", item.Key, item.Value);
+//    }
+//
+//    output += "\n";
+//
+//    Debug.Log(output);
   }
+  */
 }
