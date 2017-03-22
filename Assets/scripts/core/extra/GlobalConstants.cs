@@ -113,7 +113,7 @@ public static class GlobalConstants
   public const string SFXMaleVillagerHuh = "act-huh-m";
   public const string SFXTakeScreenshot = "act-photo";
   public const string SFXTeleportation = "snd-teleportation";
-  public const string SFXPlayerFall = "player-thump";
+  public const string SFXPlayerFall = "player-fall-small";
   public const string SFXPlayerFallLong = "player-fall";
   public const string SFXPlayerPullStartMale = "player-pull-start-m";
   public const string SFXPlayerPullEndMale = "player-pull-end-m";
