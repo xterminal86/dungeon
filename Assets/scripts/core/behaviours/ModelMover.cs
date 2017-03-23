@@ -11,20 +11,9 @@ public class ModelMover : MonoBehaviour
 {
   public string ActorName = string.Empty;
 
-  [Range(0.1f, 2.0f)]
-  public float VoicePitch = 1.0f;
-  [Range(0.1f, 4.0f)]
-  public float SpeakPitch = 1.0f;
-
-  public bool IsFemale = false;
-
   public ActorBase Actor;
 
-  public Int2 ModelPos = new Int2();
-
-  // Model move speed
-  [Range(0.5f, 100.0f)]
-  public float WalkingSpeed = 1.0f;
+  public Int3 MapPos = new Int3();
 
   Animation _animationComponent;
   public Animation AnimationComponent
@@ -43,14 +32,11 @@ public class ModelMover : MonoBehaviour
 
       float speed = _animationComponent[GlobalConstants.AnimationWalkName].speed;
       float length = _animationComponent[GlobalConstants.AnimationWalkName].length;
-
-      // FIXME: remove?
-      WalkingSpeed = (length / speed) * GlobalConstants.WallScaleFactor;
-
+        
       // TODO: The smaller the model, the faster the animation. Kind of hack about transform.localScale.
       // Footsteps sounds don't coincide with speed, but would be great to implement.
-      _animationComponent[GlobalConstants.AnimationWalkName].speed = transform.localScale.x < 0.5f ? GlobalConstants.WallScaleFactor * 4 : GlobalConstants.WallScaleFactor * 2;
-      //_animationComponent[GlobalConstants.AnimationWalkName].speed = GlobalConstants.WallScaleFactor * 2;
+      //_animationComponent[GlobalConstants.AnimationWalkName].speed = transform.localScale.x < 0.5f ? GlobalConstants.WallScaleFactor * 4 : GlobalConstants.WallScaleFactor * 2;
+      _animationComponent[GlobalConstants.AnimationWalkName].speed = GlobalConstants.WallScaleFactor * 2;
 
       _animationComponent[GlobalConstants.AnimationTalkName].speed = GlobalConstants.CharacterAnimationTalkSpeed;
 

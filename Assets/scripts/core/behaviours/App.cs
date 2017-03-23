@@ -401,8 +401,8 @@ public class App : MonoBehaviour
             SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
           }
 
-          mm.ModelPos.X = pos.X;
-          mm.ModelPos.Y = pos.Y;
+          mm.MapPos.X = pos.X;
+          mm.MapPos.Y = pos.Y;
 
 //          mm.Actor = new VillagerActor(mm);
 //          mm.Actor.ActorName = mm.ActorName;

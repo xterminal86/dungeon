@@ -18,8 +18,17 @@ public class SoundManager : MonoSingleton<SoundManager>
   Dictionary<int, AudioSource> _audioSourcesByHash = new Dictionary<int, AudioSource>();
 
   protected override void Init()
+  {    
+    MakeMusicDatabase();
+    MakeSoundsDatabase();
+  }
+
+  public void RefreshMediaLists()
   {
-    base.Init();
+    // FIXME:
+    // It happened several times: for some reason after git pull there is a null in the sound effects list.
+    // Some sound (might be music as well, hadn't tested) doesn't load.
+    // Call this method during singleton's initialization.
 
     MakeMusicDatabase();
     MakeSoundsDatabase();

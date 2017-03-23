@@ -51,7 +51,9 @@ public class SoundManagerInspector : Editor
     {
       for (int i = 0; i < dirs.Length; i++)
       {
-        LoadFiles(listToPopulate, dirs[i], "*.ogg");
+        string dirSlashesFixed = dirs[i].Replace("\\", "/");
+
+        LoadFiles(listToPopulate, dirSlashesFixed, "*.ogg");
       }
     }
   }
@@ -80,8 +82,10 @@ public class SoundManagerInspector : Editor
   {
     string[] files = Directory.GetFiles(path, filter);
     for (int j = 0; j < files.Length; j++)
-    {
-      AudioClip clip = AssetDatabase.LoadAssetAtPath(files[j], typeof(AudioClip)) as AudioClip;
+    {      
+      string fileSlashFixed = files[j].Replace("\\", "/");
+
+      AudioClip clip = AssetDatabase.LoadAssetAtPath(fileSlashFixed, typeof(AudioClip)) as AudioClip;
       listToAdd.Add(clip);
     }
   }
