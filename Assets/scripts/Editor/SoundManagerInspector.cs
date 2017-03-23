@@ -36,11 +36,6 @@ public class SoundManagerInspector : Editor
     }
 
     PrintListContents(_sm.SoundEffects);
-
-    if (GUI.changed)
-    {
-      EditorUtility.SetDirty(target);
-    }
   }
 
   void BuildMediaList(List<AudioClip> listToPopulate, string pathToDirWithFiles)

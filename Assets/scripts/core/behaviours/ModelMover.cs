@@ -18,8 +18,6 @@ public class ModelMover : MonoBehaviour
 
   public bool IsFemale = false;
 
-  public Transform RaycastPoint;
-
   public ActorBase Actor;
 
   public Int2 ModelPos = new Int2();
