@@ -17,7 +17,7 @@ public class ShrineWorldObject : WorldObject
 
   bool _wasActivated = false;
 
-  int _cooldownSeconds = 10;
+  int _cooldownSeconds = 1200;
 
   Job _job;
 
