@@ -20,6 +20,12 @@ public class SceneLoaderInspector : Editor
     {
       sceneLoader.CharacterClass = (PlayerCharacter.CharacterClass)EditorGUILayout.EnumPopup("Character Class to Start With", sceneLoader.CharacterClass);
       sceneLoader.IsFemale = EditorGUILayout.Toggle("Female", sceneLoader.IsFemale);
-    }    
+    }
+
+    if (GUI.changed)
+    {
+      EditorUtility.SetDirty(sceneLoader);
+      AssetDatabase.SaveAssets();
+    }
   }
 }

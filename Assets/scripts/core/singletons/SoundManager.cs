@@ -182,19 +182,19 @@ public class SoundManager : MonoSingleton<SoundManager>
   {
     if (GlobalConstants.FootstepsListByType.ContainsKey(type))
     {
-      int which = Random.Range(0, GlobalConstants.Footsteps3dListByType[type].Count);
+      int which = Random.Range(0, GlobalConstants.FootstepsListByType[type].Count);
       int hash = gameObjectName.GetHashCode();
       if (LastPlayedSoundOfChar[hash] == which)
       {
         LastPlayedSoundOfChar[hash]++;
 
-        if (which > GlobalConstants.Footsteps3dListByType[type].Count - 1)
+        if (which > GlobalConstants.FootstepsListByType[type].Count - 1)
         {
           which = 0;
         }
       }
 
-      PlaySound(GlobalConstants.Footsteps3dListByType[type][which], position, is3D);
+      PlaySound(GlobalConstants.FootstepsListByType[type][which], position, is3D);
 
       LastPlayedSoundOfChar[hash] = which;
     }

@@ -50,5 +50,11 @@ public class GUIManagerInspector : Editor
 
       EditorGUILayout.HelpBox(_portraitsList, MessageType.None);
     }        
+
+    if (GUI.changed)
+    {
+      EditorUtility.SetDirty(m);
+      AssetDatabase.SaveAssets();
+    }
   }
 }

@@ -260,17 +260,6 @@ public static class GlobalConstants
     { FootstepSoundType.WOOD, FootstepsWood },
     { FootstepSoundType.METAL, FootstepsDummy }
   };
-    
-  public static Dictionary<FootstepSoundType, List<int>> Footsteps3dListByType = new Dictionary<FootstepSoundType, List<int>>()
-  {
-    { FootstepSoundType.DUMMY, FootstepsDummy3d },
-    { FootstepSoundType.DIRT, FootstepsDirt3d },
-    { FootstepSoundType.GRASS, FootstepsGrass3d },
-    { FootstepSoundType.STONE, FootstepsStone3d },
-    { FootstepSoundType.TILE, FootstepsTile3d },
-    { FootstepSoundType.WOOD, FootstepsWood3d },
-    { FootstepSoundType.METAL, FootstepsDummy3d }
-  };
 
   public static List<string> CharacterClassNames = new List<string>()
   {

@@ -47,5 +47,11 @@ public class AppInspector : Editor
       
       EditorGUILayout.HelpBox(_prefabsList, MessageType.None);
     }
+
+    if (GUI.changed)
+    {
+      EditorUtility.SetDirty(app);
+      AssetDatabase.SaveAssets();
+    }
   }
 }

@@ -51,6 +51,12 @@ public class PrefabsManagerInspector : Editor
 
       EditorGUILayout.HelpBox(_prefabsList, MessageType.None);
     }
+
+    if (GUI.changed)
+    {
+      EditorUtility.SetDirty(pm);
+      AssetDatabase.SaveAssets();
+    }
   }
 
   void LoadPrefabs(List<GameObject> listToAdd, string path)
