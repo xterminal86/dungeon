@@ -10,7 +10,9 @@ public class SoundManager : MonoSingleton<SoundManager>
 
   public AudioSource AudioSourceOneShotPrefab;
 
+  [SerializeField]
   public List<AudioClip> MusicTracks = new List<AudioClip>();
+  [SerializeField]
   public List<AudioClip> SoundEffects = new List<AudioClip>();
 
   public Dictionary<int, int> LastPlayedSoundOfChar = new Dictionary<int, int>();
