@@ -348,12 +348,41 @@ public class App : MonoBehaviour
           {
             InstantiateTeleporter(LevelLoader.Instance.LevelMap.Level[x, y, z]);
           }
+
+          PlaceWalls(LevelLoader.Instance.LevelMap.Level[x, y, z]);
         }
       }
     }
 
     Int3 cameraPos = new Int3(LevelLoader.Instance.LevelMap.PlayerPos.X, LevelLoader.Instance.LevelMap.PlayerPos.Y, LevelLoader.Instance.LevelMap.PlayerPos.Z);
     InputController.Instance.SetupCamera(cameraPos);
+  }
+
+  Int3 _blockCoordinates = new Int3();
+  void PlaceWalls(BlockEntity block)
+  {
+    _blockCoordinates.Set(block.ArrayCoordinates);
+
+    foreach (var obj in block.WallsByOrientation)
+    {      
+      if (obj.Value != null)
+      {
+        if (obj.Value.ArrayCoordinates == _blockCoordinates)
+        {
+          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(obj.Value.PrefabName);
+
+          GameObject go = (GameObject)Instantiate(prefab, block.WorldCoordinates, Quaternion.identity);
+
+          Vector3 eulerAngles = go.transform.eulerAngles;
+          eulerAngles.y = GlobalConstants.OrientationAngles[obj.Value.ObjectOrientation];
+
+          go.transform.eulerAngles = eulerAngles;
+          go.transform.parent = ObjectsInstancesTransform.transform;
+
+          //Utils.HideWallSides(obj.Value, LevelLoader.Instance.LevelMap);
+        }
+      }
+    }
   }
 
   void InstantiateTeleporter(BlockEntity block)
@@ -496,9 +525,12 @@ public class App : MonoBehaviour
             (worldObject as SignWorldObject).InitBWO();
             break;          
 
+            /*
           case GlobalConstants.WorldObjectClass.WALL:
-            Utils.HideWallSides((worldObject as WallWorldObject), LevelLoader.Instance.LevelMap); 
+            Utils.HideWallSides((worldObject as WallWorldObject), LevelLoader.Instance.LevelMap);
+            Utils.SetWallColumns((worldObject as WallWorldObject), LevelLoader.Instance.LevelMap);
             break;
+            */
 
           case GlobalConstants.WorldObjectClass.SHRINE:
             (worldObject as ShrineWorldObject).InitBWO();

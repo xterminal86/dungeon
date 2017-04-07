@@ -360,7 +360,24 @@ public class LevelBase
     {
       WorldObject wo = new WallWorldObject(string.Empty, prefabStringName);
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
-      SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.WALL, orientation);
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WallsByOrientation[orientation] = wo as WallWorldObject;
+
+      BlockEntity nextBlock = Utils.GetNextCellTowardsOrientation(arrayPos, orientation, this);
+      if (nextBlock != null)
+      {
+        var o = Utils.GetOppositeOrientation(orientation);
+        nextBlock.WallsByOrientation[o] = wo as WallWorldObject;
+      }
+
+      wo.ArrayCoordinates.Set(arrayPos);
+
+      wo.ObjectClass = GlobalConstants.WorldObjectClass.WALL;
+      wo.ObjectOrientation = orientation;
+
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].ArrayCoordinates.Set(arrayPos.X, arrayPos.Y, arrayPos.Z);
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
+
+      //SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.WALL, orientation);
 
       return wo;
     }
@@ -510,7 +527,7 @@ public class LevelBase
   /// <param name="orientation">Orientation</param>
   void SetWorldObjectParams(WorldObject wo, Int3 arrayPos, GlobalConstants.WorldObjectClass objectClass, GlobalConstants.Orientation orientation)
   {
-    // Avoid reference passing via =
+    // Avoid reference passing via = for complex types
     wo.ArrayCoordinates.Set(arrayPos);
 
     wo.ObjectClass = objectClass;

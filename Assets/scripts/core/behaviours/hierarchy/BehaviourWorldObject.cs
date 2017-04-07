@@ -22,4 +22,7 @@ public class BehaviourWorldObject : BehaviourWorldObjectBase
   public Transform RightQuad;
   public Transform TopQuad;
   public Transform BottomQuad;
+
+  public Transform WallColumnLeft;
+  public Transform WallColumnRight;
 }

@@ -142,6 +142,82 @@ public static class Utils
     }
   }
 
+  static Int3 _nextCellCoordsTowardsCurrentOrientation = Int3.Zero;
+  public static BlockEntity GetNextCellTowardsOrientation(Int3 currentPos, GlobalConstants.Orientation currentOrientation, LevelBase level)
+  {
+    _nextCellCoordsTowardsCurrentOrientation.Set(currentPos);
+
+    // South - X+, East - Z+
+
+    if (currentOrientation == GlobalConstants.Orientation.NORTH)
+    {
+      _nextCellCoordsTowardsCurrentOrientation.X--;
+    }
+    else if (currentOrientation == GlobalConstants.Orientation.EAST)
+    {
+      _nextCellCoordsTowardsCurrentOrientation.Z++;
+    }
+    else if (currentOrientation == GlobalConstants.Orientation.SOUTH)
+    {
+      _nextCellCoordsTowardsCurrentOrientation.X++;
+    }
+    else if (currentOrientation == GlobalConstants.Orientation.WEST)
+    {
+      _nextCellCoordsTowardsCurrentOrientation.Z--;
+    }
+
+    if (_nextCellCoordsTowardsCurrentOrientation.X >= 0 && _nextCellCoordsTowardsCurrentOrientation.X < level.MapX
+      && _nextCellCoordsTowardsCurrentOrientation.Z >= 0 && _nextCellCoordsTowardsCurrentOrientation.Z < level.MapZ)
+    {
+      return level.Level[_nextCellCoordsTowardsCurrentOrientation.X, _nextCellCoordsTowardsCurrentOrientation.Y, _nextCellCoordsTowardsCurrentOrientation.Z];
+    }
+
+    return null;
+  }
+
+  public static GlobalConstants.Orientation GetOppositeOrientation(GlobalConstants.Orientation orientation)
+  {
+    int oppositeOrientation = (int)orientation;
+
+    oppositeOrientation += 2;
+    oppositeOrientation %= 4;
+
+    return (GlobalConstants.Orientation)oppositeOrientation;
+  }
+
+  public static void SetWallColumns(WallWorldObject wall, LevelBase level)
+  {
+    /*
+    Int3 c = wall.ArrayCoordinates;
+
+    GlobalConstants.Orientation wallOrientation = wall.ObjectOrientation;
+
+    int lx = c.X - 1;
+    int hx = c.X + 1;
+    int ly = c.Y - 1;
+    int hy = c.Y + 1;
+    int lz = c.Z - 1;
+    int hz = c.Z + 1;
+
+    // Since HasWall is shared between blocks, we can use the current one.
+
+    GlobalConstants.Orientation perpendicularOrientation = (GlobalConstants.Orientation)(((int)wallOrientation + 1) % 4);
+
+    BlockEntity nextBlock = GetNextCellTowardsOrientation(c, wallOrientation, level);
+    BlockEntity parallelBlock = GetNextCellTowardsOrientation(c, perpendicularOrientation, level);
+
+    if (nextBlock != null && parallelBlock != null)
+    {
+      if (!nextBlock.HasWall[perpendicularOrientation]
+        && !level.Level[c.X, c.Y, c.Z].HasWall[perpendicularOrientation]
+        && !parallelBlock.HasWall[wallOrientation])
+      {
+        wall.BWO.WallColumnRight.gameObject.SetActive(true);
+      }
+    }
+    */
+  }
+
   /// <summary>
   /// Hides the wall sides if it has adjacent walls to save draw calls and minimize lighting artefacts.
   /// </summary>

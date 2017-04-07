@@ -257,7 +257,7 @@ public class InputController : MonoSingleton<InputController>
       return;
     }
 
-    GlobalConstants.Orientation oppositeOrientation = GetOppositeOrientation(CameraOrientation);
+    GlobalConstants.Orientation oppositeOrientation = Utils.GetOppositeOrientation(CameraOrientation);
 
     if (blockBefore.BlockType != GlobalConstants.BlockType.AIR 
      && blockAbove.BlockType == GlobalConstants.BlockType.AIR
@@ -506,7 +506,7 @@ public class InputController : MonoSingleton<InputController>
     }
     else if (bwo.WorldObjectInstance.ArrayCoordinates != PlayerMapPos)
     {
-      BlockEntity nextCell = GetNextCellForCurrentOrientation();
+      BlockEntity nextCell = Utils.GetNextCellTowardsOrientation(PlayerMapPos, CameraOrientation, LevelLoader.Instance.LevelMap);
 
       if (nextCell != null)
       {
@@ -515,7 +515,7 @@ public class InputController : MonoSingleton<InputController>
         // If object belongs to the next cell before player and has the same or opposite orientation 
         if (bwo.WorldObjectInstance.ArrayCoordinates == _nextCellArrayCoordinates
           && (bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation 
-           || bwo.WorldObjectInstance.ObjectOrientation == GetOppositeOrientation(CameraOrientation)) )
+           || bwo.WorldObjectInstance.ObjectOrientation == Utils.GetOppositeOrientation(CameraOrientation)) )
         {          
           if (bwo.WorldObjectInstance.ActionCallback != null)
             bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
@@ -604,7 +604,7 @@ public class InputController : MonoSingleton<InputController>
         break;
 
       case CameraMoveType.BACKWARD:
-        newOrientation = GetOppositeOrientation(CameraOrientation);
+        newOrientation = Utils.GetOppositeOrientation(CameraOrientation);
         break;
 
         // If we are facing NORTH, it is 0, so to deal with -1 we use special condition.
@@ -632,7 +632,7 @@ public class InputController : MonoSingleton<InputController>
 
     isBlockWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].Walkable;
     currentBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].SidesWalkability[newOrientation];
-    nextBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].SidesWalkability[GetOppositeOrientation(newOrientation)];
+    nextBlockSideWalkable = LevelLoader.Instance.LevelMap.Level[newX, PlayerMapPos.Y, newZ].SidesWalkability[Utils.GetOppositeOrientation(newOrientation)];
 
     _walkabilityCheckResult[0] = isBlockWalkable;
     _walkabilityCheckResult[1] = currentBlockSideWalkable;
@@ -1019,49 +1019,6 @@ public class InputController : MonoSingleton<InputController>
     _cameraPos.z = endZ;
     
     _isProcessing = false;    
-  }
-
-  GlobalConstants.Orientation GetOppositeOrientation(GlobalConstants.Orientation orientation)
-  {
-    int oppositeOrientation = (int)orientation;
-
-    oppositeOrientation += 2;
-    oppositeOrientation %= 4;
-
-    return (GlobalConstants.Orientation)oppositeOrientation;
-  }
-
-  Int3 _nextCellCoordsForCurrentOrientation = new Int3();
-  BlockEntity GetNextCellForCurrentOrientation()
-  {
-    _nextCellCoordsForCurrentOrientation.Set(PlayerMapPos);
-
-    // South - X+, East - Z+
-
-    if (CameraOrientation == GlobalConstants.Orientation.NORTH)
-    {
-      _nextCellCoordsForCurrentOrientation.X--;
-    }
-    else if (CameraOrientation == GlobalConstants.Orientation.EAST)
-    {
-      _nextCellCoordsForCurrentOrientation.Z++;
-    }
-    else if (CameraOrientation == GlobalConstants.Orientation.SOUTH)
-    {
-      _nextCellCoordsForCurrentOrientation.X++;
-    }
-    else if (CameraOrientation == GlobalConstants.Orientation.WEST)
-    {
-      _nextCellCoordsForCurrentOrientation.Z--;
-    }
-
-    if (_nextCellCoordsForCurrentOrientation.X >= 0 && _nextCellCoordsForCurrentOrientation.X < LevelLoader.Instance.LevelSize.X
-     && _nextCellCoordsForCurrentOrientation.Z >= 0 && _nextCellCoordsForCurrentOrientation.Z < LevelLoader.Instance.LevelSize.Z)
-    {
-      return LevelLoader.Instance.LevelMap.Level[_nextCellCoordsForCurrentOrientation.X, _nextCellCoordsForCurrentOrientation.Y, _nextCellCoordsForCurrentOrientation.Z];
-    }
-      
-    return null;
   }
 
   Vector3 _cameraForwardVector = Vector3.zero;
