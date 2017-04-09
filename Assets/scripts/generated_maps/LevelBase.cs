@@ -359,6 +359,10 @@ public class LevelBase
     if (TryFindPrefab(prefabStringName))
     {
       WorldObject wo = new WallWorldObject(string.Empty, prefabStringName);
+      wo.ArrayCoordinates.Set(arrayPos);
+      wo.ObjectClass = GlobalConstants.WorldObjectClass.WALL;
+      wo.ObjectOrientation = orientation;
+
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WallsByOrientation[orientation] = wo as WallWorldObject;
 
@@ -366,18 +370,16 @@ public class LevelBase
       if (nextBlock != null)
       {
         var o = Utils.GetOppositeOrientation(orientation);
-        nextBlock.WallsByOrientation[o] = wo as WallWorldObject;
+        WallWorldObject sharedWall = new WallWorldObject(string.Empty, string.Empty);
+        sharedWall.ArrayCoordinates = new Int3(nextBlock.ArrayCoordinates);
+        sharedWall.ObjectClass = GlobalConstants.WorldObjectClass.WALL;
+        sharedWall.ObjectOrientation = o;
+        nextBlock.WallsByOrientation[o] = sharedWall;
+        nextBlock.SidesWalkability[o] = false;
       }
-
-      wo.ArrayCoordinates.Set(arrayPos);
-
-      wo.ObjectClass = GlobalConstants.WorldObjectClass.WALL;
-      wo.ObjectOrientation = orientation;
 
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].ArrayCoordinates.Set(arrayPos.X, arrayPos.Y, arrayPos.Z);
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
-
-      //SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.WALL, orientation);
 
       return wo;
     }

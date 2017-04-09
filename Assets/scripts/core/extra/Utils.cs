@@ -186,36 +186,25 @@ public static class Utils
   }
 
   public static void SetWallColumns(WallWorldObject wall, LevelBase level)
-  {
-    /*
-    Int3 c = wall.ArrayCoordinates;
+  {    
+    int x = wall.ArrayCoordinates.X;
+    int y = wall.ArrayCoordinates.Y;
+    int z = wall.ArrayCoordinates.Z;
+
+    int lx = wall.ArrayCoordinates.X - 1;
+    int lz = wall.ArrayCoordinates.Z - 1;
+    int hx = wall.ArrayCoordinates.X + 1;
+    int hz = wall.ArrayCoordinates.Z + 1;
 
     GlobalConstants.Orientation wallOrientation = wall.ObjectOrientation;
 
-    int lx = c.X - 1;
-    int hx = c.X + 1;
-    int ly = c.Y - 1;
-    int hy = c.Y + 1;
-    int lz = c.Z - 1;
-    int hz = c.Z + 1;
-
-    // Since HasWall is shared between blocks, we can use the current one.
-
-    GlobalConstants.Orientation perpendicularOrientation = (GlobalConstants.Orientation)(((int)wallOrientation + 1) % 4);
-
-    BlockEntity nextBlock = GetNextCellTowardsOrientation(c, wallOrientation, level);
-    BlockEntity parallelBlock = GetNextCellTowardsOrientation(c, perpendicularOrientation, level);
-
-    if (nextBlock != null && parallelBlock != null)
+    if (lx >= 0)
     {
-      if (!nextBlock.HasWall[perpendicularOrientation]
-        && !level.Level[c.X, c.Y, c.Z].HasWall[perpendicularOrientation]
-        && !parallelBlock.HasWall[wallOrientation])
+      if (level.Level[lx, y, z].WallsByOrientation[GlobalConstants.Orientation.EAST] == null)
       {
-        wall.BWO.WallColumnRight.gameObject.SetActive(true);
+        //wall.BWO.WallColumnLeft.gameObject.SetActive(true);
       }
     }
-    */
   }
 
   /// <summary>
@@ -232,6 +221,19 @@ public static class Utils
 
   /// <summary>
   /// If we have neighbouring walls, hide appropriate lateral sides of the current wall.
+  /// This is to reduce draw calls and get rid of potential lighting artefacts:
+  /// if you have two cubes adjacent to each other, at their "shared" side there will be situations
+  /// when lighting can sometimes highlight "shared" side of the adjacent cube, which result in a seam that
+  /// clearly shows that two objects are separate.
+  /// \
+  ///  \
+  ///   \ here
+  ///    |\ _
+  ///    | |_|
+  ///    |/
+  ///   /
+  ///  /
+  /// /
   /// </summary>
   static void TryHideLeftRightSides(WallWorldObject wall, LevelBase level)
   {
@@ -246,73 +248,54 @@ public static class Utils
 
     GlobalConstants.Orientation wallOrientation = wall.ObjectOrientation;
 
-    WorldObject res = null;
+    // South - X+, East - Z+
 
-    if (lx >= 0)
+    if (wallOrientation == GlobalConstants.Orientation.EAST)
     {
-      res = DetectObject(level.Level[lx, y, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
-
-      if (res != null)
+      if (lx >= 0 && level.Level[lx, y, z].WallsByOrientation[wallOrientation] != null)
       {
-        if (wallOrientation == GlobalConstants.Orientation.EAST)
-        {
-          wall.BWO.LeftQuad.gameObject.SetActive(false);
-        }
-        else if (wallOrientation == GlobalConstants.Orientation.WEST)
-        {
-          wall.BWO.RightQuad.gameObject.SetActive(false);
-        }
+        wall.BWO.LeftQuad.gameObject.SetActive(false);
+      }
+
+      if (hx < level.MapX && level.Level[hx, y, z].WallsByOrientation[wallOrientation] != null)
+      {
+        wall.BWO.RightQuad.gameObject.SetActive(false);
       }
     }
-
-    if (hx < level.MapX)
+    else if (wallOrientation == GlobalConstants.Orientation.SOUTH)
     {
-      res = DetectObject(level.Level[hx, y, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
-
-      if (res != null)
+      if (lz >= 0 && level.Level[x, y, lz].WallsByOrientation[wallOrientation] != null)
       {
-        if (wallOrientation == GlobalConstants.Orientation.EAST)
-        {
-          wall.BWO.RightQuad.gameObject.SetActive(false);
-        }
-        else if (wallOrientation == GlobalConstants.Orientation.WEST)
-        {
-          wall.BWO.LeftQuad.gameObject.SetActive(false);
-        }
+        wall.BWO.RightQuad.gameObject.SetActive(false);
+      }
+
+      if (hz < level.MapZ && level.Level[x, y, hz].WallsByOrientation[wallOrientation] != null)
+      {
+        wall.BWO.LeftQuad.gameObject.SetActive(false);
       }
     }
-
-    if (lz >= 0)
+    else if (wallOrientation == GlobalConstants.Orientation.WEST)
     {      
-      res = DetectObject(level.Level[x, y, lz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
-
-      if (res != null)
+      if (lx >= 0 && level.Level[lx, y, z].WallsByOrientation[wallOrientation] != null)
       {
-        if (wallOrientation == GlobalConstants.Orientation.SOUTH)
-        {
-          wall.BWO.RightQuad.gameObject.SetActive(false);
-        }
-        else if (wallOrientation == GlobalConstants.Orientation.NORTH)
-        {
-          wall.BWO.LeftQuad.gameObject.SetActive(false);
-        }
+        wall.BWO.RightQuad.gameObject.SetActive(false);
+      }
+
+      if (hx < level.MapX && level.Level[hx, y, z].WallsByOrientation[wallOrientation] != null)
+      {
+        wall.BWO.LeftQuad.gameObject.SetActive(false);
       }
     }
-
-    if (hz < level.MapZ)
+    else if (wallOrientation == GlobalConstants.Orientation.NORTH)
     {
-      res = DetectObject(level.Level[x, y, hz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
-
-      if (res != null)
+      if (lz >= 0 && level.Level[x, y, lz].WallsByOrientation[wallOrientation] != null)
       {
-        if (wallOrientation == GlobalConstants.Orientation.SOUTH)
-        {
-          wall.BWO.LeftQuad.gameObject.SetActive(false);
-        }
-        else if (wallOrientation == GlobalConstants.Orientation.NORTH)
-        {
-          wall.BWO.RightQuad.gameObject.SetActive(false);
-        }
+        wall.BWO.LeftQuad.gameObject.SetActive(false);
+      }
+
+      if (hz < level.MapZ && level.Level[x, y, hz].WallsByOrientation[wallOrientation] != null)
+      {
+        wall.BWO.RightQuad.gameObject.SetActive(false);
       }
     }
   }
@@ -337,9 +320,7 @@ public static class Utils
 
     if (ly >= 0)
     {
-      res1 = DetectObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
-
-      if (res1 != null)
+      if (level.Level[x, ly, z].WallsByOrientation[wallOrientation] != null)
       {
         wall.BWO.BottomQuad.gameObject.SetActive(false);
       }
@@ -347,28 +328,26 @@ public static class Utils
       {
         // To disable Z fighting of door frame with bottom side of the wall, handle this case specifically.
 
-        res2 = DetectObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE);
-        res3 = DetectObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE);
+        res2 = FindObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE);
+        res3 = FindObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE);
 
         if (res2 != null || res3 != null)
-        {
+        {          
           wall.BWO.BottomQuad.gameObject.SetActive(false);
         }
-      }        
+      }
     }
 
     if (hy < level.MapY)
     {
-      res1 = DetectObject(level.Level[x, hy, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.WALL);
-
-      if (res1 != null)
+      if (level.Level[x, hy, z].WallsByOrientation[wallOrientation] != null)
       {
         wall.BWO.TopQuad.gameObject.SetActive(false);
       }
     }
   }
 
-  static WorldObject DetectObject(List<WorldObject> worldObjects, GlobalConstants.Orientation orientation, GlobalConstants.WorldObjectClass objectClass)
+  static WorldObject FindObject(List<WorldObject> worldObjects, GlobalConstants.Orientation orientation, GlobalConstants.WorldObjectClass objectClass)
   {
     if (worldObjects == null)
     {

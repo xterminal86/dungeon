@@ -364,10 +364,12 @@ public class App : MonoBehaviour
     _blockCoordinates.Set(block.ArrayCoordinates);
 
     foreach (var obj in block.WallsByOrientation)
-    {      
+    {     
       if (obj.Value != null)
-      {
-        if (obj.Value.ArrayCoordinates == _blockCoordinates)
+      {        
+        // Shared walls have string.Empty as prefabName
+
+        if (obj.Value.PrefabName != string.Empty)
         {
           GameObject prefab = PrefabsManager.Instance.FindPrefabByName(obj.Value.PrefabName);
 
@@ -379,7 +381,21 @@ public class App : MonoBehaviour
           go.transform.eulerAngles = eulerAngles;
           go.transform.parent = ObjectsInstancesTransform.transform;
 
-          //Utils.HideWallSides(obj.Value, LevelLoader.Instance.LevelMap);
+          BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
+          bwo.WorldObjectInstance = obj.Value;
+
+          obj.Value.BWO = bwo;
+
+          BlockEntity nextBlock = Utils.GetNextCellTowardsOrientation(_blockCoordinates, obj.Value.ObjectOrientation, LevelLoader.Instance.LevelMap);
+          if (nextBlock != null)
+          {
+            var o = Utils.GetOppositeOrientation(obj.Value.ObjectOrientation);
+            nextBlock.WallsByOrientation[o].ObjectOrientation = o;
+            nextBlock.WallsByOrientation[o].BWO = bwo;
+          }
+
+          Utils.HideWallSides(obj.Value, LevelLoader.Instance.LevelMap);
+          Utils.SetWallColumns(obj.Value, LevelLoader.Instance.LevelMap);
         }
       }
     }
