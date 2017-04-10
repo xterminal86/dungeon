@@ -197,14 +197,57 @@ public static class Utils
     int hz = wall.ArrayCoordinates.Z + 1;
 
     GlobalConstants.Orientation wallOrientation = wall.ObjectOrientation;
+    GlobalConstants.Orientation perpendicularOrientation1 = GlobalConstants.Orientation.EAST;
+    GlobalConstants.Orientation perpendicularOrientation2 = GlobalConstants.Orientation.EAST;
 
-    if (lx >= 0)
+    bool parallelWall = false;
+    WorldObject parallelDoorType1 = null;
+    WorldObject parallelDoorType2 = null;
+    bool perpendicularWallCurrent = false;
+    bool perpendicularWallNext = false;
+
+    // South - X+, East - Z+
+
+    if (wallOrientation == GlobalConstants.Orientation.EAST)
     {
-      if (level.Level[lx, y, z].WallsByOrientation[GlobalConstants.Orientation.EAST] == null)
+      perpendicularOrientation1 = GlobalConstants.Orientation.NORTH;
+      perpendicularOrientation2 = GlobalConstants.Orientation.SOUTH;
+
+      if (lx >= 0 && hz < level.MapZ)
       {
-        //wall.BWO.WallColumnLeft.gameObject.SetActive(true);
+        parallelWall = (level.Level[lx, y, z].WallsByOrientation[wallOrientation] != null);
+        parallelDoorType1 = FindObject(level.Level[lx, y, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE);
+        parallelDoorType2 = FindObject(level.Level[lx, y, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE);
+        perpendicularWallCurrent = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientation1] != null);
+        perpendicularWallNext = (level.Level[x, y, hz].WallsByOrientation[perpendicularOrientation1] != null);
+
+        if ( (parallelWall || parallelDoorType1 != null || parallelDoorType2 != null)
+          || (perpendicularWallCurrent && perpendicularWallNext))
+        {
+          wall.BWO.WallColumnLeft.gameObject.SetActive(false);
+        }
+      }
+
+      if (hx < level.MapX && hz < level.MapZ)
+      {
+        if (level.Level[hx, y, z].WallsByOrientation[wallOrientation] != null
+          || (level.Level[x, y, z].WallsByOrientation[perpendicularOrientation2] != null
+          && level.Level[x, y, hz].WallsByOrientation[perpendicularOrientation2] != null))
+        {
+          wall.BWO.WallColumnRight.gameObject.SetActive(false);
+        }
       }
     }
+    else if (wallOrientation == GlobalConstants.Orientation.SOUTH)
+    {
+    }
+    else if (wallOrientation == GlobalConstants.Orientation.WEST)
+    {
+    }
+    else if (wallOrientation == GlobalConstants.Orientation.NORTH)
+    {
+    }
+
   }
 
   /// <summary>

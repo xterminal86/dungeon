@@ -20,6 +20,8 @@ public class TestLevel : LevelBase
 
     WorldObject wo = null;
 
+    PlaceWall(new Int3(5, 1, 6), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+
     // Sign
 
     PlaceWall(new Int3(0, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
@@ -42,6 +44,7 @@ public class TestLevel : LevelBase
     // Secret door
 
     wo = PlaceDoor(new Int3(5, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_STONE_BRICKS_SLIDING, GlobalConstants.Orientation.EAST, false, true, 0.5f, 0.5f);
+    PlaceWall(new Int3(5, 2, 1), GlobalConstants.WorldObjectPrefabType.DUMMY, GlobalConstants.Orientation.EAST);
 
     PlaceWall(new Int3(6, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceWall(new Int3(6, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
