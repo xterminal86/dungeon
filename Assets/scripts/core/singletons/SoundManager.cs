@@ -17,7 +17,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
   public Dictionary<int, int> LastPlayedSoundOfChar = new Dictionary<int, int>();
 
-  Dictionary<int, AudioSource> _audioSourcesByHash = new Dictionary<int, AudioSource>();
+  Dictionary<string, AudioSource> _audioSourcesByName = new Dictionary<string, AudioSource>();
 
   protected override void Init()
   {    
@@ -54,9 +54,7 @@ public class SoundManager : MonoSingleton<SoundManager>
       s.name = item.name;
       s.loop = true;
 
-      int hash = s.name.GetHashCode();
-    
-      _audioSourcesByHash.Add(hash, s);
+      _audioSourcesByName.Add(s.name, s);
     }
   }
 
@@ -83,45 +81,33 @@ public class SoundManager : MonoSingleton<SoundManager>
       s.volume = SoundVolume;
       s.name = item.name;
 
-      int hash = s.name.GetHashCode();
-
-      _audioSourcesByHash.Add(hash, s);
+      _audioSourcesByName.Add(s.name, s);
     }
   }
 
   public void PlaySound(string name)
   {
-    PlaySound(name.GetHashCode());
-  }
-
-  public void PlaySound(int hash)
-  {
-    if (_audioSourcesByHash.ContainsKey(hash))
+    if (_audioSourcesByName.ContainsKey(name))
     {
-      _audioSourcesByHash[hash].spatialBlend = 0.0f;
-      _audioSourcesByHash[hash].Play();
+      _audioSourcesByName[name].spatialBlend = 0.0f;
+      _audioSourcesByName[name].Play();
     }
   }
 
-  public void PlaySound(int hash, float pitchOffset)
+  public void PlaySound(string name, float pitchOffset)
   {
-    if (_audioSourcesByHash.ContainsKey(hash))
+    if (_audioSourcesByName.ContainsKey(name))
     {
-      _audioSourcesByHash[hash].pitch = 1 + Random.Range(-pitchOffset, pitchOffset);
-      _audioSourcesByHash[hash].Play();      
+      _audioSourcesByName[name].pitch = 1 + Random.Range(-pitchOffset, pitchOffset);
+      _audioSourcesByName[name].Play();      
     }
   }
 
   public void PlaySound(string name, Vector3 position, bool is3D, float pitch = 1.0f)
   {
-    PlaySound(name.GetHashCode(), position, is3D, pitch);
-  }
-
-  public void PlaySound(int hash, Vector3 position, bool is3D, float pitch = 1.0f)
-  {
-    if (_audioSourcesByHash.ContainsKey(hash))
+    if (_audioSourcesByName.ContainsKey(name))
     {      
-      GameObject go = new GameObject("SFX-3D");
+      GameObject go = new GameObject("SFX-3D-" + name);
       go.transform.parent = transform;
       go.transform.position = position;
       AudioSource a = go.AddComponent<AudioSource>();
@@ -134,7 +120,7 @@ public class SoundManager : MonoSingleton<SoundManager>
       a.rolloffMode = AudioRolloffMode.Custom;
       var curve = AudioSourceOneShotPrefab.GetCustomCurve(AudioSourceCurveType.CustomRolloff);
       a.SetCustomCurve(AudioSourceCurveType.CustomRolloff, curve);
-      a.clip = _audioSourcesByHash[hash].clip;
+      a.clip = _audioSourcesByName[name].clip;
       float length = a.clip.length / pitch + 1.0f;
       a.Play();
       Destroy(go, length);
@@ -206,25 +192,24 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
   }  
 
-  int _currentPlayingTrack = -1;
+  string _currentPlayingTrack = string.Empty;
   public void PlayMusicTrack(string trackName)
-  {    
-    int hash = trackName.GetHashCode();
-    if (_audioSourcesByHash.ContainsKey(hash))
+  { 
+    if (_audioSourcesByName.ContainsKey(trackName))
     {
-      if (_currentPlayingTrack != -1 && _audioSourcesByHash[_currentPlayingTrack].isPlaying)
+      if (_currentPlayingTrack != string.Empty && _audioSourcesByName[_currentPlayingTrack].isPlaying)
       {
-        _audioSourcesByHash[_currentPlayingTrack].Stop();
+        _audioSourcesByName[_currentPlayingTrack].Stop();
       }
 
-      _audioSourcesByHash[hash].Play();
-      _currentPlayingTrack = hash;
+      _audioSourcesByName[trackName].Play();
+      _currentPlayingTrack = trackName;
     }
   }
 
   public void StopAllSounds()
   {
-    foreach (var item in _audioSourcesByHash)
+    foreach (var item in _audioSourcesByName)
     {
       item.Value.Stop();
     }

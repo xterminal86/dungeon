@@ -375,7 +375,7 @@ public class LevelBase
     if (nextBlock != null)
     {
       var o = Utils.GetOppositeOrientation(orientation);
-      WallWorldObject sharedWall = new WallWorldObject(string.Empty, string.Empty);
+      WallWorldObject sharedWall = new WallWorldObject(string.Empty, prefabStringName);
       sharedWall.ArrayCoordinates = new Int3(nextBlock.ArrayCoordinates);
       sharedWall.ObjectClass = GlobalConstants.WorldObjectClass.WALL;
       sharedWall.ObjectOrientation = o;

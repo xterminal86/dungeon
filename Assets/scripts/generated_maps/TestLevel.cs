@@ -44,7 +44,7 @@ public class TestLevel : LevelBase
     // Secret door
 
     wo = PlaceDoor(new Int3(5, 1, 1), GlobalConstants.WorldObjectPrefabType.DOOR_STONE_BRICKS_SLIDING, GlobalConstants.Orientation.EAST, false, true, 0.5f, 0.5f);
-    PlaceWall(new Int3(5, 2, 1), GlobalConstants.WorldObjectPrefabType.DUMMY, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(5, 2, 1), GlobalConstants.WorldObjectPrefabType.NOTHING, GlobalConstants.Orientation.EAST);
 
     PlaceWall(new Int3(6, 1, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
     PlaceWall(new Int3(6, 2, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
@@ -127,6 +127,13 @@ public class TestLevel : LevelBase
     PlaceShrine(new Int3(10, 21, 25), GlobalConstants.WorldObjectPrefabType.SHRINE_MIGHT, GlobalConstants.Orientation.SOUTH);
     PlaceShrine(new Int3(10, 21, 15), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
     //PlaceShrine(new Int3(1, 1, 0), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
+
+    // Cube
+
+    PlaceWall(new Int3(20, 1, 5), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(20, 1, 5), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
+    PlaceWall(new Int3(20, 1, 5), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
+    PlaceWall(new Int3(20, 1, 5), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
 

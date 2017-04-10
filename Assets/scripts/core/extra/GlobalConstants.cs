@@ -158,99 +158,99 @@ public static class GlobalConstants
     { 180, Orientation.EAST }
   };
 
-  public static List<int> FootstepsDummy = new List<int>()
+  public static List<string> FootstepsDummy = new List<string>()
   {
-    "fs-dummy1".GetHashCode(),
-    "fs-dummy2".GetHashCode()
+    "fs-dummy1",
+    "fs-dummy2"
   };
 
-  public static List<int> FootstepsDummy3d = new List<int>()
+  public static List<string> FootstepsDummy3d = new List<string>()
   {
-    "fs-dummy1-3d".GetHashCode(),
-    "fs-dummy2-3d".GetHashCode()
+    "fs-dummy1-3d",
+    "fs-dummy2-3d"
   };
 
-  public static List<int> FootstepsGrass = new List<int>()
+  public static List<string> FootstepsGrass = new List<string>()
   {
-    "fs-grass1".GetHashCode(),
-    "fs-grass2".GetHashCode(),
-    "fs-grass3".GetHashCode(),
-    "fs-grass4".GetHashCode()
+    "fs-grass1",
+    "fs-grass2",
+    "fs-grass3",
+    "fs-grass4"
   };
 
-  public static List<int> FootstepsGrass3d = new List<int>()
+  public static List<string> FootstepsGrass3d = new List<string>()
   {
-    "fs-grass1-3d".GetHashCode(),
-    "fs-grass2-3d".GetHashCode(),
-    "fs-grass3-3d".GetHashCode(),
-    "fs-grass4-3d".GetHashCode()
+    "fs-grass1-3d",
+    "fs-grass2-3d",
+    "fs-grass3-3d",
+    "fs-grass4-3d"
   };
 
-  public static List<int> FootstepsTile = new List<int>()
+  public static List<string> FootstepsTile = new List<string>()
   {
-    "fs-tile1".GetHashCode(),
-    "fs-tile2".GetHashCode(),
-    "fs-tile3".GetHashCode(),
-    "fs-tile4".GetHashCode()
+    "fs-tile1",
+    "fs-tile2",
+    "fs-tile3",
+    "fs-tile4"
   };
 
-  public static List<int> FootstepsTile3d = new List<int>()
+  public static List<string> FootstepsTile3d = new List<string>()
   {
-    "fs-tile1-3d".GetHashCode(),
-    "fs-tile2-3d".GetHashCode(),
-    "fs-tile3-3d".GetHashCode(),
-    "fs-tile4-3d".GetHashCode()
+    "fs-tile1-3d",
+    "fs-tile2-3d",
+    "fs-tile3-3d",
+    "fs-tile4-3d"
   };
 
-  public static List<int> FootstepsWood = new List<int>()
+  public static List<string> FootstepsWood = new List<string>()
   {
-    "fs-wood1".GetHashCode(),
-    "fs-wood2".GetHashCode(),
-    "fs-wood3".GetHashCode(),
-    "fs-wood4".GetHashCode()    
+    "fs-wood1",
+    "fs-wood2",
+    "fs-wood3",
+    "fs-wood4"    
   };
 
-  public static List<int> FootstepsWood3d = new List<int>()
+  public static List<string> FootstepsWood3d = new List<string>()
   {
-    "fs-wood1-3d".GetHashCode(),
-    "fs-wood2-3d".GetHashCode(),
-    "fs-wood3-3d".GetHashCode(),
-    "fs-wood4-3d".GetHashCode()    
+    "fs-wood1-3d",
+    "fs-wood2-3d",
+    "fs-wood3-3d",
+    "fs-wood4-3d"    
   };
 
-  public static List<int> FootstepsDirt = new List<int>()
+  public static List<string> FootstepsDirt = new List<string>()
   {
-    "fs-dirt1".GetHashCode(),
-    "fs-dirt2".GetHashCode(),
-    "fs-dirt3".GetHashCode(),
-    "fs-dirt4".GetHashCode()
+    "fs-dirt1",
+    "fs-dirt2",
+    "fs-dirt3",
+    "fs-dirt4"
   };
 
-  public static List<int> FootstepsDirt3d = new List<int>()
+  public static List<string> FootstepsDirt3d = new List<string>()
   {
-    "fs-dirt1-3d".GetHashCode(),
-    "fs-dirt2-3d".GetHashCode(),
-    "fs-dirt3-3d".GetHashCode(),
-    "fs-dirt4-3d".GetHashCode()
+    "fs-dirt1-3d",
+    "fs-dirt2-3d",
+    "fs-dirt3-3d",
+    "fs-dirt4-3d"
   };
 
-  public static List<int> FootstepsStone = new List<int>()
+  public static List<string> FootstepsStone = new List<string>()
   {
-    "fs-stone1".GetHashCode(),
-    "fs-stone2".GetHashCode(),
-    "fs-stone3".GetHashCode(),
-    "fs-stone4".GetHashCode()
+    "fs-stone1",
+    "fs-stone2",
+    "fs-stone3",
+    "fs-stone4"
   };
 
-  public static List<int> FootstepsStone3d = new List<int>()
+  public static List<string> FootstepsStone3d = new List<string>()
   {
-    "fs-stone1-3d".GetHashCode(),
-    "fs-stone2-3d".GetHashCode(),
-    "fs-stone3-3d".GetHashCode(),
-    "fs-stone4-3d".GetHashCode()
+    "fs-stone1-3d",
+    "fs-stone2-3d",
+    "fs-stone3-3d",
+    "fs-stone4-3d"
   };
 
-  public static Dictionary<FootstepSoundType, List<int>> FootstepsListByType = new Dictionary<FootstepSoundType, List<int>>()
+  public static Dictionary<FootstepSoundType, List<string>> FootstepsListByType = new Dictionary<FootstepSoundType, List<string>>()
   {
     { FootstepSoundType.DUMMY, FootstepsDummy },
     { FootstepSoundType.DIRT, FootstepsDirt },
@@ -343,7 +343,7 @@ public static class GlobalConstants
 
   public enum WorldObjectPrefabType
   {
-    DUMMY = 0,
+    NOTHING = 0,
     WALL_STONE_BRICKS,
     WALL_STONE_BRICKS_WINDOW,
     WALL_TILES,
@@ -364,7 +364,7 @@ public static class GlobalConstants
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
   {
-    { WorldObjectPrefabType.DUMMY, "" },
+    { WorldObjectPrefabType.NOTHING, "" },
     { WorldObjectPrefabType.WALL_STONE_BRICKS, "wall-stone-bricks" },
     { WorldObjectPrefabType.WALL_STONE_BRICKS_WINDOW, "wall-stone-bricks-window" },
     { WorldObjectPrefabType.WALL_TILES, "wall-tiles" },

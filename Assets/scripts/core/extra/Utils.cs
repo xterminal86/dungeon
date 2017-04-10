@@ -208,6 +208,9 @@ public static class Utils
 
     // South - X+, East - Z+
 
+    SetColumnsExtractedMethod(wall, level);
+
+    /*
     if (wallOrientation == GlobalConstants.Orientation.EAST)
     {
       perpendicularOrientation1 = GlobalConstants.Orientation.NORTH;
@@ -247,7 +250,103 @@ public static class Utils
     else if (wallOrientation == GlobalConstants.Orientation.NORTH)
     {
     }
+    */
+  }
 
+  static Dictionary<GlobalConstants.Orientation, Int2> _offsetsForParallelLeft = new Dictionary<GlobalConstants.Orientation, Int2>()
+  {
+    { GlobalConstants.Orientation.EAST, new Int2(-1, 0) },
+    { GlobalConstants.Orientation.SOUTH, new Int2(0, 1) },
+    { GlobalConstants.Orientation.WEST, new Int2(1, 0) },
+    { GlobalConstants.Orientation.NORTH, new Int2(0, -1) }
+  };
+
+  static Dictionary<GlobalConstants.Orientation, Int2> _offsetsForParallelRight = new Dictionary<GlobalConstants.Orientation, Int2>()
+  {
+    { GlobalConstants.Orientation.EAST, new Int2(1, 0) },
+    { GlobalConstants.Orientation.SOUTH, new Int2(0, -1) },
+    { GlobalConstants.Orientation.WEST, new Int2(-1, 0) },
+    { GlobalConstants.Orientation.NORTH, new Int2(0, 1) }
+  };
+
+  static void SetColumnsExtractedMethod(WallWorldObject wallToCheck, LevelBase level)
+  {
+    GlobalConstants.Orientation wallOrientation = wallToCheck.ObjectOrientation;
+
+    int pol = ((int)wallOrientation - 1) == -1 ? 3 : ((int)wallOrientation - 1);
+    int por = ((int)wallOrientation + 1) % 4;
+
+    GlobalConstants.Orientation perpendicularOrientationLeft = (GlobalConstants.Orientation)pol;
+    GlobalConstants.Orientation perpendicularOrientationRight = (GlobalConstants.Orientation)por;
+
+    int x = wallToCheck.ArrayCoordinates.X;
+    int y = wallToCheck.ArrayCoordinates.Y;
+    int z = wallToCheck.ArrayCoordinates.Z;
+
+    int lpnx = x + _offsetsForParallelLeft[wallOrientation].X;
+    int lpnz = z + _offsetsForParallelLeft[wallOrientation].Y;
+    int rpnx = x + _offsetsForParallelRight[wallOrientation].X;
+    int rpnz = z + _offsetsForParallelRight[wallOrientation].Y;
+
+    bool parallelWallLeft = (lpnx >= 0 && lpnx < level.MapX && lpnz >= 0 && lpnz < level.MapZ) ? (level.Level[lpnx, y, lpnz].WallsByOrientation[wallOrientation] != null) : false;
+    bool parallelWallRight = (rpnx >= 0 && rpnx < level.MapX && rpnz >= 0 && rpnz < level.MapZ) ? (level.Level[rpnx, y, rpnz].WallsByOrientation[wallOrientation] != null) : false;
+    bool perpendicularWallCurrentLeft = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientationLeft] != null);
+    bool perpendicularWallCurrentRight = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientationRight] != null);
+    BlockEntity nextBlock = GetNextCellTowardsOrientation(wallToCheck.ArrayCoordinates, wallOrientation, level);
+    bool perpendicularWallNextLeft = (nextBlock != null) ? (nextBlock.WallsByOrientation[perpendicularOrientationLeft] != null) : false;
+    bool perpendicularWallNextRight = (nextBlock != null) ? (nextBlock.WallsByOrientation[perpendicularOrientationRight] != null) : false;
+    WorldObject parallelLeftDoorType1 = (lpnx >= 0 && lpnx < level.MapX && lpnz >= 0 && lpnz < level.MapZ) ? FindObject(level.Level[lpnx, y, lpnz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE) : null;
+    WorldObject parallelLeftDoorType2 = (lpnx >= 0 && lpnx < level.MapX && lpnz >= 0 && lpnz < level.MapZ) ? FindObject(level.Level[lpnx, y, lpnz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE) : null;
+    WorldObject parallelRightDoorType1 = (rpnx >= 0 && rpnx < level.MapX && rpnz >= 0 && rpnz < level.MapZ) ? FindObject(level.Level[rpnx, y, rpnz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE) : null;
+    WorldObject parallelRightDoorType2 = (rpnx >= 0 && rpnx < level.MapX && rpnz >= 0 && rpnz < level.MapZ) ? FindObject(level.Level[rpnx, y, rpnz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE) : null;
+
+    if ((parallelWallLeft || (parallelLeftDoorType1 != null || parallelLeftDoorType2 != null)) || (perpendicularWallCurrentLeft && perpendicularWallNextLeft))
+    {      
+      wallToCheck.BWO.WallColumnLeft.gameObject.SetActive(false);
+    }
+
+    if ((parallelWallRight || (parallelRightDoorType1 != null || parallelRightDoorType2 != null)) || (perpendicularWallCurrentRight && perpendicularWallNextRight))
+    {      
+      wallToCheck.BWO.WallColumnRight.gameObject.SetActive(false);
+    }
+  }
+
+  public static void CheckPerpendicularWallsForColumns(WallWorldObject wallToCheck, LevelBase level)
+  {
+    GlobalConstants.Orientation wallOrientation = wallToCheck.ObjectOrientation;
+
+    int pol = ((int)wallOrientation - 1) == -1 ? 3 : ((int)wallOrientation - 1);
+    int por = ((int)wallOrientation + 1) % 4;
+
+    GlobalConstants.Orientation perpendicularOrientationLeft = (GlobalConstants.Orientation)pol;
+    GlobalConstants.Orientation perpendicularOrientationRight = (GlobalConstants.Orientation)por;
+
+    int x = wallToCheck.ArrayCoordinates.X;
+    int y = wallToCheck.ArrayCoordinates.Y;
+    int z = wallToCheck.ArrayCoordinates.Z;
+
+    bool perpendicularWallCurrentLeft = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientationLeft] != null);
+    bool perpendicularWallCurrentRight = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientationRight] != null);
+
+    if (perpendicularWallCurrentLeft)
+    {
+      BehaviourWorldObject bwol = level.Level[x, y, z].WallsByOrientation[perpendicularOrientationLeft].BWO;
+
+      if (bwol.WallColumnRight.gameObject.activeSelf)
+      {
+        wallToCheck.BWO.WallColumnLeft.gameObject.SetActive(false);
+      }
+    }
+
+    if (perpendicularWallCurrentRight)
+    {
+      BehaviourWorldObject bwor = level.Level[x, y, z].WallsByOrientation[perpendicularOrientationRight].BWO;
+
+      if (bwor.WallColumnLeft.gameObject.activeSelf)
+      {
+        wallToCheck.BWO.WallColumnRight.gameObject.SetActive(false);
+      }
+    }
   }
 
   /// <summary>
