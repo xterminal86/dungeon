@@ -270,8 +270,9 @@ public static class Utils
   };
 
   static void SetColumnsExtractedMethod(WallWorldObject wallToCheck, LevelBase level)
-  {
+  {    
     GlobalConstants.Orientation wallOrientation = wallToCheck.ObjectOrientation;
+    GlobalConstants.Orientation wallOppositeOrientation = Utils.GetOppositeOrientation(wallOrientation);
 
     int pol = ((int)wallOrientation - 1) == -1 ? 3 : ((int)wallOrientation - 1);
     int por = ((int)wallOrientation + 1) % 4;
@@ -283,13 +284,50 @@ public static class Utils
     int y = wallToCheck.ArrayCoordinates.Y;
     int z = wallToCheck.ArrayCoordinates.Z;
 
+    Int3 blockCoordinatesLeft = Int3.Zero;
+    Int3 blockCoordinatesRight = Int3.Zero;
+
+    BlockEntity leftBlockParallel = GetNextCellTowardsOrientation(wallToCheck.ArrayCoordinates, perpendicularOrientationLeft, level);
+    BlockEntity leftBlockNext = null;
+    if (leftBlockParallel != null)
+    {
+      blockCoordinatesLeft.Set(leftBlockParallel.ArrayCoordinates);
+
+      leftBlockNext = GetNextCellTowardsOrientation(blockCoordinatesLeft, wallOrientation, level);
+    }
+
+    BlockEntity rightBlockParallel = GetNextCellTowardsOrientation(wallToCheck.ArrayCoordinates, perpendicularOrientationRight, level);
+    BlockEntity rightBlockNext = null;
+    if (rightBlockParallel != null)
+    {
+      blockCoordinatesRight.Set(rightBlockParallel.ArrayCoordinates);
+
+      rightBlockNext = GetNextCellTowardsOrientation(blockCoordinatesRight, wallOrientation, level);
+    }
+
+    bool parallelWallLeft = ((leftBlockParallel != null && leftBlockParallel.WallsByOrientation[wallOrientation] != null)
+      || (leftBlockNext != null && leftBlockNext.WallsByOrientation[wallOppositeOrientation] != null));
+
+    bool parallelWallRight = ((rightBlockParallel != null && rightBlockParallel.WallsByOrientation[wallOrientation] != null)
+      || (rightBlockNext != null && rightBlockNext.WallsByOrientation[wallOppositeOrientation] != null));
+
+    wallToCheck.LeftColumnVisible = !parallelWallLeft;
+    wallToCheck.RightColumnVisible = !parallelWallRight;
+
+    /*
     int lpnx = x + _offsetsForParallelLeft[wallOrientation].X;
     int lpnz = z + _offsetsForParallelLeft[wallOrientation].Y;
     int rpnx = x + _offsetsForParallelRight[wallOrientation].X;
     int rpnz = z + _offsetsForParallelRight[wallOrientation].Y;
 
-    bool parallelWallLeft = (lpnx >= 0 && lpnx < level.MapX && lpnz >= 0 && lpnz < level.MapZ) ? (level.Level[lpnx, y, lpnz].WallsByOrientation[wallOrientation] != null) : false;
-    bool parallelWallRight = (rpnx >= 0 && rpnx < level.MapX && rpnz >= 0 && rpnz < level.MapZ) ? (level.Level[rpnx, y, rpnz].WallsByOrientation[wallOrientation] != null) : false;
+    BlockEntity nextBlockLeft = GetNextCellTowardsOrientation(wallToCheck.ArrayCoordinates, wallOrientation, level);
+    BlockEntity nextBlockRight = GetNextCellTowardsOrientation(wallToCheck.ArrayCoordinates, wallOrientation, level);
+
+    bool parallelWallLeftCurrent = (lpnx >= 0 && lpnx < level.MapX && lpnz >= 0 && lpnz < level.MapZ) ? (level.Level[lpnx, y, lpnz].WallsByOrientation[wallOrientation] != null) : false;
+    //bool parallelWallLeftNext = 
+    bool parallelWallLeftNext = (lpnx >= 0 && lpnx < level.MapX && lpnz >= 0 && lpnz < level.MapZ) ? (level.Level[lpnx, y, lpnz].WallsByOrientation[wallOppositeOrientation] != null) : false;
+    bool parallelWallRightCurrent = (rpnx >= 0 && rpnx < level.MapX && rpnz >= 0 && rpnz < level.MapZ) ? (level.Level[rpnx, y, rpnz].WallsByOrientation[wallOrientation] != null) : false;
+    bool parallelWallRightNext = (rpnx >= 0 && rpnx < level.MapX && rpnz >= 0 && rpnz < level.MapZ) ? (level.Level[rpnx, y, rpnz].WallsByOrientation[wallOrientation] != null) : false;
     bool perpendicularWallCurrentLeft = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientationLeft] != null);
     bool perpendicularWallCurrentRight = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientationRight] != null);
     BlockEntity nextBlock = GetNextCellTowardsOrientation(wallToCheck.ArrayCoordinates, wallOrientation, level);
@@ -300,68 +338,21 @@ public static class Utils
     WorldObject parallelRightDoorType1 = (rpnx >= 0 && rpnx < level.MapX && rpnz >= 0 && rpnz < level.MapZ) ? FindObject(level.Level[rpnx, y, rpnz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE) : null;
     WorldObject parallelRightDoorType2 = (rpnx >= 0 && rpnx < level.MapX && rpnz >= 0 && rpnz < level.MapZ) ? FindObject(level.Level[rpnx, y, rpnz].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE) : null;
 
-    if ((parallelWallLeft || (parallelLeftDoorType1 != null || parallelLeftDoorType2 != null)) || (perpendicularWallCurrentLeft && perpendicularWallNextLeft))
+    if ((parallelWallLeftCurrent || (parallelLeftDoorType1 != null || parallelLeftDoorType2 != null)) || (perpendicularWallCurrentLeft && perpendicularWallNextLeft))
     {      
       wallToCheck.BWO.WallColumnLeft.gameObject.SetActive(false);
     }
 
-    if ((parallelWallRight || (parallelRightDoorType1 != null || parallelRightDoorType2 != null)) || (perpendicularWallCurrentRight && perpendicularWallNextRight))
+    if ((parallelWallRightCurrent || (parallelRightDoorType1 != null || parallelRightDoorType2 != null)) || (perpendicularWallCurrentRight && perpendicularWallNextRight))
     {      
       wallToCheck.BWO.WallColumnRight.gameObject.SetActive(false);
     }
-  }
-
-  public static void CheckPerpendicularWallsForColumns(WallWorldObject wallToCheck, LevelBase level)
-  {
-    GlobalConstants.Orientation wallOrientation = wallToCheck.ObjectOrientation;
-
-    int pol = ((int)wallOrientation - 1) == -1 ? 3 : ((int)wallOrientation - 1);
-    int por = ((int)wallOrientation + 1) % 4;
-
-    GlobalConstants.Orientation perpendicularOrientationLeft = (GlobalConstants.Orientation)pol;
-    GlobalConstants.Orientation perpendicularOrientationRight = (GlobalConstants.Orientation)por;
-
-    int x = wallToCheck.ArrayCoordinates.X;
-    int y = wallToCheck.ArrayCoordinates.Y;
-    int z = wallToCheck.ArrayCoordinates.Z;
-
-    bool perpendicularWallCurrentLeft = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientationLeft] != null);
-    bool perpendicularWallCurrentRight = (level.Level[x, y, z].WallsByOrientation[perpendicularOrientationRight] != null);
-
-    if (perpendicularWallCurrentLeft)
-    {
-      BehaviourWorldObject bwol = level.Level[x, y, z].WallsByOrientation[perpendicularOrientationLeft].BWO;
-
-      if (bwol.WallColumnRight.gameObject.activeSelf)
-      {
-        wallToCheck.BWO.WallColumnLeft.gameObject.SetActive(false);
-      }
-    }
-
-    if (perpendicularWallCurrentRight)
-    {
-      BehaviourWorldObject bwor = level.Level[x, y, z].WallsByOrientation[perpendicularOrientationRight].BWO;
-
-      if (bwor.WallColumnLeft.gameObject.activeSelf)
-      {
-        wallToCheck.BWO.WallColumnRight.gameObject.SetActive(false);
-      }
-    }
+    */
   }
 
   /// <summary>
   /// Hides the wall sides if it has adjacent walls to save draw calls and minimize lighting artefacts.
-  /// </summary>
-  public static void HideWallSides(WallWorldObject wall, LevelBase level)
-  {     
-    // Increment of X is equivalent of going to the south, increment of Z - east.
-    // So, we have four cases: neighbouring Xs for east and west walls, and neighbouring Zs for south and north.
-
-    TryHideLeftRightSides(wall, level);
-    TryHideTopBottomSides(wall, level);
-  }
-
-  /// <summary>
+  /// 
   /// If we have neighbouring walls, hide appropriate lateral sides of the current wall.
   /// This is to reduce draw calls and get rid of potential lighting artefacts:
   /// if you have two cubes adjacent to each other, at their "shared" side there will be situations
@@ -377,6 +368,15 @@ public static class Utils
   ///  /
   /// /
   /// </summary>
+  public static void HideWallSides(WallWorldObject wall, LevelBase level)
+  {     
+    // Increment of X is equivalent of going to the south, increment of Z - east.
+    // So, we have four cases: neighbouring Xs for east and west walls, and neighbouring Zs for south and north.
+
+    TryHideLeftRightSides(wall, level);
+    TryHideTopBottomSides(wall, level);
+  }
+
   static void TryHideLeftRightSides(WallWorldObject wall, LevelBase level)
   {
     int x = wall.ArrayCoordinates.X;
@@ -389,53 +389,82 @@ public static class Utils
     int hz = wall.ArrayCoordinates.Z + 1;
 
     GlobalConstants.Orientation wallOrientation = wall.ObjectOrientation;
+    GlobalConstants.Orientation wallOppositeOrientation = GetOppositeOrientation(wallOrientation);
+
+    // Check parallel walls for current orientation on neighbouring cells and on opposite sides of the next
+    // cells towards orientation of the neighbouring (the same as current) cell.
+
+    bool parallelWallCurrentLeft = false;
+    bool parallelWallNextLeft = false;
+    bool parallelWallCurrentRight = false;
+    bool parallelWallNextRight = false;
 
     // South - X+, East - Z+
 
     if (wallOrientation == GlobalConstants.Orientation.EAST)
     {
-      if (lx >= 0 && level.Level[lx, y, z].WallsByOrientation[wallOrientation] != null)
+      parallelWallCurrentLeft = (lx >= 0) ? (level.Level[lx, y, z].WallsByOrientation[wallOrientation] != null) : false;
+      parallelWallNextLeft = (lx >= 0 && hz < level.MapZ) ? (level.Level[lx, y, hz].WallsByOrientation[wallOppositeOrientation] != null) : false;
+      parallelWallCurrentRight = (hx < level.MapX) ? (level.Level[hx, y, z].WallsByOrientation[wallOrientation] != null) : false;
+      parallelWallNextRight = (hx < level.MapX && hz < level.MapZ) ? (level.Level[hx, y, hz].WallsByOrientation[wallOppositeOrientation] != null) : false;
+
+      if (parallelWallCurrentLeft || parallelWallNextLeft)
       {
         wall.BWO.LeftQuad.gameObject.SetActive(false);
       }
 
-      if (hx < level.MapX && level.Level[hx, y, z].WallsByOrientation[wallOrientation] != null)
+      if (parallelWallCurrentRight || parallelWallNextRight)
       {
         wall.BWO.RightQuad.gameObject.SetActive(false);
       }
     }
     else if (wallOrientation == GlobalConstants.Orientation.SOUTH)
     {
-      if (lz >= 0 && level.Level[x, y, lz].WallsByOrientation[wallOrientation] != null)
-      {
-        wall.BWO.RightQuad.gameObject.SetActive(false);
-      }
+      parallelWallCurrentLeft = (hz < level.MapZ) ? (level.Level[x, y, hz].WallsByOrientation[wallOrientation] != null) : false;
+      parallelWallNextLeft = (hx < level.MapX && hz < level.MapZ) ? (level.Level[hx, y, hz].WallsByOrientation[wallOppositeOrientation] != null) : false;
+      parallelWallCurrentRight = (lz >= 0) ? (level.Level[x, y, lz].WallsByOrientation[wallOrientation] != null) : false;
+      parallelWallNextRight = (hx < level.MapX && lz >= 0) ? (level.Level[hx, y, lz].WallsByOrientation[wallOppositeOrientation] != null) : false;
 
-      if (hz < level.MapZ && level.Level[x, y, hz].WallsByOrientation[wallOrientation] != null)
+      if (parallelWallCurrentLeft || parallelWallNextLeft)
       {
         wall.BWO.LeftQuad.gameObject.SetActive(false);
+      }
+
+      if (parallelWallCurrentRight || parallelWallNextRight)
+      {
+        wall.BWO.RightQuad.gameObject.SetActive(false);
       }
     }
     else if (wallOrientation == GlobalConstants.Orientation.WEST)
-    {      
-      if (lx >= 0 && level.Level[lx, y, z].WallsByOrientation[wallOrientation] != null)
-      {
-        wall.BWO.RightQuad.gameObject.SetActive(false);
-      }
+    { 
+      parallelWallCurrentLeft = (hx < level.MapX) ? (level.Level[hx, y, z].WallsByOrientation[wallOrientation] != null) : false;
+      parallelWallNextLeft = (hx < level.MapX && lz >= 0) ? (level.Level[hx, y, lz].WallsByOrientation[wallOppositeOrientation] != null) : false;
+      parallelWallCurrentRight = (lx >= 0) ? (level.Level[lx, y, z].WallsByOrientation[wallOrientation] != null) : false;
+      parallelWallNextRight = (lx >= 0 && lz >= 0) ? (level.Level[lx, y, lz].WallsByOrientation[wallOppositeOrientation] != null) : false;
 
-      if (hx < level.MapX && level.Level[hx, y, z].WallsByOrientation[wallOrientation] != null)
+      if (parallelWallCurrentLeft || parallelWallNextLeft)
       {
         wall.BWO.LeftQuad.gameObject.SetActive(false);
+      }
+
+      if (parallelWallCurrentRight || parallelWallNextRight)
+      {
+        wall.BWO.RightQuad.gameObject.SetActive(false);
       }
     }
     else if (wallOrientation == GlobalConstants.Orientation.NORTH)
     {
-      if (lz >= 0 && level.Level[x, y, lz].WallsByOrientation[wallOrientation] != null)
+      parallelWallCurrentLeft = (lz >= 0) ? (level.Level[x, y, lz].WallsByOrientation[wallOrientation] != null) : false;
+      parallelWallNextLeft = (lx >= 0 && lz >= 0) ? (level.Level[lx, y, lz].WallsByOrientation[wallOppositeOrientation] != null) : false;
+      parallelWallCurrentRight = (hz < level.MapZ) ? (level.Level[x, y, hz].WallsByOrientation[wallOrientation] != null) : false;
+      parallelWallNextRight = (lx >= 0 && hz < level.MapZ) ? (level.Level[lx, y, hz].WallsByOrientation[wallOppositeOrientation] != null) : false;
+
+      if (parallelWallCurrentLeft || parallelWallNextLeft)
       {
         wall.BWO.LeftQuad.gameObject.SetActive(false);
       }
 
-      if (hz < level.MapZ && level.Level[x, y, hz].WallsByOrientation[wallOrientation] != null)
+      if (parallelWallCurrentRight || parallelWallNextRight)
       {
         wall.BWO.RightQuad.gameObject.SetActive(false);
       }
@@ -455,37 +484,45 @@ public static class Utils
     int hy = wall.ArrayCoordinates.Y + 1;
 
     GlobalConstants.Orientation wallOrientation = wall.ObjectOrientation;
+    GlobalConstants.Orientation wallOppositeOrientation = GetOppositeOrientation(wallOrientation);
 
-    WorldObject res1 = null;
-    WorldObject res2 = null;
-    WorldObject res3 = null;
+    BlockEntity nextBlockCurrent = GetNextCellTowardsOrientation(wall.ArrayCoordinates, wallOrientation, level);
+    BlockEntity nextBlockUpper = GetNextCellTowardsOrientation(new Int3(wall.ArrayCoordinates.X, wall.ArrayCoordinates.Y + 1, wall.ArrayCoordinates.Z), wallOrientation, level);
+
+    bool bottomWallCurrent = (ly >= 0) ? level.Level[x, ly, z].WallsByOrientation[wallOrientation] != null : false;
+    bool bottomWallNext = (ly >= 0 && nextBlockCurrent != null) ? nextBlockCurrent.WallsByOrientation[wallOppositeOrientation] != null : false;
+    bool upperWallCurrent = (hy < level.MapY) ? level.Level[x, hy, z].WallsByOrientation[wallOrientation] != null : false;
+    bool upperWallNext = (hy< level.MapY && nextBlockUpper != null) ? nextBlockUpper.WallsByOrientation[wallOppositeOrientation] != null : false;
+
+    WorldObject bottomDoorCurrent1 = null;
+    WorldObject bottomDoorCurrent2 = null;
+    WorldObject bottomDoorNext1 = null;
+    WorldObject bottomDoorNext2 = null;
 
     if (ly >= 0)
     {
-      if (level.Level[x, ly, z].WallsByOrientation[wallOrientation] != null)
-      {
-        wall.BWO.BottomQuad.gameObject.SetActive(false);
-      }
-      else
-      {
-        // To disable Z fighting of door frame with bottom side of the wall, handle this case specifically.
+      bottomDoorCurrent1 = FindObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE);
+      bottomDoorCurrent2 = FindObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE);
 
-        res2 = FindObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE);
-        res3 = FindObject(level.Level[x, ly, z].WorldObjects, wallOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE);
-
-        if (res2 != null || res3 != null)
-        {          
-          wall.BWO.BottomQuad.gameObject.SetActive(false);
-        }
+      if (nextBlockCurrent != null)
+      {
+        bottomDoorNext1 = FindObject(nextBlockCurrent.WorldObjects, wallOppositeOrientation, GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE);
+        bottomDoorNext2 = FindObject(nextBlockCurrent.WorldObjects, wallOppositeOrientation, GlobalConstants.WorldObjectClass.DOOR_OPENABLE);
       }
     }
 
-    if (hy < level.MapY)
+    // To disable Z fighting of door frame with bottom side of the wall, handle this case specifically.
+
+    if (bottomWallCurrent || bottomWallNext 
+     || bottomDoorCurrent1 != null || bottomDoorCurrent2 != null 
+     || bottomDoorNext1 != null || bottomDoorNext2 != null)
     {
-      if (level.Level[x, hy, z].WallsByOrientation[wallOrientation] != null)
-      {
-        wall.BWO.TopQuad.gameObject.SetActive(false);
-      }
+      wall.BWO.BottomQuad.gameObject.SetActive(false);
+    }
+
+    if (upperWallCurrent || upperWallNext)
+    {
+      wall.BWO.TopQuad.gameObject.SetActive(false);
     }
   }
 

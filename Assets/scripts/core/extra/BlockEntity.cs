@@ -19,12 +19,9 @@ public class BlockEntity
   public List<WorldObject> WorldObjects = new List<WorldObject>();
   public Dictionary<GlobalConstants.Orientation, bool> SidesWalkability = new Dictionary<GlobalConstants.Orientation, bool>();
 
-  // In order to place wall columns we'll be going to rely on this dictionary
-  // where wall will be shared between two cells. This way we can simplify the conditions in SetWallColumns().
+  // Special dictionary that holds wall world object references for easy checking.
   // We shouldn't rely on SidesWalkability because it might be possible to place
   // wall and don't block the path (illusionary wall or something).
-  // It's kinda hackish way, because properly it should be BWO that is shared and WallWorldObject
-  // must be constructed manually for other side of the wall.
   public Dictionary<GlobalConstants.Orientation, WallWorldObject> WallsByOrientation = new Dictionary<GlobalConstants.Orientation, WallWorldObject>();
 
   GlobalConstants.BlockType _blockType = GlobalConstants.BlockType.AIR;
@@ -47,8 +44,6 @@ public class BlockEntity
 
   public BlockEntity()
   {
-    Walkable = true;
-
     SidesWalkability[GlobalConstants.Orientation.EAST] = true;
     SidesWalkability[GlobalConstants.Orientation.SOUTH] = true;
     SidesWalkability[GlobalConstants.Orientation.WEST] = true;

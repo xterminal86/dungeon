@@ -364,27 +364,17 @@ public class LevelBase
     string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
 
     WorldObject wo = new WallWorldObject(string.Empty, prefabStringName);
+
     wo.ArrayCoordinates.Set(arrayPos);
+
     wo.ObjectClass = GlobalConstants.WorldObjectClass.WALL;
     wo.ObjectOrientation = orientation;
 
-    _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
-    _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WallsByOrientation[orientation] = wo as WallWorldObject;
-
-    BlockEntity nextBlock = Utils.GetNextCellTowardsOrientation(arrayPos, orientation, this);
-    if (nextBlock != null)
-    {
-      var o = Utils.GetOppositeOrientation(orientation);
-      WallWorldObject sharedWall = new WallWorldObject(string.Empty, prefabStringName);
-      sharedWall.ArrayCoordinates = new Int3(nextBlock.ArrayCoordinates);
-      sharedWall.ObjectClass = GlobalConstants.WorldObjectClass.WALL;
-      sharedWall.ObjectOrientation = o;
-      nextBlock.WallsByOrientation[o] = sharedWall;
-      nextBlock.SidesWalkability[o] = false;
-    }
-
     _level[arrayPos.X, arrayPos.Y, arrayPos.Z].ArrayCoordinates.Set(arrayPos.X, arrayPos.Y, arrayPos.Z);
     _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
+
+    _level[arrayPos.X, arrayPos.Y, arrayPos.Z].SidesWalkability[orientation] = false;
+    _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WallsByOrientation[orientation] = wo as WallWorldObject;
 
     return wo;
   }

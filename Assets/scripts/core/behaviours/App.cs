@@ -369,8 +369,10 @@ public class App : MonoBehaviour
       {        
         // Shared walls have string.Empty as prefabName
 
-        if (obj.Value.PrefabName != string.Empty && obj.Value.BWO == null)
+        if (obj.Value.PrefabName != string.Empty)
         {
+          Utils.SetWallColumns(obj.Value, LevelLoader.Instance.LevelMap);
+
           GameObject prefab = PrefabsManager.Instance.FindPrefabByName(obj.Value.PrefabName);
 
           GameObject go = (GameObject)Instantiate(prefab, block.WorldCoordinates, Quaternion.identity);
@@ -382,28 +384,14 @@ public class App : MonoBehaviour
           go.transform.parent = ObjectsInstancesTransform.transform;
 
           BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
+          bwo.WallColumnLeft.gameObject.SetActive(obj.Value.LeftColumnVisible);
+          bwo.WallColumnRight.gameObject.SetActive(obj.Value.RightColumnVisible);
           bwo.WorldObjectInstance = obj.Value;
 
           obj.Value.BWO = bwo;
 
-          BlockEntity nextBlock = Utils.GetNextCellTowardsOrientation(_blockCoordinates, obj.Value.ObjectOrientation, LevelLoader.Instance.LevelMap);
-          if (nextBlock != null)
-          {
-            var o = Utils.GetOppositeOrientation(obj.Value.ObjectOrientation);
-            nextBlock.WallsByOrientation[o].BWO = bwo;
-          }
-
           Utils.HideWallSides(obj.Value, LevelLoader.Instance.LevelMap);
-          Utils.SetWallColumns(obj.Value, LevelLoader.Instance.LevelMap);
         }
-      }
-    }
-
-    foreach (var obj in block.WallsByOrientation)
-    {
-      if (obj.Value != null)
-      {
-        Utils.CheckPerpendicularWallsForColumns(obj.Value, LevelLoader.Instance.LevelMap);
       }
     }
   }
