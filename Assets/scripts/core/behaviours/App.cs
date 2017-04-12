@@ -363,6 +363,8 @@ public class App : MonoBehaviour
   {
     _blockCoordinates.Set(block.ArrayCoordinates);
 
+    // Instantiate and hide invisible sides (and duplicate columns)
+
     foreach (var obj in block.WallsByOrientation)
     {     
       if (obj.Value != null)
@@ -371,7 +373,7 @@ public class App : MonoBehaviour
 
         if (obj.Value.PrefabName != string.Empty)
         {
-          Utils.SetWallColumns(obj.Value, LevelLoader.Instance.LevelMap);
+          Utils.CheckAndHideWallColumns(obj.Value, LevelLoader.Instance.LevelMap);
 
           GameObject prefab = PrefabsManager.Instance.FindPrefabByName(obj.Value.PrefabName);
 
