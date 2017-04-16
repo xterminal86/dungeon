@@ -13,8 +13,6 @@ public class ModelMover : MonoBehaviour
 
   public ActorBase Actor;
 
-  public Int3 MapPos = new Int3();
-
   Animation _animationComponent;
   public Animation AnimationComponent
   {

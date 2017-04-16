@@ -29,12 +29,29 @@ public abstract class ActorBase
   public AttackState AttackStateVar;
   public StoppedState StoppedStateVar;
 
-  public ActorBase(ModelMover model)
-  {        
-    Model = model;
-    AnimationComponent = Model.GetComponent<Animation>();
+  public Int3 ActorPosition = Int3.Zero;
+  public Vector3 ActorWorldPosition = Vector3.zero;
 
-    StoppedStateVar = new StoppedState(this);
+  public readonly GlobalConstants.ActorRole ActorRole = GlobalConstants.ActorRole.DUMMY;
+
+  public readonly string PrefabName = string.Empty;
+
+  protected GlobalConstants.Orientation _actorOrientation = GlobalConstants.Orientation.EAST;
+  public GlobalConstants.Orientation ActorOrientation
+  {
+    get { return _actorOrientation; }
+  }
+
+  public ActorBase(string prefabName, Int3 position, GlobalConstants.Orientation actorOrientation, GlobalConstants.ActorRole actorRole)
+  {        
+    PrefabName = prefabName;
+    ActorRole = actorRole;
+    _actorOrientation = actorOrientation;
+
+    ActorPosition.Set(position);
+    ActorWorldPosition.Set(position.X * GlobalConstants.WallScaleFactor, 
+                           position.Y * GlobalConstants.WallScaleFactor,
+                           position.Z * GlobalConstants.WallScaleFactor);    
   }
 
   public virtual void ChangeState(GameObjectState newState)
@@ -46,12 +63,18 @@ public abstract class ActorBase
     ActorState.ResetState();
   }
 
-  public virtual void Perform()
+  public virtual void Interact()
+  {
+  }
+
+  public void Perform()
   {
     ActorState.Run();
   }
 
-  public virtual void Interact()
+  public void InitBehaviour(ModelMover modelMover)
   {
+    Model = modelMover;
+    AnimationComponent = Model.GetComponent<Animation>();
   }
 }

@@ -15,7 +15,6 @@ public class App : MonoBehaviour
 {  
   public Terrain Mountains;
 
-  public GameObject TestMob;
   public SunController Sun;
 
   public ParticleSystem Stars;
@@ -102,7 +101,7 @@ public class App : MonoBehaviour
 
     BuildMap();
     SpawnItems();
-    SetupMobs();
+    SetupNPCs();
 
     if (LevelLoader.Instance.LevelMap is TestLevel)
     {
@@ -285,8 +284,31 @@ public class App : MonoBehaviour
     return bio.ItemObjectInstance;
   }
 
-  void SetupMobs()
+  void SetupNPCs()
   {
+    foreach (var actor in LevelLoader.Instance.LevelMap.Actors)
+    {
+      GameObject prefab = FindCharacterPrefabByName(actor.PrefabName);
+      if (prefab != null)
+      {
+        var go = (GameObject)Instantiate(prefab, actor.ActorWorldPosition, Quaternion.identity);
+        var mm = go.GetComponent<ModelMover>();
+        if (mm != null)
+        {
+          /*
+          if (!SoundManager.Instance.LastPlayedSoundOfChar.ContainsKey(go.name.GetHashCode()))
+          {
+            SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+          }
+          */
+
+          actor.InitBehaviour(mm);
+          mm.Actor = actor;
+        }
+      }
+    }
+
+    /*
     var go = (GameObject)Instantiate(TestMob, new Vector3(2.0f, 2.0f, 0.0f), Quaternion.identity);
     var mm = go.GetComponent<ModelMover>();
     if (mm != null)
@@ -298,6 +320,7 @@ public class App : MonoBehaviour
       
       mm.Actor = new EnemyActor(mm);
     }
+    */
   }
     
   int _terrainAddedWidth = 10;
@@ -443,8 +466,8 @@ public class App : MonoBehaviour
             SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
           }
 
-          mm.MapPos.X = pos.X;
-          mm.MapPos.Y = pos.Y;
+          //mm.MapPos.X = pos.X;
+          //mm.MapPos.Y = pos.Y;
 
 //          mm.Actor = new VillagerActor(mm);
 //          mm.Actor.ActorName = mm.ActorName;

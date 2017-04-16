@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// </summary>
 public class VillagerActor : ActorBase 
 {
-  public VillagerActor(ModelMover model) : base(model)
+  public VillagerActor(string prefabName, Int3 position, GlobalConstants.Orientation o, GlobalConstants.ActorRole actorRole) : base(prefabName, position, o, actorRole)
   {
   }
 

@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class LevelBase
 {
+  List<ActorBase> _actors = new List<ActorBase>();
+  public List<ActorBase> Actors
+  {
+    get { return _actors; }
+  }
+
   protected BlockEntity[,,] _level;
   public BlockEntity[,,] Level
   {
@@ -197,6 +203,16 @@ public class LevelBase
           }
         }
       }
+    }
+  }
+
+  public void PlaceActor(string prefabName, Int3 position, GlobalConstants.Orientation actorOrientation, GlobalConstants.ActorRole actorRole)
+  {
+    switch (actorRole)
+    {
+      case GlobalConstants.ActorRole.DUMMY:
+        _actors.Add(new DummyActor(prefabName, position, actorOrientation, actorRole));
+        break;
     }
   }
 

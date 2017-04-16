@@ -7,7 +7,140 @@ using System.Collections.Generic;
 /// After that there is a delay and the process starts all over again.
 /// </summary>
 public class WanderingState : GameObjectState
-{   
+{ 
+  List<Int3> _visitedCells = new List<Int3>();
+
+  public WanderingState(ActorBase actor)
+  {
+    _actor = actor;
+  }
+
+  Job _mainJob;
+
+  public override void Run()
+  {    
+    if (!_lock)
+    {
+      _lock = true;
+      _mainJob = new Job(FindAndMoveToPosition());
+    }
+  }
+
+  public override void ResetState()
+  {    
+    _lock = false;
+  }
+
+  List<Int3> _availableCells = new List<Int3>();
+
+  Int3 _cell = new Int3();
+  IEnumerator FindAndMoveToPosition()
+  {
+    _availableCells.Clear();
+
+    int lx = _actor.ActorPosition.X - 1;
+    int hx = _actor.ActorPosition.X + 1;
+    int lz = _actor.ActorPosition.Z - 1;
+    int hz = _actor.ActorPosition.Z + 1;
+
+    if (lx >= 0)
+    {
+      if (CheckCellAvailability(lx, _actor.ActorPosition.Y, _actor.ActorPosition.Z, GlobalConstants.Orientation.NORTH))
+      {
+        _cell.Set(lx, _actor.ActorPosition.Y, _actor.ActorPosition.Z);
+        _availableCells.Add(new Int3(_cell));
+      }
+    }
+
+    if (hx < LevelLoader.Instance.LevelSize.X)
+    {
+      if (CheckCellAvailability(hx, _actor.ActorPosition.Y, _actor.ActorPosition.Z, GlobalConstants.Orientation.SOUTH))
+      {
+        _cell.Set(hx, _actor.ActorPosition.Y, _actor.ActorPosition.Z);
+        _availableCells.Add(new Int3(_cell));
+      }
+    }
+
+    if (lz >= 0)
+    {
+      if (CheckCellAvailability(_actor.ActorPosition.X, _actor.ActorPosition.Y, lz, GlobalConstants.Orientation.WEST))
+      {
+        _cell.Set(_actor.ActorPosition.X, _actor.ActorPosition.Y, lz);
+        _availableCells.Add(new Int3(_cell));
+      }
+    }
+
+    if (hz < LevelLoader.Instance.LevelSize.Z)
+    {
+      if (CheckCellAvailability(_actor.ActorPosition.X, _actor.ActorPosition.Y, hz, GlobalConstants.Orientation.EAST))
+      {
+        _cell.Set(_actor.ActorPosition.X, _actor.ActorPosition.Y, hz);
+        _availableCells.Add(new Int3(_cell));
+      }
+    }
+
+    if (_availableCells.Count != 0)
+    {      
+      _visitedCells.Add(new Int3(_actor.ActorPosition));
+
+      int choice = Random.Range(0, _availableCells.Count);
+
+      yield return MoveModel(_availableCells[choice]);
+
+      _actor.ActorPosition.Set(_availableCells[choice]);
+
+      _lock = false;
+    }
+    else
+    {
+      _visitedCells.Clear();
+
+      yield return DelayRoutine(() =>
+      {
+        _lock = false;
+      });
+    }
+
+    yield return null;
+  }
+
+  float _delay = 0.0f;
+  IEnumerator DelayRoutine(Callback cb)
+  {
+    //_delay = Random.Range(GlobalConstants.WanderingMinDelaySeconds + 1, GlobalConstants.WanderingMaxDelaySeconds + 1);
+    _delay = 3.0f;
+
+    float time = 0.0f;
+
+    while (time < _delay)
+    {
+      time += Time.smoothDeltaTime;
+
+      yield return null;
+    }
+
+    if (cb != null)
+      cb();
+
+    yield return null;
+  }
+
+  bool CheckCellAvailability(int x, int y, int z, GlobalConstants.Orientation orientationToCheck)
+  { 
+    foreach (var c in _visitedCells)
+    {
+      if (c.X == x && c.Y == y && c.Z == z)
+      {
+        return false;
+      }
+    }
+
+    bool currentBlockSide = LevelLoader.Instance.LevelMap.Level[_actor.ActorPosition.X, _actor.ActorPosition.Y, _actor.ActorPosition.Z].SidesWalkability[orientationToCheck];
+    bool nextBlockSide = LevelLoader.Instance.LevelMap.Level[x, y, z].SidesWalkability[Utils.GetOppositeOrientation(orientationToCheck)];
+
+    return (currentBlockSide && nextBlockSide);
+  }
+
   /*
   Pathfinder _roadBuilder;
   public WanderingState(ActorBase actor)

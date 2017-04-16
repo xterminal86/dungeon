@@ -14,7 +14,7 @@ public class TestLevel : LevelBase
     //GenerateRandomTerrain();
     //GenerateHills();
 
-    _playerPos.Set(0, 1, 0);
+    _playerPos.Set(31, 1, 17);
 
     MakePerimeter();
 
@@ -159,6 +159,21 @@ public class TestLevel : LevelBase
     PlaceWall(new Int3(31, 1, 5), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.WEST);
     PlaceWall(new Int3(31, 1, 4), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
     PlaceDoor(new Int3(32, 1, 4), GlobalConstants.WorldObjectPrefabType.DOOR_WOODEN_SWING, GlobalConstants.Orientation.EAST, true, false, 3.0f, 4.0f);
+
+    // States test
+
+    PlaceWall(new Int3(30, 1, 20), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(30, 1, 20), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
+    PlaceWall(new Int3(30, 1, 20), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+    PlaceWall(new Int3(30, 1, 19), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
+    PlaceWall(new Int3(30, 1, 19), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+    PlaceWall(new Int3(30, 1, 18), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.SOUTH);
+    PlaceWall(new Int3(30, 1, 18), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.NORTH);
+    PlaceWall(new Int3(31, 1, 17), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    wo = PlaceDoor(new Int3(30, 1, 18), GlobalConstants.WorldObjectPrefabType.DOOR_PORTCULLIS, GlobalConstants.Orientation.WEST, false, true, 0.5f, 2.0f);
+    PlaceControl(new Int3(31, 1, 17), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.EAST, wo);
+
+    PlaceActor("char-steve", new Int3(30, 1, 20), GlobalConstants.Orientation.EAST, GlobalConstants.ActorRole.DUMMY);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
 

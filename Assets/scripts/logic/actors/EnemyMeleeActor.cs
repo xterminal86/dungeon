@@ -6,7 +6,7 @@ public class EnemyActor : ActorBase
 {
   public int AgroRange = 5;
 
-  public EnemyActor(ModelMover model) : base(model)
+  public EnemyActor(string prefabName, Int3 position, GlobalConstants.Orientation o, GlobalConstants.ActorRole actorRole) : base(prefabName, position, o, actorRole)
   {
     SearchingForPlayerStateVar = new SearchingForPlayerState(this);
     IdleStateVar = new IdleState(this);

@@ -9,6 +9,8 @@ public abstract class GameObjectState
 {
   protected ActorBase _actor;
 
+  protected bool _lock = false;
+
   // Avoid starting coroutines in state ctor since changing of states is carried out
   // via _actor.ChangeState(new SomeState());
   // Because ctor of SomeState will be called first, coroutine will start immediately before
@@ -21,8 +23,7 @@ public abstract class GameObjectState
   }
 
   /// <summary>
-  /// Override it in certain states to reset all needed variables to default values,
-  /// so that state becomes clean.
+  /// Since we cache state variables, override this method to reset state to its default values.
   /// Usually it's almost the same code as in constructor.
   /// </summary>
   public virtual void ResetState()
@@ -149,7 +150,8 @@ public abstract class GameObjectState
   }
 
   protected Vector3 _modelPosition = Vector3.zero;
-  protected Int3 _currentMapPos = new Int3();
+  protected Vector3 _currentModelPos = Vector3.zero;
+  protected Vector3 _newModelPos = Vector3.zero;
   protected Int3 _positionForTalk = new Int3();
   protected bool _moveDone = false;
   protected bool _firstStepSound = false;
@@ -157,64 +159,62 @@ public abstract class GameObjectState
   {
     _moveDone = false;
 
-    _currentMapPos.X = _actor.Model.MapPos.X;
-    _currentMapPos.Y = _actor.Model.MapPos.Y;
-    _currentMapPos.Z = _actor.Model.MapPos.Z;
+    _currentModelPos.Set(_actor.ActorWorldPosition.x, _actor.ActorWorldPosition.y, _actor.ActorWorldPosition.z);
+    _newModelPos.Set(newMapPos.X * GlobalConstants.WallScaleFactor, newMapPos.Y * GlobalConstants.WallScaleFactor, newMapPos.Z * GlobalConstants.WallScaleFactor);
 
-    Int3 oldWorldPos = new Int3(_currentMapPos.X * GlobalConstants.WallScaleFactor, _currentMapPos.Y * GlobalConstants.WallScaleFactor, _currentMapPos.Z * GlobalConstants.WallScaleFactor);
-    Int3 newWorldPos = new Int3(newMapPos.X * GlobalConstants.WallScaleFactor, newMapPos.Y * GlobalConstants.WallScaleFactor, newMapPos.Z * GlobalConstants.WallScaleFactor);
+    _modelPosition.Set(_actor.ActorWorldPosition.x, _actor.ActorWorldPosition.y, _actor.ActorWorldPosition.z);
 
-    int dx = newMapPos.X - _currentMapPos.X;
-    int dz = newMapPos.Z - _currentMapPos.Z;
+    int dx = (int)(_newModelPos.x - _currentModelPos.x);
+    int dz = (int)(_newModelPos.z - _currentModelPos.z);
 
     if (!_firstStepSound)
     {
-      PlayFootstepSound3D(_actor.Model.MapPos, _modelPosition);
+      //PlayFootstepSound3D(_actor.ActorWorldPosition, _modelPosition);
       _firstStepSound = true;      
     }
 
-    while (dx != 0 || dz != 0)
-    {
-      // Constantly moving 3d model
-      _modelPosition.x += dx * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
-      _modelPosition.z += dz * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
+    float cond = 0.0f;
+    float condX = 0.0f, condZ = 0.0f;
+    while (cond < GlobalConstants.WallScaleFactor)
+    { 
+      cond += Time.smoothDeltaTime * GlobalConstants.WallScaleFactor;
 
-      // We have to calculate map position from 3d coordinates every frame, so we have to perform a division.
-      // In order to properly determine map position when model is less than halfway from the center of the cell,
-      // we use Ceil or Floor.
-      _currentMapPos.X = dx < 0 ? Mathf.CeilToInt(_modelPosition.x / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.x / GlobalConstants.WallScaleFactor);
-      _currentMapPos.Y = dz < 0 ? Mathf.CeilToInt(_modelPosition.z / GlobalConstants.WallScaleFactor) : Mathf.FloorToInt(_modelPosition.z / GlobalConstants.WallScaleFactor);
+      //condX += dx * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
+      //condZ += dz * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
 
-      dx = newMapPos.X - _currentMapPos.X;
-      dz = newMapPos.Z - _currentMapPos.Z;      
+      //_modelPosition.x += dx * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
+      //_modelPosition.z += dz * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
+      _modelPosition.x += dx * Time.smoothDeltaTime;
+      _modelPosition.z += dz * Time.smoothDeltaTime;
 
-      if (oldWorldPos.X > newWorldPos.X)
+      if (_currentModelPos.x > _newModelPos.x)
       {
-        _modelPosition.x = Mathf.Clamp(_modelPosition.x, newWorldPos.X, oldWorldPos.X);
+        _modelPosition.x = Mathf.Clamp(_modelPosition.x, _newModelPos.x, _currentModelPos.x);
       }
       else
       {
-        _modelPosition.x = Mathf.Clamp(_modelPosition.x, oldWorldPos.X, newWorldPos.X);
+        _modelPosition.x = Mathf.Clamp(_modelPosition.x, _currentModelPos.x, _newModelPos.x);
       }
 
-      if (oldWorldPos.Z > newWorldPos.Z)
+      if (_currentModelPos.z > _newModelPos.z)
       {
-        _modelPosition.z = Mathf.Clamp(_modelPosition.z, newWorldPos.Z, oldWorldPos.Z);
+        _modelPosition.z = Mathf.Clamp(_modelPosition.z, _newModelPos.z, _currentModelPos.z);
       }
       else
       {
-        _modelPosition.z = Mathf.Clamp(_modelPosition.z, oldWorldPos.Z, newWorldPos.Z);
+        _modelPosition.z = Mathf.Clamp(_modelPosition.z, _currentModelPos.z, _newModelPos.z);
       }
+
+      _actor.Model.transform.position = _modelPosition;
 
       yield return null;
     }
 
-    _actor.Model.MapPos.X = newMapPos.X;
-    _actor.Model.MapPos.Z = newMapPos.Z;
-
     _moveDone = true;
 
-    PlayFootstepSound3D(_actor.Model.MapPos, _modelPosition);
+    _actor.ActorWorldPosition.Set(_newModelPos.x, _newModelPos.y, _newModelPos.z);
+
+    //PlayFootstepSound3D(_actor.ActorWorldPosition, _modelPosition);
 
     yield return null;
   }
