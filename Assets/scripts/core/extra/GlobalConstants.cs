@@ -42,7 +42,7 @@ public static class GlobalConstants
   public const float FadeSpeed = 1.0f;
 
   // VillagerActor rotation and speech speeds
-  public const float CharacterRotationSpeed = 150.0f;
+  public const float CharacterRotationSpeed = 300.0f;
   public const float CharacterAnimationTalkSpeed = 2.0f;
 
   // Speed of attack trail drawing

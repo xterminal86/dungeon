@@ -7,8 +7,6 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class ActorBase
 {
-  public string ActorName = string.Empty;
-
   // Current state of this actor
   public GameObjectState ActorState;
 
@@ -34,7 +32,12 @@ public abstract class ActorBase
 
   public readonly GlobalConstants.ActorRole ActorRole = GlobalConstants.ActorRole.DUMMY;
 
+  // For footsteps dictionary access
+  public string GameObjectName = string.Empty;
+
   public readonly string PrefabName = string.Empty;
+
+  public float ModelMovementSpeed = GlobalConstants.WallScaleFactor;
 
   protected GlobalConstants.Orientation _actorOrientation = GlobalConstants.Orientation.EAST;
   public GlobalConstants.Orientation ActorOrientation

@@ -34,14 +34,6 @@ public abstract class GameObjectState
   {
   }
 
-  protected void PlayFootstepSound3D(Int3 mapPos, Vector3 position3D)
-  {
-    if (LevelLoader.Instance.LevelMap.Level[mapPos.X, mapPos.Y - 1, mapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
-    {
-      SoundManager.Instance.PlayFootstepSound(_actor.Model.name, LevelLoader.Instance.LevelMap.Level[mapPos.X, mapPos.Y - 1, mapPos.Z].FootstepSound, position3D);
-    }
-  }
-
   protected bool IsPlayerPositionChanged()
   {
     /*
@@ -75,6 +67,21 @@ public abstract class GameObjectState
     */
 
     return false;
+  }
+
+  protected float GetAngleToRotate(Int3 cellToLook)
+  {
+    int dx = cellToLook.X - _actor.ActorPosition.X;
+    int dz = cellToLook.Z - _actor.ActorPosition.Z;
+
+    float angleEnd = 0.0f;
+
+    if (dz == 1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.EAST];
+    else if (dz == -1 && dx == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.WEST];
+    else if (dx == 1 && dz == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.SOUTH];
+    else if (dx == -1 && dz == 0) angleEnd = GlobalConstants.OrientationAngles[GlobalConstants.Orientation.NORTH];
+
+    return angleEnd;
   }
 
   protected bool _rotateDone = false;
@@ -154,9 +161,8 @@ public abstract class GameObjectState
   protected Vector3 _newModelPos = Vector3.zero;
   protected Int3 _positionForTalk = new Int3();
   protected bool _moveDone = false;
-  protected bool _firstStepSound = false;
   protected IEnumerator MoveModel(Int3 newMapPos)
-  {
+  {      
     _moveDone = false;
 
     _currentModelPos.Set(_actor.ActorWorldPosition.x, _actor.ActorWorldPosition.y, _actor.ActorWorldPosition.z);
@@ -164,28 +170,21 @@ public abstract class GameObjectState
 
     _modelPosition.Set(_actor.ActorWorldPosition.x, _actor.ActorWorldPosition.y, _actor.ActorWorldPosition.z);
 
-    int dx = (int)(_newModelPos.x - _currentModelPos.x);
-    int dz = (int)(_newModelPos.z - _currentModelPos.z);
-
-    if (!_firstStepSound)
-    {
-      //PlayFootstepSound3D(_actor.ActorWorldPosition, _modelPosition);
-      _firstStepSound = true;      
-    }
+    int dx = newMapPos.X - _actor.ActorPosition.X;
+    int dz = newMapPos.Z - _actor.ActorPosition.Z;
 
     float cond = 0.0f;
-    float condX = 0.0f, condZ = 0.0f;
+    float speed = 0.0f;
     while (cond < GlobalConstants.WallScaleFactor)
     { 
-      cond += Time.smoothDeltaTime * GlobalConstants.WallScaleFactor;
+      // cond and model position must be incremented equally,
+      // in order for model movement to be in sync with loop condition increment.
 
-      //condX += dx * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
-      //condZ += dz * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
+      speed = Time.smoothDeltaTime * _actor.ModelMovementSpeed;
+      cond += speed;
 
-      //_modelPosition.x += dx * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
-      //_modelPosition.z += dz * (Time.smoothDeltaTime * GlobalConstants.WallScaleFactor);
-      _modelPosition.x += dx * Time.smoothDeltaTime;
-      _modelPosition.z += dz * Time.smoothDeltaTime;
+      _modelPosition.x += dx * speed;
+      _modelPosition.z += dz * speed;
 
       if (_currentModelPos.x > _newModelPos.x)
       {
@@ -213,8 +212,6 @@ public abstract class GameObjectState
     _moveDone = true;
 
     _actor.ActorWorldPosition.Set(_newModelPos.x, _newModelPos.y, _newModelPos.z);
-
-    //PlayFootstepSound3D(_actor.ActorWorldPosition, _modelPosition);
 
     yield return null;
   }

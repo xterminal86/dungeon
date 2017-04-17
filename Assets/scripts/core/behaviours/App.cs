@@ -295,12 +295,12 @@ public class App : MonoBehaviour
         var mm = go.GetComponent<ModelMover>();
         if (mm != null)
         {
-          /*
-          if (!SoundManager.Instance.LastPlayedSoundOfChar.ContainsKey(go.name.GetHashCode()))
+          actor.GameObjectName = go.name;
+
+          if (!SoundManager.Instance.LastPlayedFootstepSoundOfActor.ContainsKey(go.name))
           {
-            SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+            SoundManager.Instance.LastPlayedFootstepSoundOfActor.Add(go.name, 0);
           }
-          */
 
           actor.InitBehaviour(mm);
           mm.Actor = actor;
@@ -461,9 +461,9 @@ public class App : MonoBehaviour
         var mm = go.GetComponent<ModelMover>();
         if (mm != null)
         {
-          if (!SoundManager.Instance.LastPlayedSoundOfChar.ContainsKey(go.name.GetHashCode()))
+          if (!SoundManager.Instance.LastPlayedFootstepSoundOfActor.ContainsKey(go.name))
           {
-            SoundManager.Instance.LastPlayedSoundOfChar.Add(go.name.GetHashCode(), 0);
+            SoundManager.Instance.LastPlayedFootstepSoundOfActor.Add(go.name, 0);
           }
 
           //mm.MapPos.X = pos.X;

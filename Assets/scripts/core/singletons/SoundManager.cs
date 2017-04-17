@@ -15,7 +15,7 @@ public class SoundManager : MonoSingleton<SoundManager>
   [SerializeField]
   public List<AudioClip> SoundEffects = new List<AudioClip>();
 
-  public Dictionary<int, int> LastPlayedSoundOfChar = new Dictionary<int, int>();
+  public Dictionary<string, int> LastPlayedFootstepSoundOfActor = new Dictionary<string, int>();
 
   Dictionary<string, AudioSource> _audioSourcesByName = new Dictionary<string, AudioSource>();
 
@@ -166,15 +166,20 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
   }
 
-  public void PlayFootstepSound(string gameObjectName, GlobalConstants.FootstepSoundType type, Vector3 position, bool is3D = true)
+  public void PlayFootstepSound(string actorName, GlobalConstants.FootstepSoundType type, Vector3 position)
   {
     if (GlobalConstants.FootstepsListByType.ContainsKey(type))
     {
-      int which = Random.Range(0, GlobalConstants.FootstepsListByType[type].Count);
-      int hash = gameObjectName.GetHashCode();
-      if (LastPlayedSoundOfChar[hash] == which)
+      if (!LastPlayedFootstepSoundOfActor.ContainsKey(actorName))
       {
-        LastPlayedSoundOfChar[hash]++;
+        Debug.LogWarning("No key " + actorName + " in footsteps dictionary!");
+        return;
+      }
+
+      int which = Random.Range(0, GlobalConstants.FootstepsListByType[type].Count);
+      if (LastPlayedFootstepSoundOfActor[actorName] == which)
+      {
+        LastPlayedFootstepSoundOfActor[actorName]++;
 
         if (which > GlobalConstants.FootstepsListByType[type].Count - 1)
         {
@@ -182,9 +187,9 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
       }
 
-      PlaySound(GlobalConstants.FootstepsListByType[type][which], position, is3D);
+      PlaySound(GlobalConstants.FootstepsListByType[type][which], position, true);
 
-      LastPlayedSoundOfChar[hash] = which;
+      LastPlayedFootstepSoundOfActor[actorName] = which;
     }
     else
     {

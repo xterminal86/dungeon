@@ -79,11 +79,21 @@ public class WanderingState : GameObjectState
       }
     }
 
+    GlobalConstants.FootstepSoundType footstepSound = LevelLoader.Instance.LevelMap.Level[_actor.ActorPosition.X, _actor.ActorPosition.Y - 1, _actor.ActorPosition.Z].FootstepSound;
+
     if (_availableCells.Count != 0)
     {      
       _visitedCells.Add(new Int3(_actor.ActorPosition));
 
       int choice = Random.Range(0, _availableCells.Count);
+
+      _actor.AnimationComponent.CrossFade(GlobalConstants.AnimationIdleName);
+
+      yield return RotateModel(GetAngleToRotate(_availableCells[choice]));
+
+      _actor.AnimationComponent.CrossFade(GlobalConstants.AnimationWalkName);
+
+      SoundManager.Instance.PlayFootstepSound(_actor.GameObjectName, footstepSound, _actor.ActorWorldPosition);
 
       yield return MoveModel(_availableCells[choice]);
 
@@ -93,10 +103,13 @@ public class WanderingState : GameObjectState
     }
     else
     {
+      SoundManager.Instance.PlayFootstepSound(_actor.GameObjectName, footstepSound, _actor.ActorWorldPosition);
+      _actor.AnimationComponent.CrossFade(GlobalConstants.AnimationIdleName);
+
       _visitedCells.Clear();
 
       yield return DelayRoutine(() =>
-      {
+      {        
         _lock = false;
       });
     }
