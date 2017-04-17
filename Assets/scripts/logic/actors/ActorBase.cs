@@ -79,5 +79,6 @@ public abstract class ActorBase
   {
     Model = modelMover;
     AnimationComponent = Model.GetComponent<Animation>();
+    AnimationComponent[GlobalConstants.AnimationWalkName].speed = ModelMovementSpeed;
   }
 }

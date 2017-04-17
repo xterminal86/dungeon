@@ -211,7 +211,9 @@ public class LevelBase
     switch (actorRole)
     {
       case GlobalConstants.ActorRole.DUMMY:
-        _actors.Add(new DummyActor(prefabName, position, actorOrientation, actorRole));
+        ActorBase actor = new DummyActor(prefabName, position, actorOrientation, actorRole);
+        actor.ModelMovementSpeed = GlobalConstants.WallScaleFactor;
+        _actors.Add(actor);
         break;
     }
   }

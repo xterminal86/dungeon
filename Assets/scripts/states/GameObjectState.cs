@@ -173,10 +173,29 @@ public abstract class GameObjectState
     int dx = newMapPos.X - _actor.ActorPosition.X;
     int dz = newMapPos.Z - _actor.ActorPosition.Z;
 
+    GlobalConstants.FootstepSoundType footstepSound = LevelLoader.Instance.LevelMap.Level[_actor.ActorPosition.X, _actor.ActorPosition.Y - 1, _actor.ActorPosition.Z].FootstepSound;
+
+    bool soundPlayFlag = false;
+
     float cond = 0.0f;
     float speed = 0.0f;
     while (cond < GlobalConstants.WallScaleFactor)
     { 
+      // Synchronize footstep sound with animation
+
+      if (cond % 1.0f > 0.9f)
+      {
+        if (!soundPlayFlag)
+        {
+          SoundManager.Instance.PlayFootstepSound(_actor.GameObjectName, footstepSound, _modelPosition);
+          soundPlayFlag = true;
+        }
+      }
+      else
+      {
+        soundPlayFlag = false;
+      }
+
       // cond and model position must be incremented equally,
       // in order for model movement to be in sync with loop condition increment.
 
