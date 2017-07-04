@@ -18,6 +18,9 @@ public class DarwinVillage : LevelBase
 
     MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(_mapX / 2, posY, _mapZ / 2), 3);
 
+    PlaceTeleporter(new Int3(2, posY, 1), new Int3(_mapX / 2, posY + 3, _mapZ / 2));
+    PlaceTeleporter(new Int3(_mapX / 2, posY + 3, _mapZ / 2), new Int3(1, posY, 1));
+
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }
 

@@ -20,6 +20,7 @@ public class InputController : MonoSingleton<InputController>
   public Int3 PlayerMapPos = new Int3();
 
   public Animation PlayerModelAnimation;
+  public Transform PlayerModel;
 
   Vector3 _cameraPos = Vector3.zero;
   public Vector3 CameraPos
@@ -50,10 +51,10 @@ public class InputController : MonoSingleton<InputController>
 
     // Teleportation uses this method, so without resetting eulerAngles first we'll get wrong rotation
     _cameraAngles = Vector3.zero;
-    CameraHolder.eulerAngles = _cameraAngles;
+    PlayerModel.eulerAngles = _cameraAngles;
 
-    CameraHolder.Rotate(Vector3.up, GlobalConstants.OrientationAngles[orientation]);
-    _cameraAngles = CameraHolder.eulerAngles;
+    PlayerModel.Rotate(Vector3.up, GlobalConstants.OrientationAngles[orientation]);
+    _cameraAngles = PlayerModel.eulerAngles;
 
     _cameraOrientation = orientation;
 
@@ -109,7 +110,7 @@ public class InputController : MonoSingleton<InputController>
       ProcessMouse();
     }
 
-    CameraHolder.eulerAngles = _cameraAngles;
+    PlayerModel.eulerAngles = _cameraAngles;
     CameraHolder.position = _cameraPos;
 
     GUIManager.Instance.CompassImage.transform.eulerAngles = _compassSpriteAngles;
@@ -567,8 +568,8 @@ public class InputController : MonoSingleton<InputController>
     int newX = PlayerMapPos.X;
     int newZ = PlayerMapPos.Z;
 
-    int xComponent = Mathf.RoundToInt (Mathf.Sin (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
-    int zComponent = Mathf.RoundToInt (Mathf.Cos (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
+    int xComponent = Mathf.RoundToInt(Mathf.Sin (PlayerModel.eulerAngles.y * Mathf.Deg2Rad));
+    int zComponent = Mathf.RoundToInt(Mathf.Cos (PlayerModel.eulerAngles.y * Mathf.Deg2Rad));
     
     if (moveType == CameraMoveType.FORWARD)
     {
@@ -777,8 +778,8 @@ public class InputController : MonoSingleton<InputController>
     int startX = endX;
     int startZ = endZ;
 
-    int xComponent = Mathf.RoundToInt (Mathf.Sin (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
-    int zComponent = Mathf.RoundToInt (Mathf.Cos (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
+    int xComponent = Mathf.RoundToInt(Mathf.Sin (PlayerModel.eulerAngles.y * Mathf.Deg2Rad));
+    int zComponent = Mathf.RoundToInt(Mathf.Cos (PlayerModel.eulerAngles.y * Mathf.Deg2Rad));
 
     if (ca.MoveType == CameraMoveType.FORWARD)
     {
@@ -973,8 +974,8 @@ public class InputController : MonoSingleton<InputController>
     int endX = (int)_cameraPos.x;
     int endZ = (int)_cameraPos.z;
 
-    int xComponent = Mathf.RoundToInt (Mathf.Sin (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
-    int zComponent = Mathf.RoundToInt (Mathf.Cos (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
+    int xComponent = Mathf.RoundToInt (Mathf.Sin (PlayerModel.eulerAngles.y * Mathf.Deg2Rad));
+    int zComponent = Mathf.RoundToInt (Mathf.Cos (PlayerModel.eulerAngles.y * Mathf.Deg2Rad));
 
     float cond = 0.0f;
     float nudge = (float)GlobalConstants.WallScaleFactor / 6.0f;
