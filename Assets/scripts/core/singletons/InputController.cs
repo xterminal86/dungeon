@@ -19,6 +19,8 @@ public class InputController : MonoSingleton<InputController>
 
   public Int3 PlayerMapPos = new Int3();
 
+  public Animation PlayerModelAnimation;
+
   Vector3 _cameraPos = Vector3.zero;
   public Vector3 CameraPos
   {
@@ -69,12 +71,25 @@ public class InputController : MonoSingleton<InputController>
     _cameraTurnArgument.Speed = GlobalConstants.CameraTurnSpeed;
     _cameraMoveArgument.Speed = GlobalConstants.CameraMoveSpeed;
     _compassSpriteAngles.z = _cameraAngles.y + 90.0f;
+
+    // FIXME: synchronize animation speed and walking speed
+    PlayerModelAnimation[GlobalConstants.AnimationWalkName].speed = 2.0f;
+
+    PlayerModelAnimation[GlobalConstants.AnimationIdleName].speed = 0.5f;
+
+    PlayerModelAnimation.Play(GlobalConstants.AnimationIdleName);
+
+    float speed = PlayerModelAnimation[GlobalConstants.AnimationWalkName].speed;
+    float length = PlayerModelAnimation[GlobalConstants.AnimationWalkName].length;
+
+    PlayerModelAnimation[GlobalConstants.AnimationTalkName].speed = GlobalConstants.CharacterAnimationTalkSpeed;
 	}
 	
   float _cameraBob = 0.0f;
   bool _isProcessing = false;
   Vector3 _compassSpriteAngles = Vector3.zero;
   float _currentMoveSpeed = 0.0f;
+  float _mouseZoom = GlobalConstants.CameraMaxZoom / 2.0f;
 	void Update () 
   {
     if (GameData.Instance.PlayerMoveState == GameData.PlayerMoveStateEnum.HOLD_PLAYER
@@ -82,6 +97,11 @@ public class InputController : MonoSingleton<InputController>
     {
       return;
     }
+
+    // Camera zoom
+    _mouseZoom -= Input.GetAxis("Mouse ScrollWheel") * 5.0f;
+    _mouseZoom = Mathf.Clamp(_mouseZoom, GlobalConstants.CameraMinZoom, GlobalConstants.CameraMaxZoom);
+    Camera.main.orthographicSize = _mouseZoom;
 
     if (!_isProcessing)
     {
@@ -397,7 +417,7 @@ public class InputController : MonoSingleton<InputController>
 
   RaycastHit _raycastHit;      
   void ProcessMouse()
-  {
+  {    
     if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
     {
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -547,8 +567,8 @@ public class InputController : MonoSingleton<InputController>
     int newX = PlayerMapPos.X;
     int newZ = PlayerMapPos.Z;
 
-    int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-    int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+    int xComponent = Mathf.RoundToInt (Mathf.Sin (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
+    int zComponent = Mathf.RoundToInt (Mathf.Cos (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
     
     if (moveType == CameraMoveType.FORWARD)
     {
@@ -744,6 +764,8 @@ public class InputController : MonoSingleton<InputController>
     CameraMoveArgument ca = arg as CameraMoveArgument;
     if (ca == null) yield return null;
    
+    PlayerModelAnimation.CrossFade(GlobalConstants.AnimationWalkName);
+
     Vector3 cameraPosCached = new Vector3(_cameraPos.x, _cameraPos.y, _cameraPos.z);
 
     _isProcessing = true;
@@ -755,8 +777,8 @@ public class InputController : MonoSingleton<InputController>
     int startX = endX;
     int startZ = endZ;
 
-    int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-    int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+    int xComponent = Mathf.RoundToInt (Mathf.Sin (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
+    int zComponent = Mathf.RoundToInt (Mathf.Cos (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
 
     if (ca.MoveType == CameraMoveType.FORWARD)
     {
@@ -868,6 +890,8 @@ public class InputController : MonoSingleton<InputController>
       }
     }
 
+    PlayerModelAnimation.CrossFade(GlobalConstants.AnimationIdleName);
+
     CheckAndProcessFalling();
   }
 
@@ -949,8 +973,8 @@ public class InputController : MonoSingleton<InputController>
     int endX = (int)_cameraPos.x;
     int endZ = (int)_cameraPos.z;
 
-    int xComponent = Mathf.RoundToInt (Mathf.Sin (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
-    int zComponent = Mathf.RoundToInt (Mathf.Cos (Camera.main.transform.eulerAngles.y * Mathf.Deg2Rad));
+    int xComponent = Mathf.RoundToInt (Mathf.Sin (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
+    int zComponent = Mathf.RoundToInt (Mathf.Cos (CameraHolder.eulerAngles.y * Mathf.Deg2Rad));
 
     float cond = 0.0f;
     float nudge = (float)GlobalConstants.WallScaleFactor / 6.0f;

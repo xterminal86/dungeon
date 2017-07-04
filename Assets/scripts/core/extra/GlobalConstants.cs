@@ -13,6 +13,8 @@ public static class GlobalConstants
   public const int CameraTurnSpeed = 350;
   public const int CameraMoveSpeed = 4;
   public const int CameraCannotMoveSpeed = 2;
+  public const float CameraMinZoom = 1.0f;
+  public const float CameraMaxZoom = 10.0f;
 
   // Delay limits, which determine pause after which VillagerActor starts to walk the random path again.
   // (note, that path building is done via coroutines, so real pause time is longer)

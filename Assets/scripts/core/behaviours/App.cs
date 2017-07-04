@@ -109,7 +109,7 @@ public class App : MonoBehaviour
     }
 
     // FIXME: clouds are not visible if far clip plane is quite less than 1000
-    CloudsControllerScript.Generate(LevelLoader.Instance.LevelSize.Y);
+    //CloudsControllerScript.Generate(LevelLoader.Instance.LevelSize.Y);
 
     ScreenFader.Instance.FadeIn();
 
