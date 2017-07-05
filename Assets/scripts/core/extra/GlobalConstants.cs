@@ -16,6 +16,8 @@ public static class GlobalConstants
   public const float CameraMinZoom = 1.0f;
   public const float CameraMaxZoom = 10.0f;
 
+  public const float SoundHearingMaxDistance = 12.0f;
+
   // Delay limits, which determine pause after which VillagerActor starts to walk the random path again.
   // (note, that path building is done via coroutines, so real pause time is longer)
   public const int WanderingMinDelaySeconds = 5;

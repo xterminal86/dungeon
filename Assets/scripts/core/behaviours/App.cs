@@ -434,6 +434,7 @@ public class App : MonoBehaviour
     go.transform.parent = ObjectsInstancesTransform.transform;
 
     BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
+    bwo.MapPosition.Set(block.ArrayCoordinates);
     bwo.AmbientSound.Play();
   }
 
@@ -538,6 +539,7 @@ public class App : MonoBehaviour
         go.transform.parent = ObjectsInstancesTransform.transform;
 
         BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
+        bwo.MapPosition.Set(blockEnity.ArrayCoordinates);
         bwo.WorldObjectInstance = worldObject;
 
         worldObject.BWO = bwo;

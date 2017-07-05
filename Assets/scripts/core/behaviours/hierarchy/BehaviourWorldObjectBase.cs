@@ -7,6 +7,8 @@ public abstract class BehaviourWorldObjectBase : MonoBehaviour
   [Header("Looping sound that is played as ambience")]
   public AudioSource AmbientSound;
 
+  protected float _ambientSoundMaxVolume = 1.0f;
+
   // Which logic WorldObject this sound is "attached" to
   public WorldObject WorldObjectInstance;
 
@@ -20,6 +22,7 @@ public abstract class BehaviourWorldObjectBase : MonoBehaviour
   {
     if (AmbientSound != null)
     {
+      _ambientSoundMaxVolume = AmbientSound.volume;
       AmbientSound.Play();
     }
   }

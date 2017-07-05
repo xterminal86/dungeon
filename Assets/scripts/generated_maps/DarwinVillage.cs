@@ -20,6 +20,8 @@ public class DarwinVillage : LevelBase
 
     PlaceTeleporter(new Int3(2, posY, 1), new Int3(_mapX / 2, posY + 3, _mapZ / 2));
     PlaceTeleporter(new Int3(_mapX / 2, posY + 3, _mapZ / 2), new Int3(1, posY, 1));
+    PlaceShrine(new Int3(_mapX - 1, posY, 0), GlobalConstants.WorldObjectPrefabType.SHRINE_MIGHT, GlobalConstants.Orientation.SOUTH);
+    PlaceShrine(new Int3(_mapX - 1, posY, _mapZ - 1), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }

@@ -14,6 +14,7 @@ public class SceneLoader : MonoBehaviour
 
   void Start() 
 	{ 
+    SoundListener.Instance.Initialize();
     GameData.Instance.Initialize();
     GUIManager.Instance.Initialize();
     JobManager.Instance.Initialize();

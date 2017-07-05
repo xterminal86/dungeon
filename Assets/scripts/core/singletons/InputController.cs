@@ -113,6 +113,8 @@ public class InputController : MonoSingleton<InputController>
     PlayerModel.eulerAngles = _cameraAngles;
     CameraHolder.position = _cameraPos;
 
+    SoundListener.Instance.UpdateTransform(_cameraPos, _cameraAngles);
+
     GUIManager.Instance.CompassImage.transform.eulerAngles = _compassSpriteAngles;
 
     #if UNITY_EDITOR
@@ -869,7 +871,7 @@ public class InputController : MonoSingleton<InputController>
 
       _cameraBob = Mathf.Clamp(_cameraBob, 0.0f, half);
 
-      _cameraPos.y = cameraPosCached.y + _cameraBob;
+      //_cameraPos.y = cameraPosCached.y + _cameraBob;
 
       yield return null;
     }

@@ -25,4 +25,18 @@ public class BehaviourWorldObject : BehaviourWorldObjectBase
 
   public Transform WallColumnLeft;
   public Transform WallColumnRight;
+
+  void Update()
+  {
+    if (AmbientSound != null)
+    {
+      float d = Vector3.Distance(transform.position, InputController.Instance.CameraPos);
+
+      d = Mathf.Clamp(d, 0.0f, GlobalConstants.SoundHearingMaxDistance);
+
+      float volume = _ambientSoundMaxVolume - (d / GlobalConstants.SoundHearingMaxDistance) * _ambientSoundMaxVolume;
+
+      AmbientSound.volume = volume;
+    }
+  }
 }

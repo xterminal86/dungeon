@@ -9,6 +9,11 @@ public static class Utils
     return Mathf.Abs(to.Y - from.Y) + Mathf.Abs(to.X - from.X);
   }	
 
+  public static int BlockDistance(Int3 from, Int3 to)
+  {
+    return Mathf.Abs(to.X - from.X) + Mathf.Abs(to.Z - from.Z);
+  }
+
   /// <summary>
   /// Hide appropriate sides of a block to prevent side doubling and lighting artifacts (also to reduce draw calls).
   /// </summary>
