@@ -18,6 +18,7 @@ public class InputController : MonoSingleton<InputController>
   public Text DebugText;
 
   public Int3 PlayerMapPos = new Int3();
+  public Int3 PlayerPrevMapPos = new Int3();
 
   public Animation PlayerModelAnimation;
   public Transform PlayerModel;
@@ -297,6 +298,17 @@ public class InputController : MonoSingleton<InputController>
   IEnumerator ClimbingRoutine(Int3 newPlayerPos)
   {
     _isProcessing = true;
+
+    Vector3 oldPosition = new Vector3(PlayerMapPos.X * GlobalConstants.WallScaleFactor,
+                                      PlayerMapPos.Y * GlobalConstants.WallScaleFactor,
+                                      PlayerMapPos.Z * GlobalConstants.WallScaleFactor);
+
+    var obstructingBlocks = Physics.RaycastAll(oldPosition, new Vector3(-1.0f, 1.0f, -1.0f));
+    for (int i = 0; i < obstructingBlocks.Length; i++)
+    {
+      var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
+      b.BlockFullHolder.SetActive(true);
+    }
 
     if (GameData.Instance.PlayerCharacterVariable.IsFemale)
     { 
@@ -761,12 +773,16 @@ public class InputController : MonoSingleton<InputController>
     _isProcessing = false;   
   }
 
+  List<MinecraftBlock> _obstructingBlocks = new List<MinecraftBlock>();
+
   // Same thing as commented above here, but instead we get error in position.
   IEnumerator CameraMoveRoutine(object arg)
   {
     CameraMoveArgument ca = arg as CameraMoveArgument;
     if (ca == null) yield return null;
    
+    PlayerPrevMapPos.Set(PlayerMapPos);
+
     PlayerModelAnimation.CrossFade(GlobalConstants.AnimationWalkName);
 
     Vector3 cameraPosCached = new Vector3(_cameraPos.x, _cameraPos.y, _cameraPos.z);
@@ -806,6 +822,8 @@ public class InputController : MonoSingleton<InputController>
 
     int dx = (endX - (int)_cameraPos.x) / GlobalConstants.WallScaleFactor;
     int dz = (endZ - (int)_cameraPos.z) / GlobalConstants.WallScaleFactor;
+
+    RaycastHit[] obstructingBlocks = null;
 
     bool bobFlag = false;
     float cond = 0.0f;
@@ -873,6 +891,13 @@ public class InputController : MonoSingleton<InputController>
 
       //_cameraPos.y = cameraPosCached.y + _cameraBob;
 
+      obstructingBlocks = Physics.RaycastAll(_cameraPos, new Vector3(-1.0f, 1.0f, -1.0f));
+      for (int i = 0; i < obstructingBlocks.Length; i++)
+      {
+        var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
+        b.BlockFullHolder.SetActive(false);
+      }
+
       yield return null;
     }
 
@@ -894,6 +919,19 @@ public class InputController : MonoSingleton<InputController>
     }
 
     PlayerModelAnimation.CrossFade(GlobalConstants.AnimationIdleName);
+
+    Vector3 oldPosition = new Vector3(PlayerPrevMapPos.X * GlobalConstants.WallScaleFactor,
+                                      PlayerPrevMapPos.Y * GlobalConstants.WallScaleFactor,
+                                      PlayerPrevMapPos.Z * GlobalConstants.WallScaleFactor);
+    
+    obstructingBlocks = Physics.RaycastAll(oldPosition, new Vector3(-1.0f, 1.0f, -1.0f));
+    for (int i = 0; i < obstructingBlocks.Length; i++)
+    {
+      var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
+      b.BlockFullHolder.SetActive(true);
+    }
+
+    //Debug.Log("Old pos " + PlayerPrevMapPos + " | New Pos " + PlayerMapPos);
 
     CheckAndProcessFalling();
   }

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class MinecraftBlock : MonoBehaviour 
 {
+  public GameObject BlockFullHolder;
+  public GameObject BlockCutHolder;
+
+  [Space(20)]
+
   public Transform LeftQuad;
   public MeshRenderer LeftQuadRenderer;
   public Transform RightQuad;

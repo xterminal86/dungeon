@@ -12,7 +12,7 @@ public class DarwinVillage : LevelBase
   {
     int posY = _mapY / 2 + 1;
 
-    _playerPos.Set(0, posY, 0);
+    _playerPos.Set(26, posY, 24);
 
     CreateGround();
 
