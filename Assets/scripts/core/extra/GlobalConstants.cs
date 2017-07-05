@@ -92,7 +92,9 @@ public static class GlobalConstants
   public const string ManyForcedNewlines = "- Hi, Barbie!\n- Hi, Ken!\n- Wanna go for a ride?\n\n- NO!\n\n\n- ...\n- Now pick up your palette knife and work that into meat. Give your meat a good old rub... That's it... Nice and hot... Hot and spicy meat... He-he, boai!\n- Mudafucka, what's wrong wit' yo ass?";
   public const string BigTextLast = "- Hello World!\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
-  // Model Animation Names
+  // Model Animation
+
+  public const float AnimationWalkSpeed = 2.0f;
 
   public const string AnimationIdleName = "Idle";
   public const string AnimationWalkName = "Walk";

@@ -74,15 +74,9 @@ public class InputController : MonoSingleton<InputController>
     _cameraMoveArgument.Speed = GlobalConstants.CameraMoveSpeed;
     _compassSpriteAngles.z = _cameraAngles.y + 90.0f;
 
-    // FIXME: synchronize animation speed and walking speed
-    PlayerModelAnimation[GlobalConstants.AnimationWalkName].speed = 2.0f;
-
     PlayerModelAnimation[GlobalConstants.AnimationIdleName].speed = 0.5f;
 
     PlayerModelAnimation.Play(GlobalConstants.AnimationIdleName);
-
-    float speed = PlayerModelAnimation[GlobalConstants.AnimationWalkName].speed;
-    float length = PlayerModelAnimation[GlobalConstants.AnimationWalkName].length;
 
     PlayerModelAnimation[GlobalConstants.AnimationTalkName].speed = GlobalConstants.CharacterAnimationTalkSpeed;
 	}
@@ -198,10 +192,12 @@ public class InputController : MonoSingleton<InputController>
     }
 
     _currentMoveSpeed = GlobalConstants.CameraMoveSpeed;
+    PlayerModelAnimation[GlobalConstants.AnimationWalkName].speed = GlobalConstants.AnimationWalkSpeed;
 
     if (Input.GetKey(KeyCode.LeftShift))
     {
       _currentMoveSpeed = GlobalConstants.CameraMoveSpeed * 2.0f;
+      PlayerModelAnimation[GlobalConstants.AnimationWalkName].speed = GlobalConstants.AnimationWalkSpeed * 2.0f;
     }
 
     if (_doMove)
@@ -784,6 +780,7 @@ public class InputController : MonoSingleton<InputController>
     PlayerPrevMapPos.Set(PlayerMapPos);
 
     PlayerModelAnimation.CrossFade(GlobalConstants.AnimationWalkName);
+    //PlayerModelAnimation.Play(GlobalConstants.AnimationWalkName);
 
     Vector3 cameraPosCached = new Vector3(_cameraPos.x, _cameraPos.y, _cameraPos.z);
 
@@ -904,19 +901,7 @@ public class InputController : MonoSingleton<InputController>
     PlayerMapPos.X += dx;
     PlayerMapPos.Z += dz;
 
-    if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter != null)
-    {
-      ScreenFader.Instance.FlashScreen();
-      SetupCamera(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter.CoordinatesToTeleport, CameraOrientation);
-      SoundManager.Instance.PlaySound(GlobalConstants.SFXTeleportation);
-    }
-    else
-    {
-      if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
-      {
-        SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
-      }
-    }
+    //PlayFootstepSound();
 
     PlayerModelAnimation.CrossFade(GlobalConstants.AnimationIdleName);
 
@@ -934,6 +919,23 @@ public class InputController : MonoSingleton<InputController>
     //Debug.Log("Old pos " + PlayerPrevMapPos + " | New Pos " + PlayerMapPos);
 
     CheckAndProcessFalling();
+  }
+
+  public void PlayFootstepSound()
+  {
+    if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter != null)
+    {
+      ScreenFader.Instance.FlashScreen();
+      SetupCamera(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter.CoordinatesToTeleport, CameraOrientation);
+      SoundManager.Instance.PlaySound(GlobalConstants.SFXTeleportation);
+    }
+    else
+    {
+      if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
+      {
+        SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
+      }
+    }
   }
 
   int _numberOfCoroutineCalls = 0;

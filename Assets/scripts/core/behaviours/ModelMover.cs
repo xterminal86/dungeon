@@ -28,9 +28,6 @@ public class ModelMover : MonoBehaviour
             
       _animationComponent.Play(GlobalConstants.AnimationIdleName);
 
-      float speed = _animationComponent[GlobalConstants.AnimationWalkName].speed;
-      float length = _animationComponent[GlobalConstants.AnimationWalkName].length;
-
       _animationComponent[GlobalConstants.AnimationTalkName].speed = GlobalConstants.CharacterAnimationTalkSpeed;
 
       // FIXME: Attack speed is hardcoded
