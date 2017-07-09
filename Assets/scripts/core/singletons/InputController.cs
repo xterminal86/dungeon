@@ -23,6 +23,8 @@ public class InputController : MonoSingleton<InputController>
   public Animation PlayerModelAnimation;
   public Transform PlayerModel;
 
+  public Camera RenderCamera;
+
   Vector3 _cameraPos = Vector3.zero;
   public Vector3 CameraPos
   {
@@ -98,7 +100,8 @@ public class InputController : MonoSingleton<InputController>
     _mouseZoom -= Input.GetAxis("Mouse ScrollWheel") * 5.0f;
     _mouseZoom = Mathf.Clamp(_mouseZoom, GlobalConstants.CameraMinZoom, GlobalConstants.CameraMaxZoom);
     Camera.main.orthographicSize = _mouseZoom;
-
+    RenderCamera.orthographicSize = _mouseZoom;
+      
     if (!_isProcessing)
     {
       ProcessKeyboard();
@@ -303,7 +306,7 @@ public class InputController : MonoSingleton<InputController>
     for (int i = 0; i < obstructingBlocks.Length; i++)
     {
       var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
-      b.BlockFullHolder.SetActive(true);
+      //b.BlockFullHolder.SetActive(true);
     }
 
     if (GameData.Instance.PlayerCharacterVariable.IsFemale)
@@ -892,7 +895,7 @@ public class InputController : MonoSingleton<InputController>
       for (int i = 0; i < obstructingBlocks.Length; i++)
       {
         var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
-        b.BlockFullHolder.SetActive(false);
+        //b.BlockFullHolder.SetActive(false);
       }
 
       yield return null;
@@ -913,7 +916,7 @@ public class InputController : MonoSingleton<InputController>
     for (int i = 0; i < obstructingBlocks.Length; i++)
     {
       var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
-      b.BlockFullHolder.SetActive(true);
+      //b.BlockFullHolder.SetActive(true);
     }
 
     //Debug.Log("Old pos " + PlayerPrevMapPos + " | New Pos " + PlayerMapPos);
