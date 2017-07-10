@@ -1,22 +1,61 @@
-﻿Shader "Custom/MaskedTexture"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/MaskedTexture"
 {
-   Properties
+  Properties 
+  {
+    _MainTex ("Main Texture", 2D) = "white" {}
+    _MaskTex ("Mask", 2D) = "white" {}
+  }
+ 
+ SubShader 
+ {
+   Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+   ZWrite Off
+   ZTest Off
+   Blend SrcAlpha OneMinusSrcAlpha
+   Pass 
    {
-      _MainTex ("Base (RGB)", 2D) = "white" {}
-      _Mask ("Culling Mask", 2D) = "white" {}
-      _Cutoff ("Alpha cutoff", Range (0,1)) = 0.1
-   }
-   SubShader
-   {
-      Tags {"Queue"="Transparent"}
-      Lighting Off
-      ZWrite Off
-      Blend SrcAlpha OneMinusSrcAlpha
-      AlphaTest LEqual [_Cutoff]
-      Pass
-      {
-         SetTexture [_Mask] {combine texture}
-         SetTexture [_MainTex] {combine texture, previous}
-      }
-   }
+     CGPROGRAM
+     #pragma vertex vert
+     #pragma fragment frag
+     #pragma fragmentoption ARB_precision_hint_fastest
+     #include "UnityCG.cginc"
+
+     uniform sampler2D _MainTex;
+     uniform sampler2D _MaskTex;
+     uniform float4 _MainTex_ST;
+     uniform float4 _MaskTex_ST;
+     uniform float _Alpha;
+
+     struct app2vert
+     {
+         float4 position: POSITION;
+         float2 texcoord: TEXCOORD0;
+     };
+
+     struct vert2frag
+     {
+         float4 position: POSITION;
+         float2 texcoord: TEXCOORD0;
+     };
+
+     vert2frag vert(app2vert input)
+     {
+         vert2frag output;
+         output.position = UnityObjectToClipPos(input.position);
+         output.texcoord = TRANSFORM_TEX(input.texcoord, _MainTex);
+         return output;
+     }
+       
+     fixed4 frag(vert2frag input) : COLOR
+     {
+       fixed4 main_color = tex2D(_MainTex, input.texcoord);
+       fixed4 mask_color = tex2D(_MaskTex, input.texcoord);
+
+       return fixed4(main_color.r, main_color.g, main_color.b, mask_color.a);
+     }       
+     ENDCG
+    }
+  }
 }

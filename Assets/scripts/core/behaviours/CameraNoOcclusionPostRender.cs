@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraCombinerPostRender : MonoBehaviour 
+public class CameraNoOcclusionPostRender : MonoBehaviour 
 {
   public Material NoOcclusionMaterial;
 
+  [HideInInspector]
+  public RenderTexture NoOcclusionTexture;
+
   void Awake()
   { 
+    NoOcclusionTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+    GetComponent<Camera>().targetTexture = NoOcclusionTexture;
+
     Texture2D maskedTexture = new Texture2D(Screen.width, Screen.height);
     maskedTexture.alphaIsTransparency = true;
 
@@ -21,7 +27,8 @@ public class CameraCombinerPostRender : MonoBehaviour
 
     DrawCircle(maskedTexture, maskedTexture.width / 2, maskedTexture.height / 2, 64, Color.white);
 
-    NoOcclusionMaterial.SetTexture("_Mask", maskedTexture);
+    NoOcclusionMaterial.SetTexture("_MainTex", NoOcclusionTexture);
+    NoOcclusionMaterial.SetTexture("_MaskTex", maskedTexture);
   }
 
   void DrawCircle(Texture2D tex, int cx, int cy, int r, Color c)
@@ -51,7 +58,7 @@ public class CameraCombinerPostRender : MonoBehaviour
   }
 
   void OnRenderImage(RenderTexture src, RenderTexture dest)
-  {     
+  { 
     Graphics.Blit(src, dest, NoOcclusionMaterial);
   }
 }

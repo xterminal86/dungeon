@@ -25,7 +25,6 @@ public class InputController : MonoSingleton<InputController>
 
   public Camera AllLayersCamera;
   public Camera NoOcclusionCamera;
-  public Camera CameraCombiner;
 
   Vector3 _cameraPos = Vector3.zero;
   public Vector3 CameraPos
@@ -105,7 +104,6 @@ public class InputController : MonoSingleton<InputController>
     Camera.main.orthographicSize = _mouseZoom;
     AllLayersCamera.orthographicSize = _mouseZoom;
     NoOcclusionCamera.orthographicSize = _mouseZoom;
-    CameraCombiner.orthographicSize = _mouseZoom;
 
     if (!_isProcessing)
     {

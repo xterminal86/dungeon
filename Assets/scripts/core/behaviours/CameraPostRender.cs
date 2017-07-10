@@ -4,65 +4,15 @@ using UnityEngine;
 
 public class CameraPostRender : MonoBehaviour 
 {
-  public RenderTexture NoOcclusionRenderTexture;
-  public RenderTexture AllLayersRenderTexture;
-  public RenderTexture CombinedTexture;
+  public CameraAllLayers AllLayersRenderCamera;
+  public CameraNoOcclusionPostRender NoOcclusionRenderCamera;
 
-  public Material NoOcclusionMaterial;
-  public Material AllLayersMaterial;
   public Material ActualCameraMaterial;
 
   void Awake()
-  {    
-    NoOcclusionRenderTexture.width = Screen.width;
-    NoOcclusionRenderTexture.height = Screen.height;
-
-    AllLayersRenderTexture.width = Screen.width;
-    AllLayersRenderTexture.height = Screen.height;
-
-    CombinedTexture.width = Screen.width;
-    CombinedTexture.height = Screen.height;
-
-    Texture2D maskedTexture = new Texture2D(Screen.width, Screen.height);
-    maskedTexture.alphaIsTransparency = true;
-
-    Color[] colors = new Color[Screen.width * Screen.height];
-    for (int i = 0; i < colors.Length; i++)
-    {
-      colors[i] = Color.clear;
-    }
-
-    maskedTexture.SetPixels(colors);
-
-    DrawCircle(maskedTexture, maskedTexture.width / 2, maskedTexture.height / 2, 64, Color.white);
-
-    NoOcclusionMaterial.SetTexture("_Mask", maskedTexture);
-  }
-
-  void DrawCircle(Texture2D tex, int cx, int cy, int r, Color c)
-  {
-    int x, y, px, nx, py, ny, d;
-    Color[] tempArray = tex.GetPixels();
-
-    for (x = 0; x <= r; x++)
-    {
-      d = (int)Mathf.Ceil(Mathf.Sqrt(r * r - x * x));
-      for (y = 0; y <= d; y++)
-      {
-        px = cx + x;
-        nx = cx - x;
-        py = cy + y;
-        ny = cy - y;
-
-        tempArray[py * tex.width + px] = c;
-        tempArray[py * tex.width + nx] = c;
-        tempArray[ny * tex.width + px] = c;
-        tempArray[ny * tex.width + nx] = c;
-      }
-    }  
-
-    tex.SetPixels(tempArray);
-    tex.Apply();
+  { 
+    ActualCameraMaterial.SetTexture("_MainTex", AllLayersRenderCamera.AllLayersRenderTexture);
+    ActualCameraMaterial.SetTexture("_AddTex", NoOcclusionRenderCamera.NoOcclusionTexture);
   }
 
   void OnRenderImage(RenderTexture src, RenderTexture dest)
