@@ -23,7 +23,9 @@ public class InputController : MonoSingleton<InputController>
   public Animation PlayerModelAnimation;
   public Transform PlayerModel;
 
-  public Camera RenderCamera;
+  public Camera AllLayersCamera;
+  public Camera NoOcclusionCamera;
+  public Camera CameraCombiner;
 
   Vector3 _cameraPos = Vector3.zero;
   public Vector3 CameraPos
@@ -99,9 +101,12 @@ public class InputController : MonoSingleton<InputController>
     // Camera zoom
     _mouseZoom -= Input.GetAxis("Mouse ScrollWheel") * 5.0f;
     _mouseZoom = Mathf.Clamp(_mouseZoom, GlobalConstants.CameraMinZoom, GlobalConstants.CameraMaxZoom);
+
     Camera.main.orthographicSize = _mouseZoom;
-    RenderCamera.orthographicSize = _mouseZoom;
-      
+    AllLayersCamera.orthographicSize = _mouseZoom;
+    NoOcclusionCamera.orthographicSize = _mouseZoom;
+    CameraCombiner.orthographicSize = _mouseZoom;
+
     if (!_isProcessing)
     {
       ProcessKeyboard();
@@ -895,7 +900,7 @@ public class InputController : MonoSingleton<InputController>
       for (int i = 0; i < obstructingBlocks.Length; i++)
       {
         var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
-        //b.BlockFullHolder.SetActive(false);
+        b.SetLayer("Occluder");
       }
 
       yield return null;
@@ -911,12 +916,15 @@ public class InputController : MonoSingleton<InputController>
     Vector3 oldPosition = new Vector3(PlayerPrevMapPos.X * GlobalConstants.WallScaleFactor,
                                       PlayerPrevMapPos.Y * GlobalConstants.WallScaleFactor,
                                       PlayerPrevMapPos.Z * GlobalConstants.WallScaleFactor);
-    
-    obstructingBlocks = Physics.RaycastAll(oldPosition, new Vector3(-1.0f, 1.0f, -1.0f));
-    for (int i = 0; i < obstructingBlocks.Length; i++)
+
+    if (obstructingBlocks.Length == 0)
     {
-      var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
-      //b.BlockFullHolder.SetActive(true);
+      obstructingBlocks = Physics.RaycastAll(oldPosition, new Vector3(-1.0f, 1.0f, -1.0f));
+      for (int i = 0; i < obstructingBlocks.Length; i++)
+      {
+        var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
+        b.SetLayer("Default");
+      }
     }
 
     //Debug.Log("Old pos " + PlayerPrevMapPos + " | New Pos " + PlayerMapPos);

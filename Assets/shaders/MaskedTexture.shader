@@ -12,7 +12,7 @@
       Lighting Off
       ZWrite Off
       Blend SrcAlpha OneMinusSrcAlpha
-      AlphaTest GEqual [_Cutoff]
+      AlphaTest LEqual [_Cutoff]
       Pass
       {
          SetTexture [_Mask] {combine texture}

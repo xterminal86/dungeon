@@ -12,14 +12,17 @@ public class DarwinVillage : LevelBase
   {
     int posY = _mapY / 2 + 1;
 
-    _playerPos.Set(26, posY, 24);
+    //_playerPos.Set(26, posY, 24);
+    _playerPos.Set(0, posY, 0);
 
     CreateGround();
 
-    MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(_mapX / 2, posY, _mapZ / 2), 3);
+    _level[2, posY, 2].BlockType = GlobalConstants.BlockType.STONE;
 
-    PlaceTeleporter(new Int3(2, posY, 1), new Int3(_mapX / 2, posY + 3, _mapZ / 2));
-    PlaceTeleporter(new Int3(_mapX / 2, posY + 3, _mapZ / 2), new Int3(1, posY, 1));
+    //MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(_mapX / 2, posY, _mapZ / 2), 3);
+
+    //PlaceTeleporter(new Int3(2, posY, 1), new Int3(_mapX / 2, posY + 3, _mapZ / 2));
+    //PlaceTeleporter(new Int3(_mapX / 2, posY + 3, _mapZ / 2), new Int3(1, posY, 1));
     PlaceShrine(new Int3(_mapX - 1, posY, 0), GlobalConstants.WorldObjectPrefabType.SHRINE_MIGHT, GlobalConstants.Orientation.SOUTH);
     PlaceShrine(new Int3(_mapX - 1, posY, _mapZ - 1), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
 

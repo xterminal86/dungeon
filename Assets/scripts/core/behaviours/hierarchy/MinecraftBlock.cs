@@ -21,4 +21,14 @@ public class MinecraftBlock : MonoBehaviour
   public MeshRenderer UpQuadRenderer;
   public Transform DownQuad;
   public MeshRenderer DownQuadRenderer;
+
+  public void SetLayer(string layerName)
+  {
+    LeftQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    RightQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    ForwardQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    BackQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    UpQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    DownQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+  }
 }

@@ -2,27 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraPostRender : MonoBehaviour 
+public class CameraCombinerPostRender : MonoBehaviour 
 {
-  public RenderTexture NoOcclusionRenderTexture;
-  public RenderTexture AllLayersRenderTexture;
-  public RenderTexture CombinedTexture;
-
   public Material NoOcclusionMaterial;
-  public Material AllLayersMaterial;
-  public Material ActualCameraMaterial;
 
   void Awake()
-  {    
-    NoOcclusionRenderTexture.width = Screen.width;
-    NoOcclusionRenderTexture.height = Screen.height;
-
-    AllLayersRenderTexture.width = Screen.width;
-    AllLayersRenderTexture.height = Screen.height;
-
-    CombinedTexture.width = Screen.width;
-    CombinedTexture.height = Screen.height;
-
+  { 
     Texture2D maskedTexture = new Texture2D(Screen.width, Screen.height);
     maskedTexture.alphaIsTransparency = true;
 
@@ -66,7 +51,7 @@ public class CameraPostRender : MonoBehaviour
   }
 
   void OnRenderImage(RenderTexture src, RenderTexture dest)
-  { 
-    Graphics.Blit(src, null as RenderTexture, ActualCameraMaterial);
+  {     
+    Graphics.Blit(src, dest, NoOcclusionMaterial);
   }
 }
