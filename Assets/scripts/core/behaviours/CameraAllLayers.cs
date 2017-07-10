@@ -12,6 +12,8 @@ public class CameraAllLayers : MonoBehaviour
   void Awake()
   {    
     AllLayersRenderTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+    AllLayersRenderTexture.Create();
+
     GetComponent<Camera>().targetTexture = AllLayersRenderTexture;
 
     AllLayersMaterial.SetTexture("_MainTex", AllLayersRenderTexture);

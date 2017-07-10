@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class CameraNoOcclusionPostRender : MonoBehaviour 
 {
+  public CameraAllLayers CameraAllLayersRef;
+
   public Material NoOcclusionMaterial;
 
   [HideInInspector]
-  public RenderTexture NoOcclusionTexture;
+  public RenderTexture DumpTexture;
+
+  [HideInInspector]
+  public RenderTexture TextureToRender;
 
   void Awake()
   { 
-    NoOcclusionTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
-    GetComponent<Camera>().targetTexture = NoOcclusionTexture;
+    DumpTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+    TextureToRender = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
+
+    DumpTexture.Create();
+    TextureToRender.Create();
+
+    GetComponent<Camera>().targetTexture = DumpTexture;
 
     Texture2D maskedTexture = new Texture2D(Screen.width, Screen.height);
     maskedTexture.alphaIsTransparency = true;
@@ -27,7 +37,7 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
 
     DrawCircle(maskedTexture, maskedTexture.width / 2, maskedTexture.height / 2, 64, Color.white);
 
-    NoOcclusionMaterial.SetTexture("_MainTex", NoOcclusionTexture);
+    NoOcclusionMaterial.SetTexture("_MainTex", CameraAllLayersRef.AllLayersRenderTexture);
     NoOcclusionMaterial.SetTexture("_MaskTex", maskedTexture);
   }
 
@@ -59,6 +69,6 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
 
   void OnRenderImage(RenderTexture src, RenderTexture dest)
   { 
-    Graphics.Blit(src, dest, NoOcclusionMaterial);
+    Graphics.Blit(src, TextureToRender, NoOcclusionMaterial);
   }
 }

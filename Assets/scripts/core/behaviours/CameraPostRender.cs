@@ -12,7 +12,7 @@ public class CameraPostRender : MonoBehaviour
   void Awake()
   { 
     ActualCameraMaterial.SetTexture("_MainTex", AllLayersRenderCamera.AllLayersRenderTexture);
-    ActualCameraMaterial.SetTexture("_AddTex", NoOcclusionRenderCamera.NoOcclusionTexture);
+    ActualCameraMaterial.SetTexture("_AddTex", NoOcclusionRenderCamera.TextureToRender);
   }
 
   void OnRenderImage(RenderTexture src, RenderTexture dest)
