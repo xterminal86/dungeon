@@ -14,6 +14,8 @@ public class BlockEntity
   public Vector3 WorldCoordinates = Vector3.zero;
   public GlobalConstants.FootstepSoundType FootstepSound = GlobalConstants.FootstepSoundType.DUMMY;
 
+  public MinecraftBlock BWO;
+
   public TeleporterWorldObject Teleporter = null;
 
   public List<WorldObject> WorldObjects = new List<WorldObject>();

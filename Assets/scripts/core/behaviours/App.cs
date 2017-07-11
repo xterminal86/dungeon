@@ -511,12 +511,14 @@ public class App : MonoBehaviour
       block.transform.parent = ObjectsInstancesTransform.transform;
       MinecraftBlockAnimated blockAnimated = block.GetComponent<MinecraftBlockAnimated>();
       if (blockAnimated != null)
-      {
+      { 
+        blockEntity.BWO = blockAnimated;
         Utils.HideLevelBlockSides(blockAnimated, blockEntity.ArrayCoordinates, LevelLoader.Instance.LevelMap);
       }
       else
       {
         MinecraftBlock blockScript = block.GetComponent<MinecraftBlock>();
+        blockEntity.BWO = blockScript;
         Utils.HideLevelBlockSides(blockScript, blockEntity.ArrayCoordinates, LevelLoader.Instance.LevelMap);
       }
     }

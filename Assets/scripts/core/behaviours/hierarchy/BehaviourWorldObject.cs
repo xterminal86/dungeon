@@ -23,6 +23,7 @@ public class BehaviourWorldObject : BehaviourWorldObjectBase
   public Transform TopQuad;
   public Transform BottomQuad;
 
+  public Transform MainObject;
   public Transform WallColumnLeft;
   public Transform WallColumnRight;
 
@@ -42,11 +43,16 @@ public class BehaviourWorldObject : BehaviourWorldObjectBase
 
   public void SetLayer(string layerName)
   {
-    LeftQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
-    RightQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
-    FrontQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
-    BackQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
-    TopQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
-    BottomQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    SetLayerRecursively((MainObject == null) ? transform : MainObject, layerName);
+  }
+
+  void SetLayerRecursively(Transform t, string layerName)
+  {
+    t.gameObject.layer = LayerMask.NameToLayer(layerName);
+
+    foreach (Transform item in t)
+    {
+      SetLayerRecursively(item, layerName);
+    }
   }
 }

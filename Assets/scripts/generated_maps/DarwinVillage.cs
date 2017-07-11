@@ -17,16 +17,30 @@ public class DarwinVillage : LevelBase
 
     CreateGround();
 
-    _level[3, posY, 2].BlockType = GlobalConstants.BlockType.STONE;
-    _level[2, posY, 2].BlockType = GlobalConstants.BlockType.STONE;
-    _level[2, posY + 1, 2].BlockType = GlobalConstants.BlockType.STONE;
+    _level[1, posY, 1].BlockType = GlobalConstants.BlockType.STONE;
+    _level[2, posY, 1].BlockType = GlobalConstants.BlockType.STONE;
+    _level[2, posY + 1, 1].BlockType = GlobalConstants.BlockType.STONE;
+    _level[3, posY + 2, 1].BlockType = GlobalConstants.BlockType.STONE;
+    _level[4, posY + 3, 1].BlockType = GlobalConstants.BlockType.STONE;
+    _level[4, posY + 2, 1].BlockType = GlobalConstants.BlockType.STONE;
+    _level[4, posY + 1, 1].BlockType = GlobalConstants.BlockType.STONE;
+    _level[4, posY, 1].BlockType = GlobalConstants.BlockType.STONE;
 
-    //MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(_mapX / 2, posY, _mapZ / 2), 3);
+    PlaceWall(new Int3(5, posY, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(6, posY, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(7, posY, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
+    PlaceWall(new Int3(8, posY, 1), GlobalConstants.WorldObjectPrefabType.WALL_STONE_BRICKS, GlobalConstants.Orientation.EAST);
 
-    //PlaceTeleporter(new Int3(2, posY, 1), new Int3(_mapX / 2, posY + 3, _mapZ / 2));
-    //PlaceTeleporter(new Int3(_mapX / 2, posY + 3, _mapZ / 2), new Int3(1, posY, 1));
-    PlaceShrine(new Int3(_mapX - 1, posY, 0), GlobalConstants.WorldObjectPrefabType.SHRINE_MIGHT, GlobalConstants.Orientation.SOUTH);
-    PlaceShrine(new Int3(_mapX - 1, posY, _mapZ - 1), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
+    WorldObject wo = PlaceDoor(new Int3(9, posY, 1), GlobalConstants.WorldObjectPrefabType.DOOR_STONE_BRICKS_SLIDING, GlobalConstants.Orientation.EAST, false, true, 0.5f, 0.5f);
+    PlaceWall(new Int3(9, posY + 1, 1), GlobalConstants.WorldObjectPrefabType.NOTHING, GlobalConstants.Orientation.EAST);
+    PlaceControl(new Int3(8, posY, 1), GlobalConstants.WorldObjectClass.BUTTON, GlobalConstants.WorldObjectPrefabType.BUTTON, GlobalConstants.Orientation.EAST, wo);
+
+    //PlaceTeleporter(new Int3(1, posY, 2), new Int3(4, posY + 3, 2));
+    //PlaceTeleporter(new Int3(4, posY + 2, 0), new Int3(0, posY, 0));
+    //PlaceShrine(new Int3(_mapX - 1, posY, 0), GlobalConstants.WorldObjectPrefabType.SHRINE_MIGHT, GlobalConstants.Orientation.SOUTH);
+    //PlaceShrine(new Int3(_mapX - 1, posY, _mapZ - 1), GlobalConstants.WorldObjectPrefabType.SHRINE_SPIRIT, GlobalConstants.Orientation.SOUTH);
+
+    //PlaceShrine(new Int3(1, posY, 3), GlobalConstants.WorldObjectPrefabType.SHRINE_MIGHT, GlobalConstants.Orientation.SOUTH);
 
     DiscardHiddenBlocks(1, _mapX - 1, 1, _mapY - 1, 1, _mapZ - 1);
   }

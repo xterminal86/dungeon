@@ -98,7 +98,7 @@ public class InputController : MonoSingleton<InputController>
     }
 
     // Camera zoom
-    _mouseZoom -= Input.GetAxis("Mouse ScrollWheel") * 5.0f;
+    _mouseZoom -= Input.GetAxis("Mouse ScrollWheel") * 2.0f;
     _mouseZoom = Mathf.Clamp(_mouseZoom, GlobalConstants.CameraMinZoom, GlobalConstants.CameraMaxZoom);
 
     Camera.main.orthographicSize = _mouseZoom;
@@ -305,12 +305,8 @@ public class InputController : MonoSingleton<InputController>
                                       PlayerMapPos.Y * GlobalConstants.WallScaleFactor,
                                       PlayerMapPos.Z * GlobalConstants.WallScaleFactor);
 
-    var obstructingBlocks = Physics.RaycastAll(oldPosition, new Vector3(-1.0f, 1.0f, -1.0f));
-    for (int i = 0; i < obstructingBlocks.Length; i++)
-    {
-      var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
-      //b.BlockFullHolder.SetActive(true);
-    }
+    SetBlocksLayer(PlayerMapPos, "Default");
+    SetBlocksLayer(newPlayerPos, "Occluder");
 
     if (GameData.Instance.PlayerCharacterVariable.IsFemale)
     { 
@@ -775,7 +771,33 @@ public class InputController : MonoSingleton<InputController>
     _isProcessing = false;   
   }
 
-  List<MinecraftBlock> _obstructingBlocks = new List<MinecraftBlock>();
+  Vector3 _raycastWorldPosition = Vector3.zero;
+  void SetBlocksLayer(Int3 pos, string layerName)
+  {    
+    //Debug.Log(pos + " " + layerName);
+
+    _raycastWorldPosition.Set(pos.X * GlobalConstants.WallScaleFactor, pos.Y * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
+
+    // The ~ operator inverts a bitmask
+    int layerMaskToIgnore = ~(1 << LayerMask.NameToLayer("IgnoreCircleOfTransparency"));
+
+    // Doesn't work with 3 parameters
+    var obstructingBlocks = Physics.RaycastAll(_raycastWorldPosition, new Vector3(-1.0f, 1.0f, -1.0f), Mathf.Infinity, layerMaskToIgnore);
+    for (int i = 0; i < obstructingBlocks.Length; i++)
+    {
+      MinecraftBlock b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
+      if (b != null)
+      {
+        b.SetLayer(layerName);
+      }
+
+      BehaviourWorldObject bwo = obstructingBlocks[i].collider.gameObject.GetComponent<BehaviourWorldObject>();
+      if (bwo != null)
+      {
+        bwo.SetLayer(layerName);
+      }
+    }
+  }
 
   // Same thing as commented above here, but instead we get error in position.
   IEnumerator CameraMoveRoutine(object arg)
@@ -786,16 +808,13 @@ public class InputController : MonoSingleton<InputController>
     PlayerPrevMapPos.Set(PlayerMapPos);
 
     PlayerModelAnimation.CrossFade(GlobalConstants.AnimationWalkName);
-    //PlayerModelAnimation.Play(GlobalConstants.AnimationWalkName);
 
     Vector3 cameraPosCached = new Vector3(_cameraPos.x, _cameraPos.y, _cameraPos.z);
 
     _isProcessing = true;
 
-    // We move camera game object, so we work in world space here
-
-    int endX = (int)_cameraPos.x;
-    int endZ = (int)_cameraPos.z;
+    int endX = PlayerMapPos.X;
+    int endZ = PlayerMapPos.Z;
     int startX = endX;
     int startZ = endZ;
 
@@ -804,29 +823,27 @@ public class InputController : MonoSingleton<InputController>
 
     if (ca.MoveType == CameraMoveType.FORWARD)
     {
-      if (xComponent != 0) endX += xComponent * GlobalConstants.WallScaleFactor;
-      if (zComponent != 0) endZ += zComponent * GlobalConstants.WallScaleFactor;
+      if (xComponent != 0) endX += xComponent;
+      if (zComponent != 0) endZ += zComponent;
     }
     else if (ca.MoveType == CameraMoveType.BACKWARD)
     {
-      if (xComponent != 0) endX -= xComponent * GlobalConstants.WallScaleFactor;
-      if (zComponent != 0) endZ -= zComponent * GlobalConstants.WallScaleFactor;
+      if (xComponent != 0) endX -= xComponent;
+      if (zComponent != 0) endZ -= zComponent;
     }
     else if (ca.MoveType == CameraMoveType.STRAFE_LEFT)
     {
-      if (xComponent != 0) endZ += xComponent * GlobalConstants.WallScaleFactor;
-      if (zComponent != 0) endX -= zComponent * GlobalConstants.WallScaleFactor;
+      if (xComponent != 0) endZ += xComponent;
+      if (zComponent != 0) endX -= zComponent;
     }
     else if (ca.MoveType == CameraMoveType.STRAFE_RIGHT)
     {
-      if (xComponent != 0) endZ -= xComponent * GlobalConstants.WallScaleFactor;
-      if (zComponent != 0) endX += zComponent * GlobalConstants.WallScaleFactor;
+      if (xComponent != 0) endZ -= xComponent;
+      if (zComponent != 0) endX += zComponent;
     }
 
-    int dx = (endX - (int)_cameraPos.x) / GlobalConstants.WallScaleFactor;
-    int dz = (endZ - (int)_cameraPos.z) / GlobalConstants.WallScaleFactor;
-
-    RaycastHit[] obstructingBlocks = null;
+    SetBlocksLayer(PlayerPrevMapPos, "Default");
+    SetBlocksLayer(new Int3(endX, PlayerMapPos.Y, endZ), "Occluder");
 
     bool bobFlag = false;
     float cond = 0.0f;
@@ -874,76 +891,58 @@ public class InputController : MonoSingleton<InputController>
       // values after end of the loop which cause slight jitter.
       if (startX < endX)
       {
-        _cameraPos.x = Mathf.Clamp(_cameraPos.x, startX, endX);
+        _cameraPos.x = Mathf.Clamp(_cameraPos.x, startX * GlobalConstants.WallScaleFactor, endX * GlobalConstants.WallScaleFactor);
       }
       else
       {
-        _cameraPos.x = Mathf.Clamp(_cameraPos.x, endX, startX);
+        _cameraPos.x = Mathf.Clamp(_cameraPos.x, endX * GlobalConstants.WallScaleFactor, startX * GlobalConstants.WallScaleFactor);
       }
 
       if (startZ < endZ)
       {
-        _cameraPos.z = Mathf.Clamp(_cameraPos.z, startZ, endZ);
+        _cameraPos.z = Mathf.Clamp(_cameraPos.z, startZ * GlobalConstants.WallScaleFactor, endZ * GlobalConstants.WallScaleFactor);
       }
       else
       {
-        _cameraPos.z = Mathf.Clamp(_cameraPos.z, endZ, startZ);
+        _cameraPos.z = Mathf.Clamp(_cameraPos.z, endZ * GlobalConstants.WallScaleFactor, startZ * GlobalConstants.WallScaleFactor);
       }
 
       _cameraBob = Mathf.Clamp(_cameraBob, 0.0f, half);
 
       //_cameraPos.y = cameraPosCached.y + _cameraBob;
 
-      obstructingBlocks = Physics.RaycastAll(_cameraPos, new Vector3(-1.0f, 1.0f, -1.0f));
-      for (int i = 0; i < obstructingBlocks.Length; i++)
-      {
-        var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
-        b.SetLayer("Occluder");
-      }
-
       yield return null;
     }
 
-    PlayerMapPos.X += dx;
-    PlayerMapPos.Z += dz;
-
-    //PlayFootstepSound();
+    PlayerMapPos.X = endX;
+    PlayerMapPos.Z = endZ;
 
     PlayerModelAnimation.CrossFade(GlobalConstants.AnimationIdleName);
 
-    Vector3 oldPosition = new Vector3(PlayerPrevMapPos.X * GlobalConstants.WallScaleFactor,
-                                      PlayerPrevMapPos.Y * GlobalConstants.WallScaleFactor,
-                                      PlayerPrevMapPos.Z * GlobalConstants.WallScaleFactor);
-
-    if (obstructingBlocks.Length == 0)
-    {
-      obstructingBlocks = Physics.RaycastAll(oldPosition, new Vector3(-1.0f, 1.0f, -1.0f));
-      for (int i = 0; i < obstructingBlocks.Length; i++)
-      {
-        var b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
-        b.SetLayer("Default");
-      }
-    }
-
     //Debug.Log("Old pos " + PlayerPrevMapPos + " | New Pos " + PlayerMapPos);
 
+    CheckAndProcessTeleportation();
     CheckAndProcessFalling();
   }
 
-  public void PlayFootstepSound()
+  void CheckAndProcessTeleportation()
   {
     if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter != null)
-    {
+    {      
       ScreenFader.Instance.FlashScreen();
+      SetBlocksLayer(PlayerPrevMapPos, "Default");
+      SetBlocksLayer(PlayerMapPos, "Occluder");
       SetupCamera(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter.CoordinatesToTeleport, CameraOrientation);
       SoundManager.Instance.PlaySound(GlobalConstants.SFXTeleportation);
     }
-    else
+  }
+
+  // Used in Walk animation state event as method name to call at specific animation time (see CopiedAnimations folder)
+  public void PlayFootstepSound()
+  {
+    if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
     {
-      if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound != GlobalConstants.FootstepSoundType.DUMMY)
-      {
-        SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
-      }
+      SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
     }
   }
 
@@ -974,6 +973,9 @@ public class InputController : MonoSingleton<InputController>
 
     float oldY = PlayerMapPos.Y;
     float newY = PlayerMapPos.Y - 1;
+
+    SetBlocksLayer(PlayerMapPos, "Default");
+    SetBlocksLayer(new Int3(PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z), "Occluder");
 
     while (oldY > newY)
     {
