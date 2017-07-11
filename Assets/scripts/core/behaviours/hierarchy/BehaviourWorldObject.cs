@@ -39,4 +39,14 @@ public class BehaviourWorldObject : BehaviourWorldObjectBase
       AmbientSound.volume = volume;
     }
   }
+
+  public void SetLayer(string layerName)
+  {
+    LeftQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    RightQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    FrontQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    BackQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    TopQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+    BottomQuad.gameObject.layer = LayerMask.NameToLayer(layerName);
+  }
 }

@@ -17,7 +17,9 @@ public class DarwinVillage : LevelBase
 
     CreateGround();
 
+    _level[3, posY, 2].BlockType = GlobalConstants.BlockType.STONE;
     _level[2, posY, 2].BlockType = GlobalConstants.BlockType.STONE;
+    _level[2, posY + 1, 2].BlockType = GlobalConstants.BlockType.STONE;
 
     //MakeHillLayered(GlobalConstants.BlockType.STONE, new Int3(_mapX / 2, posY, _mapZ / 2), 3);
 

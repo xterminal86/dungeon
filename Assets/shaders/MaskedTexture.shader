@@ -10,7 +10,8 @@ Shader "Custom/MaskedTexture"
  
  SubShader 
  {
-   Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+   Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "LightMode" = "ForwardBase"}
+
    ZWrite Off
    ZTest Off
    Blend SrcAlpha OneMinusSrcAlpha

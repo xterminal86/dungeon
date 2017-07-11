@@ -14,6 +14,7 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
   [HideInInspector]
   public RenderTexture TextureToRender;
 
+  Camera _cameraComponent;
   void Awake()
   { 
     DumpTexture = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.ARGB32);
@@ -22,7 +23,9 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
     DumpTexture.Create();
     TextureToRender.Create();
 
-    GetComponent<Camera>().targetTexture = DumpTexture;
+    _cameraComponent = GetComponent<Camera>();
+
+    _cameraComponent.targetTexture = DumpTexture;
 
     Texture2D maskedTexture = new Texture2D(Screen.width, Screen.height);
     maskedTexture.alphaIsTransparency = true;
@@ -38,7 +41,6 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
     DrawCircle(maskedTexture, maskedTexture.width / 2, maskedTexture.height / 2, 64, Color.white);
 
     NoOcclusionMaterial.SetTexture("_MainTex", CameraAllLayersRef.AllLayersRenderTexture);
-    NoOcclusionMaterial.SetTexture("_MaskTex", maskedTexture);
   }
 
   void DrawCircle(Texture2D tex, int cx, int cy, int r, Color c)
@@ -68,7 +70,13 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
   }
 
   void OnRenderImage(RenderTexture src, RenderTexture dest)
-  { 
+  {   
+    // Radius is hardcoded from manual visual adjustment
+
+    float r = 0.04f * (10.0f / _cameraComponent.orthographicSize);
+
+    NoOcclusionMaterial.SetFloat("_Radius", r);
+
     Graphics.Blit(src, TextureToRender, NoOcclusionMaterial);
   }
 }
