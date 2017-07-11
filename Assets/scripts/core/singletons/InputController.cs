@@ -781,7 +781,7 @@ public class InputController : MonoSingleton<InputController>
     // The ~ operator inverts a bitmask
     int layerMaskToIgnore = ~(1 << LayerMask.NameToLayer("IgnoreCircleOfTransparency"));
 
-    // Doesn't work with 3 parameters
+    // Need to supply 4 parameters to avoid automatic conversion of layerMaskToIgnore to distance
     var obstructingBlocks = Physics.RaycastAll(_raycastWorldPosition, new Vector3(-1.0f, 1.0f, -1.0f), Mathf.Infinity, layerMaskToIgnore);
     for (int i = 0; i < obstructingBlocks.Length; i++)
     {
