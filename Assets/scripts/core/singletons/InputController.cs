@@ -837,8 +837,10 @@ public class InputController : MonoSingleton<InputController>
   {    
     //Debug.Log(pos + " " + layerName);
 
-    _raycastWorldPositionLow.Set(pos.X * GlobalConstants.WallScaleFactor, pos.Y * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
-    _raycastWorldPositionHigh.Set(pos.X * GlobalConstants.WallScaleFactor, (pos.Y + 1) * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
+    // FIXME: hack raycast y coordinate to offset it from up quad of low position cell and down quad of high position cell
+    // in order to avoid missing raycast due to cast from inside the collider.
+    _raycastWorldPositionLow.Set(pos.X * GlobalConstants.WallScaleFactor, pos.Y * GlobalConstants.WallScaleFactor + 0.1f, pos.Z * GlobalConstants.WallScaleFactor);
+    _raycastWorldPositionHigh.Set(pos.X * GlobalConstants.WallScaleFactor, (pos.Y + 1) * GlobalConstants.WallScaleFactor - 0.1f, pos.Z * GlobalConstants.WallScaleFactor);
 
     // The ~ operator inverts a bitmask
     int layerMaskToIgnore = ~(1 << LayerMask.NameToLayer("IgnoreCircleOfTransparency"));
@@ -854,13 +856,13 @@ public class InputController : MonoSingleton<InputController>
   {
     for (int i = 0; i < objects.Length; i++)
     {
-      MinecraftBlock b = objects[i].collider.gameObject.GetComponent<MinecraftBlock>();
+      MinecraftBlock b = objects[i].collider.gameObject.GetComponentInParent<MinecraftBlock>();
       if (b != null)
       {
         b.SetLayer(layerName);
       }
 
-      BehaviourWorldObject bwo = objects[i].collider.gameObject.GetComponent<BehaviourWorldObject>();
+      BehaviourWorldObject bwo = objects[i].collider.gameObject.GetComponentInParent<BehaviourWorldObject>();
       if (bwo != null)
       {
         bwo.SetLayer(layerName);

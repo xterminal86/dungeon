@@ -36,11 +36,11 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
 
     _textureColors = new Color[Screen.width * Screen.height];
 
-    DrawCircle(_maskedTexture, _maskedTexture.width / 2, _maskedTexture.height / 2, 32, Color.white);
+    //DrawCircle(_maskedTexture, _maskedTexture.width / 2, _maskedTexture.height / 2, 32, Color.white);
 
-    NoOcclusionMaterial.SetTexture("_MainTex", CameraAllLayersRef.AllLayersRenderTexture);
     NoOcclusionMaterial.SetInt("_ScreenWidth", Screen.width);
     NoOcclusionMaterial.SetInt("_ScreenHeight", Screen.height);
+    NoOcclusionMaterial.SetTexture("_MainTex", CameraAllLayersRef.AllLayersRenderTexture);
 
     //NoOcclusionMaterial.SetTexture("_MaskTex", _maskedTexture);
 
@@ -84,7 +84,7 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
   void OnRenderImage(RenderTexture src, RenderTexture dest)
   {   
     // Radius is hardcoded from manual visual adjustment
-    float r = 0.06f * (10.0f / _cameraComponent.orthographicSize);
+    float r = 0.075f * (GlobalConstants.CameraMaxZoom / _cameraComponent.orthographicSize);
 
     NoOcclusionMaterial.SetFloat("_Radius", r);
 
