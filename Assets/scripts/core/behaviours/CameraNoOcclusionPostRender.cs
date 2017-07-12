@@ -14,6 +14,10 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
   [HideInInspector]
   public RenderTexture TextureToRender;
 
+  Texture2D _maskedTexture;
+
+  float _currentZoom = 1.0f, _prevZoom = 1.0f;
+
   Camera _cameraComponent;
   void Awake()
   { 
@@ -27,26 +31,34 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
 
     _cameraComponent.targetTexture = DumpTexture;
 
-    Texture2D maskedTexture = new Texture2D(Screen.width, Screen.height);
-    maskedTexture.alphaIsTransparency = true;
+    _maskedTexture = new Texture2D(Screen.width, Screen.height);
+    _maskedTexture.alphaIsTransparency = true;
 
-    Color[] colors = new Color[Screen.width * Screen.height];
-    for (int i = 0; i < colors.Length; i++)
-    {
-      colors[i] = Color.clear;
-    }
+    _textureColors = new Color[Screen.width * Screen.height];
 
-    maskedTexture.SetPixels(colors);
-
-    DrawCircle(maskedTexture, maskedTexture.width / 2, maskedTexture.height / 2, 64, Color.white);
+    DrawCircle(_maskedTexture, _maskedTexture.width / 2, _maskedTexture.height / 2, 32, Color.white);
 
     NoOcclusionMaterial.SetTexture("_MainTex", CameraAllLayersRef.AllLayersRenderTexture);
+    NoOcclusionMaterial.SetInt("_ScreenWidth", Screen.width);
+    NoOcclusionMaterial.SetInt("_ScreenHeight", Screen.height);
+
+    //NoOcclusionMaterial.SetTexture("_MaskTex", _maskedTexture);
+
+    _currentZoom = _cameraComponent.orthographicSize;
+    _prevZoom = _cameraComponent.orthographicSize;
   }
 
+  Color[] _textureColors;
   void DrawCircle(Texture2D tex, int cx, int cy, int r, Color c)
   {
+    for (int i = 0; i < _textureColors.Length; i++)
+    {
+      _textureColors[i] = Color.clear;
+    }
+
+    _maskedTexture.SetPixels(_textureColors);
+
     int x, y, px, nx, py, ny, d;
-    Color[] tempArray = tex.GetPixels();
 
     for (x = 0; x <= r; x++)
     {
@@ -58,24 +70,35 @@ public class CameraNoOcclusionPostRender : MonoBehaviour
         py = cy + y;
         ny = cy - y;
 
-        tempArray[py * tex.width + px] = c;
-        tempArray[py * tex.width + nx] = c;
-        tempArray[ny * tex.width + px] = c;
-        tempArray[ny * tex.width + nx] = c;
+        _textureColors[py * tex.width + px] = c;
+        _textureColors[py * tex.width + nx] = c;
+        _textureColors[ny * tex.width + px] = c;
+        _textureColors[ny * tex.width + nx] = c;
       }
     }  
 
-    tex.SetPixels(tempArray);
+    tex.SetPixels(_textureColors);
     tex.Apply();
   }
 
   void OnRenderImage(RenderTexture src, RenderTexture dest)
   {   
     // Radius is hardcoded from manual visual adjustment
-
-    float r = 0.04f * (10.0f / _cameraComponent.orthographicSize);
+    float r = 0.06f * (10.0f / _cameraComponent.orthographicSize);
 
     NoOcclusionMaterial.SetFloat("_Radius", r);
+
+    /*
+    _currentZoom = _cameraComponent.orthographicSize;
+
+    if (_currentZoom != _prevZoom)
+    {
+      _prevZoom = _currentZoom;
+
+      float r = 32.0f * (10.0f / _currentZoom);
+      DrawCircle(_maskedTexture, _maskedTexture.width / 2, _maskedTexture.height / 2, (int)r, Color.white);
+    }
+    */
 
     Graphics.Blit(src, TextureToRender, NoOcclusionMaterial);
   }

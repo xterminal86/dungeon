@@ -1,9 +1,11 @@
-﻿Shader "Custom/DrawCirlce" 
+﻿Shader "Custom/CropCircle" 
 {
   Properties 
   {
     _MainTex("Texture", 2D) = "white" {}
-    _Radius("Circle Radius", float) = 1.0 
+    _Radius("Circle Radius", float) = 1.0
+    _ScreenWidth("Screen Width", int) = 640
+    _ScreenHeight("Screen Height", int) = 480
   }
 
   SubShader 
@@ -19,6 +21,8 @@
 
       uniform sampler2D _MainTex;     
       float _Radius;
+      int _ScreenWidth;
+      int _ScreenHeight;
 
       struct app2vert
       {
@@ -44,6 +48,8 @@
       fixed4 frag(vert2frag input) : COLOR
       {
         fixed4 main_color = tex2D(_MainTex, input.texcoord);
+
+        float aspect = (float)_ScreenWidth / (_ScreenHeight == 0) ? 1.0 : (float)_ScreenHeight;
 
         float d = sqrt(pow(0.5 - input.texcoord.x, 2) + pow(0.5 - input.texcoord.y, 2));
 

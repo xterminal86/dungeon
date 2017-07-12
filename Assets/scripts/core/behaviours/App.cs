@@ -105,7 +105,7 @@ public class App : MonoBehaviour
 
     if (LevelLoader.Instance.LevelMap is TestLevel)
     {
-      //SoundManager.Instance.PlayMusicTrack("map-test");
+      SoundManager.Instance.PlayMusicTrack("map-test");
     }
 
     // FIXME: clouds are not visible if far clip plane is quite less than 1000

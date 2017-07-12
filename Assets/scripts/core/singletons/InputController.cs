@@ -305,8 +305,8 @@ public class InputController : MonoSingleton<InputController>
                                       PlayerMapPos.Y * GlobalConstants.WallScaleFactor,
                                       PlayerMapPos.Z * GlobalConstants.WallScaleFactor);
 
-    SetBlocksLayer(PlayerMapPos, "Default");
-    SetBlocksLayer(newPlayerPos, "Occluder");
+    SetRaycastObjectsLayer(PlayerMapPos, "Default");
+    SetRaycastObjectsLayer(newPlayerPos, "Occluder");
 
     if (GameData.Instance.PlayerCharacterVariable.IsFemale)
     { 
@@ -435,8 +435,9 @@ public class InputController : MonoSingleton<InputController>
     {
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-      // If we hit something before us
-      if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, GlobalConstants.WallScaleFactor + 1))
+      int layerMask = 1 << LayerMask.NameToLayer("IgnoreCircleOfTransparency");
+      
+      if (Physics.Raycast(ray.origin, ray.direction, out _raycastHit, Mathf.Infinity, layerMask))
       {          
         if (_raycastHit.collider != null)
         {
@@ -477,6 +478,7 @@ public class InputController : MonoSingleton<InputController>
   Vector3 _itemRotation = Vector3.zero;
   void PutItem()
   {
+    /*
     int x = PlayerMapPos.X;
     int y = PlayerMapPos.Y;
     int z = PlayerMapPos.Z;
@@ -508,20 +510,22 @@ public class InputController : MonoSingleton<InputController>
     {      
       return;
     }
+    */
 
     SoundManager.Instance.PlaySound(GlobalConstants.SFXItemPut);
     
     GUIManager.Instance.ItemTakenSprite.gameObject.SetActive(false);
 
-    _itemPos.x = x * GlobalConstants.WallScaleFactor;
-    _itemPos.y = y * GlobalConstants.WallScaleFactor;
-    _itemPos.z = z * GlobalConstants.WallScaleFactor;
+    _itemPos.x = PlayerMapPos.X * GlobalConstants.WallScaleFactor;
+    _itemPos.y = PlayerMapPos.Y * GlobalConstants.WallScaleFactor;
+    _itemPos.z = PlayerMapPos.Z * GlobalConstants.WallScaleFactor;
 
     _itemRotation = GUIManager.Instance.ItemTaken.BIO.gameObject.transform.eulerAngles;
 
     _itemRotation.y = GlobalConstants.OrientationAngles[_cameraOrientation];
 
-    GUIManager.Instance.ItemTaken.BIO.MapPosition.Set(x, y, z);
+    //GUIManager.Instance.ItemTaken.BIO.MapPosition.Set(x, y, z);
+    GUIManager.Instance.ItemTaken.BIO.MapPosition.Set(PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z);
     GUIManager.Instance.ItemTaken.BIO.transform.position = _itemPos;
     GUIManager.Instance.ItemTaken.BIO.transform.eulerAngles = _itemRotation;
     GUIManager.Instance.ItemTaken.BIO.gameObject.SetActive(true);
@@ -532,11 +536,58 @@ public class InputController : MonoSingleton<InputController>
   void ProcessBWO(BehaviourWorldObject bwo)
   { 
     // If object belongs to the same cell as player and has the same orientation
-    if (bwo.WorldObjectInstance.ArrayCoordinates == PlayerMapPos && bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation)
+    if (bwo.WorldObjectInstance.ArrayCoordinates == PlayerMapPos) // && bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation)
     {
       if (bwo.WorldObjectInstance.ActionCallback != null)
         bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);      
     }
+    else if (bwo.WorldObjectInstance.ArrayCoordinates != PlayerMapPos)
+    { 
+      int dx = Mathf.Abs(bwo.MapPosition.X - PlayerMapPos.X);
+      int dz = Mathf.Abs(bwo.MapPosition.Z - PlayerMapPos.Z);
+
+      // Ensure that we are on the same "line" with object
+      bool cond = ((dx == 1 && dz == 0) || (dz == 1 && dx == 0));
+
+      // Some objects can be interacted from different sides (e.g door can be opened from current cell and next)
+      if (bwo.WorldObjectInstance.ObjectClass == GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE
+          || bwo.WorldObjectInstance.ObjectClass == GlobalConstants.WorldObjectClass.DOOR_OPENABLE)
+      {
+        if (cond && bwo.WorldObjectInstance.ActionCallback != null)
+          bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);        
+      }
+      else if (bwo.WorldObjectInstance.ObjectClass != GlobalConstants.WorldObjectClass.BUTTON
+        && bwo.WorldObjectInstance.ObjectClass != GlobalConstants.WorldObjectClass.LEVER
+        && bwo.WorldObjectInstance.ObjectClass != GlobalConstants.WorldObjectClass.SIGN)
+      {
+        // Some objects can be interacted only from corresponding side (e.g. shrine, bookshelf).
+        // For that we check next cell and see if object there has same coordinates as objects we hit via raycast,
+        // i.e. it's the same one.
+        if (cond && bwo.WorldObjectInstance.ActionCallback != null)
+          bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);        
+      }
+
+      /*
+      BlockEntity nextCell = Utils.GetNextCellTowardsOrientation(PlayerMapPos, CameraOrientation, LevelLoader.Instance.LevelMap);
+      if (nextCell != null)
+      {
+        _nextCellArrayCoordinates.Set(nextCell.ArrayCoordinates);
+
+        bool canBeInteractedFromDifferentPositions = bwo.WorldObjectInstance.ObjectClass == GlobalConstants.WorldObjectClass.DOOR_CONTROLLABLE
+                                                  || bwo.WorldObjectInstance.ObjectClass == GlobalConstants.WorldObjectClass.DOOR_OPENABLE;
+        
+        if (canBeInteractedFromDifferentPositions)
+        {
+          if (bwo.WorldObjectInstance.ArrayCoordinates == _nextCellArrayCoordinates)
+          {
+            if (bwo.WorldObjectInstance.ActionCallback != null)
+              bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
+          }
+        }
+      }
+      */
+    }
+    /*
     else if (bwo.WorldObjectInstance.ArrayCoordinates != PlayerMapPos)
     {
       BlockEntity nextCell = Utils.GetNextCellTowardsOrientation(PlayerMapPos, CameraOrientation, LevelLoader.Instance.LevelMap);
@@ -547,18 +598,26 @@ public class InputController : MonoSingleton<InputController>
 
         // If object belongs to the next cell before player and has the same or opposite orientation 
         if (bwo.WorldObjectInstance.ArrayCoordinates == _nextCellArrayCoordinates
-          && (bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation 
-           || bwo.WorldObjectInstance.ObjectOrientation == Utils.GetOppositeOrientation(CameraOrientation)) )
+        && (bwo.WorldObjectInstance.ObjectOrientation == CameraOrientation 
+         || bwo.WorldObjectInstance.ObjectOrientation == Utils.GetOppositeOrientation(CameraOrientation)))
         {          
           if (bwo.WorldObjectInstance.ActionCallback != null)
             bwo.WorldObjectInstance.ActionCallback(bwo.WorldObjectInstance);
         }
       }
     }
+    */
   }
 
   void ProcessBIO(BehaviourItemObject bio)
   {
+    if (bio.MapPosition == PlayerMapPos)
+    {
+      if (bio.ItemObjectInstance.LMBAction != null)
+        bio.ItemObjectInstance.LMBAction(this);
+    }
+
+    /*
     int dx = PlayerMapPos.X - bio.MapPosition.X;
     int dz = PlayerMapPos.Z - bio.MapPosition.Z;
 
@@ -568,6 +627,7 @@ public class InputController : MonoSingleton<InputController>
       if (bio.ItemObjectInstance.LMBAction != null)
         bio.ItemObjectInstance.LMBAction(this);
     }
+    */
   }
 
   /// <summary>
@@ -771,27 +831,36 @@ public class InputController : MonoSingleton<InputController>
     _isProcessing = false;   
   }
 
-  Vector3 _raycastWorldPosition = Vector3.zero;
-  void SetBlocksLayer(Int3 pos, string layerName)
+  Vector3 _raycastWorldPositionLow = Vector3.zero;
+  Vector3 _raycastWorldPositionHigh = Vector3.zero;
+  void SetRaycastObjectsLayer(Int3 pos, string layerName)
   {    
     //Debug.Log(pos + " " + layerName);
 
-    _raycastWorldPosition.Set(pos.X * GlobalConstants.WallScaleFactor, pos.Y * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
+    _raycastWorldPositionLow.Set(pos.X * GlobalConstants.WallScaleFactor, pos.Y * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
+    _raycastWorldPositionHigh.Set(pos.X * GlobalConstants.WallScaleFactor, (pos.Y + 1) * GlobalConstants.WallScaleFactor, pos.Z * GlobalConstants.WallScaleFactor);
 
     // The ~ operator inverts a bitmask
     int layerMaskToIgnore = ~(1 << LayerMask.NameToLayer("IgnoreCircleOfTransparency"));
 
     // Need to supply 4 parameters to avoid automatic conversion of layerMaskToIgnore to distance
-    var obstructingBlocks = Physics.RaycastAll(_raycastWorldPosition, new Vector3(-1.0f, 1.0f, -1.0f), Mathf.Infinity, layerMaskToIgnore);
-    for (int i = 0; i < obstructingBlocks.Length; i++)
+    RaycastHit[] obstructingObjects = Physics.RaycastAll(_raycastWorldPositionLow, new Vector3(-1.0f, 1.0f, -1.0f), Mathf.Infinity, layerMaskToIgnore);
+    ProcessHitObjects(obstructingObjects, layerName);
+    obstructingObjects = Physics.RaycastAll(_raycastWorldPositionHigh, new Vector3(-1.0f, 1.0f, -1.0f), Mathf.Infinity, layerMaskToIgnore);
+    ProcessHitObjects(obstructingObjects, layerName);
+  }
+
+  void ProcessHitObjects(RaycastHit[] objects, string layerName)
+  {
+    for (int i = 0; i < objects.Length; i++)
     {
-      MinecraftBlock b = obstructingBlocks[i].collider.gameObject.GetComponent<MinecraftBlock>();
+      MinecraftBlock b = objects[i].collider.gameObject.GetComponent<MinecraftBlock>();
       if (b != null)
       {
         b.SetLayer(layerName);
       }
 
-      BehaviourWorldObject bwo = obstructingBlocks[i].collider.gameObject.GetComponent<BehaviourWorldObject>();
+      BehaviourWorldObject bwo = objects[i].collider.gameObject.GetComponent<BehaviourWorldObject>();
       if (bwo != null)
       {
         bwo.SetLayer(layerName);
@@ -842,8 +911,8 @@ public class InputController : MonoSingleton<InputController>
       if (zComponent != 0) endX += zComponent;
     }
 
-    SetBlocksLayer(PlayerPrevMapPos, "Default");
-    SetBlocksLayer(new Int3(endX, PlayerMapPos.Y, endZ), "Occluder");
+    SetRaycastObjectsLayer(PlayerPrevMapPos, "Default");
+    SetRaycastObjectsLayer(new Int3(endX, PlayerMapPos.Y, endZ), "Occluder");
 
     bool bobFlag = false;
     float cond = 0.0f;
@@ -930,8 +999,8 @@ public class InputController : MonoSingleton<InputController>
     if (LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter != null)
     {      
       ScreenFader.Instance.FlashScreen();
-      SetBlocksLayer(PlayerPrevMapPos, "Default");
-      SetBlocksLayer(PlayerMapPos, "Occluder");
+      SetRaycastObjectsLayer(PlayerPrevMapPos, "Default");
+      SetRaycastObjectsLayer(PlayerMapPos, "Occluder");
       SetupCamera(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y, PlayerMapPos.Z].Teleporter.CoordinatesToTeleport, CameraOrientation);
       SoundManager.Instance.PlaySound(GlobalConstants.SFXTeleportation);
     }
@@ -974,8 +1043,8 @@ public class InputController : MonoSingleton<InputController>
     float oldY = PlayerMapPos.Y;
     float newY = PlayerMapPos.Y - 1;
 
-    SetBlocksLayer(PlayerMapPos, "Default");
-    SetBlocksLayer(new Int3(PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z), "Occluder");
+    SetRaycastObjectsLayer(PlayerMapPos, "Default");
+    SetRaycastObjectsLayer(new Int3(PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z), "Occluder");
 
     while (oldY > newY)
     {

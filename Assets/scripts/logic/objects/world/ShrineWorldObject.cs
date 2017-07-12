@@ -17,7 +17,7 @@ public class ShrineWorldObject : WorldObject
 
   bool _wasActivated = false;
 
-  int _cooldownSeconds = 1200;
+  int _cooldownSeconds = 5; // 1200;
 
   Job _job;
 
@@ -47,6 +47,8 @@ public class ShrineWorldObject : WorldObject
   {
     _animation.CrossFade(_animationInactiveName);
 
+    BWO.DisableAmbientVolumeAutoAdjustment = true;
+
     Job auraLightJob = new Job(AuraLightFadeRoutine(-0.01f));
       
     float time = 0.0f;
@@ -65,6 +67,8 @@ public class ShrineWorldObject : WorldObject
 
     yield return auraLightJob.CoroutineMethod;
 
+    BWO.DisableAmbientVolumeAutoAdjustment = false;
+
     _wasActivated = false;
 
     yield return null;
@@ -75,7 +79,7 @@ public class ShrineWorldObject : WorldObject
   Color _orbEmissionColor = Color.white;
   Color _finalEmissionColor = Color.white;
   IEnumerator AuraLightFadeRoutine(float factor)
-  {
+  {    
     int sign = (int)Mathf.Sign(factor);
 
     bool cond = (sign == -1) ? (_auraLight.intensity > 0.0f) : (_auraLight.intensity < 2.0f);
@@ -87,7 +91,7 @@ public class ShrineWorldObject : WorldObject
       cond = (sign == -1) ? (_auraLight.intensity > 0.0f) : (_auraLight.intensity < 2.0f);
 
       _loop.volume += factor;
-      _loop.volume = Mathf.Clamp(_loop.volume, 0.0f, 1.0f);
+      _loop.volume = Mathf.Clamp(_loop.volume, 0.0f, BWO.AmbientSoundMaxVolume);
 
       _auraLight.intensity += factor;
       _auraLight.intensity = Mathf.Clamp(_auraLight.intensity, 0.0f, 2.0f);

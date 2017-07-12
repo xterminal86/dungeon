@@ -8,6 +8,10 @@ public abstract class BehaviourWorldObjectBase : MonoBehaviour
   public AudioSource AmbientSound;
 
   protected float _ambientSoundMaxVolume = 1.0f;
+  public float AmbientSoundMaxVolume
+  {
+    get { return _ambientSoundMaxVolume; }
+  }
 
   // Which logic WorldObject this sound is "attached" to
   public WorldObject WorldObjectInstance;

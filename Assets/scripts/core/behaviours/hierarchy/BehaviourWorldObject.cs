@@ -27,9 +27,11 @@ public class BehaviourWorldObject : BehaviourWorldObjectBase
   public Transform WallColumnLeft;
   public Transform WallColumnRight;
 
+  public bool DisableAmbientVolumeAutoAdjustment = false;
+
   void Update()
   {
-    if (AmbientSound != null)
+    if (AmbientSound != null && !DisableAmbientVolumeAutoAdjustment)
     {
       float d = Vector3.Distance(transform.position, InputController.Instance.CameraPos);
 
