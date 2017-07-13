@@ -37,7 +37,14 @@ public class ModelMover : MonoBehaviour
       }
     }
 	}
-  
+
+  // Used in Walk animation state event as method name to call at specific animation time (see CopiedAnimations folder)
+  public void StepHandler()
+  {
+    GlobalConstants.FootstepSoundType footstepSound = LevelLoader.Instance.LevelMap.Level[Actor.ActorPosition.X, Actor.ActorPosition.Y - 1, Actor.ActorPosition.Z].FootstepSound;
+    SoundManager.Instance.PlayFootstepSound(Actor.GameObjectName, footstepSound, transform.position);
+  }
+
   void Update () 
 	{
     if (GameData.Instance.CurrentGameState != GameData.GameState.RUNNING)
