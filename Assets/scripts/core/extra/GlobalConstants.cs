@@ -378,7 +378,8 @@ public static class GlobalConstants
     { WorldObjectPrefabType.SIGN_PLAQUE_METAL, "sign-plaque-metal" },
     { WorldObjectPrefabType.SIGN_POST_WOODEN, "sign-post-wooden" },
     { WorldObjectPrefabType.TELEPORTER, "teleporter" },
-    { WorldObjectPrefabType.TORCH, "torch-wall" },
+    //{ WorldObjectPrefabType.TORCH, "torch-wall" },
+    { WorldObjectPrefabType.TORCH, "mc-torch" },
     { WorldObjectPrefabType.SHRINE_MIGHT, "shrine-might" },
     { WorldObjectPrefabType.SHRINE_SPIRIT, "shrine-spirit" }
   };
