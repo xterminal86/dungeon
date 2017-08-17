@@ -192,61 +192,65 @@ public class GameData : MonoSingleton<GameData>
 
   public SerializableItem GetItem(GlobalConstants.WorldItemType type, int hash)
   {
+    SerializableItem result = null;
+
     switch (type)
     {
       case GlobalConstants.WorldItemType.WEAPON_MELEE:
       case GlobalConstants.WorldItemType.WEAPON_RANGED:
-        return _weaponItemsByHash[hash];
+        result = _weaponItemsByHash[hash];
         break;
 
       case GlobalConstants.WorldItemType.FOOD:
-        return _foodItemsByHash[hash];
+        result = _foodItemsByHash[hash];
         break;
 
       case GlobalConstants.WorldItemType.PLACEHOLDER:
-        return _placeholderItemsByHash[hash];
+        result =  _placeholderItemsByHash[hash];
         break;
 
       case GlobalConstants.WorldItemType.ARMOR_CHEST:
       case GlobalConstants.WorldItemType.ARMOR_BOOTS:
       case GlobalConstants.WorldItemType.ARMOR_HEAD:
       case GlobalConstants.WorldItemType.ARMOR_PANTS:
-        return _armorItemsByHash[hash];
+        result = _armorItemsByHash[hash];
         break;
 
-      default:
+      default:        
         break;
     }
 
-    return null;
+    return result;
   }
 
   public SerializableItem GetRandomItem(GlobalConstants.WorldItemType type)
   {
+    SerializableItem result = null;
+
     int index = 0;
     switch (type)
     {
       case GlobalConstants.WorldItemType.WEAPON_MELEE:
       case GlobalConstants.WorldItemType.WEAPON_RANGED:
         index = Random.Range(0, _weaponsKeys.Length);
-        return _weaponItemsByHash[_weaponsKeys[index]];
+        result = _weaponItemsByHash[_weaponsKeys[index]];
         break;
 
       case GlobalConstants.WorldItemType.FOOD:
         index = Random.Range(0, _foodKeys.Length);
-        return _foodItemsByHash[_foodKeys[index]];
+        result = _foodItemsByHash[_foodKeys[index]];
         break;
 
       case GlobalConstants.WorldItemType.PLACEHOLDER:
         index = Random.Range(0, _placeholderKeys.Length);
-        return _placeholderItemsByHash[_placeholderKeys[index]];
+        result = _placeholderItemsByHash[_placeholderKeys[index]];
         break;
 
-      default:
+      default:        
         break;
     }
 
-    return null;
+    return result;
   }
 
   float _hungerTimer = 0.0f;
