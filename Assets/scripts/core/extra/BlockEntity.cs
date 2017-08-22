@@ -14,7 +14,9 @@ public class BlockEntity
   public Vector3 WorldCoordinates = Vector3.zero;
   public GlobalConstants.FootstepSoundType FootstepSound = GlobalConstants.FootstepSoundType.DUMMY;
 
+  // Separate field for teleported and stairs are for quick access.
   public TeleporterWorldObject Teleporter = null;
+  public StairsWorldObject Stairs = null;
 
   public List<WorldObject> WorldObjects = new List<WorldObject>();
   public Dictionary<GlobalConstants.Orientation, bool> SidesWalkability = new Dictionary<GlobalConstants.Orientation, bool>();

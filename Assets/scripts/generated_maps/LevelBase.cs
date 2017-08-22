@@ -499,6 +499,12 @@ public class LevelBase
     return null;
   }
 
+  /// <summary>
+  /// Places the teleporter.
+  /// 
+  /// Separate method and approach is for quick access (via BlockEntity::Teleporter variable)
+  /// 
+  /// </summary>
   protected void PlaceTeleporter(Int3 arrayPos, Int3 destination)
   {
     string prefabStringName = GlobalConstants.WorldObjectPrefabByType[GlobalConstants.WorldObjectPrefabType.TELEPORTER];
@@ -515,6 +521,30 @@ public class LevelBase
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].WorldCoordinates.Set(arrayPos.X * GlobalConstants.WallScaleFactor, arrayPos.Y * GlobalConstants.WallScaleFactor, arrayPos.Z * GlobalConstants.WallScaleFactor);
       _level[arrayPos.X, arrayPos.Y, arrayPos.Z].Teleporter = wo as TeleporterWorldObject;
     }
+  }
+
+  /// <summary>
+  /// Places the stairs.
+  /// 
+  /// Separate method is for quick access (via BlockEntity::Stairs variable).
+  /// 
+  /// </summary>
+  protected WorldObject PlaceStairs(Int3 arrayPos, GlobalConstants.WorldObjectPrefabType prefabType, GlobalConstants.Orientation orientation)
+  {
+    string prefabStringName = GlobalConstants.WorldObjectPrefabByType[prefabType];
+
+    if (TryFindPrefab(prefabStringName))
+    {
+      WorldObject wo = new StairsWorldObject(string.Empty, prefabStringName);
+
+      SetWorldObjectParams(wo, arrayPos, GlobalConstants.WorldObjectClass.STAIRS, orientation);
+
+      _level[arrayPos.X, arrayPos.Y, arrayPos.Z].Stairs = wo as StairsWorldObject;
+
+      return wo;
+    }
+
+    return null;
   }
 
   // ********************************* Helper Functions ********************************* //

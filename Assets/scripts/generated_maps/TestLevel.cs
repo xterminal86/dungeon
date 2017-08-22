@@ -14,7 +14,7 @@ public class TestLevel : LevelBase
     //GenerateRandomTerrain();
     //GenerateHills();
 
-    _playerPos.Set(31, 1, 17);
+    _playerPos.Set(7, 1, 5);
 
     MakePerimeter();
 
@@ -116,6 +116,7 @@ public class TestLevel : LevelBase
     _level[7, 1, 10].SidesWalkability[GlobalConstants.Orientation.EAST] = false;
 
     PlaceSign(new Int3(7, 1, 10), GlobalConstants.WorldObjectPrefabType.SIGN_POST_WOODEN, GlobalConstants.Orientation.EAST, "Press F\nto climb on the block\nin front of you");
+    PlaceStairs(new Int3(8, 1, 9), GlobalConstants.WorldObjectPrefabType.STAIRS_STONE_BRICKS, GlobalConstants.Orientation.EAST);
 
     // Objects
 

@@ -338,7 +338,8 @@ public static class GlobalConstants
     BUTTON,
     SIGN,                // Any form of object with text  
     TELEPORTER,
-    SHRINE
+    SHRINE,
+    STAIRS
   }
 
   public enum WorldObjectPrefabType
@@ -359,7 +360,8 @@ public static class GlobalConstants
     TELEPORTER,
     TORCH,
     SHRINE_MIGHT,
-    SHRINE_SPIRIT
+    SHRINE_SPIRIT,
+    STAIRS_STONE_BRICKS
   }
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
@@ -381,7 +383,8 @@ public static class GlobalConstants
     //{ WorldObjectPrefabType.TORCH, "torch-wall" },
     { WorldObjectPrefabType.TORCH, "mc-torch" },
     { WorldObjectPrefabType.SHRINE_MIGHT, "shrine-might" },
-    { WorldObjectPrefabType.SHRINE_SPIRIT, "shrine-spirit" }
+    { WorldObjectPrefabType.SHRINE_SPIRIT, "shrine-spirit" },
+    { WorldObjectPrefabType.STAIRS_STONE_BRICKS, "stairs-stone-bricks" }
   };
 
   public enum WorldItemType

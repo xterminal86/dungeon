@@ -570,7 +570,7 @@ public class App : MonoBehaviour
 
           case GlobalConstants.WorldObjectClass.SHRINE:
             (worldObject as ShrineWorldObject).InitBWO();
-            break;
+            break;          
         }
       }
     }
