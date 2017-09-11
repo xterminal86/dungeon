@@ -65,5 +65,6 @@ public class SceneLoader : MonoBehaviour
 public enum ScenesList
 {
   VILLAGE = 0,
-  TEST1
+  TEST1,
+  STRESS_TEST
 }

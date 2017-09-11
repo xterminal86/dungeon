@@ -41,12 +41,12 @@ public class CombineMeshes : MonoBehaviour
     {
       combine[i].mesh = meshFilters[i].sharedMesh;
       combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-      meshFilters[i].gameObject.active = false;
+      meshFilters[i].gameObject.SetActive(false);
       i++;
     }
 
     CombinedMesh.transform.GetComponent<MeshFilter>().mesh = new Mesh();
     CombinedMesh.transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
-    CombinedMesh.transform.gameObject.active = true;
+    CombinedMesh.transform.gameObject.SetActive(true);
   }
 }

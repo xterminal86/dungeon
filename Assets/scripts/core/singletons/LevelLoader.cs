@@ -11,7 +11,7 @@ public class LevelLoader : MonoSingleton<LevelLoader>
     get { return _levelMap; }
   }
 
-  Int3 _levelSize = new Int3(40, 40, 40);
+  Int3 _levelSize = new Int3(64, GlobalConstants.MapMaxHeight, 64);
   public Int3 LevelSize
   {
     get { return _levelSize; }
@@ -33,6 +33,10 @@ public class LevelLoader : MonoSingleton<LevelLoader>
 
       case ScenesList.TEST1:
         _levelMap = new TestLevel(_levelSize.X, _levelSize.Y, _levelSize.Z);
+        break;
+
+      case ScenesList.STRESS_TEST:
+        _levelMap = new StressTestMap(64, GlobalConstants.MapMaxHeight, 64);
         break;
     }
 

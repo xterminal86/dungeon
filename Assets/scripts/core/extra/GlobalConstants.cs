@@ -6,7 +6,10 @@ public delegate void CallbackO(object sender);
 public delegate void CallbackB(bool arg);
 
 public static class GlobalConstants 
-{  
+{ 
+  public const int BlocksChunkSize = 16;
+  public const int MapMaxHeight = 256;
+
   // How much one unit actually is in the world
   public const int WallScaleFactor = 2;
 

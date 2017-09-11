@@ -56,14 +56,15 @@ public static class ExtensionMethods
     if(meshRenderers != null && meshRenderers.Length > 0) 
     {
       foreach(MeshRenderer meshRenderer in meshRenderers) 
-      {
+      {        
         MeshFilter filter = meshRenderer.gameObject.GetComponent<MeshFilter>();
-        if(filter != null && filter.sharedMesh != null) 
+
+        if(filter != null && filter.sharedMesh != null && filter.gameObject.activeSelf) 
         {
           MergeMeshInto(filter.sharedMesh, meshRenderer.sharedMaterials, myTransform * filter.transform.localToWorldMatrix, vertices, normals, uv1s, uv2s, subMeshes);
 
           if(filter.gameObject != aGo) 
-          {
+          {            
             filter.gameObject.SetActive(false);
           }
         }

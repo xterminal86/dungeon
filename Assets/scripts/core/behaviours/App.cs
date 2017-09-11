@@ -350,6 +350,16 @@ public class App : MonoBehaviour
 
   void BuildMap()
   {
+    int blockChunkNumber = 0;
+    int blocksInstantiated = 0;
+    int gameObjectsCreated = 0;
+
+    GameObject blocksChunkHolder = null;
+
+    string blocksChunkName = string.Empty;
+
+    List<GameObject> chunks = new List<GameObject>();
+
     for (int y = 0; y < LevelLoader.Instance.LevelMap.MapY; y++)
     {
       for (int x = 0; x < LevelLoader.Instance.LevelMap.MapX; x++)
@@ -359,7 +369,24 @@ public class App : MonoBehaviour
           if (LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType != GlobalConstants.BlockType.AIR 
            && !LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
           {
-            InstantiateBlock(LevelLoader.Instance.LevelMap.Level[x, y, z]);
+            if (blocksInstantiated == 0)
+            {              
+              blocksChunkName = string.Format("CHUNK_{0}", blockChunkNumber);
+              blocksChunkHolder = new GameObject(blocksChunkName);
+              gameObjectsCreated++;
+            }
+
+            InstantiateBlock(LevelLoader.Instance.LevelMap.Level[x, y, z], blocksChunkHolder.transform);
+
+            blocksInstantiated++;
+
+            if (blocksInstantiated > 512)
+            {
+              chunks.Add(blocksChunkHolder);
+
+              blockChunkNumber++;
+              blocksInstantiated = 0;
+            }
           }
 
           if (LevelLoader.Instance.LevelMap.Level[x, y, z].WorldObjects.Count != 0)
@@ -375,6 +402,16 @@ public class App : MonoBehaviour
           PlaceWalls(LevelLoader.Instance.LevelMap.Level[x, y, z]);
         }
       }
+    }
+
+    if (chunks.Count < gameObjectsCreated)
+    {
+      chunks.Add(blocksChunkHolder);
+    }
+
+    foreach (var item in chunks)
+    {
+      item.CombineMeshes();
     }
 
     Int3 cameraPos = new Int3(LevelLoader.Instance.LevelMap.PlayerPos.X, LevelLoader.Instance.LevelMap.PlayerPos.Y, LevelLoader.Instance.LevelMap.PlayerPos.Z);
@@ -500,14 +537,14 @@ public class App : MonoBehaviour
     ScreenFader.Instance.FadeIn(() => { SceneManager.LoadScene("title"); });
   }
 
-  void InstantiateBlock(BlockEntity blockEntity)
+  void InstantiateBlock(BlockEntity blockEntity, Transform parent)
   {
     GameObject prefab = PrefabsManager.Instance.FindPrefabByName(GlobalConstants.BlockPrefabByType[blockEntity.BlockType]);
 
     if (prefab != null)
     {
       GameObject block = (GameObject)Instantiate(prefab, blockEntity.WorldCoordinates, Quaternion.identity);
-      block.transform.parent = ObjectsInstancesTransform.transform;
+      block.transform.parent = parent; //ObjectsInstancesTransform.transform;
       MinecraftBlockAnimated blockAnimated = block.GetComponent<MinecraftBlockAnimated>();
       if (blockAnimated != null)
       {
