@@ -11,6 +11,7 @@ public class LevelLoader : MonoSingleton<LevelLoader>
     get { return _levelMap; }
   }
 
+  // Map (x, z) dimensions must be multiple of GlobalConstants.BlocksChunkSize
   Int3 _levelSize = new Int3(64, GlobalConstants.MapMaxHeight, 64);
   public Int3 LevelSize
   {
@@ -24,7 +25,7 @@ public class LevelLoader : MonoSingleton<LevelLoader>
   }
 
   public void LoadLevel(ScenesList scene)
-  {
+  {    
     switch (scene)
     {
       case ScenesList.VILLAGE:

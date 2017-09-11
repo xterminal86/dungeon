@@ -351,75 +351,103 @@ public class App : MonoBehaviour
   void BuildMap()
   {
     int blockChunkNumber = 0;
-    int blocksInstantiated = 0;
-    int gameObjectsCreated = 0;
 
     GameObject blocksChunkHolder = null;
+    GameObject staticObjectsChunkHolder = null;
 
     string blocksChunkName = string.Empty;
+    string staticObjectsChunkName = string.Empty;
 
-    List<GameObject> chunks = new List<GameObject>();
+    List<GameObject> blockChunks = new List<GameObject>();
+    List<GameObject> staticObjectsChunks = new List<GameObject>();
 
-    for (int y = 0; y < LevelLoader.Instance.LevelMap.MapY; y++)
+    int chunksNumber = LevelLoader.Instance.LevelMap.MapX / GlobalConstants.BlocksChunkSize;
+
+    for (int cx = 0; cx < chunksNumber; cx++)
     {
-      for (int x = 0; x < LevelLoader.Instance.LevelMap.MapX; x++)
+      int currentChunkStartX = cx * GlobalConstants.BlocksChunkSize;
+
+      for (int cy = 0; cy < chunksNumber; cy++)
       {
-        for (int z = 0; z < LevelLoader.Instance.LevelMap.MapZ; z++)
+        int currentChunkStartZ = cy * GlobalConstants.BlocksChunkSize;
+
+        blocksChunkName = string.Format("CHUNK_{0}", blockChunkNumber);
+        staticObjectsChunkName = string.Format("OBJECTS_{0}", blockChunkNumber);
+
+        blocksChunkHolder = new GameObject(blocksChunkName);
+        staticObjectsChunkHolder = new GameObject(staticObjectsChunkName);
+
+        for (int x = currentChunkStartX; x < currentChunkStartX + GlobalConstants.BlocksChunkSize; x++)
         {
-          if (LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType != GlobalConstants.BlockType.AIR 
-           && !LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
+          for (int z = currentChunkStartZ; z < currentChunkStartZ + GlobalConstants.BlocksChunkSize; z++)
           {
-            if (blocksInstantiated == 0)
-            {              
-              blocksChunkName = string.Format("CHUNK_{0}", blockChunkNumber);
-              blocksChunkHolder = new GameObject(blocksChunkName);
-              gameObjectsCreated++;
-            }
-
-            InstantiateBlock(LevelLoader.Instance.LevelMap.Level[x, y, z], blocksChunkHolder.transform);
-
-            blocksInstantiated++;
-
-            if (blocksInstantiated > 512)
+            for (int y = 0; y < LevelLoader.Instance.LevelMap.MapY; y++)
             {
-              chunks.Add(blocksChunkHolder);
+              if (LevelLoader.Instance.LevelMap.Level[x, y, z].BlockType != GlobalConstants.BlockType.AIR 
+                && !LevelLoader.Instance.LevelMap.Level[x, y, z].SkipInstantiation)
+              {
+                InstantiateBlock(LevelLoader.Instance.LevelMap.Level[x, y, z], blocksChunkHolder.transform);
+              }
 
-              blockChunkNumber++;
-              blocksInstantiated = 0;
+              if (LevelLoader.Instance.LevelMap.Level[x, y, z].WorldObjects.Count != 0)
+              {
+                InstantiateObjects(LevelLoader.Instance.LevelMap.Level[x, y, z]);
+              }
+
+              if (LevelLoader.Instance.LevelMap.Level[x, y, z].Teleporter != null)
+              {
+                InstantiateTeleporter(LevelLoader.Instance.LevelMap.Level[x, y, z]);
+              }
+
+              PlaceWalls(LevelLoader.Instance.LevelMap.Level[x, y, z], staticObjectsChunkHolder.transform);
             }
           }
-
-          if (LevelLoader.Instance.LevelMap.Level[x, y, z].WorldObjects.Count != 0)
-          {
-            InstantiateObjects(LevelLoader.Instance.LevelMap.Level[x, y, z]);
-          }
-
-          if (LevelLoader.Instance.LevelMap.Level[x, y, z].Teleporter != null)
-          {
-            InstantiateTeleporter(LevelLoader.Instance.LevelMap.Level[x, y, z]);
-          }
-
-          PlaceWalls(LevelLoader.Instance.LevelMap.Level[x, y, z]);
         }
+
+        if (blocksChunkHolder.transform.childCount != 0)
+        {
+          blockChunks.Add(blocksChunkHolder);
+        }
+
+        if (staticObjectsChunkHolder.transform.childCount != 0)
+        {
+          staticObjectsChunks.Add(staticObjectsChunkHolder);
+        }
+
+        blockChunkNumber++;
       }
     }
 
-    if (chunks.Count < gameObjectsCreated)
-    {
-      chunks.Add(blocksChunkHolder);
+    foreach (var item in blockChunks)
+    {      
+      item.CombineMeshes();
     }
 
-    foreach (var item in chunks)
+    foreach (var item in staticObjectsChunks)
     {
       item.CombineMeshes();
     }
+
+    CleanupChunks(blockChunks);
+    CleanupChunks(staticObjectsChunks);
 
     Int3 cameraPos = new Int3(LevelLoader.Instance.LevelMap.PlayerPos.X, LevelLoader.Instance.LevelMap.PlayerPos.Y, LevelLoader.Instance.LevelMap.PlayerPos.Z);
     InputController.Instance.SetupCamera(cameraPos);
   }
 
+  void CleanupChunks(List<GameObject> chunks)
+  {
+    foreach (var chunk in chunks)
+    {
+      foreach (Transform child in chunk.transform)
+      {
+        Destroy(child.gameObject);
+      }
+    }
+  }
+
   Int3 _blockCoordinates = new Int3();
-  void PlaceWalls(BlockEntity block)
+  void PlaceWalls(BlockEntity block, Transform parent)
   {
     _blockCoordinates.Set(block.ArrayCoordinates);
 
@@ -443,7 +471,7 @@ public class App : MonoBehaviour
           eulerAngles.y = GlobalConstants.OrientationAngles[obj.Value.ObjectOrientation];
 
           go.transform.eulerAngles = eulerAngles;
-          go.transform.parent = ObjectsInstancesTransform.transform;
+          go.transform.parent = parent; // ObjectsInstancesTransform.transform;
 
           BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
           bwo.WallColumnLeft.gameObject.SetActive(obj.Value.LeftColumnVisible);
