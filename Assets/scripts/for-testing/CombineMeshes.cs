@@ -10,16 +10,23 @@ public class CombineMeshes : MonoBehaviour
 
   void Start()
   {
-    for (int x = 0; x < 50; x++)
+    int index = 0;
+    for (int x = 0; x < 25; x++)
     {
-      for (int y = 0; y < 50; y++)
+      for (int y = 0; y < 25; y++)
       {
-        Instantiate(GrassBlockPrefab, new Vector3(x, 0, y), Quaternion.identity, ObjectsHolder.transform);
+        Instantiate(GrassBlockPrefab, new Vector3(x, 0, y), Quaternion.identity, ObjectsHolder.transform).name = string.Format("Obj_{0}", index);
+        index++;
       }
     }
 
     // Combining improves FPS dramatically (~30 without combining on home PC, ~75 with combining).
-    CombineBlocks();
+
+    // Lame style
+    //CombineBlocks();
+
+    // Advanced style
+    ObjectsHolder.CombineMeshes();
   }	
 
   /// <summary>
