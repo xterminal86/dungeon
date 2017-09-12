@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -430,6 +431,8 @@ public class App : MonoBehaviour
 
     CleanupChunks(blockChunks);
     CleanupChunks(staticObjectsChunks);
+
+    GC.Collect();
 
     Int3 cameraPos = new Int3(LevelLoader.Instance.LevelMap.PlayerPos.X, LevelLoader.Instance.LevelMap.PlayerPos.Y, LevelLoader.Instance.LevelMap.PlayerPos.Z);
     InputController.Instance.SetupCamera(cameraPos);

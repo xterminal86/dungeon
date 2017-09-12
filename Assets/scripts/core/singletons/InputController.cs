@@ -924,6 +924,9 @@ public class InputController : MonoSingleton<InputController>
     {
       _isProcessing = false;
 
+      SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
+
+      /*
       if (_numberOfCoroutineCalls > 1)
       {
         SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerFallLong);
@@ -932,6 +935,7 @@ public class InputController : MonoSingleton<InputController>
       {
         SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerFall);
       }
+      */
     }
       
     yield return null;
