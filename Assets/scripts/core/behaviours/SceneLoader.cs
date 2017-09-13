@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 public class SceneLoader : MonoBehaviour 
 { 
-  public ScenesList SceneToLoad;
-
   public bool SkipTitleScreen = false;
+
+  public ScenesList SceneToLoad;
 
   public PlayerCharacter.CharacterClass CharacterClass;
   public bool IsFemale = false;
@@ -25,10 +25,10 @@ public class SceneLoader : MonoBehaviour
     LevelLoader.Instance.Initialize();
     InputController.Instance.Initialize();
 
-    LevelLoader.Instance.LoadLevel(SceneToLoad);
-
     if (SkipTitleScreen)
     {
+      LevelLoader.Instance.LoadLevel(SceneToLoad);
+
       GameData.Instance.PlayerCharacterVariable.IsFemale = IsFemale;
         
       switch (CharacterClass)
@@ -56,7 +56,7 @@ public class SceneLoader : MonoBehaviour
       SceneManager.LoadScene("main");
     }
     else
-    {
+    {      
       SceneManager.LoadScene("title");
     }
 	}
@@ -66,5 +66,6 @@ public enum ScenesList
 {
   VILLAGE = 0,
   TEST1,
-  STRESS_TEST
+  STRESS_TEST,
+  TITLE_SCREEN
 }

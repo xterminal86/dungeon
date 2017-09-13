@@ -10,11 +10,9 @@ public class StoppedState : GameObjectState
   public StoppedState(ActorBase actor)
   {    
     _actor = actor;
-    _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
 
   public override void ResetState()
   {
-    _actor.AnimationComponent.Play(GlobalConstants.AnimationIdleName);
   }
 }

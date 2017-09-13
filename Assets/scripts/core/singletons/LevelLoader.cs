@@ -39,6 +39,10 @@ public class LevelLoader : MonoSingleton<LevelLoader>
       case ScenesList.STRESS_TEST:
         _levelMap = new StressTestMap(64, GlobalConstants.MapMaxHeight, 64);
         break;
+
+      case ScenesList.TITLE_SCREEN:
+        _levelMap = new TitleScreenLevel(16, GlobalConstants.MapMaxHeight, 16);
+        break;
     }
 
     _levelMap.Generate();

@@ -45,8 +45,11 @@ public class ModelMover : MonoBehaviour
 	{
     if (GameData.Instance.CurrentGameState != GameData.GameState.RUNNING)
     {
-      StopAllCoroutines();
-      Actor.ChangeState(Actor.StoppedStateVar);
+      if (!(Actor.ActorState is StoppedState))
+      {
+        StopAllCoroutines();
+        Actor.ChangeState(Actor.StoppedStateVar);
+      }
 
       return;
     }

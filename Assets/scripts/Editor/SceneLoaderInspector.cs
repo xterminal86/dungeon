@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(SceneLoader))]
 public class SceneLoaderInspector : Editor 
@@ -12,12 +13,11 @@ public class SceneLoaderInspector : Editor
 
     if (sceneLoader == null) return;
 
-    sceneLoader.SceneToLoad = (ScenesList)EditorGUILayout.EnumPopup("Scene to Load", sceneLoader.SceneToLoad);
-
     sceneLoader.SkipTitleScreen = EditorGUILayout.Toggle("Skip Title Screen", sceneLoader.SkipTitleScreen);
 
     if (sceneLoader.SkipTitleScreen)
     {
+      sceneLoader.SceneToLoad = (ScenesList)EditorGUILayout.EnumPopup("Scene to Load", sceneLoader.SceneToLoad);
       sceneLoader.CharacterClass = (PlayerCharacter.CharacterClass)EditorGUILayout.EnumPopup("Character Class to Start With", sceneLoader.CharacterClass);
       sceneLoader.IsFemale = EditorGUILayout.Toggle("Female", sceneLoader.IsFemale);
     }
@@ -25,7 +25,7 @@ public class SceneLoaderInspector : Editor
     if (GUI.changed)
     {
       EditorUtility.SetDirty(sceneLoader);
-      AssetDatabase.SaveAssets();
+      EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
     }
   }
 }

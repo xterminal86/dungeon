@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class InputController : MonoSingleton<InputController>
 { 
+  public Camera CameraComponent;
   public Transform CameraHolder;
 
   // Origin of raycast ray for checking move availability status.
@@ -72,7 +73,7 @@ public class InputController : MonoSingleton<InputController>
 	}
 	
   float _cameraBob = 0.0f;
-  bool _isProcessing = false;
+  bool _lockInput = false;
   Vector3 _compassSpriteAngles = Vector3.zero;
   float _currentMoveSpeed = 0.0f;
 	void Update () 
@@ -83,7 +84,7 @@ public class InputController : MonoSingleton<InputController>
       return;
     }
 
-    if (!_isProcessing)
+    if (!_lockInput)
     {
       ProcessKeyboard();
       ProcessMouse();
@@ -273,7 +274,7 @@ public class InputController : MonoSingleton<InputController>
   const int _cameraAngleXLimit = 60;
   IEnumerator ClimbingRoutine(Int3 newPlayerPos)
   {
-    _isProcessing = true;
+    _lockInput = true;
 
     if (GameData.Instance.PlayerCharacterVariable.IsFemale)
     { 
@@ -390,7 +391,7 @@ public class InputController : MonoSingleton<InputController>
 
     PlayerMapPos.Set(newPlayerPos);
 
-    _isProcessing = false;
+    _lockInput = false;
 
     yield return null;
   }
@@ -667,7 +668,7 @@ public class InputController : MonoSingleton<InputController>
     CameraTurnArgument ca = arg as CameraTurnArgument;
     if (ca == null) yield return null;
 
-    _isProcessing = true;
+    _lockInput = true;
 
     int fromAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.From]];
     int toAngle = GlobalConstants.OrientationAngles[GlobalConstants.OrientationsMap[ca.To]];
@@ -735,7 +736,7 @@ public class InputController : MonoSingleton<InputController>
 
     _cameraOrientation = GlobalConstants.OrientationByAngle[toAngle == 360 ? 0 : toAngle];
 
-    _isProcessing = false;   
+    _lockInput = false;   
   }
 
   // Same thing as commented above here, but instead we get error in position.
@@ -746,7 +747,7 @@ public class InputController : MonoSingleton<InputController>
    
     Vector3 cameraPosCached = new Vector3(_cameraPos.x, _cameraPos.y, _cameraPos.z);
 
-    _isProcessing = true;
+    _lockInput = true;
 
     // We move camera game object, so we work in world space here
 
@@ -878,7 +879,7 @@ public class InputController : MonoSingleton<InputController>
 
     if (blockUnderneath.BlockType != GlobalConstants.BlockType.AIR)
     {
-      _isProcessing = false;
+      _lockInput = false;
 
       return;
     }
@@ -922,7 +923,7 @@ public class InputController : MonoSingleton<InputController>
     }
     else
     {
-      _isProcessing = false;
+      _lockInput = false;
 
       SoundManager.Instance.PlayFootstepSoundPlayer(LevelLoader.Instance.LevelMap.Level[PlayerMapPos.X, PlayerMapPos.Y - 1, PlayerMapPos.Z].FootstepSound);
 
@@ -948,7 +949,7 @@ public class InputController : MonoSingleton<InputController>
 
     SoundManager.Instance.PlaySound(GlobalConstants.SFXPlayerCannotMove);
 
-    _isProcessing = true;
+    _lockInput = true;
     
     int endX = (int)_cameraPos.x;
     int endZ = (int)_cameraPos.z;
@@ -1022,7 +1023,7 @@ public class InputController : MonoSingleton<InputController>
     _cameraPos.x = endX;
     _cameraPos.z = endZ;
     
-    _isProcessing = false;    
+    _lockInput = false;    
   }
 
   Vector3 _cameraForwardVector = Vector3.zero;

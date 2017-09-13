@@ -100,6 +100,8 @@ public class App : MonoBehaviour
 
     Camera.main.backgroundColor = _fogColor;
 
+    InputController.Instance.CameraComponent.GetComponent<Skybox>().enabled = true;
+
     BuildMap();
     SpawnItems();
     SetupNPCs();
@@ -449,62 +451,6 @@ public class App : MonoBehaviour
     }
   }
 
-  Int3 _blockCoordinates = new Int3();
-  void PlaceWalls(BlockEntity block, Transform parent)
-  {
-    _blockCoordinates.Set(block.ArrayCoordinates);
-
-    // Instantiate and hide invisible sides (and duplicate columns)
-
-    foreach (var obj in block.WallsByOrientation)
-    {     
-      if (obj.Value != null)
-      {        
-        // Shared walls have string.Empty as prefabName
-
-        if (obj.Value.PrefabName != string.Empty)
-        {
-          Utils.CheckAndHideWallColumns(obj.Value, LevelLoader.Instance.LevelMap);
-
-          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(obj.Value.PrefabName);
-
-          GameObject go = (GameObject)Instantiate(prefab, block.WorldCoordinates, Quaternion.identity);
-
-          Vector3 eulerAngles = go.transform.eulerAngles;
-          eulerAngles.y = GlobalConstants.OrientationAngles[obj.Value.ObjectOrientation];
-
-          go.transform.eulerAngles = eulerAngles;
-          go.transform.parent = parent; // ObjectsInstancesTransform.transform;
-
-          BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
-          bwo.WallColumnLeft.gameObject.SetActive(obj.Value.LeftColumnVisible);
-          bwo.WallColumnRight.gameObject.SetActive(obj.Value.RightColumnVisible);
-          bwo.WorldObjectInstance = obj.Value;
-
-          obj.Value.BWO = bwo;
-
-          Utils.HideWallSides(obj.Value, LevelLoader.Instance.LevelMap);
-        }
-      }
-    }
-  }
-
-  void InstantiateTeleporter(BlockEntity block)
-  {    
-    GameObject prefab = PrefabsManager.Instance.FindPrefabByName(block.Teleporter.PrefabName);
-
-    GameObject go = (GameObject)Instantiate(prefab, block.WorldCoordinates, Quaternion.identity);
-
-    Vector3 eulerAngles = go.transform.eulerAngles;
-    eulerAngles.y = GlobalConstants.OrientationAngles[block.Teleporter.ObjectOrientation];
-
-    go.transform.eulerAngles = eulerAngles;
-    go.transform.parent = ObjectsInstancesTransform.transform;
-
-    BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
-    bwo.AmbientSound.Play();
-  }
-
   GameObject FindCharacterPrefabByName(string name)
   {
     foreach (var item in Characters)
@@ -566,6 +512,62 @@ public class App : MonoBehaviour
     }
 
     ScreenFader.Instance.FadeIn(() => { SceneManager.LoadScene("title"); });
+  }
+
+  Int3 _blockCoordinates = new Int3();
+  void PlaceWalls(BlockEntity block, Transform parent)
+  {
+    _blockCoordinates.Set(block.ArrayCoordinates);
+
+    // Instantiate and hide invisible sides (and duplicate columns)
+
+    foreach (var obj in block.WallsByOrientation)
+    {     
+      if (obj.Value != null)
+      {        
+        // Shared walls have string.Empty as prefabName
+
+        if (obj.Value.PrefabName != string.Empty)
+        {
+          Utils.CheckAndHideWallColumns(obj.Value, LevelLoader.Instance.LevelMap);
+
+          GameObject prefab = PrefabsManager.Instance.FindPrefabByName(obj.Value.PrefabName);
+
+          GameObject go = (GameObject)Instantiate(prefab, block.WorldCoordinates, Quaternion.identity);
+
+          Vector3 eulerAngles = go.transform.eulerAngles;
+          eulerAngles.y = GlobalConstants.OrientationAngles[obj.Value.ObjectOrientation];
+
+          go.transform.eulerAngles = eulerAngles;
+          go.transform.parent = parent; // ObjectsInstancesTransform.transform;
+
+          BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
+          bwo.WallColumnLeft.gameObject.SetActive(obj.Value.LeftColumnVisible);
+          bwo.WallColumnRight.gameObject.SetActive(obj.Value.RightColumnVisible);
+          bwo.WorldObjectInstance = obj.Value;
+
+          obj.Value.BWO = bwo;
+
+          Utils.HideWallSides(obj.Value, LevelLoader.Instance.LevelMap);
+        }
+      }
+    }
+  }
+
+  void InstantiateTeleporter(BlockEntity block)
+  {    
+    GameObject prefab = PrefabsManager.Instance.FindPrefabByName(block.Teleporter.PrefabName);
+
+    GameObject go = (GameObject)Instantiate(prefab, block.WorldCoordinates, Quaternion.identity);
+
+    Vector3 eulerAngles = go.transform.eulerAngles;
+    eulerAngles.y = GlobalConstants.OrientationAngles[block.Teleporter.ObjectOrientation];
+
+    go.transform.eulerAngles = eulerAngles;
+    go.transform.parent = ObjectsInstancesTransform.transform;
+
+    BehaviourWorldObject bwo = go.GetComponent<BehaviourWorldObject>();
+    bwo.AmbientSound.Play();
   }
 
   void InstantiateBlock(BlockEntity blockEntity, Transform parent)

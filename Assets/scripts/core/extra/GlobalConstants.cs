@@ -314,7 +314,8 @@ public static class GlobalConstants
     STONE,
     DIRT,
     OAK_PLANKS,
-    STONE_BRICKS
+    STONE_BRICKS,
+    STONE_BRICKS_OLD
   }
 
   /// <summary>
@@ -328,6 +329,7 @@ public static class GlobalConstants
     { BlockType.STONE, "block-stone" },
     { BlockType.STONE_BRICKS, "block-stone-bricks" },
     { BlockType.DIRT, "block-dirt" },
+    { BlockType.STONE_BRICKS_OLD, "block-stone-bricks-old" },
     { BlockType.OAK_PLANKS, "block-oak-planks" }
   };
 
@@ -364,7 +366,8 @@ public static class GlobalConstants
     TORCH,
     SHRINE_MIGHT,
     SHRINE_SPIRIT,
-    STAIRS_STONE_BRICKS
+    STAIRS_STONE_BRICKS,
+    CHEST_WOODEN
   }
 
   public static Dictionary<WorldObjectPrefabType, string> WorldObjectPrefabByType = new Dictionary<WorldObjectPrefabType, string>()
@@ -387,6 +390,7 @@ public static class GlobalConstants
     { WorldObjectPrefabType.TORCH, "mc-torch" },
     { WorldObjectPrefabType.SHRINE_MIGHT, "shrine-might" },
     { WorldObjectPrefabType.SHRINE_SPIRIT, "shrine-spirit" },
+    { WorldObjectPrefabType.CHEST_WOODEN, "mc-chest-wooden" },
     { WorldObjectPrefabType.STAIRS_STONE_BRICKS, "stairs-stone-bricks" }
   };
 

@@ -103,7 +103,11 @@ public class FormNewGame : MonoBehaviour
 
     GUIManager.Instance.InventoryForm.SetPlayerNameAndTitle();
 
-    ScreenFader.Instance.FadeOut(() => { SceneManager.LoadSceneAsync("main"); });
+    ScreenFader.Instance.FadeOut(() => 
+    { 
+      LevelLoader.Instance.LoadLevel(ScenesList.TEST1);
+      SceneManager.LoadScene("main"); 
+    });
   }
 
   void ReadStats()
