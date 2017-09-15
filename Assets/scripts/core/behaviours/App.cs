@@ -19,8 +19,7 @@ public class App : MonoBehaviour
   public SunController Sun;
 
   public ParticleSystem Stars;
-
-  public CloudsController CloudsControllerScript;
+  public ParticleSystem Clouds;
 
   [HideInInspector]
   public List<GameObject> Characters;
@@ -85,6 +84,8 @@ public class App : MonoBehaviour
   Color _fogColor = Color.black;
   void SceneLoadedHandler(Scene scene, LoadSceneMode mode)
   {     
+    Clouds.transform.position = new Vector3(LevelLoader.Instance.LevelSize.X, 64, LevelLoader.Instance.LevelSize.Z);
+
     DateAndTime.Instance.InGameTime = GlobalConstants.DawnEndTime;
 
     AdjustFogDensityForTime();
@@ -110,9 +111,6 @@ public class App : MonoBehaviour
     {
       //SoundManager.Instance.PlayMusicTrack("map-test");
     }
-
-    // FIXME: clouds are not visible if far clip plane is quite less than 1000
-    CloudsControllerScript.Generate(LevelLoader.Instance.LevelSize.Y);
 
     ScreenFader.Instance.FadeIn();
 
