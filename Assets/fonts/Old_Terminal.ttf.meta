@@ -3,13 +3,15 @@ guid: f96ec36962bd3ab46932ff5401f12e32
 timeCreated: 1468880932
 licenseType: Free
 TrueTypeFontImporter:
-  serializedVersion: 3
-  fontSize: 16
+  serializedVersion: 4
+  fontSize: 32
   forceTextureCase: -2
-  characterSpacing: 1
-  characterPadding: 0
+  characterSpacing: 0
+  characterPadding: 1
   includeFontData: 1
-  fontNames: []
+  fontName: Old_Terminal
+  fontNames:
+  - Old_Terminal
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

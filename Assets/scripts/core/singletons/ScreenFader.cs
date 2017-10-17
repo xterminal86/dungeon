@@ -6,16 +6,19 @@ using System.Collections.Generic;
 public class ScreenFader : MonoSingleton<ScreenFader> 
 {
   public Image FaderImage;
+  public Text LoadingText;
   public Image WhiteFlasher;
 
   Color _faderColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+  Color _textColor = Color.white;
 
   protected override void Init()
   {
     _alpha = 1.0f;
     _faderColor.a = 1.0f;
     FaderImage.gameObject.SetActive(true);
-    FaderImage.color = _faderColor;    
+    FaderImage.color = _faderColor;
+    LoadingText.color = _textColor;
   }
 
   public void FlashScreen()
@@ -71,9 +74,11 @@ public class ScreenFader : MonoSingleton<ScreenFader>
       _alpha += Time.smoothDeltaTime * GlobalConstants.FadeSpeed;
 
       _faderColor.a = _alpha;
+      _textColor.a = _alpha;
 
       FaderImage.color = _faderColor;
-            
+      LoadingText.color = _textColor;
+
       yield return null;
     }
 
@@ -90,8 +95,10 @@ public class ScreenFader : MonoSingleton<ScreenFader>
       _alpha -= Time.smoothDeltaTime * GlobalConstants.FadeSpeed;
 
       _faderColor.a = _alpha;
-      
+      _textColor.a = _alpha;
+
       FaderImage.color = _faderColor;
+      LoadingText.color = _textColor;
 
       yield return null;
     }
