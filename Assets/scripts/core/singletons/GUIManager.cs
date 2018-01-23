@@ -223,7 +223,7 @@ public class GUIManager : MonoSingleton<GUIManager>
   {
     if (Input.GetKeyDown(KeyCode.F9)) 
     {
-      Application.CaptureScreenshot(string.Format("scr-{0}{1}{2}.png", System.DateTime.Now.Hour, System.DateTime.Now.Minute, System.DateTime.Now.Second));
+      ScreenCapture.CaptureScreenshot(string.Format("scr-{0}{1}{2}.png", System.DateTime.Now.Hour, System.DateTime.Now.Minute, System.DateTime.Now.Second));
       SoundManager.Instance.PlaySound(GlobalConstants.SFXTakeScreenshot);
     }
 
